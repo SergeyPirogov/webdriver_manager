@@ -9,7 +9,17 @@ class DriverManager:
         self.root_dir = os.path.dirname(os.path.abspath(__file__))
         self.folder = ".drivers"
 
+    def download_driver(self, name, version):
+        target_dir_path = os.path.join(self.root_dir, self.folder, version)
+        self._file_manager.download_driver(self.get_driver_url(), target_dir_path)
+        driver_path = os.path.join(target_dir_path, name)
+        os.chmod(driver_path, 0755)
+        return driver_path
+
     def install(self):
+        raise NotImplementedError("Please Implement this method")
+
+    def get_driver_url(self):
         raise NotImplementedError("Please Implement this method")
 
 
@@ -21,11 +31,7 @@ class ChromeDriverManager(DriverManager):
         self.driver_version = version
 
     def install(self):
-        target_dir_path = os.path.join(self.root_dir, self.folder, self.driver_version)
-        self._file_manager.download_driver(self.get_driver_url(), target_dir_path)
-        driver_path = os.path.join(target_dir_path, self.driver_name)
-        os.chmod(driver_path, 0755)
-        return driver_path
+        return self.download_driver(self.driver_name, self.driver_version)
 
     def get_driver_url(self):
         url = "{url}/{ver}/{name}_{os}.zip"
