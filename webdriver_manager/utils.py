@@ -2,6 +2,7 @@ import StringIO
 import zipfile
 import platform
 import sys
+
 import requests
 
 
@@ -17,8 +18,11 @@ class FileManager:
         zip_file.extractall(path)
 
     def download_driver(self, url, path):
-        zip_file = self._download_zip(url)
-        self._extract_zip(zip_file, path)
+        try:
+            zip_file = self._download_zip(url)
+            self._extract_zip(zip_file, path)
+        except zipfile.BadZipfile:
+            raise ValueError("No such driver found by url {0}. Wrong url or driver version".format(url))
 
 
 class OSUtils:
