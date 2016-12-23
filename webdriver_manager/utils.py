@@ -20,9 +20,9 @@ class FileManager:
             return gzip.GzipFile(fileobj=StringIO.StringIO(response.content))
 
     def _extract_zip(self, zip_file, path):
-        try:
+        if zip_file.isinstance(zipfile.ZipFile):
             zip_file.extractall(path)
-        except Exception:
+        elif zip_file.isinstance(gzip.GzipFile):
             self.extract_tar_file(zip_file, path, "geckodriver")
 
     def extract_tar_file(self, tar, to_directory, filename):
