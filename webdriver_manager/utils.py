@@ -1,7 +1,9 @@
 import StringIO
-import zipfile
+import gzip
+import os
 import platform
 import sys
+import zipfile
 
 import requests
 
@@ -11,18 +13,26 @@ class FileManager:
         pass
 
     def _download_zip(self, url):
-        r = requests.get(url, stream=True)
-        return zipfile.ZipFile(StringIO.StringIO(r.content))
+        response = requests.get(url, stream=True)
+        try:
+            return zipfile.ZipFile(StringIO.StringIO(response.content))
+        except zipfile.BadZipfile:
+            return gzip.GzipFile(fileobj=StringIO.StringIO(response.content))
 
     def _extract_zip(self, zip_file, path):
-        zip_file.extractall(path)
+        try:
+            zip_file.extractall(path)
+        except Exception:
+            self.extract_tar_file(zip_file, path, "geckodriver")
+
+    def extract_tar_file(self, tar, to_directory, filename):
+        out_file_path = os.path.join(to_directory, filename)
+        with open(out_file_path, 'w') as outfile:
+            outfile.write(tar.read())
 
     def download_driver(self, url, path):
-        try:
-            zip_file = self._download_zip(url)
-            self._extract_zip(zip_file, path)
-        except zipfile.BadZipfile:
-            raise ValueError("No such driver found by url {0}. Wrong url or driver version".format(url))
+        zip_file = self._download_zip(url)
+        self._extract_zip(zip_file, path)
 
 
 class OSUtils:
