@@ -12,27 +12,35 @@ class FileManager:
     def __init__(self):
         pass
 
-    def _download_zip(self, url):
-        response = requests.get(url, stream=True)
+    def download(self, driver):
+        response = requests.get(driver.get_url(), stream=True)
+        if response.status_code == 404:
+            raise ValueError("There is no such driver {0} with version {1} by {2}".format(driver.name,
+                                                                                          driver.get_version(),
+                                                                                          driver.get_url()))
         try:
             return zipfile.ZipFile(StringIO.StringIO(response.content))
         except zipfile.BadZipfile:
-            return gzip.GzipFile(fileobj=StringIO.StringIO(response.content))
+            return gzip.GzipFile(fileobj=StringIO.StringIO(response.content), filename=driver.name)
 
-    def _extract_zip(self, zip_file, path):
-        if zip_file.isinstance(zipfile.ZipFile):
-            zip_file.extractall(path)
-        elif zip_file.isinstance(gzip.GzipFile):
-            self.extract_tar_file(zip_file, path, "geckodriver")
+    def extract_zip(self, zip_file, to_directory):
+        if isinstance(zip_file, zipfile.ZipFile):
+            zip_file.extractall(to_directory)
+        elif isinstance(zip_file, gzip.GzipFile):
+            self.extract_tar_file(zip_file, to_directory)
+        else:
+            raise ValueError("Bad zip file")
 
-    def extract_tar_file(self, tar, to_directory, filename):
-        out_file_path = os.path.join(to_directory, filename)
+    def extract_tar_file(self, tar, to_directory):
+        out_file_path = os.path.join(to_directory, tar.filename)
         with open(out_file_path, 'w') as outfile:
             outfile.write(tar.read())
 
-    def download_driver(self, url, path):
-        zip_file = self._download_zip(url)
-        self._extract_zip(zip_file, path)
+    def download_driver(self, driver, to_dir):
+        zip_file = self.download(driver)
+        driver_path = os.path.join(to_dir, driver.get_version(), driver.name)
+        self.extract_zip(zip_file, driver_path)
+        return os.path.join(driver_path, driver.name)
 
 
 class OSUtils:
