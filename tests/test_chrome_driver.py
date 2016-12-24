@@ -11,13 +11,14 @@ url = "http://chromedriver.storage.googleapis.com"
 driver = ChromeDriver(driver_url=url,
                       name=name,
                       version=version)
+driver_dir = ".drivers"
 
 file_manager = FileManager()
 
 
 def test_can_download_chrome_driver():
-    driver_zip = file_manager.download_file(driver)
-    assert driver_zip.NameToInfo[name].filename == name
+    driver_zip = file_manager.download_file(driver, driver_dir)
+    assert driver_zip
 
 
 def test_can_unzip_chrome_driver():

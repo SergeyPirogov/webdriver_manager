@@ -39,14 +39,12 @@ class FireFoxDriver(Driver):
         super(FireFoxDriver, self).__init__(driver_url, name, version)
 
     def get_latest_release_version(self):
-        resp = requests.get("https://api.github.com/repos/mozilla/geckodriver/releases/latest?access_token=d402775fc19618cebd806a0b5856c84b83697b92")
+        resp = requests.get("https://api.github.com/repos/mozilla/geckodriver/releases/latest")
         return resp.json()["tag_name"]
 
     def get_url(self):
         # https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz
-
-        resp = requests.get("https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}?access_token=d402775fc19618cebd806a0b5856c84b83697b92".format(self.get_version()))
-
+        resp = requests.get("https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}".format(self.get_version()))
         os = OSUtils.os_name() + str(OSUtils.os_architecture())
         assets = resp.json()["assets"]
         ver = self.get_version()

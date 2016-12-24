@@ -18,7 +18,8 @@ class FileManager:
             raise ValueError("There is no such driver {0} with version {1} by {2}".format(driver.name,
                                                                                           driver.get_version(),
                                                                                           driver.get_url()))
-        filename = re.findall("filename=(.+)", response.headers["content-disposition"])[0]
+
+        filename = self._get_filename(response)
 
         dir_path = os.path.join(self.root_dir, to_dir, driver.name, driver.get_version())
         file_path = os.path.join(dir_path, filename)
@@ -30,21 +31,27 @@ class FileManager:
             code.close()
         return file(file_path)
 
+    def _get_filename(self, response):
+        try:
+            return re.findall("filename=(.+)", response.headers["content-disposition"])[0]
+        except KeyError:
+            return "driver.zip"
+
     def extract_zip(self, zip_file, to_directory):
         zipfile.ZipFile(zip_file).extractall(to_directory)
 
-    def extract_tar_file(self, tar_file):
-        to_directory = os.path.dirname(tar_file.name)
+    def extract_tar_file(self, tar_file, to_dir):
         tar = tarfile.open(tar_file.name, mode="r:gz")
-        tar.extractall(to_directory)
+        tar.extractall(to_dir)
         tar.close()
 
     def download_driver(self, driver, to_dir):
         zip_file = self.download_file(driver, to_dir)
+        to_directory = os.path.dirname(zip_file.name)
         if zip_file.name.endswith(".zip"):
-            self.extract_zip(zip_file, "")
+            self.extract_zip(zip_file, to_directory)
         else:
-            self.extract_tar_file(zip_file)
+            self.extract_tar_file(zip_file, to_directory)
         return os.path.join(os.path.dirname(zip_file.name), driver.name)
 
 
