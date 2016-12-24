@@ -33,12 +33,14 @@ class FileManager:
 
     def extract_tar_file(self, tar, to_directory):
         out_file_path = os.path.join(to_directory, tar.filename)
+        if not os.path.exists(to_directory):
+            os.makedirs(to_directory)
         with open(out_file_path, 'w') as outfile:
             outfile.write(tar.read())
 
     def download_driver(self, driver, to_dir):
         zip_file = self.download(driver)
-        driver_path = os.path.join(to_dir, driver.get_version(), driver.name)
+        driver_path = os.path.join(to_dir, driver.name, driver.get_version())
         self.extract_zip(zip_file, driver_path)
         return os.path.join(driver_path, driver.name)
 

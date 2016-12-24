@@ -1,6 +1,9 @@
 from webdriver_manager.driver import ChromeDriver
 from webdriver_manager.utils import FileManager
 from webdriver_manager.chrome import ChromeDriverManager
+import os
+from selenium import webdriver
+import pytest
 
 name = "chromedriver"
 version = "2.26"
@@ -21,11 +24,6 @@ def test_can_unzip_chrome_driver():
     to_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".drivers")
     path = file_manager.download_driver(driver, to_dir)
     assert os.path.exists(path)
-
-
-import os
-from selenium import webdriver
-import pytest
 
 
 def test_chrome_manager_with_specific_version():
