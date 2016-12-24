@@ -16,7 +16,7 @@ file_manager = FileManager()
 
 
 def test_can_download_chrome_driver():
-    driver_zip = file_manager.download(driver)
+    driver_zip = file_manager.download_file(driver)
     assert driver_zip.NameToInfo[name].filename == name
 
 
