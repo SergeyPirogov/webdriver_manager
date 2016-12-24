@@ -1,7 +1,6 @@
-import os
-
 from webdriver_manager.driver import ChromeDriver
 from webdriver_manager.utils import FileManager
+from webdriver_manager.chrome import ChromeDriverManager
 
 name = "chromedriver"
 version = "2.26"
@@ -27,8 +26,6 @@ def test_can_unzip_chrome_driver():
 import os
 from selenium import webdriver
 import pytest
-
-from webdriver_manager.manager import ChromeDriverManager
 
 
 def test_chrome_manager_with_specific_version():
