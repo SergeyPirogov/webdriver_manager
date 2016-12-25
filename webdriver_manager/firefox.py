@@ -6,12 +6,13 @@ from webdriver_manager.utils import OSUtils
 class GeckoDriverManager(DriverManager):
     def __init__(self, version="latest",
                  name="geckodriver",
-                 url="https://github.com/mozilla/geckodriver/releases/download"):
+                 url="https://github.com/mozilla/geckodriver/releases/download",
+                 os=OSUtils.os_name()):
         DriverManager.__init__(self)
         self.driver = FireFoxDriver(driver_url=url,
                                     name=name,
                                     version=version,
-                                    os=OSUtils.os_type())
+                                    os=os)
 
     def install(self):
         return self._file_manager.download_driver(self.driver)
