@@ -7,24 +7,23 @@ from webdriver_manager.utils import Archive
 
 
 class CacheManager:
-    def __init__(self, root_dir=os.path.dirname(os.path.abspath(__file__)),
-                 to_folder=".drivers"):
-        self.root_dir = root_dir,
+    def __init__(self, to_folder=".drivers"):
+        self.root_dir = os.path.dirname(os.path.abspath(__file__))
         self.to_folder = to_folder
 
     def get_cache_path(self):
         return os.path.join(self.root_dir, self.to_folder)
 
-    def create_cache_dir(self):
-        path = self.get_cache_path()
-        if not os.path.exists(path):
-            os.makedirs(path)
-        return path
+    def create_cache_dir(self, folder_name, version):
+        cache_path = self.get_cache_path()
+        driver_path = os.path.join(cache_path, folder_name, version)
+        if not os.path.exists(driver_path):
+            os.makedirs(driver_path)
+        return driver_path
 
     def download_driver(self, driver):
         zip_file = self._download_file(driver)
-        Archive.unpack(zip_file)
-        return os.path.join(os.path.dirname(zip_file.name), driver.name)
+        return Archive.unpack(zip_file)
 
     def _download_file(self, driver):
         response = requests.get(driver.get_url(), stream=True)
@@ -34,15 +33,16 @@ class CacheManager:
                                                                                           driver.get_url()))
 
         filename = self._get_filename_from_response(response, driver)
-        self._save_file_to_cache(response, filename)
-
-    def _save_file_to_cache(self, response, filename):
-        dir_path = self.create_cache_dir()
+        dir_path = self.create_cache_dir(driver.name, driver.get_version())
         file_path = os.path.join(dir_path, filename)
-        with open(file_path, "wb") as code:
+
+        return self._save_file_to_cache(response, file_path)
+
+    def _save_file_to_cache(self, response, path):
+        with open(path, "wb") as code:
             code.write(response.content)
             code.close()
-        return file(file_path)
+        return file(path)
 
     def _get_filename_from_response(self, response, driver):
         try:

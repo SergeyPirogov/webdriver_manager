@@ -5,6 +5,8 @@ import sys
 import tarfile
 import zipfile
 
+from webdriver_manager.binary import Binary
+
 
 class Archive:
     def __init__(self):
@@ -27,6 +29,8 @@ class Archive:
             Archive.extract_zip(archive, to_directory)
         else:
             Archive.extract_tar_file(archive, to_directory)
+        name = os.path.splitext(os.path.basename(archive.name))[0]
+        return Binary(os.path.join(os.path.dirname(archive.name), name))
 
 
 class OSUtils:

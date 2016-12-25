@@ -5,12 +5,7 @@ import os
 from selenium import webdriver
 import pytest
 
-name = "chromedriver"
-version = "2.26"
-url = "http://chromedriver.storage.googleapis.com"
-driver = ChromeDriver(driver_url=url,
-                      name=name,
-                      version=version)
+
 
 cache_manager = CacheManager()
 

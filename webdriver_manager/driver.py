@@ -1,8 +1,7 @@
 import requests
+
 import config
-
 from webdriver_manager.utils import OSUtils
-
 
 class Driver(object):
     def __init__(self, driver_url, name, version):
