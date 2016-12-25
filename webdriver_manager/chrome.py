@@ -2,6 +2,7 @@ import os
 
 from webdriver_manager.driver import ChromeDriver
 from webdriver_manager.manager import DriverManager
+from webdriver_manager.utils import OSUtils
 
 
 class ChromeDriverManager(DriverManager):
@@ -9,7 +10,10 @@ class ChromeDriverManager(DriverManager):
                  name="chromedriver",
                  url="http://chromedriver.storage.googleapis.com"):
         DriverManager.__init__(self)
-        self.driver = ChromeDriver(driver_url=url, name=name, version=version)
+        self.driver = ChromeDriver(driver_url=url,
+                                   name=name,
+                                   version=version,
+                                   os=OSUtils.os_type())
 
     def install(self):
         bin_file = self._file_manager.download_driver(self.driver)

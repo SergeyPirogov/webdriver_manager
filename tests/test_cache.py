@@ -1,7 +1,10 @@
+import pytest
+
 from webdriver_manager.cache import CacheManager
 import os
 
 from webdriver_manager.driver import ChromeDriver, FireFoxDriver
+from webdriver_manager.utils import OSUtils
 
 cache = CacheManager()
 
@@ -11,26 +14,38 @@ def test_can_create_cache_dir():
     assert os.path.exists(path)
 
 
-def test_can_download_chrome_driver():
+@pytest.mark.parametrize("os_type", ["linux64",
+                                     "linux32",
+                                     "mac64",
+                                     "win32"
+                                     ])
+def test_can_download_chrome_driver_for_os(os_type):
     name = "chromedriver"
     version = "2.26"
     url = "http://chromedriver.storage.googleapis.com"
     driver = ChromeDriver(driver_url=url,
                           name=name,
-                          version=version)
+                          version=version,
+                          os=os_type)
 
     binary = cache.download_driver(driver)
     assert binary.name == name
 
 
-def test_can_download_firefox_driver():
+@pytest.mark.parametrize("os_type", ["linux64",
+                                     "linux32",
+                                     "macos",
+                                     "win32",
+                                     "win64",
+                                     ])
+def test_can_download_firefox_driver(os_type):
     name = "geckodriver"
     version = "v0.11.1"
     url = "https://github.com/mozilla/geckodriver/releases/download"
-
     driver = FireFoxDriver(driver_url=url,
                            name=name,
-                           version=version)
+                           version=version,
+                           os=os_type)
 
     binary = cache.download_driver(driver)
     assert binary.name == name

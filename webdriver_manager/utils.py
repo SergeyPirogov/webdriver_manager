@@ -41,7 +41,7 @@ class OSUtils:
         elif pl == "darwin":
             return "mac"
         elif pl == "win32":
-            return "windows"
+            return "win"
 
     @staticmethod
     def os_architecture():
@@ -49,3 +49,7 @@ class OSUtils:
         if bits == "64bit":
             return 64
         return 32
+
+    @staticmethod
+    def os_type():
+        return OSUtils.os_name() + str(OSUtils.os_architecture())

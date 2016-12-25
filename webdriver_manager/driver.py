@@ -7,17 +7,18 @@ from webdriver_manager.utils import OSUtils
 
 
 class Driver(object):
-    def __init__(self, driver_url, name, version):
+    def __init__(self, driver_url, name, version, os):
         self._url = driver_url
         self.name = name
         self._version = version
+        self.os = os
 
     def get_url(self):
         url = "{url}/{ver}/{name}_{os}.zip"
         return url.format(url=self._url,
                           ver=self.get_version(),
                           name=self.name,
-                          os=OSUtils.os_name() + str(OSUtils.os_architecture()))
+                          os=self.os)
 
     def get_version(self):
         if self._version == "latest":
@@ -29,8 +30,8 @@ class Driver(object):
 
 
 class ChromeDriver(Driver):
-    def __init__(self, driver_url, name, version):
-        super(ChromeDriver, self).__init__(driver_url, name, version)
+    def __init__(self, driver_url, name, version, os):
+        super(ChromeDriver, self).__init__(driver_url, name, version, os)
 
     def get_latest_release_version(self):
         file = requests.get(self._url + "/LATEST_RELEASE")
@@ -38,8 +39,8 @@ class ChromeDriver(Driver):
 
 
 class FireFoxDriver(Driver):
-    def __init__(self, driver_url, name, version):
-        super(FireFoxDriver, self).__init__(driver_url, name, version)
+    def __init__(self, driver_url, name, version, os):
+        super(FireFoxDriver, self).__init__(driver_url, name, version, os)
 
     def get_latest_release_version(self):
         resp = requests.get(config.mozila_latest_release)
@@ -55,9 +56,8 @@ class FireFoxDriver(Driver):
             raise ValueError("There is no such driver {0} with version {1} by {2}".format(self.name,
                                                                                           self._version,
                                                                                           url))
-        os = OSUtils.os_name() + str(OSUtils.os_architecture())
         assets = resp.json()["assets"]
         ver = self.get_version()
-        name = "{0}-{1}-{2}".format(self.name, ver, os)
+        name = "{0}-{1}-{2}".format(self.name, ver, self.os)
         output_dict = [asset for asset in assets if asset['name'].startswith(name)]
         return output_dict[0]['browser_download_url']
