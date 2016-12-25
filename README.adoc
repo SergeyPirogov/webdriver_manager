@@ -25,7 +25,7 @@ pip install webdriver_manager
 ```
 
 ```
-webdriver.Chrome(ChromeDriverManager().install())
+webdriver.Chrome(ChromeDriverManager().install().path)
 ```
 
 It will automatically download latest release of chromedriver and set path. Moreover when the new version of the driver
