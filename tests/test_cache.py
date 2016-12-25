@@ -7,7 +7,7 @@ cache = CacheManager()
 
 
 def test_can_create_cache_dir():
-    path = cache.create_cache_dir()
+    path = cache.create_cache_dir("chrome", "2.2")
     assert os.path.exists(path)
 
 
