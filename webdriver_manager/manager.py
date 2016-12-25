@@ -1,11 +1,11 @@
 import os
 
-from webdriver_manager.utils import FileManager
+from webdriver_manager.cache import CacheManager
 
 
 class DriverManager:
     def __init__(self):
-        self._file_manager = FileManager()
+        self._file_manager = CacheManager()
 
     def install(self):
         raise NotImplementedError("Please Implement this method")

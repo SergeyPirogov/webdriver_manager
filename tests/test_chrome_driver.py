@@ -1,5 +1,5 @@
 from webdriver_manager.driver import ChromeDriver
-from webdriver_manager.utils import FileManager
+from webdriver_manager.cache import CacheManager
 from webdriver_manager.chrome import ChromeDriverManager
 import os
 from selenium import webdriver
@@ -11,13 +11,11 @@ url = "http://chromedriver.storage.googleapis.com"
 driver = ChromeDriver(driver_url=url,
                       name=name,
                       version=version)
-driver_dir = ".drivers"
 
-file_manager = FileManager()
-
+cache_manager = CacheManager()
 
 def test_can_download_chrome_driver():
-    driver_zip = file_manager.download_file(driver, driver_dir)
+    driver_zip = cache_manager.download_driver(driver)
     assert driver_zip
 
 
