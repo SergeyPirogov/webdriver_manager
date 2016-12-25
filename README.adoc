@@ -1,0 +1,34 @@
+= python webdriver manager
+
+The main ida is to simplify managemet of binary drivers for different browsers.
+
+For now support:
+- ChromeDriver
+- GeckoDriver
+
+Before:
+You should download binary chromedriver, unzip it somwhere in you PC and set path to this driver like this:
+
+```
+webdriver.Chrome('/home/user/drivers/chromedriver')
+```
+
+It's boring!!! Moreover every time the new version of driver released, you should go and repeat all steps again and again.
+
+With webdriver manager, you just need to do two simple steps:
+
+Install manager:
+
+```
+pip install webdriver_manager
+```
+
+```
+webdriver.Chrome(ChromeDriverManager().install())
+```
+
+It will automatically download latest release of chromedriver and set path. Moreover when the new version of the driver
+will be released, webriver manager will download it and update path.
+
+This will make your test automation more elegant and robust!
+
