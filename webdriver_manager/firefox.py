@@ -10,6 +10,6 @@ class GeckoDriverManager(DriverManager):
         DriverManager.__init__(self)
         self.driver = FireFoxDriver(driver_url=url, name=name, version=version)
 
-    def install(self, to_folder=".drivers"):
-        return self._file_manager.download_driver(self.driver, to_folder)
+    def install(self):
+        return self._file_manager.download_driver(self.driver)
 

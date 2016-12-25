@@ -23,7 +23,7 @@ class CacheManager:
 
     def download_driver(self, driver):
         zip_file = self._download_file(driver)
-        return Archive.unpack(zip_file)
+        return Archive.unpack(zip_file, driver.name)
 
     def _download_file(self, driver):
         response = requests.get(driver.get_url(), stream=True)

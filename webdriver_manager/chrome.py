@@ -12,6 +12,6 @@ class ChromeDriverManager(DriverManager):
         self.driver = ChromeDriver(driver_url=url, name=name, version=version)
 
     def install(self):
-        path = self._file_manager.download_driver(self.driver)
-        os.chmod(path, 0755)
-        return path
+        bin_file = self._file_manager.download_driver(self.driver)
+        os.chmod(bin_file.path, 0755)
+        return bin_file

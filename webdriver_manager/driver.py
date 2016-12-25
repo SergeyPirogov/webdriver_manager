@@ -1,7 +1,10 @@
+import logging
+
 import requests
 
 import config
 from webdriver_manager.utils import OSUtils
+
 
 class Driver(object):
     def __init__(self, driver_url, name, version):
@@ -44,7 +47,14 @@ class FireFoxDriver(Driver):
 
     def get_url(self):
         # https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz
-        resp = requests.get(config.mozila_release_tag.format(self.get_version()))
+        url = config.mozila_release_tag.format(self.get_version())
+        logging.warning(
+            "Getting latest mozila release info {0}".format(url))
+        resp = requests.get(url)
+        if resp.status_code == 404:
+            raise ValueError("There is no such driver {0} with version {1} by {2}".format(self.name,
+                                                                                          self._version,
+                                                                                          url))
         os = OSUtils.os_name() + str(OSUtils.os_architecture())
         assets = resp.json()["assets"]
         ver = self.get_version()

@@ -1,5 +1,3 @@
-import os
-
 from webdriver_manager.cache import CacheManager
 
 

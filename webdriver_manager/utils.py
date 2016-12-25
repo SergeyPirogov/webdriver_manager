@@ -23,14 +23,13 @@ class Archive:
         tar.close()
 
     @staticmethod
-    def unpack(archive):
+    def unpack(archive, filename):
         to_directory = os.path.dirname(archive.name)
         if archive.name.endswith(".zip"):
             Archive.extract_zip(archive, to_directory)
         else:
             Archive.extract_tar_file(archive, to_directory)
-        name = os.path.splitext(os.path.basename(archive.name))[0]
-        return Binary(os.path.join(os.path.dirname(archive.name), name))
+        return Binary(os.path.join(os.path.dirname(archive.name), filename))
 
 
 class OSUtils:
