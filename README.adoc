@@ -3,6 +3,7 @@
 The main ida is to simplify managemet of binary drivers for different browsers.
 
 For now support:
+
 - ChromeDriver
 - GeckoDriver
 
