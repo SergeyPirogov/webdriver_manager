@@ -60,5 +60,5 @@ class FireFoxDriver(Driver):
         ver = self.get_version()
         name = "{0}-{1}-{2}".format(self.name, ver, self.os)
         output_dict = [asset for asset in assets if
-                       asset['name'].startswith(name) and str(OSUtils.os_architecture()) in asset['name']]
+                       asset['name'].startswith(name)]
         return output_dict[0]['browser_download_url']
