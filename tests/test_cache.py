@@ -59,7 +59,13 @@ def test_should_be_true_for_cached_driver():
 
 
 def test_should_be_false_for_new_driver():
-    manager = ChromeDriverManager()
-    manager.install()
-    shutil.rmtree(cache.root_dir)
-    assert cache.is_cached(manager.driver)
+    name = "chromedriver"
+    version = "2.26"
+    url = "http://chromedriver.storage.googleapis.com"
+    driver = ChromeDriver(driver_url=url,
+                          name=name,
+                          version=version,
+                          os="")
+    cache.create_cache_dir(name, version)
+    shutil.rmtree(cache.get_cache_path())
+    assert cache.is_cached(driver) == False
