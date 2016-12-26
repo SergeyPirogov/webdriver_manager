@@ -24,9 +24,25 @@ Install manager:
 pip install webdriver_manager
 ```
 
+Use with Chrome:
+
 ```
+from webdriver_manager.chrome import ChromeDriverManager
+
 webdriver.Chrome(ChromeDriverManager().install())
 ```
+
+Use with FireFox:
+
+```
+from webdriver_manager.firefox import GeckoDriverManager
+
+ff_config.access_token = "adasdasdasdasde32423" (*)
+driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
+
+```
+
+(*) access_token requred to work with Github API more info https://help.github.com/articles/creating-an-access-token-for-command-line-use/
 
 It will automatically download latest release of chromedriver and set path. Moreover when the new version of the driver
 will be released, webriver manager will download it and update path.
