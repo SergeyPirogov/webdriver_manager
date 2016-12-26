@@ -7,12 +7,12 @@ class GeckoDriverManager(DriverManager):
     def __init__(self, version="latest",
                  name="geckodriver",
                  url="https://github.com/mozilla/geckodriver/releases/download",
-                 os=OSUtils.os_name()):
+                 os_type=OSUtils.os_name()):
         DriverManager.__init__(self)
         self.driver = FireFoxDriver(driver_url=url,
                                     name=name,
                                     version=version,
-                                    os=os)
+                                    os_type=os_type)
 
     def install(self):
         return self._file_manager.download_driver(self.driver).path

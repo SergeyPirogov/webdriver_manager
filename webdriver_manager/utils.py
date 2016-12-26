@@ -14,22 +14,26 @@ class Archive:
 
     @staticmethod
     def extract_zip(zip_file, to_directory):
-        zipfile.ZipFile(zip_file).extractall(to_directory)
+        zip = zipfile.ZipFile(zip_file)
+        zip.extractall(to_directory)
+        return zip.namelist()
 
     @staticmethod
     def extract_tar_file(tar_file, to_dir):
         tar = tarfile.open(tar_file.name, mode="r:gz")
+        members = tar.getmembers()
         tar.extractall(to_dir)
         tar.close()
+        return members
 
     @staticmethod
-    def unpack(archive, filename):
+    def unpack(archive):
         to_directory = os.path.dirname(archive.name)
         if archive.name.endswith(".zip"):
-            Archive.extract_zip(archive, to_directory)
+            return Archive.extract_zip(archive, to_directory)
         else:
-            Archive.extract_tar_file(archive, to_directory)
-        return Binary(os.path.join(os.path.dirname(archive.name), filename))
+            file_list = Archive.extract_tar_file(archive, to_directory)
+            return map(lambda x: x.name, file_list)
 
 
 class OSUtils:

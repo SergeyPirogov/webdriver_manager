@@ -6,18 +6,18 @@ import ff_config
 
 
 class Driver(object):
-    def __init__(self, driver_url, name, version, os):
+    def __init__(self, driver_url, name, version, os_type):
         self._url = driver_url
         self.name = name
         self._version = version
-        self.os = os
+        self.os_type = os_type
 
     def get_url(self):
         url = "{url}/{ver}/{name}_{os}.zip"
         return url.format(url=self._url,
                           ver=self.get_version(),
                           name=self.name,
-                          os=self.os)
+                          os=self.os_type)
 
     def get_version(self):
         if self._version == "latest":
@@ -29,8 +29,8 @@ class Driver(object):
 
 
 class ChromeDriver(Driver):
-    def __init__(self, driver_url, name, version, os):
-        super(ChromeDriver, self).__init__(driver_url, name, version, os)
+    def __init__(self, driver_url, name, version, os_type):
+        super(ChromeDriver, self).__init__(driver_url, name, version, os_type)
 
     def get_latest_release_version(self):
         file = requests.get(self._url + "/LATEST_RELEASE")
@@ -38,8 +38,8 @@ class ChromeDriver(Driver):
 
 
 class FireFoxDriver(Driver):
-    def __init__(self, driver_url, name, version, os):
-        super(FireFoxDriver, self).__init__(driver_url, name, version, os)
+    def __init__(self, driver_url, name, version, os_type):
+        super(FireFoxDriver, self).__init__(driver_url, name, version, os_type)
 
     def get_latest_release_version(self):
         req_url = "{url}?access_token={access_token}".format(url=ff_config.mozila_latest_release,
@@ -58,7 +58,7 @@ class FireFoxDriver(Driver):
 
         assets = resp.json()["assets"]
         ver = self.get_version()
-        name = "{0}-{1}-{2}".format(self.name, ver, self.os)
+        name = "{0}-{1}-{2}".format(self.name, ver, self.os_type)
         output_dict = [asset for asset in assets if
                        asset['name'].startswith(name)]
         return output_dict[0]['browser_download_url']

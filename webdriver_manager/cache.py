@@ -4,7 +4,8 @@ import re
 
 import requests
 
-from webdriver_manager.utils import Archive
+from webdriver_manager.binary import Binary
+from webdriver_manager.utils import Archive, OSUtils
 
 
 class CacheManager:
@@ -19,9 +20,24 @@ class CacheManager:
         if not os.path.exists(driver_path):
             os.makedirs(driver_path)
 
+    def get_cached_binary(self, name, version, os_type):
+        logging.warning("Checking for {} {}:{} in cache".format(os_type, name, version))
+        if "win" in os_type:
+            name += ".exe"
+        for dirName, subdirList, fileList in os.walk(self.get_cache_path()):
+            for fname in fileList:
+                if fname == name:
+                    logging.warning("Driver found in cache {}/{}".format(dirName, fname))
+                    return Binary(os.path.join(dirName, fname))
+        return None
+
     def download_driver(self, driver):
+        cached_binary = self.get_cached_binary(driver.name, driver.get_version(), driver.os_type)
+        if cached_binary:
+            return cached_binary
         zip_file = self._download_file(driver)
-        return Archive.unpack(zip_file, driver.name)
+        files = Archive.unpack(zip_file)
+        return Binary(os.path.join(os.path.dirname(zip_file.name), files[0]))
 
     def _download_file(self, driver):
         response = requests.get(driver.get_url(), stream=True)
@@ -55,8 +71,3 @@ class CacheManager:
 
     def get_driver_binary_path(self, name, version):
         return os.path.join(self._get_driver_path(name, version), name)
-
-    def is_cached(self, name, version):
-        logging.warning("Check driver {}:{} in cache".format(name, version))
-        binary_path = self.get_driver_binary_path(name, version)
-        return os.path.exists(binary_path)
