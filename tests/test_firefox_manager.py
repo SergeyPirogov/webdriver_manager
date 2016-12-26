@@ -5,6 +5,7 @@ from selenium import webdriver
 
 from webdriver_manager.firefox import GeckoDriverManager
 
+
 def test_gecko_manager_with_correct_version():
     driver_path = GeckoDriverManager("v0.11.0").install()
     assert os.path.exists(driver_path)

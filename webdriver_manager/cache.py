@@ -15,8 +15,7 @@ class CacheManager:
         return os.path.join(self.root_dir, self.to_folder)
 
     def create_cache_dir(self, folder_name, version):
-        cache_path = self.get_cache_path()
-        driver_path = os.path.join(cache_path, folder_name, version)
+        driver_path = self._get_driver_path(folder_name, version)
         if not os.path.exists(driver_path):
             os.makedirs(driver_path)
         return driver_path
@@ -49,3 +48,11 @@ class CacheManager:
             return re.findall("filename=(.+)", response.headers["content-disposition"])[0]
         except KeyError:
             return "{}.zip".format(driver.name)
+
+    def _get_driver_path(self, name, version):
+        cache_path = self.get_cache_path()
+        return os.path.join(cache_path, name, version)
+
+    def is_cached(self, driver):
+        driver_path = os.path.join(self._get_driver_path(driver.name, driver.get_version()), driver.name)
+        return os.path.exists(driver_path)

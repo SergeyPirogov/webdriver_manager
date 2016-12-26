@@ -1,8 +1,10 @@
 import os
+import shutil
 
 import pytest
 
 from webdriver_manager.cache import CacheManager
+from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.driver import ChromeDriver, FireFoxDriver
 
 cache = CacheManager()
@@ -48,3 +50,16 @@ def test_can_download_firefox_driver(os_type):
 
     binary = cache.download_driver(driver)
     assert binary.name == name
+
+
+def test_should_be_true_for_cached_driver():
+    manager = ChromeDriverManager()
+    manager.install()
+    assert cache.is_cached(manager.driver)
+
+
+def test_should_be_false_for_new_driver():
+    manager = ChromeDriverManager()
+    manager.install()
+    shutil.rmtree(cache.root_dir)
+    assert cache.is_cached(manager.driver)
