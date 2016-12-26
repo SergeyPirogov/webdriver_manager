@@ -29,6 +29,7 @@ class CacheManager:
                 if os.path.join(dirName, fname).endswith(os.path.join(version, name)):
                     logging.warning("Driver found in cache {}/{}".format(dirName, fname))
                     return Binary(os.path.join(dirName, fname))
+        logging.warning("There is no cached driver. Downloading new one...")
         return None
 
     def download_driver(self, driver):
