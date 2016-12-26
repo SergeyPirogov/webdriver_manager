@@ -2,8 +2,7 @@ import logging
 
 import requests
 
-import config
-from webdriver_manager.utils import OSUtils
+import ff_config
 
 
 class Driver(object):
@@ -43,22 +42,30 @@ class FireFoxDriver(Driver):
         super(FireFoxDriver, self).__init__(driver_url, name, version, os)
 
     def get_latest_release_version(self):
-        resp = requests.get(config.mozila_latest_release)
+        req_url = "{url}?access_token={access_token}".format(url=ff_config.mozila_latest_release,
+                                                             access_token=ff_config.access_token)
+        resp = requests.get(req_url)
         return resp.json()["tag_name"]
 
     def get_url(self):
         # https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz
-        url = config.mozila_release_tag.format(self.get_version())
+        url = ff_config.mozila_release_tag.format(self.get_version())
         logging.warning(
             "Getting latest mozila release info {0}".format(url))
-        resp = requests.get(url)
-        if resp.status_code == 404:
-            raise ValueError("There is no such driver {0} with version {1} by {2}".format(self.name,
-                                                                                          self._version,
-                                                                                          url))
+        resp = requests.get(url + "?access_token={0}".format(ff_config.access_token))
+
+        self.validate_response(resp)
+
         assets = resp.json()["assets"]
         ver = self.get_version()
         name = "{0}-{1}-{2}".format(self.name, ver, self.os)
         output_dict = [asset for asset in assets if
                        asset['name'].startswith(name)]
         return output_dict[0]['browser_download_url']
+
+    def validate_response(self, resp):
+        if resp.status_code == 404:
+            raise ValueError("There is no such driver {0} with version {1}".format(self.name,
+                                                                                   self._version))
+        elif resp.status_code != 200:
+            raise ValueError(resp.json())

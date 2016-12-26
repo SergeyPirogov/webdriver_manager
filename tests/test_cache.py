@@ -1,10 +1,9 @@
+import os
+
 import pytest
 
 from webdriver_manager.cache import CacheManager
-import os
-
 from webdriver_manager.driver import ChromeDriver, FireFoxDriver
-from webdriver_manager.utils import OSUtils
 
 cache = CacheManager()
 

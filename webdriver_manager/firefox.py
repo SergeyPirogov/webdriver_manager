@@ -15,4 +15,4 @@ class GeckoDriverManager(DriverManager):
                                     os=os)
 
     def install(self):
-        return self._file_manager.download_driver(self.driver)
+        return self._file_manager.download_driver(self.driver).path
