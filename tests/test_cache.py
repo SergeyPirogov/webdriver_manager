@@ -10,11 +10,6 @@ from webdriver_manager.driver import ChromeDriver, FireFoxDriver
 cache = CacheManager()
 
 
-def test_can_create_cache_dir():
-    path = cache.create_cache_dir("chrome", "2.2")
-    assert os.path.exists(path)
-
-
 @pytest.mark.parametrize("os_type", ["linux64",
                                      "linux32",
                                      "mac64",
@@ -55,7 +50,7 @@ def test_can_download_firefox_driver(os_type):
 def test_should_be_true_for_cached_driver():
     manager = ChromeDriverManager()
     manager.install()
-    assert cache.is_cached(manager.driver)
+    assert cache.is_cached(manager.driver.name, manager.driver.get_version())
 
 
 def test_should_be_false_for_new_driver():
@@ -66,6 +61,7 @@ def test_should_be_false_for_new_driver():
                           name=name,
                           version=version,
                           os="")
-    cache.create_cache_dir(name, version)
-    shutil.rmtree(cache.get_cache_path())
-    assert cache.is_cached(driver) == False
+    cache_path = cache.get_cache_path()
+    if os.path.exists(cache_path):
+        shutil.rmtree(cache_path)
+    assert cache.is_cached(driver.name, driver.get_version()) == False
