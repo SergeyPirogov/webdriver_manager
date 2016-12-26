@@ -26,7 +26,7 @@ class CacheManager:
             name += ".exe"
         for dirName, subdirList, fileList in os.walk(self.get_cache_path()):
             for fname in fileList:
-                if fname == name:
+                if os.path.join(dirName, fname).endswith(os.path.join(version, name)):
                     logging.warning("Driver found in cache {}/{}".format(dirName, fname))
                     return Binary(os.path.join(dirName, fname))
         return None
