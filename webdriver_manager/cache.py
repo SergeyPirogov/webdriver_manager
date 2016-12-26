@@ -5,7 +5,7 @@ import re
 import requests
 
 from webdriver_manager.binary import Binary
-from webdriver_manager.utils import Archive, OSUtils
+from webdriver_manager.utils import Archive
 
 
 class CacheManager:
@@ -21,7 +21,8 @@ class CacheManager:
             os.makedirs(driver_path)
 
     def get_cached_binary(self, name, version, os_type):
-        logging.warning("Checking for {} {}:{} in cache".format(os_type, name, version))
+        logging.warning("Checking for {} {}:{} in cache".
+                        format(os_type, name, version))
         if "win" in os_type:
             name += ".exe"
         for dirName, subdirList, fileList in os.walk(self.get_cache_path()):

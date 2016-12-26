@@ -5,8 +5,6 @@ import sys
 import tarfile
 import zipfile
 
-from webdriver_manager.binary import Binary
-
 
 class Archive:
     def __init__(self):
