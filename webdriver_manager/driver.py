@@ -45,6 +45,7 @@ class FireFoxDriver(Driver):
         req_url = "{url}?access_token={access_token}".format(url=ff_config.mozila_latest_release,
                                                              access_token=ff_config.access_token)
         resp = requests.get(req_url)
+        self.validate_response(resp)
         return resp.json()["tag_name"]
 
     def get_url(self):
