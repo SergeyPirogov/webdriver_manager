@@ -16,12 +16,12 @@ import setuptools
 setuptools.setup(
     name='webdriver_manager',
     packages=setuptools.find_packages(exclude=['tests']),
-    version='1.0',
+    version='1.1',
     description=('Library provides the way to automatically manage drivers for different browsers'),
     author='Sergey Pirogov',
     author_email='automationremarks@gmail.com',
     url='https://github.com/SergeyPirogov/webdriver_manager',
-    download_url='https://github.com/SergeyPirogov/webdriver_manager/tarball/1.0',
+    download_url='https://github.com/SergeyPirogov/webdriver_manager/tarball/1.1',
     keywords=['testing', 'selenium', 'driver', 'test automation'],
     classifiers=[
         'License :: OSI Approved :: Apache Software License',
