@@ -42,18 +42,18 @@ class FireFoxDriver(Driver):
         super(FireFoxDriver, self).__init__(driver_url, name, version, os_type)
 
     def get_latest_release_version(self):
-        req_url = "{url}?access_token={access_token}".format(url=ff_config.mozila_latest_release,
-                                                             access_token=ff_config.access_token)
+        req_url = "{url}?access_token={access_token}".format(url=config.mozila_latest_release,
+                                                             access_token=config.access_token)
         resp = requests.get(req_url)
         self.validate_response(resp)
         return resp.json()["tag_name"]
 
     def get_url(self):
         # https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz
-        url = ff_config.mozila_release_tag.format(self.get_version())
+        url = config.mozila_release_tag.format(self.get_version())
         logging.warning(
             "Getting latest mozila release info {0}".format(url))
-        resp = requests.get(url + "?access_token={0}".format(ff_config.access_token))
+        resp = requests.get(url + "?access_token={0}".format(config.access_token))
 
         self.validate_response(resp)
 
