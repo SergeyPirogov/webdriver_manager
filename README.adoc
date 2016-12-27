@@ -37,10 +37,9 @@ Use with FireFox:
 ```python
 from webdriver_manager.firefox import GeckoDriverManager
 
-webdriver_manager.config.access_token = "adasdasdasdasde32423" (*)
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 
-or
+or if you face arror related to github credentials, you need to place github token: (*)
 
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().use_token("adasdasdsads342").install())
 ```
