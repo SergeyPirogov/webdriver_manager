@@ -41,7 +41,7 @@ driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 ```
 If you face arror related to github credentials, you need to place github token: (*)
 
-```
+```python
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().use_token("adasdasdsads342").install())
 ```
 
