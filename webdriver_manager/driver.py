@@ -42,21 +42,16 @@ class FireFoxDriver(Driver):
         super(FireFoxDriver, self).__init__(driver_url, name, version, os_type)
 
     def get_latest_release_version(self):
-        req_url = "{url}?access_token={access_token}".format(url=config.mozila_latest_release,
-                                                             access_token=config.access_token)
-        resp = requests.get(req_url)
+        resp = requests.get(self.latest_release_url)
         self.validate_response(resp)
         return resp.json()["tag_name"]
 
     def get_url(self):
         # https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz
-        url = config.mozila_release_tag.format(self.get_version())
         logging.warning(
-            "Getting latest mozila release info {0}".format(url))
-        resp = requests.get(url + "?access_token={0}".format(config.access_token))
-
+            "Getting latest mozila release info for {0}".format(self.get_version()))
+        resp = requests.get(self.tagged_release_url)
         self.validate_response(resp)
-
         assets = resp.json()["assets"]
         ver = self.get_version()
         name = "{0}-{1}-{2}".format(self.name, ver, self.os_type)
@@ -70,3 +65,20 @@ class FireFoxDriver(Driver):
                                                                                    self._version))
         elif resp.status_code != 200:
             raise ValueError(resp.json())
+
+    @property
+    def latest_release_url(self):
+        token = config.access_token
+        url = config.mozila_latest_releaseurl = config.mozila_latest_release
+        if token:
+            return "{base_url}?access_token={access_token}".format(base_url=url,
+                                                                   access_token=token)
+        return url
+
+    @property
+    def tagged_release_url(self):
+        token = config.access_token
+        url = config.mozila_release_tag.format(self.get_version())
+        if token:
+            return url + "?access_token={0}".format(token)
+        return url
