@@ -59,7 +59,7 @@ class CacheManager:
         with open(path, "wb") as code:
             code.write(response.content)
             code.close()
-        return file(path)
+        return file(path, "rb")
 
     def _get_filename_from_response(self, response, driver):
         try:
