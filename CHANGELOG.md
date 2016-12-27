@@ -1,5 +1,10 @@
 == Changelog
 
+=== 1.2 (Released 27.12.2016)
+* Windows platfor support added
+* Github api token support added for Firefox
+* Code refactoring
+
 === 1.1 (Released 26.12.2016)
 * Mac support added
 * Cache support added
