@@ -2,7 +2,7 @@ import logging
 
 import requests
 
-import ff_config
+import config
 
 
 class Driver(object):

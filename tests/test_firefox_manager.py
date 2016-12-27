@@ -26,3 +26,7 @@ def test_gecko_manager_with_wrong_version():
                                driver_path)
         ff.quit()
     assert ex.value.message == "There is no such driver geckodriver with version 0.2"
+
+def test_gecko_manager_with_correct_version_and_token():
+    driver_path = GeckoDriverManager("v0.11.0").install()
+    assert os.path.exists(driver_path)
