@@ -38,9 +38,10 @@ Use with FireFox:
 from webdriver_manager.firefox import GeckoDriverManager
 
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
+```
+If you face arror related to github credentials, you need to place github token: (*)
 
-or if you face arror related to github credentials, you need to place github token: (*)
-
+```
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().use_token("adasdasdsads342").install())
 ```
 
