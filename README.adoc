@@ -37,9 +37,12 @@ Use with FireFox:
 ```python
 from webdriver_manager.firefox import GeckoDriverManager
 
-ff_config.access_token = "adasdasdasdasde32423" (*)
+webdriver_manager.config.access_token = "adasdasdasdasde32423" (*)
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 
+or
+
+driver = webdriver.Firefox(executable_path=GeckoDriverManager().use_token("adasdasdsads342").install())
 ```
 
 (*) access_token requred to work with Github API more info https://help.github.com/articles/creating-an-access-token-for-command-line-use/
