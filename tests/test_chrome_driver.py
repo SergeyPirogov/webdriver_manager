@@ -31,7 +31,7 @@ def test_chrome_manager_with_latest_version():
 def test_chrome_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
         ChromeDriverManager("0.2").install()
-    assert ex.value.message == "There is no such driver chromedriver with version 0.2 " \
+    assert ex.value.args[0] == "There is no such driver chromedriver with version 0.2 " \
                                "by http://chromedriver.storage.googleapis.com/0.2/chromedriver_{0}.zip".format(
         OSUtils.os_type())
 

@@ -3,7 +3,7 @@ import os
 
 class Binary(object):
     def __init__(self, path):
-        self.bin_file = file(path)
+        self.bin_file = open(path)
 
     @property
     def path(self):
