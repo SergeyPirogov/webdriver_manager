@@ -25,7 +25,7 @@ def test_gecko_manager_with_wrong_version():
         ff = webdriver.Firefox(executable_path=
                                driver_path)
         ff.quit()
-    assert ex.value.message == "There is no such driver geckodriver with version 0.2"
+    assert ex.value.args[0] == "There is no such driver geckodriver with version 0.2"
 
 
 def test_gecko_manager_with_correct_version_and_token():

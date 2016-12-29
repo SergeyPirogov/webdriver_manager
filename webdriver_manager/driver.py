@@ -2,7 +2,7 @@ import logging
 
 import requests
 
-import config
+from . import config
 
 
 class Driver(object):

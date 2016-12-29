@@ -31,7 +31,7 @@ class Archive:
             return Archive.extract_zip(archive, to_directory)
         else:
             file_list = Archive.extract_tar_file(archive, to_directory)
-            return map(lambda x: x.name, file_list)
+            return [x.name for x in file_list]
 
 
 class OSUtils:
