@@ -13,6 +13,7 @@ from webdriver_manager.utils import OSUtils
 def delete_cache():
     cache = CacheManager()
     cache_path = cache.get_cache_path()
+    os.chmod(cache_path, 0o777)
     if os.path.exists(cache_path):
         shutil.rmtree(cache_path)
     sleep(5)
@@ -43,6 +44,5 @@ def test_chrome_manager_with_selenium():
 
 
 def test_chrome_manager_cached_driver_with_selenium():
-    delete_cache()
     ChromeDriverManager().install()
     webdriver.Chrome(ChromeDriverManager().install())

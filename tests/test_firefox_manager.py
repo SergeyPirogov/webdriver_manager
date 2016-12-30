@@ -14,7 +14,8 @@ def test_gecko_manager_with_correct_version():
 def test_gecko_manager_with_selenium():
     driver_path = GeckoDriverManager().install()
     ff = webdriver.Firefox(executable_path=
-                           driver_path)
+                           driver_path,
+                           log_path=os.path.join(os.path.dirname(__file__), "log.log"))
     ff.get("http://automation-remarks.com")
     ff.quit()
 
