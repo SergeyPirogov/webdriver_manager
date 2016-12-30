@@ -1,5 +1,8 @@
 == Changelog
 
+== 1.4 (Released)
+* Edge driver support added
+
 == 1.3 (Released 29.12.2016)
 * Python 3.5 support added
 
