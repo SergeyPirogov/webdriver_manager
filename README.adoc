@@ -6,6 +6,7 @@ For now support:
 
 - ChromeDriver
 - GeckoDriver
+- EdgeDriver
 
 Before:
 You should download binary chromedriver, unzip it somwhere in you PC and set path to this driver like this:
@@ -46,6 +47,10 @@ driver = webdriver.Firefox(executable_path=GeckoDriverManager().use_token("adasd
 ```
 
 (*) access_token requred to work with Github API more info https://help.github.com/articles/creating-an-access-token-for-command-line-use/
+
+```
+driver = webdriver.Edge(EdgeDriverManager().install())
+```
 
 It will automatically download latest release of chromedriver and set path. Moreover when the new version of the driver
 will be released, webriver manager will download it and update path.
