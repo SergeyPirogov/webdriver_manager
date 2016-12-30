@@ -48,7 +48,7 @@ driver = webdriver.Firefox(executable_path=GeckoDriverManager().use_token("adasd
 
 (*) access_token requred to work with Github API more info https://help.github.com/articles/creating-an-access-token-for-command-line-use/
 
-```
+```python
 driver = webdriver.Edge(EdgeDriverManager().install())
 ```
 
