@@ -82,3 +82,17 @@ class FireFoxDriver(Driver):
         if token:
             return url + "?access_token={0}".format(token)
         return url
+
+
+class EdgeDriver(Driver):
+    def get_latest_release_version(self):
+        return self.get_version()
+
+    def __init__(self, driver_url, name, version, os_type):
+        super(EdgeDriver, self).__init__(driver_url, name, version, os_type)
+
+    def get_version(self):
+        return self._version
+
+    def get_url(self):
+        return "{}/{}.exe".format(self._url, self.name)

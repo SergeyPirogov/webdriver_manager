@@ -41,6 +41,12 @@ class CacheManager:
         files = Archive.unpack(zip_file)
         return Binary(os.path.join(os.path.dirname(zip_file.name), files[0]))
 
+    def download_binary(self, driver):
+        cached_binary = self.get_cached_binary(driver.name, driver.get_version(), driver.os_type)
+        if cached_binary:
+            return cached_binary
+        return Binary(self._download_file(driver).name)
+
     def _download_file(self, driver):
         response = requests.get(driver.get_url(), stream=True)
         if response.status_code == 404:
@@ -66,6 +72,8 @@ class CacheManager:
             return re.findall("filename=(.+)", response.headers["content-disposition"])[0]
         except KeyError:
             return "{}.zip".format(driver.name)
+        except IndexError:
+            return driver.name + ".exe"
 
     def _get_driver_path(self, name, version):
         cache_path = self.get_cache_path()
