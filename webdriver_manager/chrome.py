@@ -11,6 +11,8 @@ class ChromeDriverManager(DriverManager):
                  url="http://chromedriver.storage.googleapis.com",
                  os_type=OSUtils.os_type()):
         DriverManager.__init__(self)
+        if os_type == "win64":
+            os_type = "win32"
         self.driver = ChromeDriver(driver_url=url,
                                    name=name,
                                    version=version,
