@@ -23,3 +23,8 @@ before_install:
 
 script:
   - tox
+
+notifications:
+  email:
+    recipients:
+      - sergio_89@ukr.net
