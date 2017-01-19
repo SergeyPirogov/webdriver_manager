@@ -46,3 +46,7 @@ def test_chrome_manager_with_selenium():
 def test_chrome_manager_cached_driver_with_selenium():
     ChromeDriverManager().install()
     webdriver.Chrome(ChromeDriverManager().install())
+
+
+def test_chrome_manager_with_win64_os():
+    ChromeDriverManager(os_type="win64").install()
