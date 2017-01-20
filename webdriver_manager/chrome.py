@@ -2,14 +2,14 @@ import os
 
 from webdriver_manager.driver import ChromeDriver
 from webdriver_manager.manager import DriverManager
-from webdriver_manager.utils import OSUtils
+from webdriver_manager import utils
 
 
 class ChromeDriverManager(DriverManager):
     def __init__(self, version="latest",
                  name="chromedriver",
                  url="http://chromedriver.storage.googleapis.com",
-                 os_type=OSUtils.os_type()):
+                 os_type=utils.os_type()):
         DriverManager.__init__(self)
         # there is no driver with 64 bit
         if os_type == "win64":
