@@ -19,5 +19,5 @@ class GeckoDriverManager(DriverManager):
         return self._file_manager.download_driver(self.driver).path
 
     def use_token(self, token):
-        config.access_token = token
+        config.gh_token = token
         return self
