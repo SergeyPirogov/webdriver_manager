@@ -8,14 +8,14 @@ expect_gh_token = u'""'
 
 
 def test_config_with_deafault_params():
-    config = Configuration(config_folder=os.path.dirname(__file__))
+    config = Configuration(config_folder=os.path.dirname(__file__), section="firefox")
     assert config.mozila_latest_release == expect_mz_latest
     assert config.mozila_release_tag == expect_mz_tag
     assert config.gh_token == expect_gh_token
 
 
 def test_config_variables_with_default_params():
-    config = Configuration()
+    config = Configuration(section="firefox")
     assert config.gh_token == ''
     assert config.mozila_latest_release == expect_mz_latest
     assert config.mozila_release_tag == expect_mz_tag

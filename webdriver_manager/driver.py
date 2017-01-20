@@ -3,14 +3,13 @@ import logging
 import requests
 
 from webdriver_manager.config import Configuration
-from . import config
 
 
 class Driver(object):
-    def __init__(self, driver_url, name, version, os_type):
-        self._url = driver_url
-        self.name = name
-        self._version = version
+    def __init__(self, configuration, os_type):
+        self._url = configuration.url
+        self.name = configuration.name
+        self._version = configuration.version
         self.os_type = os_type
 
     def get_url(self):
@@ -39,9 +38,9 @@ class ChromeDriver(Driver):
 
 
 class FireFoxDriver(Driver):
-    def __init__(self, driver_url, name, version, os_type):
-        super(FireFoxDriver, self).__init__(driver_url, name, version, os_type)
-        self.config = Configuration()
+    def __init__(self, os_type):
+        self.config = Configuration(section="firefox")
+        super(FireFoxDriver, self).__init__(self.config, os_type)
 
     def get_latest_release_version(self):
         resp = requests.get(self.latest_release_url)
@@ -71,7 +70,7 @@ class FireFoxDriver(Driver):
     @property
     def latest_release_url(self):
         token = self.config.gh_token
-        url = config.mozila_latest_releaseurl = self.config.mozila_latest_release
+        url = self.config.mozila_latest_releaseurl = self.config.mozila_latest_release
         if token:
             return "{base_url}?access_token={access_token}".format(base_url=url,
                                                                    access_token=token)

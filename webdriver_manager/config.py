@@ -1,26 +1,24 @@
 import os
+
 from configparser import ConfigParser
 
 filename = 'config.ini'
 folder = os.path.join(os.path.expanduser("~"), ".wdm")
 
-_default_values = {
-    'gh_token': '',
-    'mozila_latest_release': 'https://api.github.com/repos/mozilla/geckodriver/releases/latest',
-    'mozila_release_tag': 'https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}'
-}
+_default_config = os.path.join(os.path.dirname(__file__), 'default.ini')
 
 
 class Configuration(object):
     def __init__(self, file_name=filename,
-                 config_folder=folder):
-        self._parser = ConfigParser(defaults=_default_values)
+                 config_folder=folder, section=None):
+        self._parser = ConfigParser()
         self.config_file_path = os.path.join(config_folder, file_name)
+        self.section = section
 
-    def get(self, key, default=None):
+    def get(self, section, key):
+        self._parser.read(_default_config)
         self._parser.read(self.config_file_path)
-        _defaults = self._parser.defaults()
-        return _defaults.get(key, default)
+        return self._parser.get(section, key)
 
     def __getattr__(self, item):
-        return self.get(item)
+        return self.get(self.section.upper(), item)
