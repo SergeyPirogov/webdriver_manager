@@ -1,5 +1,5 @@
 import os
-import ConfigParser
+from configparser import ConfigParser
 
 filename = 'config.ini'
 folder = os.path.join(os.path.expanduser("~"), ".wdm")
@@ -14,7 +14,7 @@ _default_values = {
 class Configuration(object):
     def __init__(self, file_name=filename,
                  config_folder=folder):
-        self._parser = ConfigParser.SafeConfigParser(defaults=_default_values)
+        self._parser = ConfigParser(defaults=_default_values)
         self.config_file_path = os.path.join(config_folder, file_name)
 
     def get(self, key, default=None):
