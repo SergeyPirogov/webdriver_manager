@@ -41,6 +41,7 @@ class CacheManager:
         files = archive.unpack(zip_file)
         return Binary(os.path.join(os.path.dirname(zip_file.name), files[0]))
 
+    #TODO merge download driver and this method
     def download_binary(self, driver):
         cached_binary = self.get_cached_binary(driver.name, driver.get_version(), driver.os_type)
         if cached_binary:
