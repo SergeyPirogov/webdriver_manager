@@ -5,7 +5,7 @@ import re
 import requests
 
 from webdriver_manager.binary import Binary
-from webdriver_manager.utils import Archive
+from webdriver_manager import archive
 
 
 class CacheManager:
@@ -38,7 +38,7 @@ class CacheManager:
         if cached_binary:
             return cached_binary
         zip_file = self._download_file(driver)
-        files = Archive.unpack(zip_file)
+        files = archive.unpack(zip_file)
         return Binary(os.path.join(os.path.dirname(zip_file.name), files[0]))
 
     def download_binary(self, driver):
