@@ -7,7 +7,7 @@ from selenium import webdriver
 
 from webdriver_manager.cache import CacheManager
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.utils import OSUtils
+from webdriver_manager import utils
 
 
 def delete_cache():
@@ -34,7 +34,7 @@ def test_chrome_manager_with_wrong_version():
         ChromeDriverManager("0.2").install()
     assert ex.value.args[0] == "There is no such driver chromedriver with version 0.2 " \
                                "by http://chromedriver.storage.googleapis.com/0.2/chromedriver_{0}.zip".format(
-        OSUtils.os_type())
+        utils.os_type())
 
 
 def test_chrome_manager_with_selenium():
