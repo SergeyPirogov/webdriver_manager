@@ -13,12 +13,15 @@ class Configuration(object):
                  config_folder=folder, section=None):
         self._parser = ConfigParser()
         self.config_file_path = os.path.join(config_folder, file_name)
-        self.section = section
-
-    def get(self, section, key):
+        self.section = section.upper()
         self._parser.read(_default_config)
         self._parser.read(self.config_file_path)
+
+    def get(self, section, key):
         return self._parser.get(section, key)
 
+    def set(self, key, value):
+        self._parser.set(self.section, key, value)
+
     def __getattr__(self, item):
-        return self.get(self.section.upper(), item)
+        return self.get(self.section, item)

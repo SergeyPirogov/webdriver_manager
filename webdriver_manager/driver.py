@@ -38,8 +38,9 @@ class ChromeDriver(Driver):
 
 
 class FireFoxDriver(Driver):
-    def __init__(self, os_type):
+    def __init__(self, version, os_type):
         self.config = Configuration(section="firefox")
+        self.config.set("vesion", version)
         super(FireFoxDriver, self).__init__(self.config, os_type)
 
     def get_latest_release_version(self):
