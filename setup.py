@@ -16,7 +16,7 @@ import setuptools
 setuptools.setup(
     name='webdriver_manager',
     packages=setuptools.find_packages(exclude=['tests']),
-    version='1.3',
+    version='1.4',
     description=('Library provides the way to automatically manage drivers for different browsers'),
     author='Sergey Pirogov',
     author_email='automationremarks@gmail.com',

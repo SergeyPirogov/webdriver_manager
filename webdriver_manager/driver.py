@@ -2,6 +2,7 @@ import logging
 
 import requests
 
+from webdriver_manager.config import Configuration
 from . import config
 
 
@@ -40,6 +41,7 @@ class ChromeDriver(Driver):
 class FireFoxDriver(Driver):
     def __init__(self, driver_url, name, version, os_type):
         super(FireFoxDriver, self).__init__(driver_url, name, version, os_type)
+        self.config = Configuration()
 
     def get_latest_release_version(self):
         resp = requests.get(self.latest_release_url)
@@ -68,8 +70,8 @@ class FireFoxDriver(Driver):
 
     @property
     def latest_release_url(self):
-        token = config.access_token
-        url = config.mozila_latest_releaseurl = config.mozila_latest_release
+        token = self.config.gh_token
+        url = config.mozila_latest_releaseurl = self.config.mozila_latest_release
         if token:
             return "{base_url}?access_token={access_token}".format(base_url=url,
                                                                    access_token=token)
@@ -77,8 +79,8 @@ class FireFoxDriver(Driver):
 
     @property
     def tagged_release_url(self):
-        token = config.access_token
-        url = config.mozila_release_tag.format(self.get_version())
+        token = self.config.gh_token
+        url = self.config.mozila_release_tag.format(self.get_version())
         if token:
             return url + "?access_token={0}".format(token)
         return url
