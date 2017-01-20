@@ -6,6 +6,7 @@ For now support:
 
 - ChromeDriver
 - GeckoDriver
+- EdgeDriver
 
 Before:
 You should download binary chromedriver, unzip it somwhere in you PC and set path to this driver like this:
@@ -31,7 +32,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 webdriver.Chrome(ChromeDriverManager().install())
 ```
-
 Use with FireFox:
 
 ```python
@@ -54,6 +54,11 @@ Create file **${USER_HOME}/.wdm/config.ini** with such content:
 ```
 [DEFAULT]
 gh_token=asdadasdasdasdasdas
+```
+Use with Edge:
+
+```python
+driver = webdriver.Edge(EdgeDriverManager().install())
 ```
 
 It will automatically download latest release of chromedriver and set path. Moreover when the new version of the driver
