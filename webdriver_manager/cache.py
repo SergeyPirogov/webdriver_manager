@@ -9,8 +9,8 @@ from webdriver_manager.utils import Archive
 
 
 class CacheManager:
-    def __init__(self, to_folder=".drivers"):
-        self.root_dir = os.path.dirname(os.path.abspath(__file__))
+    def __init__(self, to_folder=".drivers", dir_name=os.path.dirname(os.path.abspath(__file__))):
+        self.root_dir = dir_name
         self.to_folder = to_folder
 
     def get_cache_path(self):
