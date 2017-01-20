@@ -37,6 +37,7 @@ setuptools.setup(
         'Operating System :: MacOS',
     ],
     install_requires=[
-        'requests'
+        'requests',
+        'configparser'
     ],
 )
