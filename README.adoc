@@ -39,13 +39,22 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 ```
-If you face arror related to github credentials, you need to place github token: (*)
+If you face error related to github credentials, you need to place github token: (*)
 
 ```python
-driver = webdriver.Firefox(executable_path=GeckoDriverManager().use_token("adasdasdsads342").install())
+driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 ```
 
 (*) access_token requred to work with Github API more info https://help.github.com/articles/creating-an-access-token-for-command-line-use/
+
+You can set Github token using configuration file:
+
+Create file **${USER_HOME}/.wdm/config.ini** with such content:
+
+```
+[DEFAULT]
+gh_token=asdadasdasdasdasdas
+```
 
 It will automatically download latest release of chromedriver and set path. Moreover when the new version of the driver
 will be released, webriver manager will download it and update path.
