@@ -8,13 +8,14 @@ from selenium import webdriver
 from webdriver_manager.cache import CacheManager
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager import utils
+from webdriver_manager import config
 
 
 def delete_cache():
     cache = CacheManager()
     cache_path = cache.get_cache_path()
-    os.chmod(cache_path, 0o777)
     if os.path.exists(cache_path):
+        os.chmod(cache_path, 0o777)
         shutil.rmtree(cache_path)
     sleep(5)
 

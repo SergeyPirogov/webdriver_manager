@@ -31,11 +31,11 @@ class Driver(object):
 
 
 class ChromeDriver(Driver):
-    def __init__(self, driver_url, name, version, os_type):
-        super(ChromeDriver, self).__init__(driver_url, name, version, os_type)
+    def __init__(self, version, os_type):
+        super(ChromeDriver, self).__init__(version, os_type)
 
     def get_latest_release_version(self):
-        file = requests.get(self._url + "/LATEST_RELEASE")
+        file = requests.get(self.config.driver_latest_release_url)
         return file.text.rstrip()
 
 
@@ -71,7 +71,7 @@ class GeckoDriver(Driver):
     @property
     def latest_release_url(self):
         token = self.config.gh_token
-        url = self.config.mozila_latest_releaseurl = self.config.mozila_latest_release
+        url = self.config.driver_latest_release_url
         if token:
             return "{base_url}?access_token={access_token}".format(base_url=url,
                                                                    access_token=token)
