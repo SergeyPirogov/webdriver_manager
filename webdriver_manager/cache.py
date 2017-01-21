@@ -21,8 +21,9 @@ class CacheManager:
             os.makedirs(driver_path)
 
     def get_cached_binary(self, driver):
-        cached_driver = driver.config.default().get('driver_path')
+        cached_driver = driver.config.driver_path
         if cached_driver:
+            logging.warning("Using driver from cache {}".format(cached_driver))
             return Binary(cached_driver)
 
         name = driver.name
