@@ -21,7 +21,7 @@ setuptools.setup(
     author='Sergey Pirogov',
     author_email='automationremarks@gmail.com',
     url='https://github.com/SergeyPirogov/webdriver_manager',
-    download_url='https://github.com/SergeyPirogov/webdriver_manager/tarball/1.2',
+    download_url='https://github.com/SergeyPirogov/webdriver_manager/tarball/1.4',
     keywords=['testing', 'selenium', 'driver', 'test automation'],
     classifiers=[
         'License :: OSI Approved :: Apache Software License',

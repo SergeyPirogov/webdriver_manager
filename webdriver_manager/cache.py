@@ -20,7 +20,14 @@ class CacheManager:
         if not os.path.exists(driver_path):
             os.makedirs(driver_path)
 
-    def get_cached_binary(self, name, version, os_type):
+    def get_cached_binary(self, driver):
+        cached_driver = driver.config.default().get('driver_path')
+        if cached_driver:
+            return Binary(cached_driver)
+
+        name = driver.name
+        version = driver.get_version()
+        os_type = driver.os_type
         logging.warning("Checking for {} {}:{} in cache".
                         format(os_type, name, version))
         if "win" in os_type:
@@ -34,16 +41,16 @@ class CacheManager:
         return None
 
     def download_driver(self, driver):
-        cached_binary = self.get_cached_binary(driver.name, driver.get_version(), driver.os_type)
+        cached_binary = self.get_cached_binary(driver)
         if cached_binary:
             return cached_binary
         zip_file = self._download_file(driver)
         files = archive.unpack(zip_file)
         return Binary(os.path.join(os.path.dirname(zip_file.name), files[0]))
 
-    #TODO merge download driver and this method
+    # TODO merge download driver and this method
     def download_binary(self, driver):
-        cached_binary = self.get_cached_binary(driver.name, driver.get_version(), driver.os_type)
+        cached_binary = self.get_cached_binary(driver)
         if cached_binary:
             return cached_binary
         return Binary(self._download_file(driver).name)

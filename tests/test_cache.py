@@ -5,6 +5,7 @@ from time import sleep
 import pytest
 
 from webdriver_manager.cache import CacheManager
+from webdriver_manager.config import Configuration
 from webdriver_manager.driver import ChromeDriver, GeckoDriver
 
 cache = CacheManager()
@@ -59,17 +60,17 @@ def test_should_be_true_for_cached_driver(os_type):
     driver = ChromeDriver(version=version,
                           os_type=os_type)
     cache.download_driver(driver)
-    assert cache.get_cached_binary(driver.name, driver.get_version(), os_type)
+    assert cache.get_cached_binary(driver)
 
 
 def test_should_be_false_for_new_driver():
     version = "2.26"
     driver = ChromeDriver(version=version,
-                          os_type="")
+                          os_type="win")
     cache_path = cache.get_cache_path()
     if os.path.exists(cache_path):
         shutil.rmtree(cache_path)
-    assert cache.get_cached_binary(driver.name, driver.get_version(), os_type="win") is None
+    assert cache.get_cached_binary(driver) is None
 
 
 def test_cache_driver_version():
@@ -79,6 +80,17 @@ def test_cache_driver_version():
     driver = ChromeDriver(version=version,
                           os_type=os_type)
     cache.download_driver(driver)
-    binary = cache.get_cached_binary(driver.name, driver.get_version(), os_type)
+    binary = cache.get_cached_binary(driver)
     assert binary
     assert os.path.join(cache.get_cache_path(), name, version, name) == binary.path
+
+
+def test_cached_driver_manual_setup():
+    config = Configuration(config_folder=os.path.dirname(__file__),file_name="wd_config.ini")
+    version = "2.26"
+    os_type = "linux"
+    driver = ChromeDriver(version=version,
+                          os_type=os_type)
+    driver.config = config
+    binary = cache.get_cached_binary(driver)
+    assert binary.path == "/home/sergey/PycharmProjects/webdriver_manager/webdriver_manager/.drivers/chromedriver/2.26/chromedriver"
