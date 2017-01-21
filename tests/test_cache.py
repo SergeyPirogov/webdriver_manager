@@ -86,11 +86,13 @@ def test_cache_driver_version():
 
 
 def test_cached_driver_manual_setup():
-    config = Configuration(config_folder=os.path.dirname(__file__),file_name="wd_config.ini")
+    config = Configuration(config_folder=os.path.dirname(__file__), file_name="wd_config.ini")
+    config.default()
     version = "2.26"
     os_type = "linux"
     driver = ChromeDriver(version=version,
                           os_type=os_type)
     driver.config = config
-    binary = cache.get_cached_binary(driver)
-    assert binary.path == "/home/sergey/PycharmProjects/webdriver_manager/webdriver_manager/.drivers/chromedriver/2.26/chromedriver"
+    with pytest.raises(IOError) as ex:
+        binary = cache.get_cached_binary(driver)
+    assert ex.value.args[1] == 'Is a directory'
