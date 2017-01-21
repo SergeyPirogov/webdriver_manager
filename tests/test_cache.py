@@ -5,7 +5,7 @@ from time import sleep
 import pytest
 
 from webdriver_manager.cache import CacheManager
-from webdriver_manager.driver import ChromeDriver, FireFoxDriver
+from webdriver_manager.driver import ChromeDriver, GeckoDriver
 
 cache = CacheManager()
 
@@ -47,10 +47,10 @@ def test_can_download_firefox_driver(os_type):
     name = "geckodriver"
     version = "v0.11.1"
     url = "https://github.com/mozilla/geckodriver/releases/download"
-    driver = FireFoxDriver(driver_url=url,
-                           name=name,
-                           version=version,
-                           os_type=os_type)
+    driver = GeckoDriver(driver_url=url,
+                         name=name,
+                         version=version,
+                         os_type=os_type)
 
     binary = cache.download_driver(driver)
     assert binary.name == name

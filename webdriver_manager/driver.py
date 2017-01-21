@@ -6,10 +6,12 @@ from webdriver_manager.config import Configuration
 
 
 class Driver(object):
-    def __init__(self, configuration, os_type):
-        self._url = configuration.url
-        self.name = configuration.name
-        self._version = configuration.version
+    def __init__(self, version, os_type):
+        self.config = Configuration(section=self.__class__.__name__)
+        self.config.set("version",version)
+        self._url = self.config.url
+        self.name = self.config.name
+        self._version = self.config.version
         self.os_type = os_type
 
     def get_url(self):
@@ -37,11 +39,9 @@ class ChromeDriver(Driver):
         return file.text.rstrip()
 
 
-class FireFoxDriver(Driver):
+class GeckoDriver(Driver):
     def __init__(self, version, os_type):
-        self.config = Configuration(section="firefox")
-        self.config.set("vesion", version)
-        super(FireFoxDriver, self).__init__(self.config, os_type)
+        super(GeckoDriver, self).__init__(version, os_type)
 
     def get_latest_release_version(self):
         resp = requests.get(self.latest_release_url)

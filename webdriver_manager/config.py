@@ -13,7 +13,7 @@ class Configuration(object):
                  config_folder=folder, section=None):
         self._parser = ConfigParser()
         self.config_file_path = os.path.join(config_folder, file_name)
-        self.section = section.upper()
+        self.section = section
         self._parser.read(_default_config)
         self._parser.read(self.config_file_path)
 
