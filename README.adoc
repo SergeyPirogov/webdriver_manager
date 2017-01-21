@@ -44,21 +44,38 @@ If you face error related to github credentials, you need to place github token:
 ```python
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 ```
+(*) access_token requred to work with Github API more info https://help.github.com/articles/creating-an-access-token-for-command-line-use/. You can set **gh_token** using config.ini file see Configuration section below. 
 
-(*) access_token requred to work with Github API more info https://help.github.com/articles/creating-an-access-token-for-command-line-use/
-
-You can set Github token using configuration file:
-
-Create file **${USER_HOME}/.wdm/config.ini** with such content:
-
-```
-[DEFAULT]
-gh_token=asdadasdasdasdasdas
-```
 Use with Edge:
 
 ```python
 driver = webdriver.Edge(EdgeDriverManager().install())
+```
+== Configuration
+Create file **${USER_HOME}/.wdm/config.ini** with such content:
+
+```
+[GeckoDriver]
+driver_path =
+gh_token =
+version = latest
+offline = False
+```
+* gh_token - Github access token to solve issues with API rate limit
+* driver_path - path to driver that was already downloaded 
+* version - by default driver lookup for the latest version of the driver, you can freeze it
+* offline - mode that will disable automatic driver lookup. In this case you need either specify exect driver version that is already in cache **${user_home}/.wdm** or set path to the driver using **driver_path** veariable.
+
+Same variables can be set for **[ChromeDriver]** and **[EdgeDriver]**
+
+Config example:
+
+```
+[GeckoDriver]
+driver_path = /home/user/.wdm/chromedriver/2.27/chromedriver
+gh_token = ada23fsdfdfsdfdf
+version = 2.27
+offline = True
 ```
 
 It will automatically download latest release of chromedriver and set path. Moreover when the new version of the driver
