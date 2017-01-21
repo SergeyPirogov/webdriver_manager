@@ -2,12 +2,15 @@ import logging
 
 import requests
 
+from webdriver_manager import config
 from webdriver_manager.config import Configuration
 
 
 class Driver(object):
     def __init__(self, version, os_type):
-        self.config = Configuration(section=self.__class__.__name__)
+        self.config = Configuration(file_name=config.filename,
+                                    config_folder=config.folder,
+                                    section=self.__class__.__name__)
         self.config.set("version", version)
         self._url = self.config.url
         self.name = self.config.name

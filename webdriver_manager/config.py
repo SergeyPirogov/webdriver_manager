@@ -7,8 +7,8 @@ folder = os.path.join(os.path.expanduser("~"), ".wdm")
 
 
 class Configuration(object):
-    def __init__(self, file_name=filename,
-                 config_folder=folder, section=None):
+    def __init__(self, file_name,
+                 config_folder, section=None):
         self._parser = ConfigParser()
         self.config_file_path = os.path.join(config_folder, file_name)
         self.section = section
