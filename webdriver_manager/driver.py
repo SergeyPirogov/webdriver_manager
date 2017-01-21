@@ -8,7 +8,7 @@ from webdriver_manager.config import Configuration
 class Driver(object):
     def __init__(self, version, os_type):
         self.config = Configuration(section=self.__class__.__name__)
-        self.config.set("version",version)
+        self.config.set("version", version)
         self._url = self.config.url
         self.name = self.config.name
         self._version = self.config.version
@@ -90,8 +90,8 @@ class EdgeDriver(Driver):
     def get_latest_release_version(self):
         return self.get_version()
 
-    def __init__(self, driver_url, name, version, os_type):
-        super(EdgeDriver, self).__init__(driver_url, name, version, os_type)
+    def __init__(self, version, os_type):
+        super(EdgeDriver, self).__init__(version, os_type)
 
     def get_version(self):
         return self._version

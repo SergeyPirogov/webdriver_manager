@@ -24,16 +24,11 @@ def delete_cache():
                                      ])
 def test_can_download_chrome_driver_for_os(os_type):
     delete_cache()
-    name = "chromedriver"
-    version = "2.26"
-    url = "http://chromedriver.storage.googleapis.com"
-    driver = ChromeDriver(driver_url=url,
-                          name=name,
-                          version=version,
+    driver = ChromeDriver(version="2.26",
                           os_type=os_type)
 
     binary = cache.download_driver(driver)
-    assert binary.name == name
+    assert binary.name == "chromedriver"
 
 
 @pytest.mark.parametrize("os_type", ["linux64",
@@ -46,10 +41,7 @@ def test_can_download_firefox_driver(os_type):
     delete_cache()
     name = "geckodriver"
     version = "v0.11.1"
-    url = "https://github.com/mozilla/geckodriver/releases/download"
-    driver = GeckoDriver(driver_url=url,
-                         name=name,
-                         version=version,
+    driver = GeckoDriver(version=version,
                          os_type=os_type)
 
     binary = cache.download_driver(driver)
@@ -63,24 +55,16 @@ def test_can_download_firefox_driver(os_type):
                                      "win64",
                                      ])
 def test_should_be_true_for_cached_driver(os_type):
-    name = "chromedriver"
     version = "2.26"
-    url = "http://chromedriver.storage.googleapis.com"
-    driver = ChromeDriver(driver_url=url,
-                          name=name,
-                          version=version,
+    driver = ChromeDriver(version=version,
                           os_type=os_type)
     cache.download_driver(driver)
     assert cache.get_cached_binary(driver.name, driver.get_version(), os_type)
 
 
 def test_should_be_false_for_new_driver():
-    name = "chromedriver"
     version = "2.26"
-    url = "http://chromedriver.storage.googleapis.com"
-    driver = ChromeDriver(driver_url=url,
-                          name=name,
-                          version=version,
+    driver = ChromeDriver(version=version,
                           os_type="")
     cache_path = cache.get_cache_path()
     if os.path.exists(cache_path):
@@ -91,11 +75,8 @@ def test_should_be_false_for_new_driver():
 def test_cache_driver_version():
     name = "chromedriver"
     version = "2.26"
-    url = "http://chromedriver.storage.googleapis.com"
     os_type = "mac64"
-    driver = ChromeDriver(driver_url=url,
-                          name=name,
-                          version=version,
+    driver = ChromeDriver(version=version,
                           os_type=os_type)
     cache.download_driver(driver)
     binary = cache.get_cached_binary(driver.name, driver.get_version(), os_type)

@@ -6,7 +6,7 @@ from webdriver_manager import utils
 
 
 class GeckoDriverManager(DriverManager):
-    def __init__(self, version="latest", os_type=utils.os_name()):
+    def __init__(self, version=None, os_type=utils.os_name()):
         DriverManager.__init__(self)
         self.driver = GeckoDriver(version=version,
                                   os_type=os_type)
