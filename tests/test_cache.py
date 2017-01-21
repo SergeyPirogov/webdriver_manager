@@ -3,12 +3,13 @@ import shutil
 from time import sleep
 
 import pytest
+from webdriver_manager import config
 
 from webdriver_manager.cache import CacheManager
 from webdriver_manager.config import Configuration
 from webdriver_manager.driver import ChromeDriver, GeckoDriver
 
-cache = CacheManager()
+cache = CacheManager(to_folder=config.folder, dir_name=config.folder)
 
 
 def delete_cache():
@@ -64,7 +65,7 @@ def test_should_be_true_for_cached_driver(os_type):
 
 
 def test_should_be_false_for_new_driver():
-    version = "2.26"
+    version = "2.25"
     driver = ChromeDriver(version=version,
                           os_type="win")
     cache_path = cache.get_cache_path()
@@ -86,8 +87,7 @@ def test_cache_driver_version():
 
 
 def test_cached_driver_manual_setup():
-    config = Configuration(config_folder=os.path.dirname(__file__), file_name="wd_config.ini")
-    config.default()
+    config = Configuration(config_folder=os.path.dirname(__file__), file_name="wd_config.ini", section="ChromeDriver")
     version = "2.26"
     os_type = "linux"
     driver = ChromeDriver(version=version,

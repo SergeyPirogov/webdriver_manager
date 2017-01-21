@@ -22,7 +22,8 @@ class CacheManager:
 
     def get_cached_binary(self, driver):
         cached_driver = driver.config.driver_path
-        if cached_driver:
+        is_offline = driver.config.offline
+        if cached_driver and is_offline == 'True':
             logging.warning("Using driver from cache {}".format(cached_driver))
             return Binary(cached_driver)
 
