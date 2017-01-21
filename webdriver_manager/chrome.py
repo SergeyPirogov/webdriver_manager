@@ -6,17 +6,13 @@ from webdriver_manager import utils
 
 
 class ChromeDriverManager(DriverManager):
-    def __init__(self, version="latest",
-                 name="chromedriver",
-                 url="http://chromedriver.storage.googleapis.com",
+    def __init__(self, version=None,
                  os_type=utils.os_type()):
         DriverManager.__init__(self)
         # there is no driver with 64 bit
         if os_type == "win64":
             os_type = "win32"
-        self.driver = ChromeDriver(driver_url=url,
-                                   name=name,
-                                   version=version,
+        self.driver = ChromeDriver(version=version,
                                    os_type=os_type)
 
     def install(self):

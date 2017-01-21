@@ -3,14 +3,15 @@ import logging
 import requests
 
 from webdriver_manager.config import Configuration
-from . import config
 
 
 class Driver(object):
-    def __init__(self, driver_url, name, version, os_type):
-        self._url = driver_url
-        self.name = name
-        self._version = version
+    def __init__(self, version, os_type):
+        self.config = Configuration(section=self.__class__.__name__)
+        self.config.set("version", version)
+        self._url = self.config.url
+        self.name = self.config.name
+        self._version = self.config.version
         self.os_type = os_type
 
     def get_url(self):
@@ -30,18 +31,17 @@ class Driver(object):
 
 
 class ChromeDriver(Driver):
-    def __init__(self, driver_url, name, version, os_type):
-        super(ChromeDriver, self).__init__(driver_url, name, version, os_type)
+    def __init__(self, version, os_type):
+        super(ChromeDriver, self).__init__(version, os_type)
 
     def get_latest_release_version(self):
-        file = requests.get(self._url + "/LATEST_RELEASE")
+        file = requests.get(self.config.driver_latest_release_url)
         return file.text.rstrip()
 
 
-class FireFoxDriver(Driver):
-    def __init__(self, driver_url, name, version, os_type):
-        super(FireFoxDriver, self).__init__(driver_url, name, version, os_type)
-        self.config = Configuration()
+class GeckoDriver(Driver):
+    def __init__(self, version, os_type):
+        super(GeckoDriver, self).__init__(version, os_type)
 
     def get_latest_release_version(self):
         resp = requests.get(self.latest_release_url)
@@ -71,7 +71,7 @@ class FireFoxDriver(Driver):
     @property
     def latest_release_url(self):
         token = self.config.gh_token
-        url = config.mozila_latest_releaseurl = self.config.mozila_latest_release
+        url = self.config.driver_latest_release_url
         if token:
             return "{base_url}?access_token={access_token}".format(base_url=url,
                                                                    access_token=token)
@@ -90,8 +90,8 @@ class EdgeDriver(Driver):
     def get_latest_release_version(self):
         return self.get_version()
 
-    def __init__(self, driver_url, name, version, os_type):
-        super(EdgeDriver, self).__init__(driver_url, name, version, os_type)
+    def __init__(self, version, os_type):
+        super(EdgeDriver, self).__init__(version, os_type)
 
     def get_version(self):
         return self._version

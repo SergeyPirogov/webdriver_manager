@@ -4,14 +4,10 @@ from webdriver_manager import utils
 
 
 class EdgeDriverManager(DriverManager):
-    def __init__(self, version="latest",
-                 name="MicrosoftWebDriver",
-                 url="https://download.microsoft.com/download/3/2/D/32D3E464-F2EF-490F-841B-05D53C848D15/",
+    def __init__(self, version=None,
                  os_type=utils.os_name()):
         DriverManager.__init__(self)
-        self.driver = EdgeDriver(driver_url=url,
-                                 name=name,
-                                 version=version,
+        self.driver = EdgeDriver(version=version,
                                  os_type=os_type)
 
     def install(self):
