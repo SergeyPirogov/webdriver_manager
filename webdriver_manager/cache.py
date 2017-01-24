@@ -65,6 +65,8 @@ class CacheManager:
                                                                                           driver.get_url()))
 
         filename = self._get_filename_from_response(response, driver)
+        if '"' in filename:
+            filename = filename.replace('"', "")
         driver_path = self._get_driver_path(driver.name, driver.get_version())
         self.create_cache_dir(driver_path)
         file_path = os.path.join(driver_path, filename)
