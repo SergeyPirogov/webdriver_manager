@@ -58,7 +58,7 @@ class GeckoDriver(Driver):
         logging.warning(
             "Getting latest mozila release info for {0}".format(self.get_version()))
         resp = requests.get(self.tagged_release_url)
-        validate_response(resp)
+        validate_response(self, resp)
         assets = resp.json()["assets"]
         ver = self.get_version()
         name = "{0}-{1}-{2}".format(self.name, ver, self.os_type)

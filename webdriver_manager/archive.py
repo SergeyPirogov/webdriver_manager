@@ -10,7 +10,10 @@ def extract_zip(zip_file, to_directory):
 
 
 def extract_tar_file(tar_file, to_dir):
-    tar = tarfile.open(tar_file.name, mode="r:gz")
+    try:
+        tar = tarfile.open(tar_file.name, mode="r:gz")
+    except tarfile.ReadError:
+        tar = tarfile.open(tar_file.name, mode="r:bz2")
     members = tar.getmembers()
     tar.extractall(to_dir)
     tar.close()

@@ -20,10 +20,17 @@ class PhantomJsDriverManager(DriverManager):
         zip_file = self._file_manager._download_file(self.driver)
         files = archive.unpack(zip_file)
 
-        from_dest = os.path.join(os.path.dirname(zip_file.name), files[2])
-        to_dest = os.path.join(os.path.dirname(zip_file.name), os.path.basename(files[2]))
+        phantom_js = self.__get_phantom_bin(files)
+
+        from_dest = os.path.join(os.path.dirname(zip_file.name), phantom_js)
+        to_dest = os.path.join(os.path.dirname(zip_file.name), os.path.basename(phantom_js))
 
         copyfile(from_dest, to_dest)
         bin_file_path = Binary(to_dest).path
         os.chmod(bin_file_path, 0o755)
         return bin_file_path
+
+    def __get_phantom_bin(self, files):
+        for index, name in enumerate(files):
+            if "/bin/phantomjs" in name:
+                return files[index]

@@ -29,7 +29,7 @@ def os_type():
     return os_name() + str(os_architecture())
 
 
-def validate_response(resp):
+def validate_response(self, resp):
     if resp.status_code == 404:
         raise ValueError("There is no such driver {0} with version {1}".format(self.name,
                                                                                self._version))
