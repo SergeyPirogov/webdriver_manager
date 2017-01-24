@@ -92,7 +92,7 @@ class PhantomJsDriver(Driver):
         token = self.config.gh_token
         url = "{}?access_token={}".format(self.config.driver_tags_url, token)
         resp = requests.get(url=url)
-        validate_response(resp)
+        validate_response(self, resp)
         return resp.json()[0]['name']
 
     def get_url(self):
