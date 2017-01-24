@@ -7,6 +7,7 @@ For now support:
 - ChromeDriver
 - GeckoDriver
 - EdgeDriver
+- PhantomJS
 
 Before:
 You should download binary chromedriver, unzip it somwhere in you PC and set path to this driver like this:
@@ -51,6 +52,13 @@ Use with Edge:
 ```python
 driver = webdriver.Edge(EdgeDriverManager().install())
 ```
+
+Use with PhantomJS:
+
+```python
+driver = webdriver.PhantomJS(PhantomJsDriverDriverManager().install())
+```
+
 == Configuration
 Create file **${USER_HOME}/.wdm/config.ini** with such content:
 
