@@ -3,7 +3,9 @@ import logging
 import requests
 
 from webdriver_manager import config
+from webdriver_manager import utils
 from webdriver_manager.config import Configuration
+from webdriver_manager.utils import validate_response, OSType
 
 
 class Driver(object):
@@ -48,7 +50,7 @@ class GeckoDriver(Driver):
 
     def get_latest_release_version(self):
         resp = requests.get(self.latest_release_url)
-        self.validate_response(resp)
+        validate_response(resp)
         return resp.json()["tag_name"]
 
     def get_url(self):
@@ -56,20 +58,13 @@ class GeckoDriver(Driver):
         logging.warning(
             "Getting latest mozila release info for {0}".format(self.get_version()))
         resp = requests.get(self.tagged_release_url)
-        self.validate_response(resp)
+        validate_response(resp)
         assets = resp.json()["assets"]
         ver = self.get_version()
         name = "{0}-{1}-{2}".format(self.name, ver, self.os_type)
         output_dict = [asset for asset in assets if
                        asset['name'].startswith(name)]
         return output_dict[0]['browser_download_url']
-
-    def validate_response(self, resp):
-        if resp.status_code == 404:
-            raise ValueError("There is no such driver {0} with version {1}".format(self.name,
-                                                                                   self._version))
-        elif resp.status_code != 200:
-            raise ValueError(resp.json())
 
     @property
     def latest_release_url(self):
@@ -87,6 +82,37 @@ class GeckoDriver(Driver):
         if token:
             return url + "?access_token={0}".format(token)
         return url
+
+
+class PhantomJsDriver(Driver):
+    def __init__(self, version, os_type):
+        super(PhantomJsDriver, self).__init__(version, os_type)
+
+    def get_latest_release_version(self):
+        token = self.config.gh_token
+        url = "{}?access_token={}".format(self.config.driver_tags_url, token)
+        resp = requests.get(url=url)
+        validate_response(resp)
+        return resp.json()[0]['name']
+
+    def get_url(self):
+        name = "{name}-{version}-{os}".format(name=self.name,
+                                              version=self.get_version(),
+                                              os=self.__file_name())
+        return "{url}/{name}".format(url=self.config.url,
+                                     name=name)
+
+    def __file_name(self):
+        if self.os_type == OSType.MAC:
+            return "macosx.zip"
+        elif self.os_type == OSType.WIN:
+            return "windows.zip"
+        elif self.os_type == OSType.LINUX and utils.os_architecture() == 64:
+            return "linux-x86_64.tar.bz2"
+        elif self.os_type == OSType.LINUX and utils.os_architecture() == 32:
+            return "linux-i686.tar.bz2"
+        else:
+            raise ValueError("No such driver for os type {}".format(utils.os_type()))
 
 
 class EdgeDriver(Driver):

@@ -17,8 +17,9 @@ def extract_tar_file(tar_file, to_dir):
     return members
 
 
-def unpack(archive):
-    to_directory = os.path.dirname(archive.name)
+def unpack(archive, to_directory=None):
+    if not to_directory:
+        to_directory = os.path.dirname(archive.name)
     if archive.name.endswith(".zip"):
         return extract_zip(archive, to_directory)
     else:
