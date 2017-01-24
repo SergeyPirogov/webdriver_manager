@@ -1,6 +1,9 @@
 == Changelog
 
-== 1.4 (Released)
+== 1.4.2 (Released 24.01.2017)
+* PhantomJS support added
+
+== 1.4 (Released 21.01.2017)
 * Edge driver support added
 * config.ini support added
 
