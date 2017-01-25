@@ -96,3 +96,8 @@ def test_cached_driver_manual_setup():
     with pytest.raises(IOError) as ex:
         binary = cache.get_cached_binary(driver)
     assert ex.value.args[1] == 'Is a directory'
+
+
+def test_cached_driver_path():
+    assert cache.get_driver_binary_path("chromedriver", "2.1.1") == os.path.join(cache.get_cache_path(), "chromedriver",
+                                                                                 "2.1.1", "chromedriver")
