@@ -32,3 +32,12 @@ def test_can_download_edge_driver_binary():
     edge_driver_bin = cache.download_binary(edge_driver)
     assert edge_driver_bin.name == u'MicrosoftWebDriver'
     assert os.path.exists(edge_driver_bin.path)
+
+
+def test_can_user_cached_edge_driver_binary():
+    delete_cache()
+    edge_driver = EdgeDriver("latest", "win")
+    cache.download_binary(edge_driver)
+    edge_driver_bin = cache.download_binary(edge_driver)
+    assert edge_driver_bin.name == u'MicrosoftWebDriver'
+    assert os.path.exists(edge_driver_bin.path)

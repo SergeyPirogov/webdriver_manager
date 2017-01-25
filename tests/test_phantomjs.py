@@ -18,3 +18,10 @@ def test_can_download_phantom_for_linux():
     delete_cache()
     path = PhantomJsDriverManager(os_type="linux").install()
     assert path.endswith("phantomjs")
+
+
+def test_can_user_phantom_driver_from_cache():
+    delete_cache()
+    PhantomJsDriverManager(os_type="linux").install()
+    path = PhantomJsDriverManager(os_type="linux").install()
+    assert path.endswith("phantomjs")

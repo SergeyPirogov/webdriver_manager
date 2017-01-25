@@ -15,7 +15,7 @@ def test_config_with_deafault_params():
 
 
 def test_config_variables_with_default_params():
-    config = Configuration(section="GeckoDriver", file_name="",config_folder="")
+    config = Configuration(section="GeckoDriver", file_name="", config_folder="")
     assert config.gh_token == ''
     assert config.driver_latest_release_url == expect_mz_latest
     assert config.mozila_release_tag == expect_mz_tag

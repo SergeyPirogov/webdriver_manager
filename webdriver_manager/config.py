@@ -25,6 +25,3 @@ class Configuration(object):
 
     def __getattr__(self, item):
         return self.get(self.section, item)
-
-    def default(self):
-        return self._parser.defaults()
