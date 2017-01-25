@@ -90,7 +90,7 @@ class PhantomJsDriver(Driver):
 
     def get_latest_release_version(self):
         token = self.config.gh_token
-        url = "{}?access_token={}".format(self.config.driver_tags_url, token)
+        url = "{}".format(self.config.driver_tags_url)
         resp = requests.get(url=url)
         validate_response(self, resp)
         return resp.json()[0]['name']
