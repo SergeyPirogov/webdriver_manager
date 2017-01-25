@@ -1,0 +1,12 @@
+# .coveragerc to control coverage.py
+[run]
+branch = True
+
+[report]
+# Regexes for lines to exclude from consideration
+exclude_lines =
+                raise NotImplementedError
+                if 0:
+                pass
+
+skip_covered=True
