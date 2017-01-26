@@ -3,6 +3,8 @@ import os
 import pytest
 from selenium import webdriver
 
+from tests.test_cache import cache
+from webdriver_manager.driver import GeckoDriver
 from webdriver_manager.firefox import GeckoDriverManager
 
 
@@ -30,3 +32,12 @@ def test_gecko_manager_with_wrong_version():
 def test_gecko_manager_with_correct_version_and_token():
     driver_path = GeckoDriverManager("v0.11.0").install()
     assert os.path.exists(driver_path)
+
+
+def test_gecko_driver_with_wrong_token():
+    with pytest.raises(ValueError) as ex:
+        driver = GeckoDriver(version="latest",
+                             os_type="linux32")
+        driver.config.set("gh_token", "adasda")
+        cache.download_driver(driver)
+    assert ex.value.args[0]['message'] == "Bad credentials"
