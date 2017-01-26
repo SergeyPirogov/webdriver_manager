@@ -10,7 +10,6 @@ python:
 
 install:
   - pip install tox
-  - pip install codeclimate-test-reporter
 
 before_install:
   - export CHROME_BIN=/usr/bin/google-chrome
@@ -24,7 +23,6 @@ before_install:
 
 script:
   - tox
-  - codeclimate-test-reporter
 
 notifications:
   email:
