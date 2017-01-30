@@ -1,6 +1,6 @@
 = python webdriver manager
 
-The main ida is to simplify managemet of binary drivers for different browsers.
+The main idea is to simplify managemet of binary drivers for different browsers.
 
 For now support:
 
