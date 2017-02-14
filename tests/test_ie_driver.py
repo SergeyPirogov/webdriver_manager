@@ -50,3 +50,8 @@ def test_ie_driver_manager_with_wrong_version():
         IEDriverManager("0.2").install()
     assert ex.value.args[0] == "There is no such driver IEDriverServer with version 0.2 " \
                                "by http://selenium-release.storage.googleapis.com/0.2/IEDriverServer_Win32_0.2.0.zip"
+
+
+def test_can_get_latest_ie_driver_version():
+    latest_version = IEDriver("latest", "win32").get_latest_release_version()
+    assert latest_version

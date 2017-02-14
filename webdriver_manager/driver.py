@@ -1,4 +1,7 @@
 import logging
+import re
+from collections import OrderedDict
+from xml.etree import ElementTree as ET
 
 import requests
 
@@ -133,8 +136,29 @@ class EdgeDriver(Driver):
 
 
 class IEDriver(Driver):
+    def sortchildrenby(self, container):
+        data = []
+        for elem in container.iter("Contents"):
+            key = elem
+            data.append((key, elem))
+
+        data.sort()
+
     def get_latest_release_version(self):
-        return self.config.latest_version
+        url = self.config.url
+        resp = requests.get(url)
+        root = ET.fromstring(resp.text)
+
+        values = {}
+
+        for child in root.findall('{http://doc.s3.amazonaws.com/2006-03-01}Contents'):
+            key = child.find("{http://doc.s3.amazonaws.com/2006-03-01}Key").text
+            if self.config.name in key:
+                last_modified = child.find('{http://doc.s3.amazonaws.com/2006-03-01}LastModified').text
+                values[last_modified] = key
+        d = sorted(values, reverse=True)
+        latest_release = values[d[0]]
+        return latest_release[-9:-4]
 
     def __init__(self, version, os_type):
         super(IEDriver, self).__init__(version, os_type)
