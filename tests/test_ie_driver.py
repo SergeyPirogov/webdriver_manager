@@ -12,8 +12,7 @@ from webdriver_manager.microsoft import IEDriverManager
 @pytest.mark.parametrize("version", ["2.53.1",
                                      "3.0",
                                      "latest",
-                                     None,
-                                     pytest.mark.xfail("0.2")])
+                                     None])
 @pytest.mark.parametrize("use_cache", [True,
                                        False])
 @pytest.mark.skipif(sys.platform != 'win32',
@@ -29,9 +28,9 @@ def test_ie_manager_with_selenium(version, use_cache):
 
 @pytest.mark.parametrize("version", ["2.53.1",
                                      "3.0",
+                                     "3.0.0",
                                      "latest",
-                                     None,
-                                     pytest.mark.xfail("0.2")])
+                                     None])
 @pytest.mark.parametrize("use_cache", [True,
                                        False])
 def test_ie_driver_binary(version, use_cache):
@@ -42,3 +41,12 @@ def test_ie_driver_binary(version, use_cache):
     ie_driver_bin = cache.download_driver(ie_driver)
     assert ie_driver_bin.name == u'IEDriverServer'
     assert os.path.exists(ie_driver_bin.path)
+
+
+@pytest.mark.skipif(sys.platform != 'win32',
+                    reason="run only on windows")
+def test_ie_driver_manager_with_wrong_version():
+    with pytest.raises(ValueError) as ex:
+        IEDriverManager("0.2").install()
+    assert ex.value.args[0] == "There is no such driver IEDriverServer with version 0.2 " \
+                               "by http://selenium-release.storage.googleapis.com/0.2/IEDriverServer_Win32_0.2.0.zip"
