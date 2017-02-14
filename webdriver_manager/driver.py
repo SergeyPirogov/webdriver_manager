@@ -1,4 +1,7 @@
 import logging
+import re
+from collections import OrderedDict
+from xml.etree import ElementTree as ET
 
 import requests
 
@@ -130,3 +133,52 @@ class EdgeDriver(Driver):
 
     def get_url(self):
         return "{}/{}.exe".format(self._url, self.name)
+
+
+class IEDriver(Driver):
+    def sortchildrenby(self, container):
+        data = []
+        for elem in container.iter("Contents"):
+            key = elem
+            data.append((key, elem))
+
+        data.sort()
+
+    def get_latest_release_version(self):
+        url = self.config.url
+        resp = requests.get(url)
+        root = ET.fromstring(resp.text)
+
+        values = {}
+
+        for child in root.findall('{http://doc.s3.amazonaws.com/2006-03-01}Contents'):
+            key = child.find("{http://doc.s3.amazonaws.com/2006-03-01}Key").text
+            if self.config.name in key:
+                last_modified = child.find('{http://doc.s3.amazonaws.com/2006-03-01}LastModified').text
+                values[last_modified] = key
+        d = sorted(values, reverse=True)
+        latest_release = values[d[0]]
+        return latest_release[-9:-4]
+
+    def __init__(self, version, os_type):
+        super(IEDriver, self).__init__(version, os_type)
+
+    def get_url(self):
+        major, minor, patch = self.__get_divided_version()
+        name = "{major}.{minor}/{name}_{os}_{major}.{minor}.{patch}.zip".format(name=self.name,
+                                                                                os=self.os_type.capitalize(),
+                                                                                major=major,
+                                                                                minor=minor,
+                                                                                patch=patch)
+        return "{url}/{name}".format(url=self.config.url,
+                                     name=name)
+
+    def __get_divided_version(self):
+        divided_version = self.get_version().split('.')
+        if len(divided_version) == 2:
+            return divided_version[0], divided_version[1], '0'
+        elif len(divided_version) == 3:
+            return divided_version
+        else:
+            raise ValueError("Version must consist of major, minor and/or patch, but given was: {version}"
+                             .format(version=self.get_version()))
