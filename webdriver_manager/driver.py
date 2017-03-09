@@ -13,6 +13,7 @@ from webdriver_manager.utils import validate_response, OSType
 
 class Driver(object):
     def __init__(self, version, os_type):
+        # type: (str, str) -> None
         self.config = Configuration(file_name=config.filename,
                                     config_folder=config.folder,
                                     section=self.__class__.__name__)
@@ -23,6 +24,7 @@ class Driver(object):
         self.os_type = os_type
 
     def get_url(self):
+        # type: () -> str
         url = "{url}/{ver}/{name}_{os}.zip"
         return url.format(url=self._url,
                           ver=self.get_version(),
@@ -30,33 +32,40 @@ class Driver(object):
                           os=self.os_type)
 
     def get_version(self):
+        # type: () -> str
         if self._version == "latest":
             return self.get_latest_release_version()
         return self._version
 
     def get_latest_release_version(self):
+        # type: () -> str
         raise NotImplementedError("Please implement this method")
 
 
 class ChromeDriver(Driver):
     def __init__(self, version, os_type):
+        # type: (str, str) -> ChromeDriver
         super(ChromeDriver, self).__init__(version, os_type)
 
     def get_latest_release_version(self):
+        # type: () -> str
         file = requests.get(self.config.driver_latest_release_url)
         return file.text.rstrip()
 
 
 class GeckoDriver(Driver):
     def __init__(self, version, os_type):
+        # type: (str, str) -> None
         super(GeckoDriver, self).__init__(version, os_type)
 
     def get_latest_release_version(self):
+        # type: () -> str
         resp = requests.get(self.latest_release_url)
         validate_response(self, resp)
         return resp.json()["tag_name"]
 
     def get_url(self):
+        # type: () -> str
         # https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz
         logging.warning(
             "Getting latest mozila release info for {0}".format(self.get_version()))
@@ -71,6 +80,7 @@ class GeckoDriver(Driver):
 
     @property
     def latest_release_url(self):
+        # type: () -> str
         token = self.config.gh_token
         url = self.config.driver_latest_release_url
         if token:
@@ -80,6 +90,7 @@ class GeckoDriver(Driver):
 
     @property
     def tagged_release_url(self):
+        # type: () -> str
         token = self.config.gh_token
         url = self.config.mozila_release_tag.format(self.get_version())
         if token:
@@ -89,9 +100,11 @@ class GeckoDriver(Driver):
 
 class PhantomJsDriver(Driver):
     def __init__(self, version, os_type):
+        # type: (str, str) -> None
         super(PhantomJsDriver, self).__init__(version, os_type)
 
     def get_latest_release_version(self):
+        # type: () -> str
         token = self.config.gh_token
         url = self.config.driver_tags_url
         if token:
@@ -102,6 +115,7 @@ class PhantomJsDriver(Driver):
         return resp.json()[0]['name']
 
     def get_url(self):
+        # type: () -> str
         name = "{name}-{version}-{os}".format(name=self.name,
                                               version=self.get_version(),
                                               os=self.__file_name())
@@ -109,6 +123,7 @@ class PhantomJsDriver(Driver):
                                      name=name)
 
     def __file_name(self):
+        # type: () -> str
         if self.os_type == OSType.MAC:
             return "macosx.zip"
         elif self.os_type == OSType.WIN:
@@ -123,15 +138,19 @@ class PhantomJsDriver(Driver):
 
 class EdgeDriver(Driver):
     def get_latest_release_version(self):
+        # type: () -> str
         return self.get_version()
 
     def __init__(self, version, os_type):
+        # type: (str, str) -> None
         super(EdgeDriver, self).__init__(version, os_type)
 
     def get_version(self):
+        # type: () -> str
         return self._version
 
     def get_url(self):
+        # type: () -> str
         return "{}/{}.exe".format(self._url, self.name)
 
 
@@ -145,6 +164,7 @@ class IEDriver(Driver):
         data.sort()
 
     def get_latest_release_version(self):
+        # type: () -> str
         url = self.config.url
         resp = requests.get(url)
         root = ET.fromstring(resp.text)
@@ -161,9 +181,11 @@ class IEDriver(Driver):
         return latest_release[-9:-4]
 
     def __init__(self, version, os_type):
+        # type: (str, str) -> None
         super(IEDriver, self).__init__(version, os_type)
 
     def get_url(self):
+        # type: () -> str
         major, minor, patch = self.__get_divided_version()
         name = "{major}.{minor}/{name}_{os}_{major}.{minor}.{patch}.zip".format(name=self.name,
                                                                                 os=self.os_type.capitalize(),
