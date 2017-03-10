@@ -10,7 +10,7 @@ from shutil import copyfile
 
 class PhantomJsDriverManager(DriverManager):
     def __init__(self, version=None, os_type=utils.os_name()):
-        DriverManager.__init__(self)
+        super(PhantomJsDriverManager, self).__init__()
         self.driver = PhantomJsDriver(version, os_type)
 
     def install(self):

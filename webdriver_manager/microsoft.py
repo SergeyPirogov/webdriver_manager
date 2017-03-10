@@ -6,7 +6,7 @@ from webdriver_manager import utils
 class EdgeDriverManager(DriverManager):
     def __init__(self, version=None,
                  os_type=utils.os_name()):
-        DriverManager.__init__(self)
+        super(EdgeDriverManager, self).__init__()
         self.driver = EdgeDriver(version=version,
                                  os_type=os_type)
 
