@@ -1,0 +1,12 @@
+[[source]]
+url = "https://pypi.org/"
+verify_ssl = true
+
+[dev-packages]
+selenium = "*"
+pytest = "*"
+pytest-cov = "*"
+
+[packages]
+requests = "*"
+configparser = "*"
