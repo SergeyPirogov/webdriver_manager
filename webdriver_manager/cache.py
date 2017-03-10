@@ -14,9 +14,11 @@ class CacheManager:
         self.to_folder = to_folder
 
     def get_cache_path(self):
+        # type: () -> str
         return os.path.join(self.root_dir, self.to_folder)
 
     def create_cache_dir(self, driver_path):
+        # type: (str) -> None
         if not os.path.exists(driver_path):
             os.makedirs(driver_path)
 
@@ -43,6 +45,7 @@ class CacheManager:
         return None
 
     def download_driver(self, driver):
+        # type: (Driver) -> Binary
         cached_binary = self.get_cached_binary(driver)
         if cached_binary:
             return cached_binary
@@ -58,6 +61,7 @@ class CacheManager:
         return Binary(self._download_file(driver).name)
 
     def _download_file(self, driver):
+        # type: (Driver) -> file
         response = requests.get(driver.get_url(), stream=True)
         if response.status_code == 404:
             raise ValueError("There is no such driver {0} with version {1} by {2}".format(driver.name,
@@ -92,4 +96,5 @@ class CacheManager:
         return os.path.join(cache_path, name, version)
 
     def get_driver_binary_path(self, name, version):
+        # type: (str, str) -> str
         return os.path.join(self._get_driver_path(name, version), name)
