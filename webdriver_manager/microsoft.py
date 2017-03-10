@@ -11,13 +11,15 @@ class EdgeDriverManager(DriverManager):
                                  os_type=os_type)
 
     def install(self):
+        # type: () -> str
         return self._file_manager.download_binary(self.driver).path
 
 
 class IEDriverManager(DriverManager):
     def __init__(self, version=None, os_type=utils.os_type()):
-        DriverManager.__init__(self)
+        super(IEDriverManager, self).__init__()
         self.driver = IEDriver(version=version, os_type=os_type)
 
     def install(self):
+        # type: () -> str
         return self._file_manager.download_driver(self.driver).path
