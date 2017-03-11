@@ -1,0 +1,23 @@
+{
+    "default": {
+        "requests": "*",
+        "configparser": "*"
+    },
+    "develop": {
+        "selenium": "*",
+        "pytest": "*",
+        "pytest-cov": "*"
+    },
+    "_meta": {
+        "sources": [
+            {
+                "url": "https://pypi.org/simple",
+                "verify_ssl": true
+            }
+        ],
+        "requires": {},
+        "hash": {
+            "sha256": "4c7734e2c544a7f2b0dd12f9b43859fb224e970f0d31078077a6dec204256c50"
+        }
+    }
+}
