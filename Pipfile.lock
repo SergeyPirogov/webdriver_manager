@@ -1,23 +1,23 @@
 {
+    "develop": {
+        "selenium": "*",
+        "pytest": "*",
+        "pytest-cov": "*"
+    },
     "_meta": {
-        "hash": {
-            "sha256": "1d0c31f81ef60099ed3ee0b6a26531df1f5cb75f1584eead8da8ef0fc775dce2"
-        },
+        "requires": {},
         "sources": [
             {
                 "url": "https://pypi.org/",
                 "verify_ssl": true
             }
         ],
-        "requires": {}
+        "hash": {
+            "sha256": "1d0c31f81ef60099ed3ee0b6a26531df1f5cb75f1584eead8da8ef0fc775dce2"
+        }
     },
     "default": {
-        "configparser": "*",
-        "requests": "*"
-    },
-    "develop": {
-        "selenium": "*",
-        "pytest": "*",
-        "pytest-cov": "*"
+        "requests": "*",
+        "configparser": "*"
     }
 }
