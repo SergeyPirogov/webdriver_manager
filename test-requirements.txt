@@ -1,5 +1,0 @@
-pytest
-pytest-cov
-selenium
-tox
-flake8==2.5.0
