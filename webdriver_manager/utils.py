@@ -40,4 +40,4 @@ def validate_response(self, resp):
 
 
 def console(text):
-    print(crayons.yellow(text, bold=True))
+    print(crayons.yellow(text))

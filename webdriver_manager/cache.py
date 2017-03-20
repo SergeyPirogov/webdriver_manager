@@ -27,14 +27,13 @@ class CacheManager:
         cached_driver = driver.config.driver_path
         is_offline = driver.config.offline
         if cached_driver and is_offline == 'True':
-            logging.warning("Using driver from cache {}".format(cached_driver))
+            console("Using driver from cache {}".format(cached_driver))
             return Binary(cached_driver)
 
         name = driver.name
         version = driver.get_version()
         os_type = driver.os_type
-        console("\nChecking for {} {}:{} in cache".
-                             format(os_type, name, version))
+        console("Checking for {} {}:{} in cache".format(os_type, name, version))
         if "win" in os_type:
             name += ".exe"
         for dirName, subdirList, fileList in os.walk(self.get_cache_path()):
