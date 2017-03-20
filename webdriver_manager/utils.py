@@ -1,6 +1,8 @@
 import platform
 import sys
 
+import crayons
+
 
 class OSType(object):
     LINUX = "linux"
@@ -35,3 +37,7 @@ def validate_response(self, resp):
                                                                                self._version))
     elif resp.status_code != 200:
         raise ValueError(resp.json())
+
+
+def console(text):
+    print(crayons.yellow(text, bold=True))

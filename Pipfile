@@ -10,3 +10,5 @@ pytest-cov = "*"
 [packages]
 requests = "*"
 configparser = "*"
+crayons = "*"
+pytest = "*"
