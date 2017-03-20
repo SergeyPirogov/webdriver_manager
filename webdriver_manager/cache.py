@@ -1,4 +1,3 @@
-import logging
 import os
 import re
 
@@ -10,7 +9,11 @@ from webdriver_manager.utils import console
 
 
 class CacheManager:
-    def __init__(self, to_folder=".drivers", dir_name=os.path.dirname(os.path.abspath(__file__))):
+    def __init__(
+            self,
+            to_folder=".drivers",
+            dir_name=os.path.dirname(
+            os.path.abspath(__file__))):
         self.root_dir = dir_name
         self.to_folder = to_folder
 
@@ -34,12 +37,22 @@ class CacheManager:
         version = driver.get_version()
         os_type = driver.os_type
         console("")
-        console("Checking for {} {}:{} in cache".format(os_type, name, version), bold=True)
+        console(
+            "Checking for {} {}:{} in cache".format(
+                os_type,
+                name,
+                version),
+            bold=True)
         if "win" in os_type:
             name += ".exe"
         for dirName, subdirList, fileList in os.walk(self.get_cache_path()):
             for fname in fileList:
-                if os.path.join(dirName, fname).endswith(os.path.join(version, name)):
+                if os.path.join(
+                    dirName,
+                    fname).endswith(
+                    os.path.join(
+                        version,
+                        name)):
                     console("Driver found in {}/{}".format(dirName, fname))
                     return Binary(os.path.join(dirName, fname))
         console("There is no cached driver. Downloading new one...")
@@ -65,9 +78,9 @@ class CacheManager:
         # type: (Driver) -> file
         response = requests.get(driver.get_url(), stream=True)
         if response.status_code == 404:
-            raise ValueError("There is no such driver {0} with version {1} by {2}".format(driver.name,
-                                                                                          driver.get_version(),
-                                                                                          driver.get_url()))
+            raise ValueError(
+                "There is no such driver {0} with version {1} by {2}".format(
+                    driver.name, driver.get_version(), driver.get_url()))
 
         filename = self._get_filename_from_response(response, driver)
         if '"' in filename:
@@ -86,7 +99,8 @@ class CacheManager:
 
     def _get_filename_from_response(self, response, driver):
         try:
-            return re.findall("filename=(.+)", response.headers["content-disposition"])[0]
+            return re.findall("filename=(.+)",
+                              response.headers["content-disposition"])[0]
         except KeyError:
             return "{}.zip".format(driver.name)
         except IndexError:

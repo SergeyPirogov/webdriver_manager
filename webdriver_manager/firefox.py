@@ -1,5 +1,3 @@
-from webdriver_manager import config
-from webdriver_manager.config import Configuration
 from webdriver_manager.driver import GeckoDriver
 from webdriver_manager.manager import DriverManager
 from webdriver_manager import utils

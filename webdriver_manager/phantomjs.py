@@ -34,7 +34,10 @@ class PhantomJsDriverManager(DriverManager):
         phantom_js = self.__get_phantom_bin(files)
 
         from_dest = os.path.join(os.path.dirname(zip_file.name), phantom_js)
-        to_dest = os.path.join(os.path.dirname(zip_file.name), os.path.basename(phantom_js))
+        to_dest = os.path.join(
+            os.path.dirname(
+                zip_file.name),
+            os.path.basename(phantom_js))
 
         copyfile(from_dest, to_dest)
         return to_dest

@@ -12,7 +12,8 @@ class Configuration(object):
         self._parser = ConfigParser()
         self.config_file_path = os.path.join(config_folder, file_name)
         self.section = section
-        _default_config_path = os.path.join(os.path.dirname(__file__), 'default.ini')
+        _default_config_path = os.path.join(
+            os.path.dirname(__file__), 'default.ini')
         self._parser.read(_default_config_path)
         self._parser.read(self.config_file_path)
 
