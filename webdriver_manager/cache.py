@@ -10,6 +10,7 @@ from webdriver_manager.utils import console
 
 
 class CacheManager:
+
     def __init__(self, to_folder=".drivers", dir_name=os.path.dirname(os.path.abspath(__file__))):
         self.root_dir = dir_name
         self.to_folder = to_folder
@@ -34,7 +35,8 @@ class CacheManager:
         version = driver.get_version()
         os_type = driver.os_type
         console("")
-        console("Checking for {} {}:{} in cache".format(os_type, name, version), bold=True)
+        console("Checking for {} {}:{} in cache".format(
+            os_type, name, version), bold=True)
         if "win" in os_type:
             name += ".exe"
         for dirName, subdirList, fileList in os.walk(self.get_cache_path()):
