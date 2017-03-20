@@ -86,6 +86,13 @@
             "version": "==1.4.3",
             "hash": "sha256:d8b24664561d0d34ddfaec54636d502d7cea6e29c3eaf68f3df6180863e2166e"
         }
+        "requests": "*",
+        "configparser": "*"
+    },
+    "develop": {
+        "selenium": "*",
+        "pytest": "*",
+        "pytest-cov": "*"
     },
     "_meta": {
         "sources": [
