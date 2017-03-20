@@ -39,7 +39,7 @@ class CacheManager:
         for dirName, subdirList, fileList in os.walk(self.get_cache_path()):
             for fname in fileList:
                 if os.path.join(dirName, fname).endswith(os.path.join(version, name)):
-                    console("Driver found in cache {}/{}".format(dirName, fname))
+                    console("Driver found in {}/{}".format(dirName, fname))
                     return Binary(os.path.join(dirName, fname))
         console("There is no cached driver. Downloading new one...")
         return None
