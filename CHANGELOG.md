@@ -1,5 +1,8 @@
 == Changelog
 
+== 1.4.5 (Released )
+* Colorfull console output added
+
 == 1.4.4 (Released )
 * IEDriver support added
 
