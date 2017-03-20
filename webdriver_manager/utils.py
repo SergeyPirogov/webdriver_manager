@@ -39,5 +39,5 @@ def validate_response(self, resp):
         raise ValueError(resp.json())
 
 
-def console(text):
-    print(crayons.yellow(text))
+def console(text, bold=False):
+    print(crayons.yellow(text, bold=bold))
