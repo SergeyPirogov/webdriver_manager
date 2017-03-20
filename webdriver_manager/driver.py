@@ -9,6 +9,7 @@ from webdriver_manager.utils import validate_response, OSType, console
 
 
 class Driver(object):
+
     def __init__(self, version, os_type):
         # type: (str, str) -> None
         self.config = Configuration(file_name=config.filename,
@@ -40,6 +41,7 @@ class Driver(object):
 
 
 class ChromeDriver(Driver):
+
     def __init__(self, version, os_type):
         # type: (str, str) -> ChromeDriver
         super(ChromeDriver, self).__init__(version, os_type)
@@ -51,6 +53,7 @@ class ChromeDriver(Driver):
 
 
 class GeckoDriver(Driver):
+
     def __init__(self, version, os_type):
         # type: (str, str) -> None
         super(GeckoDriver, self).__init__(version, os_type)
@@ -96,6 +99,7 @@ class GeckoDriver(Driver):
 
 
 class PhantomJsDriver(Driver):
+
     def __init__(self, version, os_type):
         # type: (str, str) -> None
         super(PhantomJsDriver, self).__init__(version, os_type)
@@ -130,10 +134,12 @@ class PhantomJsDriver(Driver):
         elif self.os_type == OSType.LINUX and utils.os_architecture() == 32:
             return "linux-i686.tar.bz2"
         else:
-            raise ValueError("No such driver for os type {}".format(utils.os_type()))
+            raise ValueError(
+                "No such driver for os type {}".format(utils.os_type()))
 
 
 class EdgeDriver(Driver):
+
     def get_latest_release_version(self):
         # type: () -> str
         return self.get_version()
@@ -152,6 +158,7 @@ class EdgeDriver(Driver):
 
 
 class IEDriver(Driver):
+
     def sortchildrenby(self, container):
         data = []
         for elem in container.iter("Contents"):
@@ -169,9 +176,11 @@ class IEDriver(Driver):
         values = {}
 
         for child in root.findall('{http://doc.s3.amazonaws.com/2006-03-01}Contents'):
-            key = child.find("{http://doc.s3.amazonaws.com/2006-03-01}Key").text
+            key = child.find(
+                "{http://doc.s3.amazonaws.com/2006-03-01}Key").text
             if self.config.name in key:
-                last_modified = child.find('{http://doc.s3.amazonaws.com/2006-03-01}LastModified').text
+                last_modified = child.find(
+                    '{http://doc.s3.amazonaws.com/2006-03-01}LastModified').text
                 values[last_modified] = key
         d = sorted(values, reverse=True)
         latest_release = values[d[0]]
