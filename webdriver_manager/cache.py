@@ -33,7 +33,7 @@ class CacheManager:
         name = driver.name
         version = driver.get_version()
         os_type = driver.os_type
-        console("Checking for {} {}:{} in cache".format(os_type, name, version))
+        console("\nChecking for {} {}:{} in cache".format(os_type, name, version))
         if "win" in os_type:
             name += ".exe"
         for dirName, subdirList, fileList in os.walk(self.get_cache_path()):

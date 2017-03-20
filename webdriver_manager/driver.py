@@ -1,6 +1,3 @@
-import logging
-import re
-from collections import OrderedDict
 from xml.etree import ElementTree as ET
 
 import requests
@@ -8,7 +5,7 @@ import requests
 from webdriver_manager import config
 from webdriver_manager import utils
 from webdriver_manager.config import Configuration
-from webdriver_manager.utils import validate_response, OSType
+from webdriver_manager.utils import validate_response, OSType, console
 
 
 class Driver(object):
@@ -67,7 +64,7 @@ class GeckoDriver(Driver):
     def get_url(self):
         # type: () -> str
         # https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz
-        logging.warning(
+        console(
             "Getting latest mozila release info for {0}".format(self.get_version()))
         resp = requests.get(self.tagged_release_url)
         validate_response(self, resp)
