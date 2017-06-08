@@ -185,13 +185,17 @@ class IEDriver(Driver):
 
     def __init__(self, version, os_type):
         # type: (str, str) -> None
+        if os_type == "win64":
+            os_type = "x64"
+        else:
+            os_type = "Win32"
         super(IEDriver, self).__init__(version, os_type)
 
     def get_url(self):
         # type: () -> str
         major, minor, patch = self.__get_divided_version()
         name = "{major}.{minor}/{name}_{os}_{major}.{minor}.{patch}.zip".format(
-            name=self.name, os=self.os_type.capitalize(), major=major, minor=minor, patch=patch)
+            name=self.name, os=self.os_type, major=major, minor=minor, patch=patch)
         return "{url}/{name}".format(url=self.config.url,
                                      name=name)
 
@@ -203,5 +207,5 @@ class IEDriver(Driver):
             return divided_version
         else:
             raise ValueError(
-                "Version must consist of major, minor and/or patch, but given was: {version}" .format(
+                "Version must consist of major, minor and/or patch, but given was: {version}".format(
                     version=self.get_version()))

@@ -55,3 +55,8 @@ def test_ie_driver_manager_with_wrong_version():
 def test_can_get_latest_ie_driver_version():
     latest_version = IEDriver("latest", "win32").get_latest_release_version()
     assert latest_version
+
+
+def test_can_get_latest_ie_driver_for_x64():
+    delete_cache()
+    IEDriverManager(os_type="win64").install()
