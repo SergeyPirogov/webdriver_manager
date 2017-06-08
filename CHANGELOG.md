@@ -1,5 +1,8 @@
 == Changelog
 
+== 1.4.6 (Released)
+* IEDriver bug fix for Win x64
+
 == 1.4.5 (Released )
 * Colorfull console output added
 
