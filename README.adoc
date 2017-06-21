@@ -88,7 +88,7 @@ Same variables can be set for **[ChromeDriver]** and **[EdgeDriver]**
 Config example:
 
 ```
-[GeckoDriver]
+[ChromeDriver]
 driver_path = /home/user/.wdm/chromedriver/2.27/chromedriver
 gh_token = ada23fsdfdfsdfdf
 version = 2.27
