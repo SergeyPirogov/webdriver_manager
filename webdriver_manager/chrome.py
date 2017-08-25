@@ -3,6 +3,7 @@ from webdriver_manager.driver import ChromeDriver
 from webdriver_manager.manager import DriverManager
 from webdriver_manager import utils
 
+
 class ChromeDriverManager(DriverManager):
     def __init__(self, version=None, os_type=utils.os_type()):
         # type: (str, str) -> None

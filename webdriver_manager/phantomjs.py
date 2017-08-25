@@ -6,6 +6,7 @@ from webdriver_manager.driver import PhantomJsDriver
 from webdriver_manager.manager import DriverManager
 from shutil import copyfile
 
+
 class PhantomJsDriverManager(DriverManager):
     def __init__(self, version=None, os_type=utils.os_name()):
         super(PhantomJsDriverManager, self).__init__()

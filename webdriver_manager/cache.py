@@ -5,6 +5,7 @@ from webdriver_manager import archive
 from webdriver_manager.binary import Binary
 from webdriver_manager.utils import console
 
+
 class CacheManager:
     def __init__(
             self,
@@ -43,7 +44,8 @@ class CacheManager:
         if "win" in os_type:
             name += ".exe"
         if path is None:
-            for dirName, subdirList, fileList in os.walk(self.get_cache_path()):
+            for dirName, subdirList, fileList in\
+            	    os.walk(self.get_cache_path()):
                 for fname in fileList:
                     if os.path.join(
                         dirName,
@@ -84,12 +86,12 @@ class CacheManager:
             raise ValueError(
                 "There is no such driver {0} with version {1} by {2}".format(
                     driver.name, driver.get_version(), driver.get_url()))
-
         filename = self._get_filename_from_response(response, driver)
         if '"' in filename:
             filename = filename.replace('"', "")
         if path is None:
-            driver_path = self._get_driver_path(driver.name, driver.get_version())
+            driver_path = self._get_driver_path(driver.name,\
+                                                driver.get_version())
         else:
             driver_path = path
         self.create_cache_dir(driver_path)
