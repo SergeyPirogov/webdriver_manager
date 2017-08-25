@@ -13,7 +13,8 @@ class PhantomJsDriverManager(DriverManager):
         self.driver = PhantomJsDriver(version, os_type)
 
     def install(self, path=None):
-        path = os.path.abspath(path)
+        if not path is None:
+            path = os.path.abspath(path)
         cached_binary = self._file_manager.get_cached_binary(self.driver, path)
         if cached_binary:
             return cached_binary.path

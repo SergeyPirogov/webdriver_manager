@@ -64,7 +64,8 @@ class CacheManager:
 
     def download_driver(self, driver, path=None):
         # type: (Driver) -> Binary
-        path = os.path.abspath(path)
+        if not path is None:
+            path = os.path.abspath(path)
         cached_binary = self.get_cached_binary(driver, path)
         if cached_binary:
             return cached_binary
