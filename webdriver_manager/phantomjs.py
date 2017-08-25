@@ -1,5 +1,4 @@
 import os
-
 from webdriver_manager import archive
 from webdriver_manager import utils
 from webdriver_manager.binary import Binary
@@ -7,17 +6,17 @@ from webdriver_manager.driver import PhantomJsDriver
 from webdriver_manager.manager import DriverManager
 from shutil import copyfile
 
-
 class PhantomJsDriverManager(DriverManager):
     def __init__(self, version=None, os_type=utils.os_name()):
         super(PhantomJsDriverManager, self).__init__()
         self.driver = PhantomJsDriver(version, os_type)
 
-    def install(self):
-        cached_binary = self._file_manager.get_cached_binary(self.driver)
+    def install(self, path=None):
+        path = os.path.abspath(path)
+        cached_binary = self._file_manager.get_cached_binary(self.driver, path)
         if cached_binary:
             return cached_binary.path
-        zip_file = self._file_manager._download_file(self.driver)
+        zip_file = self._file_manager._download_file(self.driver, path)
         path = self.__extract_phantomjs_bin(zip_file)
         bin_file = Binary(path)
         os.chmod(bin_file.path, 0o755)
