@@ -8,6 +8,7 @@ from tests.test_cache import cache, delete_cache
 from webdriver_manager.driver import IEDriver
 from webdriver_manager.microsoft import IEDriverManager
 
+PATH = '.'
 
 @pytest.mark.parametrize("version", ["2.53.1",
                                      "3.0",
@@ -17,11 +18,20 @@ from webdriver_manager.microsoft import IEDriverManager
                                        False])
 @pytest.mark.skipif(sys.platform != 'win32',
                     reason="run only on windows")
-def test_ie_manager_with_selenium(version, use_cache):
+@pytest.mark.parametrize('path', PATH)
+@pytest.mark.parametrize('with_path', [True,
+                                       False])
+def test_ie_manager_with_selenium(version, use_cache, path, with_path):
     delete_cache()
     if use_cache:
-        IEDriverManager(version).install()
-    driver_path = IEDriverManager(version).install()
+        if with_path:
+            IEDriverManager(version).install(path)
+        else:
+            IEDriverManager(version).install()
+    if with_path:
+        driver_path = IEDriverManager(version).install(path)
+    else:
+        driver_path = IEDriverManager(version).install()
     dr = webdriver.Ie(driver_path)
     dr.quit()
 
@@ -45,9 +55,15 @@ def test_ie_driver_binary(version, use_cache):
 
 @pytest.mark.skipif(sys.platform != 'win32',
                     reason="run only on windows")
-def test_ie_driver_manager_with_wrong_version():
+@pytest.mark.parametrize('path', PATH)
+@pytest.mark.parametrize('with_path', [True,
+                                       False])
+def test_ie_driver_manager_with_wrong_version(path, with_path):
     with pytest.raises(ValueError) as ex:
-        IEDriverManager("0.2").install()
+        if with_path:
+            IEDriverManager("0.2").install(path)
+        else:
+            IEDriverManager("0.2").install()
     assert ex.value.args[0] == "There is no such driver IEDriverServer with version 0.2 " \
                                "by http://selenium-release.storage.googleapis.com/0.2/IEDriverServer_Win32_0.2.0.zip"
 
@@ -56,7 +72,12 @@ def test_can_get_latest_ie_driver_version():
     latest_version = IEDriver("latest", "win32").get_latest_release_version()
     assert latest_version
 
-
-def test_can_get_latest_ie_driver_for_x64():
+@pytest.mark.parametrize('path', PATH)
+@pytest.mark.parametrize('with_path', [True,
+                                       False])
+def test_can_get_latest_ie_driver_for_x64(path, with_path):
     delete_cache()
-    IEDriverManager(os_type="win64").install()
+    if with_path:
+        IEDriverManager(os_type="win64").install(path)
+    else:
+        IEDriverManager(os_type="win64").install()

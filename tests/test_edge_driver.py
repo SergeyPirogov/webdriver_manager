@@ -1,5 +1,4 @@
 import os
-
 import pytest
 import sys
 
@@ -9,20 +8,33 @@ from webdriver_manager.driver import EdgeDriver
 from webdriver_manager.microsoft import EdgeDriverManager
 from selenium import webdriver
 
+PATH = '.'
 
 @pytest.mark.skipif(sys.platform != 'win32',
                     reason="run only on windows")
-def test_edge_manager_with_selenium():
+@pytest.mark.parametrize('path', PATH)
+@pytest.mark.parametrize('with_path', [True,
+                                       False])
+def test_edge_manager_with_selenium(path, with_path):
     delete_cache()
-    driver_path = EdgeDriverManager().install()
+    if with_path:
+        driver_path = EdgeDriverManager().install(path)
+    else:
+        driver_path = EdgeDriverManager().install()
     dr = webdriver.Edge(driver_path)
     dr.quit()
 
 
 @pytest.mark.skipif(sys.platform != 'win32',
                     reason="run only on windows")
-def test_edge_manager_with_selenium_cache():
-    driver_path = EdgeDriverManager().install()
+@pytest.mark.parametrize('path', PATH)
+@pytest.mark.parametrize('with_path', [True,
+                                       False])
+def test_edge_manager_with_selenium_cache(path, with_path):
+    if with_path:
+        driver_path = EdgeDriverManager().install(path)
+    else:
+        driver_path = EdgeDriverManager().install()
     dr = webdriver.Edge(driver_path)
     dr.quit()
 

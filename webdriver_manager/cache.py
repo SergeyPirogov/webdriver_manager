@@ -74,11 +74,13 @@ class CacheManager:
         return Binary(os.path.join(os.path.dirname(zip_file.name), files[0]))
 
     # TODO merge download driver and this method
-    def download_binary(self, driver):
-        cached_binary = self.get_cached_binary(driver)
+    def download_binary(self, driver, path=None):
+        if not path is None:
+            path = os.path.abspath(path)
+        cached_binary = self.get_cached_binary(driver, path)
         if cached_binary:
             return cached_binary
-        return Binary(self._download_file(driver).name)
+        return Binary(self._download_file(driver).name, path)
 
     def _download_file(self, driver, path=None):
         # type: (Driver) -> file

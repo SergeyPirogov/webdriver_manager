@@ -10,9 +10,9 @@ class EdgeDriverManager(DriverManager):
         self.driver = EdgeDriver(version=version,
                                  os_type=os_type)
 
-    def install(self):
+    def install(self, path=None):
         # type: () -> str
-        return self._file_manager.download_binary(self.driver).path
+        return self._file_manager.download_binary(self.driver, path).path
 
 
 class IEDriverManager(DriverManager):
