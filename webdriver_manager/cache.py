@@ -80,7 +80,7 @@ class CacheManager:
         cached_binary = self.get_cached_binary(driver, path)
         if cached_binary:
             return cached_binary
-        return Binary(self._download_file(driver).name, path)
+        return Binary(self._download_file(driver).name)
 
     def _download_file(self, driver, path=None):
         # type: (Driver) -> file
