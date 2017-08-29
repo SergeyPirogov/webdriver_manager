@@ -34,14 +34,8 @@ def delete_old_install(path=None):
             pass
 
 
-@pytest.mark.parametrize('path', PATH)
-@pytest.mark.parametrize('with_path', [True,
-                                       False])
-def test_chrome_manager_with_specific_version(path, with_path):
-    if with_path:
-        bin = ChromeDriverManager("2.26").install(path)
-    else:
-        bin = ChromeDriverManager("2.26").install()
+def test_chrome_manager_with_specific_version():
+    bin = ChromeDriverManager("2.26").install()
     assert os.path.exists(bin)
 
 
@@ -56,17 +50,10 @@ def test_chrome_manager_with_latest_version(path, with_path):
     assert os.path.exists(bin)
 
 
-@pytest.mark.parametrize('path', PATH)
-@pytest.mark.parametrize('with_path', [True,
-                                       False])
-def test_chrome_manager_with_wrong_version(path, with_path):
+def test_chrome_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
-        if with_path:
-            delete_old_install(path)
-            ChromeDriverManager("0.2").install(path)
-        else:
-            delete_old_install()
-            ChromeDriverManager("0.2").install()
+        delete_old_install()
+        ChromeDriverManager("0.2").install()
     assert ex.value.args[0] == "There is no such driver chromedriver with version 0.2 " \
                                "by http://chromedriver.storage.googleapis.com/0.2/chromedriver_{0}.zip".format(
         utils.os_type())

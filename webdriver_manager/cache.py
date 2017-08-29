@@ -25,6 +25,8 @@ class CacheManager:
             os.makedirs(driver_path)
 
     def get_cached_binary(self, driver, path=None):
+        if not path is None:
+            self.root_dir = path
         cached_driver = driver.config.driver_path
         is_offline = driver.config.offline
         if cached_driver and is_offline == 'True':

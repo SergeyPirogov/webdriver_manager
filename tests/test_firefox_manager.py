@@ -20,14 +20,8 @@ def delete_old_install(path=None):
             pass
 
 
-@pytest.mark.parametrize('path', PATH)
-@pytest.mark.parametrize('with_path', [True,
-                                       False])
-def test_gecko_manager_with_correct_version(path, with_path):
-    if with_path:
-        driver_path = GeckoDriverManager("v0.11.0").install(path)
-    else:
-        driver_path = GeckoDriverManager("v0.11.0").install()
+def test_gecko_manager_with_correct_version():
+    driver_path = GeckoDriverManager("v0.11.0").install()
     assert os.path.exists(driver_path)
 
 @pytest.mark.parametrize('path', PATH)
@@ -43,16 +37,11 @@ def test_gecko_manager_with_selenium(path, with_path):
     ff.get("http://automation-remarks.com")
     ff.quit()
 
-@pytest.mark.parametrize('path', PATH)
-@pytest.mark.parametrize('with_path', [True,
-                                       False])
-def test_gecko_manager_with_wrong_version(path, with_path):
+
+def test_gecko_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
-        if with_path:
-            delete_old_install(path)
-            driver_path = GeckoDriverManager("0.2").install(path)
-        else:
-            driver_path = GeckoDriverManager("0.2").install()
+        delete_old_install()
+        driver_path = GeckoDriverManager("0.2").install()
         ff = webdriver.Firefox(executable_path=driver_path)
         ff.quit()
     assert ex.value.args[0] == "There is no such driver geckodriver with version 0.2"

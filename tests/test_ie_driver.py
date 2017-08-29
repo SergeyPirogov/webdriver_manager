@@ -31,23 +31,11 @@ def delete_old_install(path=None):
                                        False])
 @pytest.mark.skipif(sys.platform != 'win32',
                     reason="run only on windows")
-@pytest.mark.parametrize('path', PATH)
-@pytest.mark.parametrize('with_path', [True,
-                                       False])
-def test_ie_manager_with_selenium(version, use_cache, path, with_path):
+def test_ie_manager_with_selenium(version, use_cache):
+    delete_old_install()
     if use_cache:
-        if with_path:
-            delete_old_install(path)
-            IEDriverManager(version).install(path)
-        else:
-            delete_old_install()
-            IEDriverManager(version).install()
-    if with_path:
-        delete_old_install(path)
-        driver_path = IEDriverManager(version).install(path)
-    else:
-        delete_old_install()
-        driver_path = IEDriverManager(version).install()
+        IEDriverManager(version).install()
+    driver_path = IEDriverManager(version).install()
     dr = webdriver.Ie(driver_path)
     dr.quit()
 
@@ -90,13 +78,7 @@ def test_can_get_latest_ie_driver_version():
     latest_version = IEDriver("latest", "win32").get_latest_release_version()
     assert latest_version
 
-@pytest.mark.parametrize('path', PATH)
-@pytest.mark.parametrize('with_path', [True,
-                                       False])
+
 def test_can_get_latest_ie_driver_for_x64(path, with_path):
-    if with_path:
-        delete_old_install(path)
-        IEDriverManager(os_type="win64").install(path)
-    else:
-        delete_old_install()
-        IEDriverManager(os_type="win64").install()
+    delete_old_install()
+    IEDriverManager(os_type="win64").install()

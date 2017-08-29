@@ -17,11 +17,12 @@ def delete_old_install(path=None):
         path = os.path.abspath(path)
         try:
             os.remove(os.path.join(path, 'phantomjs.exe'))
-            os.remove(os.path.join(path, 'phantomjs.zip'))
             for file in os.listdir(path):
                 if 'phantomjs' in file and not os.path.isfile(file):
                     if 'phantomjs.exe' in os.listdir(os.path.join(path, file, 'bin')):
                         shutil.rmtree(os.path.join(path, file))
+                elif 'phantomjs' in file and file.endswith('.zip'):
+                        os.remove(os.path.join(path, file))
         except:
             pass
 
