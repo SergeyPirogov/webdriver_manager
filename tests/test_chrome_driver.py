@@ -12,6 +12,7 @@ from webdriver_manager import config
 
 PATH = '.'
 
+
 def delete_cache():
     cache = CacheManager()
     cache_path = cache.get_cache_path()
@@ -19,6 +20,19 @@ def delete_cache():
         os.chmod(cache_path, 0o777)
         shutil.rmtree(cache_path)
     sleep(5)
+
+
+def delete_old_install(path=None):
+    if path is None:
+        delete_cache()
+    else:
+        path = os.path.abspath(path)
+        try:
+            os.remove(os.path.join(path, 'chromedriver.exe'))
+            os.remove(os.path.join(path, 'chromedriver.zip'))
+        except:
+            pass
+
 
 @pytest.mark.parametrize('path', PATH)
 @pytest.mark.parametrize('with_path', [True,
@@ -30,6 +44,7 @@ def test_chrome_manager_with_specific_version(path, with_path):
         bin = ChromeDriverManager("2.26").install()
     assert os.path.exists(bin)
 
+
 @pytest.mark.parametrize('path', PATH)
 @pytest.mark.parametrize('with_path', [True,
                                        False])
@@ -40,14 +55,17 @@ def test_chrome_manager_with_latest_version(path, with_path):
         bin = ChromeDriverManager().install()
     assert os.path.exists(bin)
 
+
 @pytest.mark.parametrize('path', PATH)
 @pytest.mark.parametrize('with_path', [True,
                                        False])
 def test_chrome_manager_with_wrong_version(path, with_path):
     with pytest.raises(ValueError) as ex:
         if with_path:
+            delete_old_install(path)
             ChromeDriverManager("0.2").install(path)
         else:
+            delete_old_install()
             ChromeDriverManager("0.2").install()
     assert ex.value.args[0] == "There is no such driver chromedriver with version 0.2 " \
                                "by http://chromedriver.storage.googleapis.com/0.2/chromedriver_{0}.zip".format(
@@ -58,40 +76,32 @@ def test_chrome_manager_with_wrong_version(path, with_path):
 @pytest.mark.parametrize('with_path', [True,
                                        False])
 def test_chrome_manager_with_selenium(path, with_path):
-    delete_cache()
     if with_path:
+        delete_old_install(path)
         driver_path = ChromeDriverManager().install(path)
     else:
+        delete_old_install()
         driver_path = ChromeDriverManager().install()
     webdriver.Chrome(driver_path)
 
-
-def test_chrome_manager_with_selenium_path_param():
-    driver_path = ChromeDriverManager().install(PATH)
-    webdriver.Chrome(driver_path)
 
 @pytest.mark.parametrize('path', PATH)
 @pytest.mark.parametrize('with_path', [True,
                                        False])
 def test_chrome_manager_cached_driver_with_selenium(path, with_path):
     if with_path:
-        ChromeDriverManager().install()
-        webdriver.Chrome(ChromeDriverManager().install())
-    else:
         ChromeDriverManager().install(path)
         webdriver.Chrome(ChromeDriverManager().install(path))
+    else:
+        ChromeDriverManager().install()
+        webdriver.Chrome(ChromeDriverManager().install())
 
-
-
-def test_chrome_manager_cached_driver_with_selenium_with_path_param():
-    ChromeDriverManager().install(PATH)
-    webdriver.Chrome(ChromeDriverManager().install(PATH))
 
 @pytest.mark.parametrize('path', PATH)
 @pytest.mark.parametrize('with_path', [True,
                                        False])
 def test_chrome_manager_with_win64_os(path, with_path):
     if with_path:
-        ChromeDriverManager(os_type="win64").install(PATH)
+        ChromeDriverManager(os_type="win64").install(path)
     else:
         ChromeDriverManager(os_type="win64").install()

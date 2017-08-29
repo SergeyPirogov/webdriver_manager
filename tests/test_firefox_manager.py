@@ -9,11 +9,22 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 PATH = '.'
 
+
+def delete_old_install(path=None):
+    if not path is None:
+        path = os.path.abspath(path)
+        try:
+            os.remove(os.path.join(path, 'geckodriver.exe'))
+            os.remove(os.path.join(path, 'geckodriver.zip'))
+        except:
+            pass
+
+
 @pytest.mark.parametrize('path', PATH)
 @pytest.mark.parametrize('with_path', [True,
                                        False])
 def test_gecko_manager_with_correct_version(path, with_path):
-    if path:
+    if with_path:
         driver_path = GeckoDriverManager("v0.11.0").install(path)
     else:
         driver_path = GeckoDriverManager("v0.11.0").install()
@@ -24,7 +35,7 @@ def test_gecko_manager_with_correct_version(path, with_path):
                                        False])
 def test_gecko_manager_with_selenium(path, with_path):
     if with_path:
-        driver_path = GeckoDriverManager().install()
+        driver_path = GeckoDriverManager().install(path)
     else:
         driver_path = GeckoDriverManager().install()
     ff = webdriver.Firefox(executable_path=driver_path,
@@ -38,6 +49,7 @@ def test_gecko_manager_with_selenium(path, with_path):
 def test_gecko_manager_with_wrong_version(path, with_path):
     with pytest.raises(ValueError) as ex:
         if with_path:
+            delete_old_install(path)
             driver_path = GeckoDriverManager("0.2").install(path)
         else:
             driver_path = GeckoDriverManager("0.2").install()
