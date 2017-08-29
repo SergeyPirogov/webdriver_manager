@@ -79,6 +79,6 @@ def test_can_get_latest_ie_driver_version():
     assert latest_version
 
 
-def test_can_get_latest_ie_driver_for_x64(path, with_path):
+def test_can_get_latest_ie_driver_for_x64():
     delete_old_install()
     IEDriverManager(os_type="win64").install()

@@ -62,16 +62,9 @@ def test_can_download_phantom_for_linux(path, with_path):
         path = PhantomJsDriverManager(os_type="linux").install()
     assert path.endswith("phantomjs")
 
-@pytest.mark.parametrize('path', PATH)
-@pytest.mark.parametrize('with_path', [True,
-                                       False])
-def test_can_user_phantom_driver_from_cache(path, with_path):
-    if with_path:
-        delete_old_install(path)
-        PhantomJsDriverManager(os_type="linux").install(path)
-        path = PhantomJsDriverManager(os_type="linux").install(path)
-    else:
-        delete_old_install()
-        PhantomJsDriverManager(os_type="linux").install()
-        path = PhantomJsDriverManager(os_type="linux").install()
+
+def test_can_user_phantom_driver_from_cache():
+    delete_old_install()
+    PhantomJsDriverManager(os_type="linux").install()
+    path = PhantomJsDriverManager(os_type="linux").install()
     assert path.endswith("phantomjs")
