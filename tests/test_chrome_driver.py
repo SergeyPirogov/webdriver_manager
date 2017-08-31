@@ -59,16 +59,10 @@ def test_chrome_manager_with_wrong_version():
         utils.os_type())
 
 
-@pytest.mark.parametrize('path', PATH)
-@pytest.mark.parametrize('with_path', [True,
-                                       False])
-def test_chrome_manager_with_selenium(path, with_path):
-    if with_path:
-        delete_old_install(path)
-        driver_path = ChromeDriverManager().install(path)
-    else:
-        delete_old_install()
-        driver_path = ChromeDriverManager().install()
+
+def test_chrome_manager_with_selenium():
+    delete_old_install()
+    driver_path = ChromeDriverManager().install()
     webdriver.Chrome(driver_path)
 
 

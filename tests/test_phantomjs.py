@@ -27,39 +27,26 @@ def delete_old_install(path=None):
             pass
 
 
-@pytest.mark.parametrize('path', PATH)
-@pytest.mark.parametrize('with_path', [True,
-                                       False])
-def test_can_phantom_with_selenium(path, with_path):
-    if with_path:
-        delete_old_install(path)
-        webdriver.PhantomJS(executable_path=PhantomJsDriverManager().install(path))
-    else:
-        delete_old_install(path)
-        webdriver.PhantomJS(executable_path=PhantomJsDriverManager().install())
+def test_can_phantom_with_selenium():
+    delete_old_install()
+    webdriver.PhantomJS(executable_path=PhantomJsDriverManager().install())
 
-@pytest.mark.parametrize('path', PATH)
-@pytest.mark.parametrize('with_path', [True,
-                                       False])
-def test_can_download_phantom_for_windows(path, with_path):
-    if with_path:
-        delete_old_install(path)
-        path = PhantomJsDriverManager(os_type="win").install(path)
-    else:
-        delete_old_install()
-        path = PhantomJsDriverManager(os_type="win").install()
+
+def test_can_download_phantom_for_windows():
+    delete_old_install()
+    path = PhantomJsDriverManager(os_type="win").install()
     assert path.endswith("phantomjs.exe")
 
-@pytest.mark.parametrize('path', PATH)
-@pytest.mark.parametrize('with_path', [True,
-                                       False])
-def test_can_download_phantom_for_linux(path, with_path):
-    if with_path:
-        delete_old_install(path)
-        path = PhantomJsDriverManager(os_type="linux").install(path)
-    else:
-        delete_old_install()
-        path = PhantomJsDriverManager(os_type="linux").install()
+
+def test_can_download_phantom_with_path():
+    delete_old_install(PATH)
+    path = PhantomJsDriverManager().install(PATH)
+    assert path.endswith("phantomjs.exe")
+
+
+def test_can_download_phantom_for_linux():
+    delete_old_install()
+    path = PhantomJsDriverManager(os_type="linux").install()
     assert path.endswith("phantomjs")
 
 

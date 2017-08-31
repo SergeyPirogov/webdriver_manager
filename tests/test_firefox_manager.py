@@ -24,14 +24,9 @@ def test_gecko_manager_with_correct_version():
     driver_path = GeckoDriverManager("v0.11.0").install()
     assert os.path.exists(driver_path)
 
-@pytest.mark.parametrize('path', PATH)
-@pytest.mark.parametrize('with_path', [True,
-                                       False])
-def test_gecko_manager_with_selenium(path, with_path):
-    if with_path:
-        driver_path = GeckoDriverManager().install(path)
-    else:
-        driver_path = GeckoDriverManager().install()
+
+def test_gecko_manager_with_selenium():
+    driver_path = GeckoDriverManager().install()
     ff = webdriver.Firefox(executable_path=driver_path,
                            log_path=os.path.join(os.path.dirname(__file__), "log.log"))
     ff.get("http://automation-remarks.com")
