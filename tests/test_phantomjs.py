@@ -17,12 +17,15 @@ def delete_old_install(path=None):
         path = os.path.abspath(path)
         try:
             os.remove(os.path.join(path, 'phantomjs.exe'))
+            print(os.path.join(path, 'phantomjs.exe'))
             for file in os.listdir(path):
                 if 'phantomjs' in file and not os.path.isfile(file):
                     if 'phantomjs.exe' in os.listdir(os.path.join(path, file, 'bin')):
                         shutil.rmtree(os.path.join(path, file))
+                        print(os.path.join(path, file))
                 elif 'phantomjs' in file and file.endswith('.zip'):
                         os.remove(os.path.join(path, file))
+                        print(os.path.join(path, file))
         except:
             pass
 
@@ -41,7 +44,7 @@ def test_can_download_phantom_for_windows():
 def test_can_download_phantom_with_path():
     delete_old_install(PATH)
     path = PhantomJsDriverManager().install(PATH)
-    assert path.endswith("phantomjs.exe")
+    assert os.path.exists(path)
 
 
 def test_can_download_phantom_for_linux():
