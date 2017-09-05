@@ -59,17 +59,11 @@ def test_ie_driver_binary(version, use_cache):
 
 @pytest.mark.skipif(sys.platform != 'win32',
                     reason="run only on windows")
-@pytest.mark.parametrize('path', PATH)
-@pytest.mark.parametrize('with_path', [True,
-                                       False])
-def test_ie_driver_manager_with_wrong_version(path, with_path):
+@pytest.mark.parametrize('path', [PATH, None])
+def test_ie_driver_manager_with_wrong_version(path):
     with pytest.raises(ValueError) as ex:
-        if with_path:
-            delete_old_install(path)
-            IEDriverManager("0.2").install(path)
-        else:
-            delete_old_install()
-            IEDriverManager("0.2").install()
+        delete_old_install(path)
+        IEDriverManager("0.2").install(path)
     assert ex.value.args[0] == "There is no such driver IEDriverServer with version 0.2 " \
                                "by http://selenium-release.storage.googleapis.com/0.2/IEDriverServer_Win32_0.2.0.zip"
 

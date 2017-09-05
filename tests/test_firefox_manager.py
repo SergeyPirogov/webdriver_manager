@@ -41,14 +41,9 @@ def test_gecko_manager_with_wrong_version():
         ff.quit()
     assert ex.value.args[0] == "There is no such driver geckodriver with version 0.2"
 
-@pytest.mark.parametrize('path', PATH)
-@pytest.mark.parametrize('with_path', [True,
-                                       False])
-def test_gecko_manager_with_correct_version_and_token(path, with_path):
-    if with_path:
-        driver_path = GeckoDriverManager("v0.11.0").install(path)
-    else:
-        driver_path = GeckoDriverManager("v0.11.0").install()
+@pytest.mark.parametrize('path', [PATH, None])
+def test_gecko_manager_with_correct_version_and_token(path):
+    driver_path = GeckoDriverManager("v0.11.0").install(path)
     assert os.path.exists(driver_path)
 
 

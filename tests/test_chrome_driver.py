@@ -39,14 +39,9 @@ def test_chrome_manager_with_specific_version():
     assert os.path.exists(bin)
 
 
-@pytest.mark.parametrize('path', PATH)
-@pytest.mark.parametrize('with_path', [True,
-                                       False])
-def test_chrome_manager_with_latest_version(path, with_path):
-    if with_path:
-        bin = ChromeDriverManager().install(path)
-    else:
-        bin = ChromeDriverManager().install()
+@pytest.mark.parametrize('path', [PATH, None])
+def test_chrome_manager_with_latest_version(path):
+    bin = ChromeDriverManager().install(path)
     assert os.path.exists(bin)
 
 
@@ -66,23 +61,12 @@ def test_chrome_manager_with_selenium():
     webdriver.Chrome(driver_path)
 
 
-@pytest.mark.parametrize('path', PATH)
-@pytest.mark.parametrize('with_path', [True,
-                                       False])
-def test_chrome_manager_cached_driver_with_selenium(path, with_path):
-    if with_path:
-        ChromeDriverManager().install(path)
-        webdriver.Chrome(ChromeDriverManager().install(path))
-    else:
-        ChromeDriverManager().install()
-        webdriver.Chrome(ChromeDriverManager().install())
+@pytest.mark.parametrize('path', [PATH, None])
+def test_chrome_manager_cached_driver_with_selenium(path):
+    ChromeDriverManager().install(path)
+    webdriver.Chrome(ChromeDriverManager().install(path))
 
 
-@pytest.mark.parametrize('path', PATH)
-@pytest.mark.parametrize('with_path', [True,
-                                       False])
-def test_chrome_manager_with_win64_os(path, with_path):
-    if with_path:
-        ChromeDriverManager(os_type="win64").install(path)
-    else:
-        ChromeDriverManager(os_type="win64").install()
+@pytest.mark.parametrize('path', [PATH, None])
+def test_chrome_manager_with_win64_os(path):
+    ChromeDriverManager(os_type="win64").install(path)
