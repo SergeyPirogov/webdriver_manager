@@ -9,6 +9,20 @@ from webdriver_manager.driver import IEDriver
 from webdriver_manager.microsoft import IEDriverManager
 
 
+PATH = '.'
+
+def delete_old_install(path=None):
+    if path is None:
+        delete_cache()
+    else:
+        path = os.path.abspath(path)
+        try:
+            os.remove(os.path.join(path, 'IEDriverServer.exe'))
+            os.remove(os.path.join(path, 'IEDriverServer.zip'))
+        except:
+            pass
+
+
 @pytest.mark.parametrize("version", ["2.53.1",
                                      "3.0",
                                      "latest",
@@ -18,7 +32,7 @@ from webdriver_manager.microsoft import IEDriverManager
 @pytest.mark.skipif(sys.platform != 'win32',
                     reason="run only on windows")
 def test_ie_manager_with_selenium(version, use_cache):
-    delete_cache()
+    delete_old_install()
     if use_cache:
         IEDriverManager(version).install()
     driver_path = IEDriverManager(version).install()
@@ -34,7 +48,7 @@ def test_ie_manager_with_selenium(version, use_cache):
 @pytest.mark.parametrize("use_cache", [True,
                                        False])
 def test_ie_driver_binary(version, use_cache):
-    delete_cache()
+    delete_old_install()
     ie_driver = IEDriver(version, "win32")
     if use_cache:
         cache.download_driver(ie_driver)
@@ -45,9 +59,11 @@ def test_ie_driver_binary(version, use_cache):
 
 @pytest.mark.skipif(sys.platform != 'win32',
                     reason="run only on windows")
-def test_ie_driver_manager_with_wrong_version():
+@pytest.mark.parametrize('path', [PATH, None])
+def test_ie_driver_manager_with_wrong_version(path):
     with pytest.raises(ValueError) as ex:
-        IEDriverManager("0.2").install()
+        delete_old_install(path)
+        IEDriverManager("0.2").install(path)
     assert ex.value.args[0] == "There is no such driver IEDriverServer with version 0.2 " \
                                "by http://selenium-release.storage.googleapis.com/0.2/IEDriverServer_Win32_0.2.0.zip"
 
@@ -58,5 +74,5 @@ def test_can_get_latest_ie_driver_version():
 
 
 def test_can_get_latest_ie_driver_for_x64():
-    delete_cache()
+    delete_old_install()
     IEDriverManager(os_type="win64").install()

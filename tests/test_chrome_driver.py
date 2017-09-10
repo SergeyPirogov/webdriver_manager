@@ -10,6 +10,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager import utils
 from webdriver_manager import config
 
+PATH = '.'
+
 
 def delete_cache():
     cache = CacheManager()
@@ -20,34 +22,51 @@ def delete_cache():
     sleep(5)
 
 
+def delete_old_install(path=None):
+    if path is None:
+        delete_cache()
+    else:
+        path = os.path.abspath(path)
+        try:
+            os.remove(os.path.join(path, 'chromedriver.exe'))
+            os.remove(os.path.join(path, 'chromedriver.zip'))
+        except:
+            pass
+
+
 def test_chrome_manager_with_specific_version():
     bin = ChromeDriverManager("2.26").install()
     assert os.path.exists(bin)
 
 
-def test_chrome_manager_with_latest_version():
-    bin = ChromeDriverManager().install()
+@pytest.mark.parametrize('path', [PATH, None])
+def test_chrome_manager_with_latest_version(path):
+    bin = ChromeDriverManager().install(path)
     assert os.path.exists(bin)
 
 
 def test_chrome_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
+        delete_old_install()
         ChromeDriverManager("0.2").install()
     assert ex.value.args[0] == "There is no such driver chromedriver with version 0.2 " \
                                "by http://chromedriver.storage.googleapis.com/0.2/chromedriver_{0}.zip".format(
         utils.os_type())
 
 
+
 def test_chrome_manager_with_selenium():
-    delete_cache()
+    delete_old_install()
     driver_path = ChromeDriverManager().install()
     webdriver.Chrome(driver_path)
 
 
-def test_chrome_manager_cached_driver_with_selenium():
-    ChromeDriverManager().install()
-    webdriver.Chrome(ChromeDriverManager().install())
+@pytest.mark.parametrize('path', [PATH, None])
+def test_chrome_manager_cached_driver_with_selenium(path):
+    ChromeDriverManager().install(path)
+    webdriver.Chrome(ChromeDriverManager().install(path))
 
 
-def test_chrome_manager_with_win64_os():
-    ChromeDriverManager(os_type="win64").install()
+@pytest.mark.parametrize('path', [PATH, None])
+def test_chrome_manager_with_win64_os(path):
+    ChromeDriverManager(os_type="win64").install(path)

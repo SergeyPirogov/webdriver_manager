@@ -7,6 +7,18 @@ from tests.test_cache import cache
 from webdriver_manager.driver import GeckoDriver
 from webdriver_manager.firefox import GeckoDriverManager
 
+PATH = '.'
+
+
+def delete_old_install(path=None):
+    if not path is None:
+        path = os.path.abspath(path)
+        try:
+            os.remove(os.path.join(path, 'geckodriver.exe'))
+            os.remove(os.path.join(path, 'geckodriver.zip'))
+        except:
+            pass
+
 
 def test_gecko_manager_with_correct_version():
     driver_path = GeckoDriverManager("v0.11.0").install()
@@ -23,14 +35,15 @@ def test_gecko_manager_with_selenium():
 
 def test_gecko_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
+        delete_old_install()
         driver_path = GeckoDriverManager("0.2").install()
         ff = webdriver.Firefox(executable_path=driver_path)
         ff.quit()
     assert ex.value.args[0] == "There is no such driver geckodriver with version 0.2"
 
-
-def test_gecko_manager_with_correct_version_and_token():
-    driver_path = GeckoDriverManager("v0.11.0").install()
+@pytest.mark.parametrize('path', [PATH, None])
+def test_gecko_manager_with_correct_version_and_token(path):
+    driver_path = GeckoDriverManager("v0.11.0").install(path)
     assert os.path.exists(driver_path)
 
 

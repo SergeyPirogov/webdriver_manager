@@ -1,5 +1,4 @@
 import os
-
 import pytest
 import sys
 
@@ -9,20 +8,42 @@ from webdriver_manager.driver import EdgeDriver
 from webdriver_manager.microsoft import EdgeDriverManager
 from selenium import webdriver
 
+PATH = '.'
+
+def delete_old_install(path=None):
+    if path is None:
+        delete_cache()
+    else:
+        path = os.path.abspath(path)
+        try:
+            os.remove(os.path.join(path, 'phantomjs.exe'))
+            print(os.path.join(path, 'phantomjs.exe'))
+            for file in os.listdir(path):
+                if 'phantomjs' in file and not os.path.isfile(file):
+                    if 'phantomjs.exe' in os.listdir(os.path.join(path, file, 'bin')):
+                        shutil.rmtree(os.path.join(path, file))
+                        print(os.path.join(path, file))
+                elif 'phantomjs' in file and file.endswith('.zip'):
+                        os.remove(os.path.join(path, file))
+                        print(os.path.join(path, file))
+        except:
+            pass
 
 @pytest.mark.skipif(sys.platform != 'win32',
                     reason="run only on windows")
-def test_edge_manager_with_selenium():
-    delete_cache()
-    driver_path = EdgeDriverManager().install()
+@pytest.mark.parametrize('path', [PATH, None])
+def test_edge_manager_with_selenium(path):
+    delete_old_install(path)
+    driver_path = EdgeDriverManager().install(path)
     dr = webdriver.Edge(driver_path)
     dr.quit()
 
 
 @pytest.mark.skipif(sys.platform != 'win32',
                     reason="run only on windows")
-def test_edge_manager_with_selenium_cache():
-    driver_path = EdgeDriverManager().install()
+@pytest.mark.parametrize('path', [PATH, None])
+def test_edge_manager_with_selenium_cache(path):
+    driver_path = EdgeDriverManager().install(path)
     dr = webdriver.Edge(driver_path)
     dr.quit()
 
