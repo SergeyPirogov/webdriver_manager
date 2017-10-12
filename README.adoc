@@ -65,7 +65,7 @@ driver = webdriver.Ie(IEDriverManager().install())
 Use with PhantomJS:
 
 ```python
-driver = webdriver.PhantomJS(PhantomJsDriverDriverManager().install())
+driver = webdriver.PhantomJS(PhantomJsDriverManager().install())
 ```
 
 == Configuration
