@@ -3,11 +3,14 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+
 selenium = "*"
 pytest = "*"
-pytest-cov = "*"
+"pytest-cov" = "*"
+codecov = "*"
 
 [packages]
+
 requests = "*"
 configparser = "*"
 crayons = "*"

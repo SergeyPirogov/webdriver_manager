@@ -1,74 +1,108 @@
 {
-    "default": {
-        "requests": {
-            "version": "==2.13.0",
-            "hash": "sha256:1a720e8862a41aa22e339373b526f508ef0c8988baf48b84d3fc891a8e237efb"
-        },
-        "colorama": {
-            "version": "==0.3.7",
-            "hash": "sha256:a4c0f5bc358a62849653471e309dcc991223cf86abafbec17cd8f41327279e89"
-        },
-        "crayons": {
-            "version": "==0.1.2",
-            "hash": "sha256:5e17691605e564d63482067eb6327d01a584bbaf870beffd4456a3391bd8809d"
-        },
-        "configparser": {
-            "version": "==3.5.0",
-            "hash": "sha256:5308b47021bc2340965c371f0f058cc6971a04502638d4244225c49d80db273a"
-        }
-    },
-    "develop": {
-        "packaging": {
-            "version": "==16.8",
-            "hash": "sha256:99276dc6e3a7851f32027a68f1095cd3f77c148091b092ea867a351811cfe388"
-        },
-        "pytest": {
-            "version": "==3.0.7",
-            "hash": "sha256:66f332ae62593b874a648b10a8cb106bfdacd2c6288ed7dec3713c3a808a6017"
-        },
-        "setuptools": {
-            "version": "==34.3.2",
-            "hash": "sha256:6483f8412313ec787fa71379147a4605d3b1cc303c3648d02542a9160d3db72b"
-        },
-        "coverage": {
-            "version": "==4.3.4",
-            "hash": "sha256:adf04843188418b012dd1974e397a7ac3faa1855cbcd69083e3af4da6de9dd81"
-        },
-        "pytest-cov": {
-            "version": "==2.4.0",
-            "hash": "sha256:10e37e876f49ddec80d6c83a54b657157f1387ebc0f7755285f8c156130014a1"
-        },
-        "pyparsing": {
-            "version": "==2.2.0",
-            "hash": "sha256:fee43f17a9c4087e7ed1605bd6df994c6173c1e977d7ade7b651292fab2bd010"
-        },
-        "six": {
-            "version": "==1.10.0",
-            "hash": "sha256:0ff78c403d9bccf5a425a6d31a12aa6b47f1c21ca4dc2573a7e2f32a97335eb1"
-        },
-        "selenium": {
-            "version": "==3.3.1",
-            "hash": "sha256:1ca1c6afef1fd66e8094c495224950d5d56279d5b22227e5c5b9c65b32206161"
-        },
-        "py": {
-            "version": "==1.4.33",
-            "hash": "sha256:81b5e37db3cc1052de438375605fb5d3b3e97f950f415f9143f04697c684d7eb"
-        },
-        "appdirs": {
-            "version": "==1.4.3",
-            "hash": "sha256:d8b24664561d0d34ddfaec54636d502d7cea6e29c3eaf68f3df6180863e2166e"
-        }
-    },
     "_meta": {
+        "hash": {
+            "sha256": "7bc297403036ad3d4576f632044dbae26de5df0262a190f1f83cfc00ce823f59"
+        },
+        "host-environment-markers": {
+            "implementation_name": "cpython",
+            "implementation_version": "0",
+            "os_name": "posix",
+            "platform_machine": "x86_64",
+            "platform_python_implementation": "CPython",
+            "platform_release": "4.10.0-35-generic",
+            "platform_system": "Linux",
+            "platform_version": "#39~16.04.1-Ubuntu SMP Wed Sep 13 09:02:42 UTC 2017",
+            "python_full_version": "2.7.12",
+            "python_version": "2.7",
+            "sys_platform": "linux2"
+        },
+        "pipfile-spec": 6,
+        "requires": {},
         "sources": [
             {
                 "url": "https://pypi.org/simple",
                 "verify_ssl": true
             }
-        ],
-        "requires": {},
-        "hash": {
-            "sha256": "df5e3e63cd8f3b19086d56c85067ec850a4ceb6b1394316fc655bfe89cee4abe"
+        ]
+    },
+    "default": {
+        "certifi": {
+            "hashes": [],
+            "version": "==2017.7.27.1"
+        },
+        "chardet": {
+            "hashes": [],
+            "version": "==3.0.4"
+        },
+        "colorama": {
+            "hashes": [],
+            "version": "==0.3.9"
+        },
+        "configparser": {
+            "hashes": [],
+            "version": "==3.5.0"
+        },
+        "crayons": {
+            "hashes": [],
+            "version": "==0.1.2"
+        },
+        "idna": {
+            "hashes": [],
+            "version": "==2.6"
+        },
+        "requests": {
+            "hashes": [],
+            "version": "==2.18.4"
+        },
+        "urllib3": {
+            "hashes": [],
+            "version": "==1.22"
+        }
+    },
+    "develop": {
+        "certifi": {
+            "hashes": [],
+            "version": "==2017.7.27.1"
+        },
+        "chardet": {
+            "hashes": [],
+            "version": "==3.0.4"
+        },
+        "codecov": {
+            "hashes": [],
+            "version": "==2.0.9"
+        },
+        "coverage": {
+            "hashes": [],
+            "version": "==4.4.1"
+        },
+        "idna": {
+            "hashes": [],
+            "version": "==2.6"
+        },
+        "py": {
+            "hashes": [],
+            "version": "==1.4.34"
+        },
+        "pytest": {
+            "hashes": [],
+            "version": "==3.2.3"
+        },
+        "pytest-cov": {
+            "hashes": [],
+            "version": "==2.5.1"
+        },
+        "requests": {
+            "hashes": [],
+            "version": "==2.18.4"
+        },
+        "selenium": {
+            "hashes": [],
+            "version": "==3.6.0"
+        },
+        "urllib3": {
+            "hashes": [],
+            "version": "==1.22"
         }
     }
 }
