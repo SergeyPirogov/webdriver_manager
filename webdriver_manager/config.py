@@ -3,7 +3,13 @@ import os
 from configparser import ConfigParser
 
 filename = 'config.ini'
-folder = os.path.join(os.path.expanduser("~"), ".wdm")
+dot_wdm = os.path.join(os.path.expanduser("~"), ".wdm")
+xdg_config_home = os.getenv('XDG_CONFIG_HOME') \
+    or os.path.join(os.path.expanduser("~"), ".config")
+if not os.path.exists(dot_wdm) and os.path.exists(xdg_config_home):
+    folder = os.path.join(xdg_config_home, "wdm")
+else:
+    folder = dot_wdm
 
 
 class Configuration(object):
