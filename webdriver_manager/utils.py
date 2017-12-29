@@ -22,13 +22,13 @@ def os_name():
 
 def os_architecture():
     if platform.machine().endswith('64'):
-        return '64'
+        return 64
     else:
-        return '32'
+        return 32
 
 
 def os_type():
-    return os_name() + os_architecture()
+    return os_name() + str(os_architecture())
 
 
 def validate_response(self, resp):
