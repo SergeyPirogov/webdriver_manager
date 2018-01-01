@@ -21,10 +21,10 @@ def os_name():
 
 
 def os_architecture():
-    bits = platform.architecture()[0]
-    if bits == "64bit":
+    if platform.machine().endswith('64'):
         return 64
-    return 32
+    else:
+        return 32
 
 
 def os_type():
