@@ -62,12 +62,6 @@ Use with IE
 driver = webdriver.Ie(IEDriverManager().install())
 ```
 
-Use with PhantomJS:
-
-```python
-driver = webdriver.PhantomJS(PhantomJsDriverManager().install())
-```
-
 == Configuration
 Create file **${USER_HOME}/.wdm/config.ini** with such content:
 
