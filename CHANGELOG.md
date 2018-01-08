@@ -3,7 +3,7 @@
 == 1.5 (Released)
 * IEDriver bug fix for Win x64
 * Additional logging addednged
-* Cache path cha
+* Cache path changed
 
 == 1.4.5 (Released )
 * Colorfull console output added
