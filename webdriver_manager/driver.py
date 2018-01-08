@@ -96,46 +96,6 @@ class GeckoDriver(Driver):
         return url
 
 
-class PhantomJsDriver(Driver):
-    def __init__(self, version, os_type):
-        # type: (str, str) -> None
-        super(PhantomJsDriver, self).__init__(version, os_type)
-
-    def get_latest_release_version(self):
-        # type: () -> str
-        token = self.config.gh_token
-        url = self.config.driver_tags_url
-        if token:
-            url = "{}?access_token={}".format(url, token)
-
-        resp = requests.get(url=url)
-        validate_response(self, resp)
-        return resp.json()[0]['name']
-
-    def get_url(self):
-        # type: () -> str
-        name = "{name}-{version}-{os}".format(name=self.name,
-                                              version=self.get_version(),
-                                              os=self.__file_name())
-        return "{url}/{name}".format(url=self.config.url,
-                                     name=name)
-
-    def __file_name(self):
-        # type: () -> str
-        if self.os_type == OSType.MAC:
-            return "macosx.zip"
-        elif self.os_type == OSType.WIN:
-            return "windows.zip"
-        elif self.os_type == OSType.LINUX and utils.os_architecture() == 64:
-            return "linux-x86_64.tar.bz2"
-        elif self.os_type == OSType.LINUX and utils.os_architecture() == 32:
-            return "linux-i686.tar.bz2"
-        else:
-            raise ValueError(
-                "No such driver for os type {}".format(
-                    utils.os_type()))
-
-
 class EdgeDriver(Driver):
     def get_latest_release_version(self):
         # type: () -> str
