@@ -85,7 +85,10 @@ class CacheManager:
 
     def _download_file(self, driver, path=None):
         # type: (Driver) -> file
-        response = requests.get(driver.get_url(), stream=True)
+        url = driver.get_url()
+        console("Trying to download new driver from {}".format(url))
+
+        response = requests.get(url, stream=True)
         if response.status_code == 404:
             raise ValueError(
                 "There is no such driver {0} with version {1} by {2}".format(
@@ -118,7 +121,7 @@ class CacheManager:
         except IndexError:
             return driver.name + ".exe"
 
-    def _get_driver_path(self, name,version, os_type):
+    def _get_driver_path(self, name, version, os_type):
         cache_path = self.get_cache_path()
         return os.path.join(cache_path, name, version, os_type)
 

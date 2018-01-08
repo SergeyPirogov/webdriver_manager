@@ -73,11 +73,8 @@ def test_can_get_latest_ie_driver_version():
     assert latest_version
 
 
-def test_can_get_latest_ie_driver_for_x64():
+@pytest.mark.parametrize('os_type', ['win32', 'win64'])
+def test_can_download_ie_driver_x64(os_type):
     delete_old_install()
-    IEDriverManager(os_type="win64").install()
-
-
-def test_can_download_ie_driver_x64():
-    path = IEDriverManager(os_type="win64").install()
-    print(path)
+    path = IEDriverManager(os_type=os_type).install()
+    assert os.path.exists(path)
