@@ -1,25 +1,13 @@
 import os
-import shutil
-from time import sleep
 
 import pytest
 from selenium import webdriver
 
-from webdriver_manager.cache import CacheManager
-from webdriver_manager.chrome import ChromeDriverManager
+from tests.test_cache import delete_cache
 from webdriver_manager import utils
-from webdriver_manager import config
+from webdriver_manager.chrome import ChromeDriverManager
 
 PATH = '.'
-
-
-def delete_cache():
-    cache = CacheManager()
-    cache_path = cache.get_cache_path()
-    if os.path.exists(cache_path):
-        os.chmod(cache_path, 0o777)
-        shutil.rmtree(cache_path)
-    sleep(5)
 
 
 def delete_old_install(path=None):
@@ -54,7 +42,6 @@ def test_chrome_manager_with_wrong_version():
         utils.os_type())
 
 
-
 def test_chrome_manager_with_selenium():
     delete_old_install()
     driver_path = ChromeDriverManager().install()
@@ -70,3 +57,10 @@ def test_chrome_manager_cached_driver_with_selenium(path):
 @pytest.mark.parametrize('path', [PATH, None])
 def test_chrome_manager_with_win64_os(path):
     ChromeDriverManager(os_type="win64").install(path)
+
+
+@pytest.mark.parametrize('os_type', ['win32', 'win64'])
+def test_can_get_chrome_for_win(os_type):
+    delete_cache()
+    path = ChromeDriverManager(os_type=os_type).install()
+    assert os.path.exists(path)

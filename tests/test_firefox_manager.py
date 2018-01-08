@@ -3,7 +3,7 @@ import os
 import pytest
 from selenium import webdriver
 
-from tests.test_cache import cache
+from tests.test_cache import cache, delete_cache
 from webdriver_manager.driver import GeckoDriver
 from webdriver_manager.firefox import GeckoDriverManager
 
@@ -41,6 +41,7 @@ def test_gecko_manager_with_wrong_version():
         ff.quit()
     assert ex.value.args[0] == "There is no such driver geckodriver with version 0.2"
 
+
 @pytest.mark.parametrize('path', [PATH, None])
 def test_gecko_manager_with_correct_version_and_token(path):
     driver_path = GeckoDriverManager("v0.11.0").install(path)
@@ -54,3 +55,17 @@ def test_gecko_driver_with_wrong_token():
         driver.config.set("gh_token", "adasda")
         cache.download_driver(driver)
     assert ex.value.args[0]['message'] == "Bad credentials"
+
+
+def test_can_download_ff_x64():
+    delete_cache()
+    driver_path = GeckoDriverManager(os_type="win64").install()
+    print(driver_path)
+
+
+@pytest.mark.parametrize('os_type', ['win32', 'win64'])
+def test_can_get_ff_driver_from_cache(os_type):
+    delete_cache()
+    GeckoDriverManager(os_type=os_type).install()
+    driver_path = GeckoDriverManager(os_type=os_type).install()
+    assert os.path.exists(driver_path)

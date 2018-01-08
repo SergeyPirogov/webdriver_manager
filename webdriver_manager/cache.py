@@ -3,6 +3,7 @@ import re
 import requests
 from webdriver_manager import archive
 from webdriver_manager.binary import Binary
+from webdriver_manager.driver import Driver
 from webdriver_manager.utils import console
 
 
@@ -11,7 +12,7 @@ class CacheManager:
             self,
             to_folder=".drivers",
             dir_name=os.path.dirname(
-            os.path.abspath(__file__))):
+                os.path.abspath(__file__))):
         self.root_dir = dir_name
         self.to_folder = to_folder
 
@@ -46,15 +47,13 @@ class CacheManager:
         if "win" in os_type:
             name += ".exe"
         if path is None:
-            for dirName, subdirList, fileList in\
-            	    os.walk(self.get_cache_path()):
+            for dirName, subdirList, fileList in \
+                    os.walk(self.get_cache_path()):
                 for fname in fileList:
-                    if os.path.join(
-                        dirName,
-                        fname).endswith(
-                        os.path.join(
-                            version,
-                            name)):
+                    target_file = os.path.join(version, os_type, name)
+                    driver_file = os.path.join(dirName, fname)
+
+                    if driver_file.endswith(target_file):
                         console("Driver found in {}/{}".format(dirName, fname))
                         return Binary(os.path.join(dirName, fname))
         else:
@@ -95,8 +94,8 @@ class CacheManager:
         if '"' in filename:
             filename = filename.replace('"', "")
         if path is None:
-            driver_path = self._get_driver_path(driver.name,\
-                                                driver.get_version())
+            driver_path = self._get_driver_path(driver.name,
+                                                driver.get_version(), driver.os_type)
         else:
             driver_path = path
         self.create_cache_dir(driver_path)
@@ -119,10 +118,10 @@ class CacheManager:
         except IndexError:
             return driver.name + ".exe"
 
-    def _get_driver_path(self, name, version):
+    def _get_driver_path(self, name,version, os_type):
         cache_path = self.get_cache_path()
-        return os.path.join(cache_path, name, version)
+        return os.path.join(cache_path, name, version, os_type)
 
-    def get_driver_binary_path(self, name, version):
+    def get_driver_binary_path(self, name, version, os_type):
         # type: (str, str) -> str
-        return os.path.join(self._get_driver_path(name, version), name)
+        return os.path.join(self._get_driver_path(name, version, os_type), name)

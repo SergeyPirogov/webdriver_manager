@@ -2,6 +2,8 @@ import os
 import tarfile
 import zipfile
 
+from webdriver_manager.utils import console
+
 
 def extract_zip(zip_file, to_directory):
     archive = zipfile.ZipFile(zip_file)
@@ -21,6 +23,7 @@ def extract_tar_file(tar_file, to_dir):
 
 
 def unpack(archive, to_directory=None):
+    console("Unpack archive {}".format(archive.name))
     if not to_directory:
         to_directory = os.path.dirname(archive.name)
     if archive.name.endswith(".zip"):

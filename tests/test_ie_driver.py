@@ -8,8 +8,8 @@ from tests.test_cache import cache, delete_cache
 from webdriver_manager.driver import IEDriver
 from webdriver_manager.microsoft import IEDriverManager
 
-
 PATH = '.'
+
 
 def delete_old_install(path=None):
     if path is None:
@@ -76,3 +76,8 @@ def test_can_get_latest_ie_driver_version():
 def test_can_get_latest_ie_driver_for_x64():
     delete_old_install()
     IEDriverManager(os_type="win64").install()
+
+
+def test_can_download_ie_driver_x64():
+    path = IEDriverManager(os_type="win64").install()
+    print(path)
