@@ -1,7 +1,9 @@
 == Changelog
 
-== 1.4.6 (Released)
+== 1.5 (Released)
 * IEDriver bug fix for Win x64
+* Additional logging addednged
+* Cache path cha
 
 == 1.4.5 (Released )
 * Colorfull console output added
