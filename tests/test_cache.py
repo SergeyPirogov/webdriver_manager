@@ -53,12 +53,11 @@ def test_can_download_firefox_driver(os_type):
 
 @pytest.mark.parametrize("os_type", ["linux64",
                                      "linux32",
-                                     "macos",
-                                     "win32",
-                                     "win64",
+                                     "mac32",
+                                     "win32"
                                      ])
 def test_should_be_true_for_cached_driver(os_type):
-    version = "2.26"
+    version = "2.10"
     driver = ChromeDriver(version=version,
                           os_type=os_type)
     cache.download_driver(driver)
@@ -84,7 +83,7 @@ def test_cache_driver_version():
     cache.download_driver(driver)
     binary = cache.get_cached_binary(driver)
     assert binary
-    assert os.path.join(cache.get_cache_path(), name, version, name) == binary.path
+    assert os.path.join(cache.get_cache_path(), name, version, os_type, name) == binary.path
 
 
 def test_cached_driver_manual_setup():
@@ -95,10 +94,13 @@ def test_cached_driver_manual_setup():
                           os_type=os_type)
     driver.config = config
     with pytest.raises(IOError) as ex:
-        binary = cache.get_cached_binary(driver)
+        cache.get_cached_binary(driver)
     assert ex.value.args[1] == 'Is a directory'
 
 
 def test_cached_driver_path():
-    assert cache.get_driver_binary_path("chromedriver", "2.1.1") == os.path.join(cache.get_cache_path(), "chromedriver",
-                                                                                 "2.1.1", "chromedriver")
+    assert cache.get_driver_binary_path("chromedriver", "2.1.1", "linux64") == os.path.join(cache.get_cache_path(),
+                                                                                            "chromedriver",
+                                                                                            "2.1.1",
+                                                                                            "linux64",
+                                                                                            "chromedriver")
