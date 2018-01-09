@@ -63,8 +63,12 @@ def test_can_download_ff_x64():
     print(driver_path)
 
 
-@pytest.mark.parametrize('os_type', ['win32', 'win64'])
-def test_can_get_ff_driver_from_cache(os_type):
+@pytest.mark.parametrize('os_type', ['win32',
+                                     'win64',
+                                     'linux32',
+                                     'linux64',
+                                     'mac64'])
+def test_can_get_driver_from_cache(os_type):
     delete_cache()
     GeckoDriverManager(os_type=os_type).install()
     driver_path = GeckoDriverManager(os_type=os_type).install()
