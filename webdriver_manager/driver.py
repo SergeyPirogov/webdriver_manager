@@ -1,11 +1,11 @@
+import re
 from xml.etree import ElementTree as ET
 
 import requests
 
 from webdriver_manager import config
-from webdriver_manager import utils
 from webdriver_manager.config import Configuration
-from webdriver_manager.utils import validate_response, OSType, console
+from webdriver_manager.utils import validate_response, console
 
 
 class Driver(object):
@@ -135,13 +135,19 @@ class IEDriver(Driver):
                 '{http://doc.s3.amazonaws.com/2006-03-01}Contents'):
             key = child.find(
                 "{http://doc.s3.amazonaws.com/2006-03-01}Key").text
-            if self.config.name in key:
+            if self.config.name in key and self.os_type in key:
                 last_modified = child.find(
                     '{http://doc.s3.amazonaws.com/2006-03-01}LastModified').text
                 values[last_modified] = key
-        d = sorted(values, reverse=True)
-        latest_release = values[d[0]]
-        return latest_release[-9:-4]
+
+        latest_key = values[max(values)]
+        # 2.39/IEDriverServer_Win32_2.39.0.zip
+        m = re.match(r".*_{os}_(.*)\.zip".format(os=self.os_type), latest_key)
+        if m:
+            return m.group(1)
+        else:
+            raise ValueError("Can't parse latest version {key} | {os}".format(
+                key=latest_key, os=self.os_type))
 
     def __init__(self, version, os_type):
         # type: (str, str) -> None
