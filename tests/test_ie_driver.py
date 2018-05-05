@@ -64,8 +64,7 @@ def test_ie_driver_manager_with_wrong_version(path):
     with pytest.raises(ValueError) as ex:
         delete_old_install(path)
         IEDriverManager("0.2").install(path)
-    assert ex.value.args[0] == "There is no such driver IEDriverServer with version 0.2 " \
-                               "by http://selenium-release.storage.googleapis.com/0.2/IEDriverServer_Win32_0.2.0.zip"
+    assert "There is no such driver IEDriverServer with version 0.2" in ex.value.args[0]
 
 
 def test_can_get_latest_ie_driver_version():
