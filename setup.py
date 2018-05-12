@@ -18,7 +18,8 @@ setuptools.setup(
     packages=setuptools.find_packages(exclude=['tests']),
     include_package_data=True,
     version='1.5.1',
-    description=('Library provides the way to automatically manage drivers for different browsers'),
+    description=('Library provides the way to automatically manage drivers '
+                 'for different browsers'),
     author='Sergey Pirogov',
     author_email='automationremarks@gmail.com',
     url='https://github.com/SergeyPirogov/webdriver_manager',

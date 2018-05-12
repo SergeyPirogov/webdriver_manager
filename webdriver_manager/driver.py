@@ -1,5 +1,5 @@
 import re
-from xml.etree import ElementTree as ET
+from xml.etree import ElementTree
 
 import requests
 
@@ -127,17 +127,16 @@ class IEDriver(Driver):
         # type: () -> str
         url = self.config.url
         resp = requests.get(url)
-        root = ET.fromstring(resp.text)
+        root = ElementTree.fromstring(resp.text)
 
         values = {}
 
-        for child in root.findall(
-                '{http://doc.s3.amazonaws.com/2006-03-01}Contents'):
-            key = child.find(
-                "{http://doc.s3.amazonaws.com/2006-03-01}Key").text
+        xmlns = '{http://doc.s3.amazonaws.com/2006-03-01}'
+
+        for child in root.findall(xmlns + 'Contents'):
+            key = child.find(xmlns + 'Key').text
             if self.config.name in key and self.os_type in key:
-                last_modified = child.find(
-                    '{http://doc.s3.amazonaws.com/2006-03-01}LastModified').text
+                last_modified = child.find(xmlns + 'LastModified').text
                 values[last_modified] = key
 
         latest_key = values[max(values)]
@@ -160,10 +159,10 @@ class IEDriver(Driver):
     def get_url(self):
         # type: () -> str
         major, minor, patch = self.__get_divided_version()
-        name = "{major}.{minor}/{name}_{os}_{major}.{minor}.{patch}.zip".format(
-            name=self.name, os=self.os_type, major=major, minor=minor, patch=patch)
-        return "{url}/{name}".format(url=self.config.url,
-                                     name=name)
+        return ("{url}/{major}.{minor}/"
+                "{name}_{os}_{major}.{minor}.{patch}.zip").format(
+                    url=self.config.url, name=self.name, os=self.os_type,
+                    major=major, minor=minor, patch=patch)
 
     def __get_divided_version(self):
         divided_version = self.get_version().split('.')
@@ -173,5 +172,5 @@ class IEDriver(Driver):
             return divided_version
         else:
             raise ValueError(
-                "Version must consist of major, minor and/or patch, but given was: {version}".format(
-                    version=self.get_version()))
+                "Version must consist of major, minor and/or patch, "
+                "but given was: {version}".format(version=self.get_version()))

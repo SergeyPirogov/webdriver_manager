@@ -26,7 +26,7 @@ class CacheManager:
             os.makedirs(driver_path)
 
     def get_cached_binary(self, driver, path=None):
-        if not path is None:
+        if path is not None:
             self.root_dir = path
         cached_driver = driver.config.driver_path
         is_offline = driver.config.offline
@@ -65,7 +65,7 @@ class CacheManager:
 
     def download_driver(self, driver, path=None):
         # type: (Driver) -> Binary
-        if not path is None:
+        if path is not None:
             path = os.path.abspath(path)
         cached_binary = self.get_cached_binary(driver, path)
         if cached_binary:
@@ -76,7 +76,7 @@ class CacheManager:
 
     # TODO merge download driver and this method
     def download_binary(self, driver, path=None):
-        if not path is None:
+        if path is not None:
             path = os.path.abspath(path)
         cached_binary = self.get_cached_binary(driver, path)
         if cached_binary:
@@ -98,7 +98,8 @@ class CacheManager:
             filename = filename.replace('"', "")
         if path is None:
             driver_path = self._get_driver_path(driver.name,
-                                                driver.get_version(), driver.os_type)
+                                                driver.get_version(),
+                                                driver.os_type)
         else:
             driver_path = path
         self.create_cache_dir(driver_path)
@@ -127,4 +128,5 @@ class CacheManager:
 
     def get_driver_binary_path(self, name, version, os_type):
         # type: (str, str) -> str
-        return os.path.join(self._get_driver_path(name, version, os_type), name)
+        directory = self._get_driver_path(name, version, os_type)
+        return os.path.join(directory, name)
