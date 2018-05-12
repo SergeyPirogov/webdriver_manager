@@ -1,6 +1,7 @@
 = python webdriver manager
 
-image:https://travis-ci.org/SergeyPirogov/webdriver_manager.svg?branch=master["Build Status", link="https://travis-ci.org/SergeyPirogov/webdriver_manager"] image:https://img.shields.io/pypi/v/webdriver_manager.svg[https://pypi.python.org/pypi/webdriver_manager]
+image:https://travis-ci.org/SergeyPirogov/webdriver_manager.svg?branch=master["Build Status", link="https://travis-ci.org/SergeyPirogov/webdriver_manager"]
+image:https://img.shields.io/pypi/v/webdriver_manager.svg["PyPI", link="https://pypi.org/project/webdriver-manager/"]
 
 The main idea is to simplify managemet of binary drivers for different browsers.
 
