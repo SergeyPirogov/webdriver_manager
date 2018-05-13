@@ -7,7 +7,7 @@ expect_mz_tag = 'https://api.github.com/repos/mozilla/geckodriver/releases/tags/
 expect_gh_token = ''
 
 
-def test_config_with_deafault_params():
+def test_config_with_default_params():
     config = Configuration(config_folder=os.path.dirname(__file__), section="GeckoDriver", file_name="config.ini")
     assert config.driver_latest_release_url == expect_mz_latest
     assert config.mozila_release_tag == expect_mz_tag
