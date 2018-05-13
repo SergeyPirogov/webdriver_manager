@@ -54,6 +54,10 @@
             "hashes": [],
             "version": "==2.18.4"
         },
+        "typing": {
+            "hashes": [],
+            "version": "==3.6.4"
+        },
         "urllib3": {
             "hashes": [],
             "version": "==1.22"
@@ -80,6 +84,11 @@
             "hashes": [],
             "version": "==2.6"
         },
+        "mypy": {
+            "hashes": [],
+            "markers": "python_version >= '3.4'",
+            "version": "==0.600"
+        },
         "py": {
             "hashes": [],
             "version": "==1.4.34"
@@ -99,6 +108,15 @@
         "selenium": {
             "hashes": [],
             "version": "==3.6.0"
+        },
+        "typed-ast": {
+            "hashes": [],
+            "markers": "python_version >= '3.4'",
+            "version": "==1.1.0"
+        },
+        "typing": {
+            "hashes": [],
+            "version": "==3.6.4"
         },
         "urllib3": {
             "hashes": [],

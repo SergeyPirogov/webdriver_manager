@@ -1,4 +1,5 @@
 import re
+from typing import Optional
 from xml.etree import ElementTree
 
 import requests
@@ -10,7 +11,7 @@ from webdriver_manager.utils import validate_response, console
 
 class Driver(object):
     def __init__(self, version, os_type):
-        # type: (str, str) -> None
+        # type: (Optional[str], str) -> None
         self.config = Configuration(file_name=config.filename,
                                     config_folder=config.folder,
                                     section=self.__class__.__name__)
@@ -41,7 +42,7 @@ class Driver(object):
 
 class ChromeDriver(Driver):
     def __init__(self, version, os_type):
-        # type: (str, str) -> ChromeDriver
+        # type: (Optional[str], str) -> None
         super(ChromeDriver, self).__init__(version, os_type)
 
     def get_latest_release_version(self):
@@ -52,7 +53,7 @@ class ChromeDriver(Driver):
 
 class GeckoDriver(Driver):
     def __init__(self, version, os_type):
-        # type: (str, str) -> None
+        # type: (Optional[str], str) -> None
         super(GeckoDriver, self).__init__(version, os_type)
 
     def get_latest_release_version(self):
@@ -134,9 +135,15 @@ class IEDriver(Driver):
         xmlns = '{http://doc.s3.amazonaws.com/2006-03-01}'
 
         for child in root.findall(xmlns + 'Contents'):
-            key = child.find(xmlns + 'Key').text
+            key_element = child.find(xmlns + 'Key')
+            if key_element is None:
+                continue
+            key = key_element.text or ""
             if self.config.name in key and self.os_type in key:
-                last_modified = child.find(xmlns + 'LastModified').text
+                last_modified_element = child.find(xmlns + 'LastModified')
+                if last_modified_element is None:
+                    continue
+                last_modified = last_modified_element.text
                 values[last_modified] = key
 
         latest_key = values[max(values)]

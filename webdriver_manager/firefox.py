@@ -5,7 +5,7 @@ from webdriver_manager import utils
 
 class GeckoDriverManager(DriverManager):
     def __init__(self, version=None, os_type=utils.os_type()):
-        # type: (str, str) -> GeckoDriverManager
+        # type: (str, str) -> None
         super(GeckoDriverManager, self).__init__()
         if os_type.startswith("mac"):
             os_type = "macos"
@@ -14,5 +14,5 @@ class GeckoDriverManager(DriverManager):
                                   os_type=os_type)
 
     def install(self, path=None):
-        # type: () -> str
+        # type: (str) -> str
         return self._file_manager.download_driver(self.driver, path).path

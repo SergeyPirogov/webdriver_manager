@@ -39,6 +39,7 @@ setuptools.setup(
     install_requires=[
         'requests',
         'configparser',
-        'crayons'
+        'crayons',
+        'typing'
     ],
 )

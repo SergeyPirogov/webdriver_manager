@@ -64,7 +64,7 @@ class CacheManager:
         return None
 
     def download_driver(self, driver, path=None):
-        # type: (Driver) -> Binary
+        # type: (Driver, str) -> Binary
         if path is not None:
             path = os.path.abspath(path)
         cached_binary = self.get_cached_binary(driver, path)
@@ -84,7 +84,7 @@ class CacheManager:
         return Binary(self._download_file(driver).name)
 
     def _download_file(self, driver, path=None):
-        # type: (Driver) -> file
+        # type: (Driver, str) -> file
         url = driver.get_url()
         console("Trying to download new driver from {}".format(url))
 
@@ -127,6 +127,6 @@ class CacheManager:
         return os.path.join(cache_path, name, version, os_type)
 
     def get_driver_binary_path(self, name, version, os_type):
-        # type: (str, str) -> str
+        # type: (str, str, str) -> str
         directory = self._get_driver_path(name, version, os_type)
         return os.path.join(directory, name)

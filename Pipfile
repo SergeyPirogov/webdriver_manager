@@ -8,9 +8,13 @@ selenium = "*"
 pytest = "*"
 "pytest-cov" = "*"
 codecov = "*"
+mypy = {version = "*", markers="python_version >= '3.4'"}
+"typed-ast" = {version = "*", markers="python_version >= '3.4'"}
+
 
 [packages]
 
 requests = "*"
 configparser = "*"
 crayons = "*"
+typing = "*"
