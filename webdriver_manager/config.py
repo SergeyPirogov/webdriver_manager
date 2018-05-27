@@ -1,9 +1,11 @@
 import os
 
 from configparser import ConfigParser
+from datetime import timedelta
 
 filename = 'config.ini'
 folder = os.path.join(os.path.expanduser("~"), ".wdm")
+cache_expired = timedelta(days=1)
 
 
 class Configuration(object):

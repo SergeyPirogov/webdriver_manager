@@ -1,8 +1,11 @@
 import os
 import re
+
 import requests
+
 from webdriver_manager import archive
 from webdriver_manager.binary import Binary
+from webdriver_manager.cached_version_driver import CachedVersionDriver
 from webdriver_manager.driver import Driver
 from webdriver_manager.utils import console
 
@@ -67,6 +70,7 @@ class CacheManager:
         # type: (Driver) -> Binary
         if path is not None:
             path = os.path.abspath(path)
+        driver = CachedVersionDriver(driver, self.root_dir)
         cached_binary = self.get_cached_binary(driver, path)
         if cached_binary:
             return cached_binary
