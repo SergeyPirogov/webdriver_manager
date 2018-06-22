@@ -93,5 +93,14 @@ offline = True
 It will automatically download latest release of chromedriver and set path. Moreover when the new version of the driver
 will be released, webdriver manager will download it and update path.
 
+There is also possibility to set same variables via ENV VARIABLES.
+
+Example:
+
+```
+GH_TOKEN = "asdasdasdasd"
+VERSION = 2.56
+```
+
 This will make your test automation more elegant and robust!
 

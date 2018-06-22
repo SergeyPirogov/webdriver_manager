@@ -1,5 +1,8 @@
 == Changelog
 
+== 1.7
+* Configuration supports environment variables
+
 == 1.5 (Released)
 * IEDriver bug fix for Win x64
 * Additional logging addednged
