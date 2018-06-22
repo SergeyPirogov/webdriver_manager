@@ -4,7 +4,6 @@ from webdriver_manager.config import Configuration
 
 expect_mz_latest = 'https://api.github.com/repos/mozilla/geckodriver/releases/latest'
 expect_mz_tag = 'https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}'
-expect_gh_token = ''
 
 
 def test_config_with_default_params():
