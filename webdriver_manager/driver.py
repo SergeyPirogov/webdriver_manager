@@ -65,7 +65,7 @@ class GeckoDriver(Driver):
         # type: () -> str
         # https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz
         console(
-            "Getting latest mozila release info for {0}".format(
+            "Getting latest mozilla release info for {0}".format(
                 self.get_version()))
         resp = requests.get(self.tagged_release_url)
         validate_response(self, resp)

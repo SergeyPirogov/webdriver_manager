@@ -22,7 +22,7 @@
 * Python 3.5 support added
 
 === 1.2 (Released 27.12.2016)
-* Windows platfor support added
+* Windows platform support added
 * Github api token support added for Firefox
 * Code refactoring
 

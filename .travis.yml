@@ -16,19 +16,27 @@ before_install:
   --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
 
 install:
-- pip install pipenv twine
+- pip install pipenv
 
 script:
 - pipenv install --dev
 - pipenv run py.test -sv --cov-config .coveragerc --cov-report html:skip-covered --cov-report
   term:skip-covered --cov=webdriver_manager --tb=short tests/
 - codecov
-- python setup.py bdist_wheel
-- twine upload --repository-url https://test.pypi.org/legacy/ dist/*
-- twine upload dist/*
 
 after_script:
 - "./.upload_reports.sh"
+
+deploy:
+  provider: pypi
+  user:
+    secure: FLEbkQUyzlttmrMxCS6sVbhnQUR3fTA8UyxLmYVfHcK8nMG9Pb7iwrQ+NVOLhylCjW5+K3ecdNyA0WPsPbyH16TLSE5pWX/FZbj3sRkN3baOkZrk1UjNDnQIu/Go4Cw2JfnPqEIeKMCfYZRGrAHfUuXcQJMmutiZPRqCq6kGJy8lkoLjtsBtK2K0+QPhNmMtGQxTBCmBn81OOWBPEfVREh66iccmX0ftqBLCbom6JmIjxyBdp0FGJbz2BymGJk7haTNbhpREeAic6oDAWy6YKi/szKfnacP3z+RwVCbVpQ9r4t36E237OqoM955xubOoOPvNRWt/AH0GBbdpAzeSCYbuopYx+ANtb9fqGG3q70Y2vyGfK9dMjjE3XEb9DJ/LoBiwZI9DBOiKfUABdPOBwLFIWGCYb5qZMTxBMlWYSYwasVt8MSpfdNl4B1YLW7PzWrgKTQX1Cc2jHhGKxbpqL8wl8uMmfaKyXaSAPsy4JTF2836EtBIZ4pnrvjcj3W2nKGlvH3Sr7SE9sSpnHQIZMvjc4obZdUnOmTStcwyvqV0CNeG4lFXFaXBI2IAGINx+4sC5Qs2JPZ0iwZ5CaqT+Oy0GsKjyXPv/OwEK/4ICxj6+gE3Dhkoepk7Qwar2Ig5QzvXdptL6y09kCtWHJkB7+RC9sCE6Nl+KZ8mwoKW0l74=
+  password:
+    secure: JJ7W3TwEX5MQpDhZWXOYqKU5ory9JcIIB+Bq6NZAkcIY7H7ZoAooSRP9MFi/aVGevJcxksDRbAWxCYWV3tqMmPewxJ597RB8EDQqS65+wNGFwckAEXb9HpHzPTrYwRQN+KPdqbeR/vLqeDw19iM1CQH++cyzKOdmKkpZIkO1PogzzqVp3ZURLCZDC7NmRjtGzijYNfTk+8/XFmEDZPkW+4tvoLRHCqsaeUNk8rRaMNH2yEqbeajXr3mgids8/Xr++C64jTbtV1EK6X7tGZnjuOXVwLyVAJmd0vGQ/FhmSYtdrZk2PAARpauIMmfoK5fVTQ+s/wfv++g3c3nY/fxblGxgriHw+2za7AGvjwa7pVIuFmYSlHQjV0f5bsiJ6J3qmI/Uhfaooly2cZDiQQXbFMrrQhR60bIJbPbthnXoDkJXrS3D0rQYl/GDUNFxwwOOxtY4pupKp78xzuhVM3gZFlAM5oBX9AglFNeb9s+AD8sucqggVhHulRV8MbQp3aR56d0xs/qClYhWMUidj5g6ZACFn/Ir/SvLN6twLXjCmfoEBsEOUTCY8Wov/EpODI+JbRzLG+I37R03N06XxyeqE9EaOAkhoESlEu3k798I1h1EIekIgsGOJNYtecdAHC/Ezz2h4ieSzgeCKS4x9Cc7Wq3nQF+sVcXVCFpw/zozkYg=
+  distributions: bdist_wheel
+  on:
+    tags: true
+    branch: master
 
 notifications:
   email:
