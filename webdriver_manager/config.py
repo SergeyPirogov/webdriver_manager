@@ -17,12 +17,12 @@ class Configuration(object):
         self._parser.read(_default_config_path)
         self._parser.read(self.config_file_path)
 
-    def get(self, section, key):
-        return self._parser.get(section, key)
+    def get(self, key):
+        return self._parser.get(self.section, key)
 
     def set(self, key, value):
         if value is not None:
             self._parser.set(self.section, key, value)
 
     def __getattr__(self, item):
-        return self.get(self.section, item)
+        return os.getenv(item.upper(), self.get(item))

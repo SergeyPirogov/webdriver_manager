@@ -25,3 +25,15 @@ def test_config_with_custom_file():
     config = Configuration(config_folder=os.path.dirname(__file__), file_name="wd_config.ini", section="GeckoDriver")
     assert config.gh_token == "test_token"
     assert config.driver_latest_release_url == "test_release"
+
+
+def test_config_can_get_variable_from_env():
+    os.environ["GH_TOKEN"] = "this is test token"
+    config = Configuration(config_folder=os.path.dirname(__file__), file_name="wd_config.ini", section="GeckoDriver")
+    assert config.gh_token == "this is test token"
+    os.environ["GH_TOKEN"] = ''
+
+
+def test_config_can_get_variable_from_file_if_no_env_variable_set():
+    config = Configuration(config_folder=os.path.dirname(__file__), file_name="wd_config.ini", section="GeckoDriver")
+    assert config.gh_token == "test_token"
