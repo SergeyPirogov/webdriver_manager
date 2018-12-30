@@ -63,7 +63,7 @@ class CacheManager:
         console("There is no cached driver. Downloading new one...")
         return None
 
-    def download_driver(self, driver, path=None):
+    def download_driver(self, driver, path=None, subpath=None):
         # type: (Driver) -> Binary
         if path is not None:
             path = os.path.abspath(path)
@@ -72,7 +72,9 @@ class CacheManager:
             return cached_binary
         zip_file = self._download_file(driver, path)
         files = archive.unpack(zip_file)
-        return Binary(os.path.join(os.path.dirname(zip_file.name), files[0]))
+        if subpath is None:
+            subpath = files[0]
+        return Binary(os.path.join(os.path.dirname(zip_file.name), subpath))
 
     # TODO merge download driver and this method
     def download_binary(self, driver, path=None):
