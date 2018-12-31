@@ -25,7 +25,7 @@ class CacheManager:
         if not os.path.exists(driver_path):
             os.makedirs(driver_path)
 
-    def get_cached_binary(self, driver, path=None):
+    def get_cached_binary(self, driver, path=None, subpath=None):
         if path is not None:
             self.root_dir = path
         cached_driver = driver.config.driver_path
@@ -44,7 +44,9 @@ class CacheManager:
                 name,
                 version),
             bold=True)
-        if "win" in os_type:
+        if subpath is not None:
+            name = subpath
+        elif "win" in os_type:
             name += ".exe"
         if path is None:
             for dirName, subdirList, fileList in \
@@ -67,7 +69,7 @@ class CacheManager:
         # type: (Driver) -> Binary
         if path is not None:
             path = os.path.abspath(path)
-        cached_binary = self.get_cached_binary(driver, path)
+        cached_binary = self.get_cached_binary(driver, path, subpath)
         if cached_binary:
             return cached_binary
         zip_file = self._download_file(driver, path)
