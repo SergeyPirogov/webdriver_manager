@@ -24,7 +24,7 @@ def delete_old_install(path=None):
 
 
 def test_phantomjs_manager_with_specific_version():
-    bin = PhantomJsDriverManager("2.0.0").install()
+    bin = PhantomJsDriverManager("2.0.0", os_type="win32").install()
     assert os.path.exists(bin)
 
 
