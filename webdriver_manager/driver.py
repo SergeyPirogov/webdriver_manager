@@ -174,3 +174,28 @@ class IEDriver(Driver):
             raise ValueError(
                 "Version must consist of major, minor and/or patch, "
                 "but given was: {version}".format(version=self.get_version()))
+
+
+class PhantomJsDriver(Driver):
+    def __init__(self, version, os_type):
+        # type: (str, str) -> PhantomJsDriver
+        super(PhantomJsDriver, self).__init__(version, os_type)
+
+    def get_latest_release_version(self):
+        # type: () -> str
+        return self.config.latest_version
+
+    def get_url(self):
+        # type: () -> str
+
+        url = None
+        if self.os_type.startswith("win"):
+            url = self.config.win_url
+        elif self.os_type.startswith("mac"):
+            url = self.config.mac_url
+        elif self.os_type == "linux32":
+            url = self.config.linux32_url
+        elif self.os_type == "linux64":
+            url = self.config.linux64_url
+
+        return url.format(self.get_version())
