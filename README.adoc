@@ -54,12 +54,16 @@ driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 Use with Edge:
 
 ```python
+from webdriver_manager.microsoft import EdgeDriverManager
+
 driver = webdriver.Edge(EdgeDriverManager().install())
 ```
 
 Use with IE
 
-```
+```python
+from webdriver_manager.microsoft import IEDriverManager
+
 driver = webdriver.Ie(IEDriverManager().install())
 ```
 
