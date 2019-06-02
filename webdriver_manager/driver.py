@@ -199,3 +199,50 @@ class PhantomJsDriver(Driver):
             url = self.config.linux64_url
 
         return url.format(self.get_version())
+
+
+class OperaDriver(Driver):
+    def __init__(self, version, os_type):
+        # type: (str, str) -> None
+        super(OperaDriver, self).__init__(version, os_type)
+
+    def get_latest_release_version(self):
+        # type: () -> str
+        resp = requests.get(self.latest_release_url)
+        validate_response(self, resp)
+        return resp.json()["tag_name"]
+
+    def get_url(self):
+        # type: () -> str
+        # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
+        console(
+            "Getting latest opera release info for {0}".format(
+                self.get_version()))
+        resp = requests.get(self.tagged_release_url)
+        validate_response(self, resp)
+        assets = resp.json()["assets"]
+        ver = self.get_version()
+        name = "{0}-{1}-{2}".format(self.name, ver, self.os_type)
+        output_dict = [asset for asset in assets if
+                       asset['name'].startswith(name)]
+        return output_dict[0]['browser_download_url']
+
+    @property
+    def latest_release_url(self):
+        # type: () -> str
+        token = self.config.gh_token
+        url = self.config.driver_latest_release_url
+        if token:
+            return "{base_url}?access_token={access_token}".format(
+                base_url=url, access_token=token)
+        return url
+
+    @property
+    def tagged_release_url(self):
+        # type: () -> str
+        token = self.config.gh_token
+        url = self.config.opera_release_tag.format(self.get_version())
+        if token:
+            return url + "?access_token={0}".format(token)
+        return url
+
