@@ -221,8 +221,7 @@ class OperaDriver(Driver):
         resp = requests.get(self.tagged_release_url)
         validate_response(self, resp)
         assets = resp.json()["assets"]
-        ver = self.get_version()
-        name = "{0}-{1}-{2}".format(self.name, ver, self.os_type)
+        name = "{0}_{1}".format(self.config.drivername, self.os_type)
         output_dict = [asset for asset in assets if
                        asset['name'].startswith(name)]
         return output_dict[0]['browser_download_url']

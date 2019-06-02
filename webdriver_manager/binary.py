@@ -1,9 +1,13 @@
 import os
 
-
 class Binary(object):
     def __init__(self, path):
-        self.bin_file = open(path)
+        if os.path.isfile(path):
+            self.bin_file = open(path)
+        elif os.path.isdir(path):
+            self.bin_file = open("{0}{1}".format(path, os.listdir(path)[0]))
+        else:
+            raise FileNotFoundError
 
     @property
     def path(self):
