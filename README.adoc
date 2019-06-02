@@ -1,4 +1,4 @@
-= python webdriver manager
+= Webdriver Manager for Python
 
 image:https://travis-ci.org/SergeyPirogov/webdriver_manager.svg?branch=master["Build Status", link="https://travis-ci.org/SergeyPirogov/webdriver_manager"]
 image:https://img.shields.io/pypi/v/webdriver_manager.svg["PyPI", link="https://pypi.org/project/webdriver-manager/"]
@@ -12,6 +12,7 @@ For now support:
 - EdgeDriver
 - IEDriver
 - PhantomJS
+- OperaDriver
 
 Before:
 You should download binary chromedriver, unzip it somewhere in you PC and set path to this driver like this:
@@ -65,6 +66,25 @@ Use with IE
 from webdriver_manager.microsoft import IEDriverManager
 
 driver = webdriver.Ie(IEDriverManager().install())
+
+```
+
+Use with PhantomJS
+
+```python
+from webdriver_manager.phantom import PhantomJsDriverManager
+
+driver = webdriver.PhantomJS(PhantomJsDriverManager().install())
+```
+
+Use with Opera
+
+```python
+
+from webdriver_manager.opera import OperaDriverManager
+
+driver = webdriver.Opera(OperaDriverManager().install())
+
 ```
 
 == Configuration
