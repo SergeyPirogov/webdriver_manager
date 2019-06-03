@@ -1,5 +1,6 @@
 import os
 
+
 class Binary(object):
     def __init__(self, path):
         if os.path.isfile(path):
