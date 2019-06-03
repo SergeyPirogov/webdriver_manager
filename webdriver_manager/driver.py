@@ -244,4 +244,3 @@ class OperaDriver(Driver):
         if token:
             return url + "?access_token={0}".format(token)
         return url
-

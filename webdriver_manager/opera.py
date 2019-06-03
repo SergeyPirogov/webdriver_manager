@@ -27,7 +27,3 @@ class OperaDriverManager(DriverManager):
                 os.remove(os.path.join(source, fname))
         print(bin_file.path)
         return bin_file.path
-        
-
-
-

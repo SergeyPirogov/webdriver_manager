@@ -11,11 +11,13 @@ PATH = '.'
 
 
 def delete_old_install(path=None):
-    if not path is None:
+    if path is not None:
         path = os.path.abspath(path)
         try:
-            os.remove(os.path.join(os.path.dirname(path))) # maybe change this
-        except:
+            os.remove(os.path.join(os.path.dirname(path)))  # maybe change this
+        except OSError as e:
+            pass
+        except Exception as e:
             pass
 
 
@@ -28,7 +30,8 @@ def test_operachromium_manager_with_selenium():
     pass
     # driver_path = OperaDriverManager().install()
     # chrome_options = webdriver.ChromeOptions()
-    # chrome_options.binary_location = "C:\\Users\\USERNAME\\FOLDERLOCATION\\Opera\\VERSION\\opera.exe"  # getting error without this line
+    # #getting error without this line
+    # chrome_options.binary_location = "C:\\Users\\USERNAME\\FOLDERLOCATION\\Opera\\VERSION\\opera.exe"
     # ff = webdriver.Opera(executable_path=driver_path,
     #                      log_path=os.path.join(os.path.dirname(__file__), "log.log"),
     #                      options=chrome_options)
