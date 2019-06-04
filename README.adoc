@@ -86,11 +86,16 @@ Use with Opera
 
 ```python
 from selenium import webdriver
+from selenium.webdriver.chrome import service
 from webdriver_manager.opera import OperaDriverManager
 
+webdriver_service = service.Service(OperaDriverManager().install())
+webdriver_service.start()
+
 options = webdriver.ChromeOptions()
-options.binary_location = "C:\\Users\\USERNAME\\FOLDERLOCATION\\Opera\\VERSION\\opera.exe" # getting error without this line
-browser = webdriver.Opera(OperaDriverManager().install() ,options=options)
+options.binary_location = "C:\\Users\\Antoine\\AppData\\Local\\Programs\\Opera\\60.0.3255.109\\opera.exe" # getting error without this line
+
+driver = webdriver.Remote(webdriver_service.service_url, webdriver.DesiredCapabilities.OPERA, options=options)
 
 ```
 

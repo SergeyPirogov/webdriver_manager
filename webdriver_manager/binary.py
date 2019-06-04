@@ -6,7 +6,7 @@ class Binary(object):
         if os.path.isfile(path):
             self.bin_file = open(path)
         elif os.path.isdir(path):
-            self.bin_file = open("{0}{1}".format(path, os.listdir(path)[0]))
+            self.bin_file = open(os.path.join(path, os.listdir(path)[0]))
         else:
             raise FileNotFoundError
 

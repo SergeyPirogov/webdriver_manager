@@ -17,6 +17,7 @@ class Driver(object):
         self.config.set("version", version)
         self._url = self.config.url
         self.name = self.config.name
+        self.drivername = self.config.drivername
         self._version = self.config.version
         self.os_type = os_type
 
@@ -25,7 +26,7 @@ class Driver(object):
         url = "{url}/{ver}/{name}_{os}.zip"
         return url.format(url=self._url,
                           ver=self.get_version(),
-                          name=self.name,
+                          name=self.drivername,
                           os=self.os_type)
 
     def get_version(self):
@@ -71,7 +72,7 @@ class GeckoDriver(Driver):
         validate_response(self, resp)
         assets = resp.json()["assets"]
         ver = self.get_version()
-        name = "{0}-{1}-{2}".format(self.name, ver, self.os_type)
+        name = "{0}-{1}-{2}".format(self.drivername, ver, self.os_type)
         output_dict = [asset for asset in assets if
                        asset['name'].startswith(name)]
         return output_dict[0]['browser_download_url']
@@ -111,7 +112,7 @@ class EdgeDriver(Driver):
 
     def get_url(self):
         # type: () -> str
-        return "{}/{}.exe".format(self._url, self.name)
+        return "{}/{}.exe".format(self._url, self.drivername)
 
 
 class IEDriver(Driver):
@@ -161,7 +162,7 @@ class IEDriver(Driver):
         major, minor, patch = self.__get_divided_version()
         return ("{url}/{major}.{minor}/"
                 "{name}_{os}_{major}.{minor}.{patch}.zip").format(
-                    url=self.config.url, name=self.name, os=self.os_type,
+                    url=self.config.url, name=self.drivername, os=self.os_type,
                     major=major, minor=minor, patch=patch)
 
     def __get_divided_version(self):
@@ -208,7 +209,9 @@ class OperaDriver(Driver):
 
     def get_latest_release_version(self):
         # type: () -> str
-        resp = requests.get(self.latest_release_url)
+        link = self.latest_release_url
+        print(link)
+        resp = requests.get(link)
         validate_response(self, resp)
         return resp.json()["tag_name"]
 

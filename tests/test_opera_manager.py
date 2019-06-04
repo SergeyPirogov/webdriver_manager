@@ -1,60 +1,71 @@
 import os
+import shutil
 
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome import service
 
 from tests.test_cache import cache, delete_cache
 from webdriver_manager.driver import OperaDriver
 from webdriver_manager.opera import OperaDriverManager
+from webdriver_manager.utils import os_type as get_os_type
 
 PATH = '.'
 
 
-def delete_old_install(path=None):
+def delete_old_install(path=None, os_type=None):
     if path is not None:
         path = os.path.abspath(path)
+    if os_type is not None:
+        os_type = get_os_type()
         try:
-            os.remove(os.path.join(os.path.dirname(path)))  # maybe change this
+            os.remove(os.path.join(path, 'operadriver_{}.zip'.format(os_type)))
+            shutil.rmtree(os.path.join(path, 'operadriver_{}'.format(os_type)))
         except OSError as e:
             pass
         except Exception as e:
             pass
 
 
-def test_operachromium_manager_with_correct_version():
+def test_operadriver_manager_with_correct_version():
     driver_path = OperaDriverManager("v.2.45").install()
     assert os.path.exists(driver_path)
 
 
-def test_operachromium_manager_with_selenium():
-    pass
-    # driver_path = OperaDriverManager().install()
-    # chrome_options = webdriver.ChromeOptions()
-    # #getting error without this line
-    # chrome_options.binary_location = "C:\\Users\\USERNAME\\FOLDERLOCATION\\Opera\\VERSION\\opera.exe"
-    # ff = webdriver.Opera(executable_path=driver_path,
-    #                      log_path=os.path.join(os.path.dirname(__file__), "log.log"),
-    #                      options=chrome_options)
-    # ff.get("http://automation-remarks.com")
-    # ff.quit()
+def test_operadriver_manager_with_selenium():
+    driver_path = OperaDriverManager().install()
+    webdriver_service = service.Service(OperaDriverManager().install())
+    webdriver_service.start()
+
+    options = webdriver.ChromeOptions()
+    if get_os_type() == "win64":
+        options.binary_location = "C:\\Users\\{0}\\AppData\\Local\\Programs\\Opera\\{1}\\opera.exe"\
+            .format(os.getlogin(), "60.0.3255.109")
+    elif get_os_type() == "linux64" or "linux32" or "mac":
+        options.binary_location = "/usr/bin/opera"
+
+    ff = webdriver.Remote(webdriver_service.service_url, webdriver.DesiredCapabilities.OPERA, options=options)
+    ff.get("http://automation-remarks.com")
+    ff.quit()
 
 
-def test_operachromium_manager_with_wrong_version():
+def test_operadriver_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
-        delete_old_install()
+        delete_old_install(PATH)
         driver_path = OperaDriverManager("0.2").install()
         ff = webdriver.Opera(executable_path=driver_path)
         ff.quit()
-    assert ex.value.args[0] == "There is no such driver operachromiumdriver with version 0.2"
+        print(ex.value.args[0])
+    assert ex.value.args[0] == "There is no such driver operadriver with version 0.2"
 
 
 @pytest.mark.parametrize('path', [PATH, None])
-def test_operachromium_manager_with_correct_version_and_token(path):
+def test_operadriver_manager_with_correct_version_and_token(path):
     driver_path = OperaDriverManager("v.2.45").install(path)
     assert os.path.exists(driver_path)
 
 
-def test_operachromium_driver_with_wrong_token():
+def test_operadriver_driver_with_wrong_token():
     old_token = os.getenv("GH_TOKEN", "default")
     os.environ["GH_TOKEN"] = "aaa"
     with pytest.raises(ValueError) as ex:
@@ -67,6 +78,7 @@ def test_operachromium_driver_with_wrong_token():
 
 def test_can_download_ff_x64():
     delete_cache()
+    delete_old_install(PATH)
     driver_path = OperaDriverManager(os_type="win64").install()
     print(driver_path)
 
@@ -78,6 +90,9 @@ def test_can_download_ff_x64():
                                      'mac64'])
 def test_can_get_driver_from_cache(os_type):
     delete_cache()
+    delete_old_install(PATH)
     OperaDriverManager(os_type=os_type).install()
     driver_path = OperaDriverManager(os_type=os_type).install()
     assert os.path.exists(driver_path)
+
+

@@ -9,7 +9,7 @@ from webdriver_manager import config
 
 class OperaDriverManager(DriverManager):
     def __init__(self, version=None, os_type=utils.os_type()):
-        # type: (str, str) -> GeckoDriverManager
+        # type: (str, str) -> OperaDriverManager
         super(OperaDriverManager, self).__init__()
         if os_type.startswith("mac"):
             os_type = "mac64"
@@ -18,7 +18,7 @@ class OperaDriverManager(DriverManager):
                                   os_type=os_type)
 
     def install(self, path=None):
-        # type: () -> str
+        # type: (str) -> str
         bin_file = self._file_manager.download_driver(self.driver, path)
         os.chmod(bin_file.path, 0o755)
         source = os.path.dirname(bin_file.path)
