@@ -1,4 +1,6 @@
+import os
 import platform
+import re
 import sys
 
 import crayons
@@ -42,3 +44,19 @@ def validate_response(self, resp):
 
 def console(text, bold=False):
     print(crayons.yellow(text, bold=bold))
+
+
+def current_chrome_version():
+    cmd_mapping = {OSType.LINUX: 'google-chrome --version',
+                   OSType.MAC: r'/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version',
+                   OSType.WIN: r'reg query "HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon" /v version'}
+
+    cmd = cmd_mapping.get(os_name())
+    if cmd is None:
+        raise ValueError(
+            'Could not get chrome version for {}'.format(os_name())
+        )
+    else:
+        stdout = os.popen(cmd).read()
+        version = re.findall(r'(\d+)\.*', stdout)
+        return '.'.join(number for number in version)
