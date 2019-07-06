@@ -46,17 +46,19 @@ def console(text, bold=False):
     print(crayons.yellow(text, bold=bold))
 
 
-def current_chrome_version():
-    cmd_mapping = {OSType.LINUX: 'google-chrome --version',
-                   OSType.MAC: r'/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version',
-                   OSType.WIN: r'reg query "HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon" /v version'}
+def chrome_version():
+    pattern = r'\d+\.\d+\.\d+\.\d+'
+    cmd_mapping = {
+        OSType.LINUX: 'google-chrome --version',
+        OSType.MAC: r'/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version',
+        OSType.WIN: r'reg query "HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon" /v version'
+    }
 
-    cmd = cmd_mapping.get(os_name())
-    if cmd is None:
+    cmd = cmd_mapping[os_name()]
+    stdout = os.popen(cmd).read()
+    version = re.search(pattern, stdout)
+    if not version:
         raise ValueError(
-            'Could not get chrome version for {}'.format(os_name())
+            'Could not get version for Chrome with this command: {}'.format(cmd)
         )
-    else:
-        stdout = os.popen(cmd).read()
-        version = re.findall(r'(\d+)\.*', stdout)
-        return '.'.join(number for number in version)
+    return version.group(0)
