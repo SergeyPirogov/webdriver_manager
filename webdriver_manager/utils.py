@@ -47,7 +47,7 @@ def console(text, bold=False):
 
 
 def chrome_version():
-    pattern = r'\d+\.\d+\.\d+\.\d+'
+    pattern = r'\d+\.\d+\.\d+'
     cmd_mapping = {
         OSType.LINUX: 'google-chrome --version',
         OSType.MAC: r'/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version',
