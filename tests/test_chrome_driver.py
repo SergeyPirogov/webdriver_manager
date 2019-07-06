@@ -1,5 +1,8 @@
 import os
-from unittest.mock import patch
+try:
+    from unittest.mock import patch
+except ImportError:
+    from mock import patch  # handling python 2.7
 
 import pytest
 from selenium import webdriver
