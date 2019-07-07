@@ -1,4 +1,8 @@
 import os
+try:
+    from unittest.mock import patch
+except ImportError:
+    from mock import patch  # handling python 2.7
 
 import pytest
 from selenium import webdriver
@@ -64,3 +68,11 @@ def test_can_get_chrome_for_win(os_type):
     delete_cache()
     path = ChromeDriverManager(os_type=os_type).install()
     assert os.path.exists(path)
+
+
+@pytest.mark.parametrize('version', ['72.0.3626', '73.0.3683', '74.0.3729'])
+def test_latest_chromedriver_for_chrome(version):
+    with patch('webdriver_manager.driver.chrome_version') as chrome_version:
+        chrome_version.return_value = version
+        path = ChromeDriverManager().install()
+        assert os.path.exists(path)

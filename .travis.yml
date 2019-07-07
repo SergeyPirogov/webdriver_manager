@@ -17,6 +17,7 @@ before_install:
 
 install:
 - pip install pipenv
+- if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]]; then pipenv install mock; fi
 
 script:
 - pipenv install --dev

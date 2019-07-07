@@ -5,7 +5,7 @@ import requests
 
 from webdriver_manager import config
 from webdriver_manager.config import Configuration
-from webdriver_manager.utils import validate_response, console
+from webdriver_manager.utils import validate_response, console, chrome_version
 
 
 class Driver(object):
@@ -46,8 +46,11 @@ class ChromeDriver(Driver):
 
     def get_latest_release_version(self):
         # type: () -> str
-        file = requests.get(self.config.driver_latest_release_url)
-        return file.text.rstrip()
+        resp = requests.get(
+            self.config.driver_latest_release_url + '_' + chrome_version()
+        )  # returns chromedriver version for current browser version
+        validate_response(self, resp)
+        return resp.text.rstrip()
 
 
 class GeckoDriver(Driver):
