@@ -23,7 +23,7 @@ class CacheManager:
     def create_cache_dir(self, driver_path):
         # type: (str) -> None
         if not os.path.exists(driver_path):
-            os.makedirs(driver_path)
+            os.makedirs(driver_path, exist_ok=True)
 
     def get_cached_binary(self, driver, path=None, subpath=None):
         if path is not None:
