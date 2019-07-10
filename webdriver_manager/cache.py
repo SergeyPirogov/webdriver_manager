@@ -5,34 +5,49 @@ from webdriver_manager import archive
 from webdriver_manager.binary import Binary
 from webdriver_manager.driver import Driver
 from webdriver_manager.utils import console
+import glob
 
 
 class CacheManager:
     def __init__(
             self,
-            to_folder="drivers",
-            dir_name=os.path.dirname(
-                os.path.abspath(__file__))):
-        self.root_dir = dir_name
-        self.to_folder = to_folder
+            sub_folder="drivers",
+            root_dir=os.path.dirname(os.path.abspath(__file__))):
+        self.root_dir = root_dir
+        self.sub_folder = sub_folder
 
     def get_cache_path(self):
         # type: () -> str
-        return os.path.join(self.root_dir, self.to_folder)
+        return os.path.join(self.root_dir, self.sub_folder)
 
     def create_cache_dir(self, driver_path):
-        # type: (str) -> None
-        if not os.path.exists(driver_path):
-            os.makedirs(driver_path, exist_ok=True)
+        # type: (str) -> bool
+        path = os.path.join(self.get_cache_path(), driver_path)
 
-    def get_cached_binary(self, driver, path=None, subpath=None):
+        if not os.path.exists(path):
+            os.makedirs(path, exist_ok=True)
+        return os.path.exists(path)
+
+    def find_file_if_exists(self, name):
+        path = self.get_cache_path()
+        paths = [f for f in glob.glob(path + "/**", recursive=True)]
+
+        if len(paths) == 0:
+            return None
+
+        for path in paths:
+            if os.path.isfile(path) and path.endswith(name):
+                print("File path [{}]".format(path))
+                return path
+
+        return None
+
+    def get_cached_binary(self, driver):
+        cached_driver_path = driver.config.driver_path
+
+        path = self.find_file_if_exists(cached_driver_path)
         if path is not None:
-            self.root_dir = path
-        cached_driver = driver.config.driver_path
-        is_offline = driver.config.offline
-        if cached_driver and is_offline == 'True':
-            console("Using driver from cache {}".format(cached_driver))
-            return Binary(cached_driver)
+            return Binary(path)
 
         name = driver.name
         version = driver.get_version()
@@ -45,34 +60,23 @@ class CacheManager:
                 version,
                 self.get_cache_path()),
             bold=True)
-        if subpath is not None:
-            name = subpath
-        elif "win" in os_type:
-            name += ".exe"
-        if path is None:
-            for dirName, subdirList, fileList in \
-                    os.walk(self.get_cache_path()):
-                for fname in fileList:
-                    target_file = os.path.join(version, os_type, name)
-                    driver_file = os.path.join(dirName, fname)
 
-                    if driver_file.endswith(target_file):
-                        console("Driver found in {}/{}".format(dirName, fname))
-                        return Binary(os.path.join(dirName, fname))
-        else:
-            if os.path.isfile(os.path.join(path, name)):
-                console("Driver found in {}".format(os.path.join(path, name)))
-                return Binary(os.path.join(path, name))
-        console("There is no cached driver. Downloading new one...")
+        if "win" in os_type:
+            name += ".exe"
+
+        path = self.find_file_if_exists(self.get_cache_path(), name)
+
+        if path is not None:
+            console("Driver found at {}".format(path))
+            return Binary(path)
+
         return None
 
     def download_driver(self, driver, path=None, subpath=None):
         # type: (Driver) -> Binary
         if path is not None:
             path = os.path.abspath(path)
-        cached_binary = self.get_cached_binary(driver, path, subpath)
-        if cached_binary:
-            return cached_binary
+
         zip_file = self._download_file(driver, path)
         files = archive.unpack(zip_file)
         if subpath is None:
