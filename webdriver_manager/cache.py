@@ -65,7 +65,7 @@ class CacheManager:
         if "win" in os_type:
             name += ".exe"
 
-        path = self.find_file_if_exists(self.get_cache_path(), name)
+        path = self.find_file_if_exists(name)
 
         if path is not None:
             console("Driver found at {}".format(path))
