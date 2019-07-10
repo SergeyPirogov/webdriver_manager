@@ -85,7 +85,6 @@ def test_can_download_ff_x64():
 
 @pytest.mark.parametrize('os_type', ['win32',
                                      'win64',
-                                     'linux32',
                                      'linux64',
                                      'mac64'])
 def test_can_get_driver_from_cache(os_type):
