@@ -1,5 +1,6 @@
 import os
 import shutil
+from os.path import expanduser
 from time import sleep
 
 import pytest
@@ -9,7 +10,7 @@ from webdriver_manager.cache import CacheManager
 from webdriver_manager.config import Configuration
 from webdriver_manager.driver import ChromeDriver, GeckoDriver
 
-cache = CacheManager(to_folder=config.folder, dir_name=config.folder)
+cache = CacheManager(dir_name=config.folder)
 
 
 def delete_cache():
@@ -18,6 +19,10 @@ def delete_cache():
     if os.path.exists(cache_path):
         shutil.rmtree(cache_path)
     sleep(5)
+
+
+def test_correct_cache_path():
+    assert cache.get_cache_path() == expanduser("~") + "/.wdm/drivers"
 
 
 @pytest.mark.parametrize("os_type", ["linux64",

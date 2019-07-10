@@ -10,7 +10,7 @@ from webdriver_manager.utils import console
 class CacheManager:
     def __init__(
             self,
-            to_folder=".drivers",
+            to_folder="drivers",
             dir_name=os.path.dirname(
                 os.path.abspath(__file__))):
         self.root_dir = dir_name
@@ -39,10 +39,11 @@ class CacheManager:
         os_type = driver.os_type
         console("")
         console(
-            "Checking for {} {}:{} in cache".format(
+            "Checking for {} {}:{} in cache {}".format(
                 os_type,
                 name,
-                version),
+                version,
+                self.get_cache_path()),
             bold=True)
         if subpath is not None:
             name = subpath

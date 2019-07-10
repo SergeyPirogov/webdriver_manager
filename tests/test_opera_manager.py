@@ -27,7 +27,7 @@ def delete_old_install(path=None, os_type=None):
             pass
 
 
-def test_operadriver_manager_with_correct_version():
+def test_opera_driver_manager_with_correct_version():
     driver_path = OperaDriverManager("v.2.45").install()
     assert os.path.exists(driver_path)
 
@@ -49,7 +49,7 @@ def test_operadriver_manager_with_selenium():
     ff.quit()
 
 
-def test_operadriver_manager_with_wrong_version():
+def test_opera_driver_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
         delete_old_install(PATH)
         driver_path = OperaDriverManager("0.2").install()
@@ -59,13 +59,13 @@ def test_operadriver_manager_with_wrong_version():
     assert ex.value.args[0] == "There is no such driver operadriver with version 0.2"
 
 
-@pytest.mark.parametrize('path', [PATH, None])
-def test_operadriver_manager_with_correct_version_and_token(path):
+@pytest.mark.parametrize('path', [PATH])
+def test_opera_driver_manager_with_correct_version_and_token(path):
     driver_path = OperaDriverManager("v.2.45").install(path)
     assert os.path.exists(driver_path)
 
 
-def test_operadriver_driver_with_wrong_token():
+def test_opera_driver_driver_with_wrong_token():
     old_token = os.getenv("GH_TOKEN", "default")
     os.environ["GH_TOKEN"] = "aaa"
     with pytest.raises(ValueError) as ex:
@@ -76,20 +76,12 @@ def test_operadriver_driver_with_wrong_token():
     os.environ["GH_TOKEN"] = old_token
 
 
-def test_can_download_ff_x64():
-    delete_cache()
-    delete_old_install(PATH)
-    driver_path = OperaDriverManager(os_type="win64").install()
-    print(driver_path)
-
-
 @pytest.mark.parametrize('os_type', ['win32',
                                      'win64',
                                      'linux64',
                                      'mac64'])
 def test_can_get_driver_from_cache(os_type):
     delete_cache()
-    delete_old_install(PATH)
     OperaDriverManager(os_type=os_type).install()
     driver_path = OperaDriverManager(os_type=os_type).install()
     assert os.path.exists(driver_path)
