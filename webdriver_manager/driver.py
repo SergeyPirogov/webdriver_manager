@@ -17,6 +17,7 @@ class Driver(object):
         self.config.set("version", version)
         self._url = self.config.url
         self.name = self.config.name
+        self.drivername = self.config.drivername
         self._version = self.config.version
         self.os_type = os_type
 
@@ -25,7 +26,7 @@ class Driver(object):
         url = "{url}/{ver}/{name}_{os}.zip"
         return url.format(url=self._url,
                           ver=self.get_version(),
-                          name=self.name,
+                          name=self.drivername,
                           os=self.os_type)
 
     def get_version(self):
@@ -74,7 +75,7 @@ class GeckoDriver(Driver):
         validate_response(self, resp)
         assets = resp.json()["assets"]
         ver = self.get_version()
-        name = "{0}-{1}-{2}".format(self.name, ver, self.os_type)
+        name = "{0}-{1}-{2}".format(self.drivername, ver, self.os_type)
         output_dict = [asset for asset in assets if
                        asset['name'].startswith(name)]
         return output_dict[0]['browser_download_url']
@@ -114,7 +115,7 @@ class EdgeDriver(Driver):
 
     def get_url(self):
         # type: () -> str
-        return "{}/{}.exe".format(self._url, self.name)
+        return "{}/{}.exe".format(self._url, self.drivername)
 
 
 class IEDriver(Driver):
@@ -164,7 +165,7 @@ class IEDriver(Driver):
         major, minor, patch = self.__get_divided_version()
         return ("{url}/{major}.{minor}/"
                 "{name}_{os}_{major}.{minor}.{patch}.zip").format(
-                    url=self.config.url, name=self.name, os=self.os_type,
+                    url=self.config.url, name=self.drivername, os=self.os_type,
                     major=major, minor=minor, patch=patch)
 
     def __get_divided_version(self):
@@ -202,3 +203,50 @@ class PhantomJsDriver(Driver):
             url = self.config.linux64_url
 
         return url.format(self.get_version())
+
+
+class OperaDriver(Driver):
+    def __init__(self, version, os_type):
+        # type: (str, str) -> None
+        super(OperaDriver, self).__init__(version, os_type)
+
+    def get_latest_release_version(self):
+        # type: () -> str
+        link = self.latest_release_url
+        print(link)
+        resp = requests.get(link)
+        validate_response(self, resp)
+        return resp.json()["tag_name"]
+
+    def get_url(self):
+        # type: () -> str
+        # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
+        console(
+            "Getting latest opera release info for {0}".format(
+                self.get_version()))
+        resp = requests.get(self.tagged_release_url)
+        validate_response(self, resp)
+        assets = resp.json()["assets"]
+        name = "{0}_{1}".format(self.config.drivername, self.os_type)
+        output_dict = [asset for asset in assets if
+                       asset['name'].startswith(name)]
+        return output_dict[0]['browser_download_url']
+
+    @property
+    def latest_release_url(self):
+        # type: () -> str
+        token = self.config.gh_token
+        url = self.config.driver_latest_release_url
+        if token:
+            return "{base_url}?access_token={access_token}".format(
+                base_url=url, access_token=token)
+        return url
+
+    @property
+    def tagged_release_url(self):
+        # type: () -> str
+        token = self.config.gh_token
+        url = self.config.opera_release_tag.format(self.get_version())
+        if token:
+            return url + "?access_token={0}".format(token)
+        return url

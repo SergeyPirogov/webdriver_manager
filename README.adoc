@@ -1,4 +1,4 @@
-= python webdriver manager
+= Webdriver Manager for Python
 
 image:https://travis-ci.org/SergeyPirogov/webdriver_manager.svg?branch=master["Build Status", link="https://travis-ci.org/SergeyPirogov/webdriver_manager"]
 image:https://img.shields.io/pypi/v/webdriver_manager.svg["PyPI", link="https://pypi.org/project/webdriver-manager/"]
@@ -12,6 +12,7 @@ For now support:
 - EdgeDriver
 - IEDriver
 - PhantomJS
+- OperaDriver
 
 Before:
 You should download binary chromedriver, unzip it somewhere in you PC and set path to this driver like this:
@@ -33,6 +34,7 @@ pip install webdriver_manager
 Use with Chrome:
 
 ```python
+from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
 webdriver.Chrome(ChromeDriverManager().install())
@@ -40,6 +42,7 @@ webdriver.Chrome(ChromeDriverManager().install())
 Use with FireFox:
 
 ```python
+from selenium import webdriver
 from webdriver_manager.firefox import GeckoDriverManager
 
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
@@ -54,6 +57,7 @@ driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 Use with Edge:
 
 ```python
+from selenium import webdriver
 from webdriver_manager.microsoft import EdgeDriverManager
 
 driver = webdriver.Edge(EdgeDriverManager().install())
@@ -62,9 +66,37 @@ driver = webdriver.Edge(EdgeDriverManager().install())
 Use with IE
 
 ```python
+from selenium import webdriver
 from webdriver_manager.microsoft import IEDriverManager
 
 driver = webdriver.Ie(IEDriverManager().install())
+
+```
+
+Use with PhantomJS
+
+```python
+from selenium import webdriver
+from webdriver_manager.phantom import PhantomJsDriverManager
+
+driver = webdriver.PhantomJS(PhantomJsDriverManager().install())
+```
+
+Use with Opera
+
+```python
+from selenium import webdriver
+from selenium.webdriver.chrome import service
+from webdriver_manager.opera import OperaDriverManager
+
+webdriver_service = service.Service(OperaDriverManager().install())
+webdriver_service.start()
+
+options = webdriver.ChromeOptions()
+options.binary_location = "C:\\Users\\Antoine\\AppData\\Local\\Programs\\Opera\\60.0.3255.109\\opera.exe" # getting error without this line
+
+driver = webdriver.Remote(webdriver_service.service_url, webdriver.DesiredCapabilities.OPERA, options=options)
+
 ```
 
 == Configuration
