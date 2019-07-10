@@ -1,10 +1,8 @@
 import os
-import shutil
+
+from webdriver_manager import utils
 from webdriver_manager.driver import OperaDriver
 from webdriver_manager.manager import DriverManager
-from webdriver_manager import utils
-
-from webdriver_manager import config
 
 
 class OperaDriverManager(DriverManager):
