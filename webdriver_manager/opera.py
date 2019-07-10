@@ -19,9 +19,5 @@ class OperaDriverManager(DriverManager):
         # type: (str) -> str
         bin_file = self._file_manager.download_driver(self.driver, path)
         os.chmod(bin_file.path, 0o755)
-        source = os.path.dirname(bin_file.path)
-        for fname in os.listdir(source):
-            if fname == "sha512_sum":
-                os.remove(os.path.join(source, fname))
         print(bin_file.path)
         return bin_file.path
