@@ -44,7 +44,7 @@ def test_operadriver_manager_with_selenium():
     elif get_os_type() == "linux64" or "linux32" or "mac":
         options.binary_location = "/usr/bin/opera"
 
-    ff = webdriver.Remote(webdriver_service.service_url, webdriver.DesiredCapabilities.OPERA, options=options)
+    ff = webdriver.Opera(executable_path=driver_path)
     ff.get("http://automation-remarks.com")
     ff.quit()
 
