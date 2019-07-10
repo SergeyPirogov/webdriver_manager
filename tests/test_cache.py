@@ -113,6 +113,14 @@ def test_should_be_true_for_cached_driver(os_type):
     assert cache.get_cached_binary(driver)
 
 
+def test_can_download_file():
+    delete_cache()
+    path = cache._download_file("http://chromedriver.storage.googleapis.com/2.0/chromedriver_linux64.zip",
+                                "chromedriver")
+
+    assert path == os.path.join(cache.get_cache_path(), "chromedriver.zip")
+
+
 def test_should_be_false_for_new_driver():
     version = "2.25"
     driver = ChromeDriver(version=version,

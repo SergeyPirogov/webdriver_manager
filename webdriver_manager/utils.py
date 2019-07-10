@@ -4,6 +4,7 @@ import re
 import sys
 
 import crayons
+import requests
 
 
 class OSType(object):

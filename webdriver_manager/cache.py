@@ -52,6 +52,7 @@ class CacheManager:
         name = driver.name
         version = driver.get_version()
         os_type = driver.os_type
+
         console("")
         console(
             "Checking for {} {}:{} in cache {}".format(
@@ -92,25 +93,19 @@ class CacheManager:
             return cached_binary
         return Binary(self._download_file(driver).name)
 
-    def _download_file(self, driver, path=None):
-        # type: (Driver) -> file
-        url = driver.get_url()
+    def _download_file(self, url, name):
         console("Trying to download new driver from {}".format(url))
+
+        driver_path = self.get_cache_path()
 
         response = requests.get(url, stream=True)
         if response.status_code == 404:
             raise ValueError(
-                "There is no such driver {0} with version {1} by {2}".format(
-                    driver.name, driver.get_version(), driver.get_url()))
-        filename = self._get_filename_from_response(response, driver)
+                "There is no such driver by {}".format(url))
+        filename = self._get_filename_from_response(response, name)
         if '"' in filename:
             filename = filename.replace('"', "")
-        if path is None:
-            driver_path = self._get_driver_path(driver.name,
-                                                driver.get_version(),
-                                                driver.os_type)
-        else:
-            driver_path = path
+
         self.create_cache_dir(driver_path)
         file_path = os.path.join(driver_path, filename)
 
@@ -120,16 +115,16 @@ class CacheManager:
         with open(path, "wb") as code:
             code.write(response.content)
             code.close()
-        return open(path, "rb")
+        return path
 
-    def _get_filename_from_response(self, response, driver):
+    def _get_filename_from_response(self, response, name):
         try:
             return re.findall("filename=(.+)",
                               response.headers["content-disposition"])[0]
         except KeyError:
-            return "{}.zip".format(driver.name)
+            return "{}.zip".format(name)
         except IndexError:
-            return driver.name + ".exe"
+            return name + ".exe"
 
     def _get_driver_path(self, name, version, os_type):
         cache_path = self.get_cache_path()
