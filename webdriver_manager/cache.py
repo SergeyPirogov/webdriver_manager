@@ -68,7 +68,7 @@ class CacheManager:
         if "win" in os_type:
             name += ".exe"
 
-        path = self.find_file_if_exists(name)
+        path = self.find_file_if_exists(os.path.join(driver.name, driver.get_version(), driver.os_type, name))
 
         if path is not None:
             console("Driver found at {}".format(path))
@@ -98,7 +98,7 @@ class CacheManager:
 
         if response.status_code == 404:
             raise ValueError(
-                "There is no such driver {} with version {} by {}".format(driver.name,driver.get_version(), url))
+                "There is no such driver {} with version {} by {}".format(driver.name, driver.get_version(), url))
 
         filename = get_filename_from_response(response, driver.name)
 

@@ -64,10 +64,11 @@ def test_can_get_chrome_for_win(os_type):
     assert os.path.exists(path)
 
 
-@pytest.mark.parametrize('version', ['72.0.3626', '73.0.3683', '74.0.3729'])
-def test_latest_chromedriver_for_chrome(version):
+@pytest.mark.parametrize('version, driver_version',
+                         [('72.0.3626', '72.0.3626.69'), ('73.0.3683', '73.0.3683.68'), ('74.0.3729', '74.0.3729.6')])
+def test_latest_chromedriver_for_chrome(version, driver_version):
     with patch('webdriver_manager.driver.chrome_version') as chrome_version:
         chrome_version.return_value = version
         path = ChromeDriverManager().install()
-        assert path == os.path.join(expanduser("~"), ".wdm", "drivers", "chromedriver", version, "linux64",
+        assert path == os.path.join(expanduser("~"), ".wdm", "drivers", "chromedriver", driver_version, "linux64",
                                     "chromedriver")
