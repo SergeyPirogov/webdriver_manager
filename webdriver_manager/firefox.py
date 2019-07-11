@@ -1,3 +1,4 @@
+from webdriver_manager.archive import unpack
 from webdriver_manager.driver import GeckoDriver
 from webdriver_manager.manager import DriverManager
 from webdriver_manager import utils
@@ -15,4 +16,15 @@ class GeckoDriverManager(DriverManager):
 
     def install(self, path=None):
         # type: () -> str
-        return self._file_manager.download_driver(self.driver, path).path
+        bin_file = self._file_manager.get_cached_binary(self.driver)
+
+        if bin_file:
+            return bin_file.path
+
+        path = self._file_manager.download_driver(self.driver)
+
+        unpack(path)
+
+        bin_file = self._file_manager.get_cached_binary(self.driver)
+
+        return bin_file.path
