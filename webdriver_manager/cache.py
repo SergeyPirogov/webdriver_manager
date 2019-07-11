@@ -1,6 +1,5 @@
 import glob
 import os
-import re
 
 import requests
 
@@ -30,6 +29,9 @@ class CacheManager:
         return os.path.exists(path)
 
     def find_file_if_exists(self, name):
+        if len(name) == 0:
+            return None
+
         path = self.get_cache_path()
         paths = [f for f in glob.glob(path + "/**", recursive=True)]
 
@@ -96,7 +98,7 @@ class CacheManager:
 
         if response.status_code == 404:
             raise ValueError(
-                "There is no such driver by {}".format(url))
+                "There is no such driver {} with version {} by {}".format(driver.name,driver.get_version(), url))
 
         filename = get_filename_from_response(response, driver.name)
 
@@ -105,5 +107,3 @@ class CacheManager:
         file_path = os.path.join(driver_path, filename)
 
         return write_file(response.content, file_path)
-
-

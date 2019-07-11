@@ -1,4 +1,6 @@
 import os
+from os.path import expanduser
+
 try:
     from unittest.mock import patch
 except ImportError:
@@ -31,12 +33,6 @@ def test_chrome_manager_with_specific_version():
     assert os.path.exists(bin)
 
 
-@pytest.mark.parametrize('path', [PATH, None])
-def test_chrome_manager_with_latest_version(path):
-    bin = ChromeDriverManager().install(path)
-    assert os.path.exists(bin)
-
-
 def test_chrome_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
         delete_old_install()
@@ -49,18 +45,16 @@ def test_chrome_manager_with_wrong_version():
 def test_chrome_manager_with_selenium():
     delete_old_install()
     driver_path = ChromeDriverManager().install()
-    webdriver.Chrome(driver_path)
+    driver = webdriver.Chrome(driver_path)
+    driver.get("http://automation-remarks.com")
+    driver.close()
 
 
-@pytest.mark.parametrize('path', [PATH, None])
-def test_chrome_manager_cached_driver_with_selenium(path):
-    ChromeDriverManager().install(path)
-    webdriver.Chrome(ChromeDriverManager().install(path))
-
-
-@pytest.mark.parametrize('path', [PATH, None])
-def test_chrome_manager_with_win64_os(path):
-    ChromeDriverManager(os_type="win64").install(path)
+def test_chrome_manager_cached_driver_with_selenium():
+    ChromeDriverManager().install()
+    driver = webdriver.Chrome(ChromeDriverManager().install())
+    driver.get("http://automation-remarks.com")
+    driver.close()
 
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])
@@ -75,4 +69,5 @@ def test_latest_chromedriver_for_chrome(version):
     with patch('webdriver_manager.driver.chrome_version') as chrome_version:
         chrome_version.return_value = version
         path = ChromeDriverManager().install()
-        assert os.path.exists(path)
+        assert path == os.path.join(expanduser("~"), ".wdm", "drivers", "chromedriver", version, "linux64",
+                                    "chromedriver")
