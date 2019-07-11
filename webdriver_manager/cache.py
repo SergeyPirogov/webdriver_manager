@@ -1,11 +1,12 @@
+import glob
 import os
 import re
+
 import requests
-from webdriver_manager import archive
+
 from webdriver_manager.binary import Binary
 from webdriver_manager.driver import Driver
-from webdriver_manager.utils import console
-import glob
+from webdriver_manager.utils import console, write_file, get_filename_from_response
 
 
 class CacheManager:
@@ -73,16 +74,9 @@ class CacheManager:
 
         return None
 
-    def download_driver(self, driver, path=None, subpath=None):
+    def download_driver(self, driver):
         # type: (Driver) -> Binary
-        if path is not None:
-            path = os.path.abspath(path)
-
-        zip_file = self._download_file(driver, path)
-        files = archive.unpack(zip_file)
-        if subpath is None:
-            subpath = files[0]
-        return Binary(os.path.join(os.path.dirname(zip_file.name), subpath))
+        return self._save_driver_to_cache(driver.get_url(), driver)
 
     # TODO merge download driver and this method
     def download_binary(self, driver, path=None):
@@ -91,46 +85,25 @@ class CacheManager:
         cached_binary = self.get_cached_binary(driver, path)
         if cached_binary:
             return cached_binary
-        return Binary(self._download_file(driver).name)
+        return Binary(self._save_driver_to_cache(driver).name)
 
-    def _download_file(self, url, name):
+    def _save_driver_to_cache(self, url, driver):
         console("Trying to download new driver from {}".format(url))
 
-        driver_path = self.get_cache_path()
+        driver_path = os.path.join(self.get_cache_path(), driver.name, driver.get_version(), driver.os_type)
 
         response = requests.get(url, stream=True)
+
         if response.status_code == 404:
             raise ValueError(
                 "There is no such driver by {}".format(url))
-        filename = self._get_filename_from_response(response, name)
-        if '"' in filename:
-            filename = filename.replace('"', "")
+
+        filename = get_filename_from_response(response, driver.name)
 
         self.create_cache_dir(driver_path)
+
         file_path = os.path.join(driver_path, filename)
 
-        return self._save_file_to_cache(response, file_path)
+        return write_file(response.content, file_path)
 
-    def _save_file_to_cache(self, response, path):
-        with open(path, "wb") as code:
-            code.write(response.content)
-            code.close()
-        return path
 
-    def _get_filename_from_response(self, response, name):
-        try:
-            return re.findall("filename=(.+)",
-                              response.headers["content-disposition"])[0]
-        except KeyError:
-            return "{}.zip".format(name)
-        except IndexError:
-            return name + ".exe"
-
-    def _get_driver_path(self, name, version, os_type):
-        cache_path = self.get_cache_path()
-        return os.path.join(cache_path, name, version, os_type)
-
-    def get_driver_binary_path(self, name, version, os_type):
-        # type: (str, str) -> str
-        directory = self._get_driver_path(name, version, os_type)
-        return os.path.join(directory, name)

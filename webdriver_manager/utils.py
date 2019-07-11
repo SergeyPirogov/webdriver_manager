@@ -63,3 +63,24 @@ def chrome_version():
             'Could not get version for Chrome with this command: {}'.format(cmd)
         )
     return version.group(0)
+
+
+def write_file(content, path):
+    with open(path, "wb") as code:
+        code.write(content)
+        code.close()
+    return path
+
+
+def get_filename_from_response(response, name):
+    try:
+        filename = re.findall("filename=(.+)", response.headers["content-disposition"])[0]
+    except KeyError:
+        filename = "{}.zip".format(name)
+    except IndexError:
+        filename = name + ".exe"
+
+    if '"' in filename:
+        filename = filename.replace('"', "")
+
+    return filename

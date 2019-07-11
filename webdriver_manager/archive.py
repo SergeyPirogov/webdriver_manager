@@ -22,7 +22,9 @@ def extract_tar_file(tar_file, to_dir):
     return members
 
 
-def unpack(archive, to_directory=None):
+def unpack(archive_path, to_directory=None):
+    archive = open(archive_path, "rb")
+
     console("Unpack archive {}".format(archive.name))
     if not to_directory:
         to_directory = os.path.dirname(archive.name)
