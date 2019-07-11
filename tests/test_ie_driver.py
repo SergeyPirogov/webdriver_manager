@@ -1,5 +1,6 @@
 import os
 import sys
+from os.path import expanduser
 
 import pytest
 from selenium import webdriver
@@ -49,12 +50,12 @@ def test_ie_manager_with_selenium(version, use_cache):
                                        False])
 def test_ie_driver_binary(version, use_cache):
     delete_old_install()
-    ie_driver = IEDriver(version, "win32")
     if use_cache:
-        cache.download_driver(ie_driver)
-    ie_driver_bin = cache.download_driver(ie_driver)
-    assert ie_driver_bin.name == u'IEDriverServer'
-    assert os.path.exists(ie_driver_bin.path)
+        IEDriverManager(version).install()
+    ie_driver_bin = IEDriverManager(version, "win32").install()
+    assert ie_driver_bin == os.path.join(expanduser("~"), ".wdm", "drivers", "IEDriverServer", version, "Win32",
+                                         u'IEDriverServer.exe')
+    assert os.path.exists(ie_driver_bin)
 
 
 @pytest.mark.skipif(sys.platform != 'win32',

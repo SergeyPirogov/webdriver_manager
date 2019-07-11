@@ -65,7 +65,7 @@ class CacheManager:
                 self.get_cache_path()),
             bold=True)
 
-        if "win" in os_type:
+        if "Win" in os_type:
             name += ".exe"
 
         path = self.find_file_if_exists(os.path.join(driver.name, driver.get_version(), driver.os_type, name))
