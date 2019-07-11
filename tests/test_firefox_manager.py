@@ -42,23 +42,6 @@ def test_gecko_manager_with_wrong_version():
     assert ex.value.args[0] == "There is no such driver geckodriver with version 0.2"
 
 
-@pytest.mark.parametrize('path', [PATH, None])
-def test_gecko_manager_with_correct_version_and_token(path):
-    driver_path = GeckoDriverManager("v0.11.0").install(path)
-    assert os.path.exists(driver_path)
-
-
-def test_gecko_driver_with_wrong_token():
-    old_token = os.getenv("GH_TOKEN", "default")
-    os.environ["GH_TOKEN"] = "aaa"
-    with pytest.raises(ValueError) as ex:
-        driver = GeckoDriver(version="latest",
-                             os_type="linux32")
-        cache.download_driver(driver)
-    assert ex.value.args[0]['message'] == "Bad credentials"
-    os.environ["GH_TOKEN"] = old_token
-
-
 def test_can_download_ff_x64():
     delete_cache()
     driver_path = GeckoDriverManager(os_type="win64").install()
