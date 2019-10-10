@@ -97,8 +97,8 @@ class CacheManager:
             raise ValueError(
                 "There is no such driver {0} with version {1} by {2}".format(
                     driver.name, driver.get_version(), driver.get_url()))
-        filename = self._get_filename_from_response(response.headers.get('content-disposition'),
-                                                    driver)
+        cd = response.headers.get('content-disposition')
+        filename = self._get_filename_from_response(cd, driver)
         if '"' in filename:
             filename = filename.replace('"', "")
         if path is None:
