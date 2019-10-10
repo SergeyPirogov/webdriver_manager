@@ -97,7 +97,7 @@ class CacheManager:
             raise ValueError(
                 "There is no such driver {0} with version {1} by {2}".format(
                     driver.name, driver.get_version(), driver.get_url()))
-        filename = self._get_filename_from_response(response, driver)
+        filename = self._get_filename_from_response(response.headers.get('content-disposition'), driver)
         if '"' in filename:
             filename = filename.replace('"', "")
         if path is None:
@@ -117,14 +117,12 @@ class CacheManager:
             code.close()
         return open(path, "rb")
 
-    def _get_filename_from_response(self, response, driver):
-        try:
-            return re.findall("filename=(.+)",
-                              response.headers["content-disposition"])[0]
-        except KeyError:
-            return "{}.zip".format(driver.name)
-        except IndexError:
-            return driver.name + ".exe"
+    def _get_filename_from_response(self, cd, driver):        
+        if cd:
+            fname = re.findall("filename=(.+)", cd)
+            return "{}.exe".format(driver.name) if len(fname) == 0 else fname[0]              
+        else:
+            return "{}.exe".format(driver.name)
 
     def _get_driver_path(self, name, version, os_type):
         cache_path = self.get_cache_path()
