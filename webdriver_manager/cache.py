@@ -118,13 +118,17 @@ class CacheManager:
         return open(path, "rb")
 
     def _get_filename_from_response(self, response, driver):
-        try:
-            return re.findall("filename=(.+)",
-                              response.headers["content-disposition"])[0]
-        except KeyError:
+        content_disp = response.headers.get('content-disposition')
+        if content_disp:
+            try:
+                return re.findall("filename=(.+)", content_disp)[0]
+            except IndexError:
+                return driver.name + ".exe"
+        content_type = response.headers.get('content-type')
+        if content_type == 'application/octet-stream':
+            return "{}.exe".format(driver.name)
+        else:
             return "{}.zip".format(driver.name)
-        except IndexError:
-            return driver.name + ".exe"
 
     def _get_driver_path(self, name, version, os_type):
         cache_path = self.get_cache_path()
