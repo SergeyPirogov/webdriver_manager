@@ -106,4 +106,32 @@ class CacheManager:
 
         file_path = os.path.join(driver_path, filename)
 
-        return write_file(response.content, file_path)
+        return self._save_file_to_cache(response, file_path)
+
+    def _save_file_to_cache(self, response, path):
+        with open(path, "wb") as code:
+            code.write(response.content)
+            code.close()
+        return open(path, "rb")
+
+    def _get_filename_from_response(self, response, driver):
+        content_disp = response.headers.get('content-disposition')
+        if content_disp:
+            try:
+                return re.findall("filename=(.+)", content_disp)[0]
+            except IndexError:
+                return driver.name + ".exe"
+        content_type = response.headers.get('content-type')
+        if content_type == 'application/octet-stream':
+            return "{}.exe".format(driver.name)
+        else:
+            return "{}.zip".format(driver.name)
+
+    def _get_driver_path(self, name, version, os_type):
+        cache_path = self.get_cache_path()
+        return os.path.join(cache_path, name, version, os_type)
+
+    def get_driver_binary_path(self, name, version, os_type):
+        # type: (str, str) -> str
+        directory = self._get_driver_path(name, version, os_type)
+        return os.path.join(directory, name)
