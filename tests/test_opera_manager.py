@@ -21,9 +21,9 @@ def delete_old_install(path=None, os_type=None):
         try:
             os.remove(os.path.join(path, 'operadriver_{}.zip'.format(os_type)))
             shutil.rmtree(os.path.join(path, 'operadriver_{}'.format(os_type)))
-        except OSError as e:
+        except OSError:
             pass
-        except Exception as e:
+        except Exception:
             pass
 
 
@@ -39,8 +39,9 @@ def test_operadriver_manager_with_selenium():
 
     options = webdriver.ChromeOptions()
     if get_os_type() == "win64":
-        options.binary_location = "C:\\Users\\{0}\\AppData\\Local\\Programs\\Opera\\{1}\\opera.exe"\
-            .format(os.getlogin(), "60.0.3255.109")
+        options.binary_location = ("C:\\Users\\{0}\\AppData\\Local\\Programs"
+                                   "\\Opera\\{1}\\opera.exe"
+                                   .format(os.getlogin(), "60.0.3255.109"))
     elif get_os_type() == "linux64" or "linux32" or "mac":
         options.binary_location = "/usr/bin/opera"
 
@@ -56,7 +57,8 @@ def test_opera_driver_manager_with_wrong_version():
         ff = webdriver.Opera(executable_path=driver_path)
         ff.quit()
         print(ex.value.args[0])
-    assert ex.value.args[0] == "There is no such driver operadriver with version 0.2"
+    assert ex.value.args[0] == "There is no such driver operadriver with "\
+                               "version 0.2"
 
 
 @pytest.mark.parametrize('path', [PATH])
@@ -85,5 +87,3 @@ def test_can_get_driver_from_cache(os_type):
     OperaDriverManager(os_type=os_type).install()
     driver_path = OperaDriverManager(os_type=os_type).install()
     assert os.path.exists(driver_path)
-
-

@@ -86,16 +86,14 @@ Use with Opera
 
 ```python
 from selenium import webdriver
-from selenium.webdriver.chrome import service
 from webdriver_manager.opera import OperaDriverManager
 
-webdriver_service = service.Service(OperaDriverManager().install())
-webdriver_service.start()
-
 options = webdriver.ChromeOptions()
-options.binary_location = "C:\\Users\\Antoine\\AppData\\Local\\Programs\\Opera\\60.0.3255.109\\opera.exe" # getting error without this line
+options.add_argument('allow-elevated-browser')
+# Provide the below binary location only if opera browser is installed in a location other than C:/Program Files or C:/Program Files (x86)
+options.binary_location = "C:\\Users\\USERNAME\\FOLDERLOCATION\\Opera\\VERSION\\opera.exe" 
 
-driver = webdriver.Remote(webdriver_service.service_url, webdriver.DesiredCapabilities.OPERA, options=options)
+driver = webdriver.Opera(executable_path=OperaDriverManager().install(), options=options)
 
 ```
 

@@ -53,7 +53,8 @@ def test_ie_driver_binary(version, use_cache):
     if use_cache:
         IEDriverManager(version).install()
     ie_driver_bin = IEDriverManager(version, "win32").install()
-    assert ie_driver_bin == os.path.join(expanduser("~"), ".wdm", "drivers", "IEDriverServer", version, "Win32",
+    assert ie_driver_bin == os.path.join(expanduser("~"), ".wdm",
+                                         "IEDriverServer", version, "Win32",
                                          u'IEDriverServer.exe')
     assert os.path.exists(ie_driver_bin)
 

@@ -19,5 +19,4 @@ class OperaDriverManager(DriverManager):
         # type: (str) -> str
         bin_file = self._file_manager.download_driver(self.driver, path)
         os.chmod(bin_file.path, 0o755)
-        print(bin_file.path)
         return bin_file.path
