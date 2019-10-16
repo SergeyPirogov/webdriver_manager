@@ -46,7 +46,8 @@ class ChromeDriver(Driver):
 
     def get_latest_release_version(self):
         # type: () -> str
-        resp = requests.get(self.config.driver_latest_release_url + '_' + chrome_version())
+        url = self.config.driver_latest_release_url + '_' + chrome_version()
+        resp = requests.get(url)
         validate_response(self, resp)
         return resp.text.rstrip()
 
