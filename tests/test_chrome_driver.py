@@ -37,10 +37,10 @@ def test_chrome_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
         delete_old_install()
         ChromeDriverManager("0.2").install()
-
+    os_type = "win32" if utils.os_type() == "win64" else utils.os_type()
     ex_value = ("There is no such driver chromedriver with version 0.2 by "
                 "http://chromedriver.storage.googleapis.com/0.2/"
-                "chromedriver_{0}.zip".format(utils.os_type()))
+                "chromedriver_{0}.zip".format(os_type))
     assert ex.value.args[0] == ex_value
 
 
@@ -74,6 +74,10 @@ def test_latest_chromedriver_for_chrome(version, driver_version):
     with patch('webdriver_manager.driver.chrome_version') as chrome_version:
         chrome_version.return_value = version
         path = ChromeDriverManager().install()
+        os_type = utils.os_type()
+        current_os_type = "win32" if os_type == "win64" else os_type
+        extension = '.exe' if os_type.startswith('win') else ''
         assert path == os.path.join(expanduser("~"), ".wdm",
-                                    "chromedriver", driver_version, "linux64",
-                                    "chromedriver")
+                                    "chromedriver", driver_version,
+                                    current_os_type,
+                                    "chromedriver") + extension

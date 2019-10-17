@@ -34,18 +34,17 @@ def test_opera_driver_manager_with_correct_version():
 
 def test_operadriver_manager_with_selenium():
     driver_path = OperaDriverManager().install()
-    webdriver_service = service.Service(OperaDriverManager().install())
-    webdriver_service.start()
-
     options = webdriver.ChromeOptions()
+    options.add_argument('allow-elevated-browser')
+
     if get_os_type() == "win64":
         options.binary_location = ("C:\\Users\\{0}\\AppData\\Local\\Programs"
                                    "\\Opera\\{1}\\opera.exe"
-                                   .format(os.getlogin(), "60.0.3255.109"))
+                                   .format(os.getlogin(), "64.0.3417.54"))
     elif get_os_type() == "linux64" or "linux32" or "mac":
         options.binary_location = "/usr/bin/opera"
 
-    ff = webdriver.Opera(executable_path=driver_path)
+    ff = webdriver.Opera(executable_path=driver_path, options=options)
     ff.get("http://automation-remarks.com")
     ff.quit()
 

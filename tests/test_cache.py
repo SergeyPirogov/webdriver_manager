@@ -33,10 +33,7 @@ def test_can_download_chrome_driver_for_os(os_type):
                           os_type=os_type)
 
     binary = cache.download_driver(driver)
-    if os_type.startswith("win"):
-        assert binary.name == "chromedriver.exe"
-    else:
-        assert binary.name == "chromedriver"
+    assert binary.name == "chromedriver"
 
 
 @pytest.mark.parametrize("os_type", ["linux64",
@@ -53,10 +50,7 @@ def test_can_download_firefox_driver(os_type):
                          os_type=os_type)
 
     binary = cache.download_driver(driver)
-    if os_type.startswith("win"):
-        assert binary.name == name + ".exe"
-    else:
-        assert binary.name == name
+    assert binary.name == name
 
 
 def test_can_get_cached_binary_by_custom_path():
@@ -64,7 +58,7 @@ def test_can_get_cached_binary_by_custom_path():
     config = Configuration(config_folder=os.path.dirname(__file__),
                            file_name="wd_config.ini", section="GeckoDriver")
     driver = GeckoDriver("v0.11.1", "macos")
-    path = cache.download_driver(driver)
+    path = cache.download_driver(driver).path
     config.set("driver_path", path)
     driver.config = config
     cached_binary = cache.get_cached_binary(driver)
@@ -106,19 +100,6 @@ def test_cache_driver_version():
     assert binary
     assert os.path.join(cache.get_cache_path(), name,
                         version, os_type, name) == binary.path
-
-
-def test_cached_driver_manual_setup():
-    config = Configuration(config_folder=os.path.dirname(__file__),
-                           file_name="wd_config.ini", section="ChromeDriver")
-    version = "2.26"
-    os_type = "linux"
-    driver = ChromeDriver(version=version,
-                          os_type=os_type)
-    driver.config = config
-    with pytest.raises(IOError) as ex:
-        cache.get_cached_binary(driver)
-    assert ex.value.args[1] == 'Is a directory'
 
 
 def test_cached_driver_path():

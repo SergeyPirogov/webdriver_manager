@@ -53,6 +53,8 @@ def test_ie_driver_binary(version, use_cache):
     if use_cache:
         IEDriverManager(version).install()
     ie_driver_bin = IEDriverManager(version, "win32").install()
+    if version == 'latest' or version is None:
+        version = IEDriver(version, "win32").get_latest_release_version()
     assert ie_driver_bin == os.path.join(expanduser("~"), ".wdm",
                                          "IEDriverServer", version, "Win32",
                                          u'IEDriverServer.exe')
@@ -66,7 +68,8 @@ def test_ie_driver_manager_with_wrong_version(path):
     with pytest.raises(ValueError) as ex:
         delete_old_install(path)
         IEDriverManager("0.2").install(path)
-    assert "There is no such driver IEDriverServer with version 0.2" in ex.value.args[0]
+    assert "There is no such driver IEDriverServer with version 0.2" \
+        in ex.value.args[0]
 
 
 def test_can_get_latest_ie_driver_version():
