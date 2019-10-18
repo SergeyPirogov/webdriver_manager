@@ -62,14 +62,20 @@ class DriverCache(object):
         with open(self._drivers_json_path, 'w') as outfile:
             json.dump(metadata, outfile, indent=4)
 
-    def check_if_latest_version_valid(self, driver_name, latest_version):
+    def is_valid_cache(self, driver_name):
         metadata = self.read_metadata()
         if driver_name in metadata:
             driver_data = metadata[driver_name]
             dates_diff = get_date_diff(driver_data['timestamp'], datetime.date.today(), self._date_format)
-            return dates_diff < 1 and driver_data['latest_version'] == latest_version
+            return dates_diff < 1
 
         return False
+
+    def get_latest_cached_driver_version(self, driver_name):
+        if not self.is_valid_cache(driver_name):
+            return None
+
+        return self.read_metadata()[driver_name]["latest_version"]
 
     def read_metadata(self):
         if os.path.exists(self._drivers_json_path):
