@@ -10,6 +10,7 @@ from webdriver_manager.utils import write_file, get_filename_from_response, cons
 class DriverCache(object):
 
     def __init__(self, root_dir=None):
+        self._root_dir = root_dir
         if root_dir is None:
             self._root_dir = os.path.join(os.path.expanduser("~"), ".wdm")
         self._drivers_root = "drivers"

@@ -14,7 +14,7 @@ driver_cache = DriverCache(os.path.join(project_root, cache_root_dir))
 
 
 def create_file(name, version, os_type):
-    path = os.path.join(project_root, cache_root_dir, name, version, os_type)
+    path = os.path.join(project_root, cache_root_dir, "drivers", name, version, os_type)
 
     os.makedirs(path, exist_ok=True)
     file_path = os.path.join(path, "chromedriver")
@@ -29,8 +29,8 @@ def test_driver_cash_can_create_folder_on_init():
 
 
 def test_driver_cache_can_find_file():
-    file_path = create_file(os_type, name, version)
-    create_file(os_type, name, "76")
+    file_path = create_file(name, version, os_type)
+    create_file(name, "76", os_type)
     path = driver_cache.find_file_if_exists(os_type, name, version)
     assert path == file_path
 
@@ -38,7 +38,7 @@ def test_driver_cache_can_find_file():
 def test_driver_cache_can_save_driver_to_cache():
     response = download_driver("http://chromedriver.storage.googleapis.com/77.0.3865.40/chromedriver_linux64.zip")
     path = driver_cache.save_driver_to_cache(response, name, version, os_type)
-    assert path == os.path.join(driver_cache._root_dir, name, version, os_type, name)
+    assert path == os.path.join(driver_cache._root_dir, "drivers", name, version, os_type, name)
 
 
 def test_metadata_reader():
@@ -49,7 +49,8 @@ def test_metadata_reader():
 
 
 def test_driver_cache_can_save_driver_metadata():
-    driver_cache.save_latest_driver_version_number_to_cache(name, version, datetime.date.today() + datetime.timedelta(days=-2))
+    driver_cache.save_latest_driver_version_number_to_cache(name, version,
+                                                            datetime.date.today() + datetime.timedelta(days=-2))
     assert driver_cache.is_valid_cache(name) is False
 
     driver_cache.save_latest_driver_version_number_to_cache(name, version, datetime.date.today())
@@ -68,5 +69,6 @@ def test_driver_cache_return_latest_version():
 
 
 def test_driver_cache_return_none_if_cache_invalid():
-    driver_cache.save_latest_driver_version_number_to_cache(name, version, datetime.date.today() + datetime.timedelta(days=-2))
+    driver_cache.save_latest_driver_version_number_to_cache(name, version,
+                                                            datetime.date.today() + datetime.timedelta(days=-2))
     assert driver_cache.get_latest_cached_driver_version(name) is None
