@@ -39,7 +39,7 @@ def test_gecko_manager_with_wrong_version():
         driver_path = GeckoDriverManager("0.2").install()
         ff = webdriver.Firefox(executable_path=driver_path)
         ff.quit()
-    assert ex.value.args[0] == "There is no such driver geckodriver with version 0.2"
+    assert ex.value.args[0] == "There is no such driver by url https://api.github.com/repos/mozilla/geckodriver/releases/tags/0.2"
 
 
 @pytest.mark.parametrize('path', [PATH, None])
@@ -71,7 +71,6 @@ def test_can_download_ff_x64():
                                      'linux64',
                                      'mac64'])
 def test_can_get_driver_from_cache(os_type):
-    delete_cache()
     GeckoDriverManager(os_type=os_type).install()
     driver_path = GeckoDriverManager(os_type=os_type).install()
     assert os.path.exists(driver_path)

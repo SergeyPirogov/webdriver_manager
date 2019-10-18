@@ -15,21 +15,9 @@ class ChromeDriverManager(DriverManager):
             os_type = "win32"
         self.driver = ChromeDriver(version=version,
                                    os_type=os_type)
-        self.driver_cache = DriverCache()
 
     def install(self, path=None):
-        cached_path = self.driver_cache.find_file_if_exists(self.driver.os_type, self.driver.name,
-                                                            self.driver.get_version())
-        if cached_path is not None:
-            return cached_path
+        driver_path = self.download_driver(self.driver)
 
-        response = download_driver(self.driver.get_url())
-        path = self.driver_cache.save_driver_to_cache(response, self.driver.name, self.driver.get_version(),
-                                                      self.driver.os_type)
-
-        if self.driver._version == "latest":
-            latest_version = self.driver.get_latest_release_version()
-            self.driver_cache.save_latest_driver_version_number_to_cache(self.driver.name, latest_version)
-
-        os.chmod(path, 0o755)
-        return path
+        os.chmod(driver_path, 0o755)
+        return driver_path
