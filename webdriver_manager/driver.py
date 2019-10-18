@@ -60,7 +60,7 @@ class GeckoDriver(Driver):
     def get_latest_release_version(self):
         # type: () -> str
         resp = requests.get(self.latest_release_url)
-        validate_response(self, resp)
+        validate_response(resp)
         return resp.json()["tag_name"]
 
     def get_url(self):

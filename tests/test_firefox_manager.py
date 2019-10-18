@@ -62,7 +62,7 @@ def test_gecko_driver_with_wrong_token():
 def test_can_download_ff_x64():
     delete_cache()
     driver_path = GeckoDriverManager(os_type="win64").install()
-    print(driver_path)
+    assert os.path.exists(driver_path)
 
 
 @pytest.mark.parametrize('os_type', ['win32',
