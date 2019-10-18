@@ -9,15 +9,17 @@ from webdriver_manager.cache import CacheManager
 from webdriver_manager.config import Configuration
 from webdriver_manager.driver import ChromeDriver, GeckoDriver
 
-# cache = CacheManager(to_folder=config.folder, dir_name=config.folder)
+cache = CacheManager(to_folder=config.folder, dir_name=config.folder)
+
+
 #
 #
-# def delete_cache():
-#     cache_path = cache.get_cache_path()
-#     print("Delete cache folder {}".format(cache_path))
-#     if os.path.exists(cache_path):
-#         shutil.rmtree(cache_path)
-#     sleep(5)
+def delete_cache():
+    cache_path = cache.get_cache_path()
+    print("Delete cache folder {}".format(cache_path))
+    if os.path.exists(cache_path):
+        shutil.rmtree(cache_path)
+    sleep(5)
 #
 #
 # @pytest.mark.parametrize("os_type", ["linux64",
