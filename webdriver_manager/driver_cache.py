@@ -34,31 +34,21 @@ class DriverCache(object):
             if os.path.isfile(path) and path.endswith(name):
                 print("File path [{}]".format(path))
                 return path
-
         return None
 
     def save_driver_to_cache(self, response, driver_name, version, os_type):
         driver_path = os.path.join(self._root_dir, driver_name, version, os_type)
         filename = get_filename_from_response(response, driver_name)
         self.create_cache_dir_for_driver(driver_path)
-
         file_path = os.path.join(driver_path, filename)
-
         write_file(response.content, file_path)
-
         files = self.__unpack(file_path)
-
-        self.save_cache_metadata(driver_name, version, datetime.date.today())
-
         return os.path.join(driver_path, files[0])
 
-    def save_cache_metadata(self, name, version, date):
+    def save_latest_driver_version_to_cache(self, name, version, date):
         metadata = self.read_metadata()
-
         new = {name: {"latest_version": version, "timestamp": date.strftime(self._date_format)}}
-
         metadata.update(new)
-
         with open(self._drivers_json_path, 'w') as outfile:
             json.dump(metadata, outfile, indent=4)
 
