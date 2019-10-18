@@ -45,7 +45,7 @@ class DriverCache(object):
         files = self.__unpack(file_path)
         return os.path.join(driver_path, files[0])
 
-    def save_latest_driver_version_to_cache(self, name, version, date):
+    def save_latest_driver_version_number_to_cache(self, name, version, date):
         metadata = self.read_metadata()
         new = {name: {"latest_version": version, "timestamp": date.strftime(self._date_format)}}
         metadata.update(new)
