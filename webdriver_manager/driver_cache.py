@@ -1,7 +1,9 @@
 import glob
 import os
 
-from webdriver_manager.utils import write_file, get_filename_from_response
+from webdriver_manager import archive
+from webdriver_manager.archive import extract_zip, extract_tar_file
+from webdriver_manager.utils import write_file, get_filename_from_response, console
 
 
 class DriverCache(object):
@@ -39,4 +41,17 @@ class DriverCache(object):
 
         file_path = os.path.join(driver_path, filename)
 
-        return write_file(response.content, file_path)
+        write_file(response.content, file_path)
+
+        files = self.__unpack(file_path)
+        return os.path.join(driver_path, files[0])
+
+    def __unpack(self, path, to_directory=None):
+        console("Unpack archive {}".format(path))
+        if not to_directory:
+            to_directory = os.path.dirname(path)
+        if path.endswith(".zip"):
+            return extract_zip(path, to_directory)
+        else:
+            file_list = extract_tar_file(path, to_directory)
+            return [x.name for x in file_list]

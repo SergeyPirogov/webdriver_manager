@@ -36,4 +36,4 @@ def test_driver_cache_can_find_file():
 def test_can_save_driver_to_cache():
     response = download_driver("http://chromedriver.storage.googleapis.com/77.0.3865.40/chromedriver_linux64.zip")
     path = driver_cache.save_driver_to_cache(response, name, version, os_type)
-    assert path == os.path.join(driver_cache._root_dir, name, version, os_type, name + ".zip")
+    assert path == os.path.join(driver_cache._root_dir, name, version, os_type, name)
