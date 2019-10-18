@@ -20,7 +20,6 @@ class ChromeDriverManager(DriverManager):
     def install(self, path=None):
         cached_path = self.driver_cache.find_file_if_exists(self.driver.os_type, self.driver.name,
                                                             self.driver.get_version())
-
         if cached_path is not None:
             return cached_path
 
