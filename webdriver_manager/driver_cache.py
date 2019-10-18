@@ -9,8 +9,10 @@ from webdriver_manager.utils import write_file, get_filename_from_response, cons
 
 class DriverCache(object):
 
-    def __init__(self, root_dir):
-        self._root_dir = root_dir
+    def __init__(self, root_dir=None):
+        if root_dir is None:
+            self._root_dir = os.path.join(os.path.expanduser("~"), ".wdm")
+        self._drivers_root = "drivers"
         self._drivers_json_path = os.path.join(self._root_dir, "drivers.json")
         self._date_format = "%d/%m/%Y"
 
@@ -22,22 +24,24 @@ class DriverCache(object):
         return os.path.exists(path)
 
     def find_file_if_exists(self, os_type, name, version):
+        console("Looking for driver {} {} {} in cache ".format(os_type, name, version))
         if len(name) == 0 or len(version) == 0:
             return None
 
-        paths = [f for f in glob.glob(os.path.join(self._root_dir, os_type, name, version) + "/**", recursive=True)]
+        paths = [f for f in glob.glob(os.path.join(self._root_dir, self._drivers_root, name, version, os_type) + "/**",
+                                      recursive=True)]
 
         if len(paths) == 0:
             return None
 
         for path in paths:
             if os.path.isfile(path) and path.endswith(name):
-                print("File path [{}]".format(path))
+                console("File found by path [{}]".format(path))
                 return path
         return None
 
     def save_driver_to_cache(self, response, driver_name, version, os_type):
-        driver_path = os.path.join(self._root_dir, driver_name, version, os_type)
+        driver_path = os.path.join(self._root_dir, self._drivers_root, driver_name, version, os_type)
         filename = get_filename_from_response(response, driver_name)
         self.create_cache_dir_for_driver(driver_path)
         file_path = os.path.join(driver_path, filename)
@@ -45,11 +49,14 @@ class DriverCache(object):
         files = self.__unpack(file_path)
         return os.path.join(driver_path, files[0])
 
-    def save_latest_driver_version_number_to_cache(self, name, version, date):
+    def save_latest_driver_version_number_to_cache(self, name, version, date=None):
+        if date is None:
+            date = datetime.date.today()
+
         metadata = self.read_metadata()
         new = {name: {"latest_version": version, "timestamp": date.strftime(self._date_format)}}
         metadata.update(new)
-        with open(self._drivers_json_path, 'w') as outfile:
+        with open(self._drivers_json_path, 'w+') as outfile:
             json.dump(metadata, outfile, indent=4)
 
     def is_valid_cache(self, driver_name):

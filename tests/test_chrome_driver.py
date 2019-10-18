@@ -41,8 +41,7 @@ def test_chrome_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
         delete_old_install()
         ChromeDriverManager("0.2").install()
-    assert ex.value.args[0] == "There is no such driver chromedriver with version 0.2 " \
-                               "by http://chromedriver.storage.googleapis.com/0.2/chromedriver_{0}.zip".format(
+    assert ex.value.args[0] == "There is no such driver by url http://chromedriver.storage.googleapis.com/0.2/chromedriver_{0}.zip".format(
         utils.os_type())
 
 

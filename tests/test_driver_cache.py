@@ -49,24 +49,24 @@ def test_metadata_reader():
 
 
 def test_driver_cache_can_save_driver_metadata():
-    driver_cache.save_cache_metadata(name, version, datetime.date.today() + datetime.timedelta(days=-2))
+    driver_cache.save_latest_driver_version_number_to_cache(name, version, datetime.date.today() + datetime.timedelta(days=-2))
     assert driver_cache.is_valid_cache(name) is False
 
-    driver_cache.save_cache_metadata(name, version, datetime.date.today())
+    driver_cache.save_latest_driver_version_number_to_cache(name, version, datetime.date.today())
     assert driver_cache.is_valid_cache(name)
 
 
 def test_driver_cache_can_update_driver_metadata():
-    driver_cache.save_cache_metadata(name, version, datetime.date.today())
-    driver_cache.save_cache_metadata("geckodriver", version, datetime.date.today())
+    driver_cache.save_latest_driver_version_number_to_cache(name, version, datetime.date.today())
+    driver_cache.save_latest_driver_version_number_to_cache("geckodriver", version, datetime.date.today())
     assert driver_cache.is_valid_cache(name)
 
 
 def test_driver_cache_return_latest_version():
-    driver_cache.save_cache_metadata(name, version, datetime.date.today())
+    driver_cache.save_latest_driver_version_number_to_cache(name, version, datetime.date.today())
     assert driver_cache.get_latest_cached_driver_version(name) == version
 
 
 def test_driver_cache_return_none_if_cache_invalid():
-    driver_cache.save_cache_metadata(name, version, datetime.date.today() + datetime.timedelta(days=-2))
+    driver_cache.save_latest_driver_version_number_to_cache(name, version, datetime.date.today() + datetime.timedelta(days=-2))
     assert driver_cache.get_latest_cached_driver_version(name) is None

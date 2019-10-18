@@ -47,9 +47,8 @@ class ChromeDriver(Driver):
     def get_latest_release_version(self):
         # type: () -> str
         resp = requests.get(
-            self.config.driver_latest_release_url + '_' + chrome_version()
-        )  # returns chromedriver version for current browser version
-        validate_response(self, resp)
+            self.config.driver_latest_release_url + '_' + chrome_version())
+        validate_response(resp)
         return resp.text.rstrip()
 
 
@@ -71,7 +70,7 @@ class GeckoDriver(Driver):
             "Getting latest mozilla release info for {0}".format(
                 self.get_version()))
         resp = requests.get(self.tagged_release_url)
-        validate_response(self, resp)
+        validate_response(resp)
         assets = resp.json()["assets"]
         ver = self.get_version()
         name = "{0}-{1}-{2}".format(self.name, ver, self.os_type)
@@ -164,8 +163,8 @@ class IEDriver(Driver):
         major, minor, patch = self.__get_divided_version()
         return ("{url}/{major}.{minor}/"
                 "{name}_{os}_{major}.{minor}.{patch}.zip").format(
-                    url=self.config.url, name=self.name, os=self.os_type,
-                    major=major, minor=minor, patch=patch)
+            url=self.config.url, name=self.name, os=self.os_type,
+            major=major, minor=minor, patch=patch)
 
     def __get_divided_version(self):
         divided_version = self.get_version().split('.')
