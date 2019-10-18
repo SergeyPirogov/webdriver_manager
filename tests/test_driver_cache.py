@@ -1,3 +1,4 @@
+import datetime
 import os
 
 from webdriver_manager.driver_cache import DriverCache
@@ -28,12 +29,34 @@ def test_driver_cash_can_create_folder_on_init():
 
 
 def test_driver_cache_can_find_file():
-    file_path = create_file(name, version, os_type)
-    path = driver_cache.find_file_if_exists(version, name)
+    file_path = create_file(os_type, name, version)
+    create_file(os_type, name, "76")
+    path = driver_cache.find_file_if_exists(os_type, name, version)
     assert path == file_path
 
 
-def test_can_save_driver_to_cache():
+def test_driver_cache_can_save_driver_to_cache():
     response = download_driver("http://chromedriver.storage.googleapis.com/77.0.3865.40/chromedriver_linux64.zip")
     path = driver_cache.save_driver_to_cache(response, name, version, os_type)
     assert path == os.path.join(driver_cache._root_dir, name, version, os_type, name)
+
+
+def test_metadata_reader():
+    if os.path.exists(driver_cache._drivers_json_path):
+        os.remove(driver_cache._drivers_json_path)
+    metadata = driver_cache.read_metadata()
+    assert metadata == {}
+
+
+def test_driver_cache_can_save_driver_metadata():
+    driver_cache.save_cache_metadata(name, version, datetime.date.today() + datetime.timedelta(days=-2))
+    assert driver_cache.check_if_latest_version_valid(name, version) is False
+
+    driver_cache.save_cache_metadata(name, version, datetime.date.today())
+    assert driver_cache.check_if_latest_version_valid(name, version)
+
+
+def test_driver_cache_can_update_driver_metadata():
+    driver_cache.save_cache_metadata(name, version, datetime.date.today())
+    driver_cache.save_cache_metadata("geckodriver", version, datetime.date.today())
+    assert driver_cache.check_if_latest_version_valid(name, version)

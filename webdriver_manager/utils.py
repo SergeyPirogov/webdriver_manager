@@ -1,3 +1,4 @@
+import datetime
 import os
 import platform
 import re
@@ -53,6 +54,13 @@ def download_driver(url):
     response = requests.get(url, stream=True)
     validate_response(response)
     return response
+
+
+def get_date_diff(date1, date2, date_format):
+    a = datetime.datetime.strptime(date1, date_format)
+    b = datetime.datetime.strptime(str(date2.strftime(date_format)), date_format)
+
+    return (b - a).days
 
 
 def get_filename_from_response(response, name):
