@@ -48,6 +48,8 @@ class DriverCache(object):
 
         files = self.__unpack(file_path)
 
+        self.save_cache_metadata(driver_name, version, datetime.date.today())
+
         return os.path.join(driver_path, files[0])
 
     def save_cache_metadata(self, name, version, date):
