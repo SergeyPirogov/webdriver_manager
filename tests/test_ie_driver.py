@@ -1,26 +1,14 @@
 import os
-import sys
 
 import pytest
-from selenium import webdriver
 
-from tests.test_cache import cache, delete_cache
 from webdriver_manager.driver import IEDriver
 from webdriver_manager.microsoft import IEDriverManager
 
 PATH = '.'
 
 
-def delete_old_install(path=None):
-    if path is None:
-        delete_cache()
-    else:
-        path = os.path.abspath(path)
-        try:
-            os.remove(os.path.join(path, 'IEDriverServer.exe'))
-            os.remove(os.path.join(path, 'IEDriverServer.zip'))
-        except:
-            pass
+
 
 
 @pytest.mark.parametrize("version", ["2.53.1",
@@ -39,6 +27,6 @@ def test_can_get_latest_ie_driver_version():
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])
 def test_can_download_ie_driver_x64(os_type):
-    delete_old_install()
+
     path = IEDriverManager(os_type=os_type).install()
     assert os.path.exists(path)

@@ -1,13 +1,9 @@
-from webdriver_manager.cache import CacheManager
-from webdriver_manager import config
 from webdriver_manager.driver_cache import DriverCache
 from webdriver_manager.utils import download_driver
 
 
 class DriverManager(object):
     def __init__(self):
-        self._file_manager = CacheManager(
-            to_folder=config.folder, dir_name=config.folder)
         self.driver_cache = DriverCache()
 
     def install(self):

@@ -3,8 +3,6 @@ import os
 import pytest
 from selenium import webdriver
 
-from tests.test_cache import cache, delete_cache
-from webdriver_manager.driver import GeckoDriver
 from webdriver_manager.firefox import GeckoDriverManager
 
 PATH = '.'
@@ -50,7 +48,6 @@ def test_gecko_manager_with_correct_version_and_token(path):
 
 
 def test_can_download_ff_x64():
-    delete_cache()
     driver_path = GeckoDriverManager(os_type="win64").install()
     assert os.path.exists(driver_path)
 
