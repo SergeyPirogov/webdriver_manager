@@ -154,16 +154,15 @@ class IEDriver(Driver):
             os_type = "Win32"
         super(IEDriver, self).__init__(version, os_type)
 
-    def get_url(self):
-        # type: () -> str
-        major, minor, patch = self.__get_divided_version()
+    def get_url(self, version):
+        major, minor, patch = self.__get_divided_version(version)
         return ("{url}/{major}.{minor}/"
                 "{name}_{os}_{major}.{minor}.{patch}.zip").format(
             url=self.config.url, name=self.name, os=self.os_type,
             major=major, minor=minor, patch=patch)
 
-    def __get_divided_version(self):
-        divided_version = self.get_version().split('.')
+    def __get_divided_version(self, version):
+        divided_version = version.split('.')
         if len(divided_version) == 2:
             return divided_version[0], divided_version[1], '0'
         elif len(divided_version) == 3:

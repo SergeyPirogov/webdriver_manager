@@ -22,4 +22,5 @@ class IEDriverManager(DriverManager):
 
     def install(self, path=None):
         # type: () -> str
-        return self._file_manager.download_driver(self.driver, path).path
+        return self.download_driver(self.driver)
+        #return self._file_manager.download_driver(self.driver, path).path
