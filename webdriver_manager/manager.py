@@ -13,26 +13,36 @@ class DriverManager(object):
     def install(self):
         raise NotImplementedError("Please Implement this method")
 
-    def download_driver(self, driver):
+    def __get_latest_driver_version(self, driver):
+        latest_cached = self.driver_cache.get_latest_cached_driver_version(driver.name)
+        if latest_cached is not None:
+            return latest_cached
+
+        return driver.get_latest_release_version()
+
+    def __get_version_to_download(self, driver):
         driver_version = driver.get_version()
 
         if driver_version == "latest":
-            latest_cached = self.driver_cache.get_latest_cached_driver_version(driver.name)
-            if latest_cached is None:
-                driver_version = driver.get_latest_release_version()
-            else:
-                driver_version = latest_cached
+            return self.__get_latest_driver_version(driver), True
+        return driver_version, False
+
+    def __download_and_save_driver_to_cache(self, driver, driver_version):
+        response = download_driver(driver.get_url(driver_version))
+        return self.driver_cache.save_driver_to_cache(response, driver.name, driver_version,
+                                                      driver.os_type)
+
+    def download_driver(self, driver):
+        driver_version, is_latest = self.__get_version_to_download(driver)
 
         cached_path = self.driver_cache.find_file_if_exists(driver.name, driver.os_type,
                                                             driver_version)
         if cached_path is not None:
             return cached_path
 
-        response = download_driver(driver.get_url(driver_version))
-        path = self.driver_cache.save_driver_to_cache(response, driver.name, driver_version,
-                                                      driver.os_type)
+        path = self.__download_and_save_driver_to_cache(driver, driver_version)
 
-        if driver.get_version() == "latest":
+        if is_latest:
             self.driver_cache.save_latest_driver_version_number_to_cache(driver.name, driver_version)
 
         return path

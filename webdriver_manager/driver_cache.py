@@ -34,9 +34,11 @@ class DriverCache(object):
 
         paths = [f for f in glob.glob(os.path.join(self._root_dir, self._drivers_root, name, version, os_type) + "/**",
                                       recursive=True)]
-
         if len(paths) == 0:
             return None
+
+        if "win" in os_type:
+            name += ".exe"
 
         for path in paths:
             if os.path.isfile(path) and path.endswith(name):
