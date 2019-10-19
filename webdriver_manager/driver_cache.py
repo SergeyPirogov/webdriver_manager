@@ -24,7 +24,10 @@ class DriverCache(object):
             os.makedirs(path, exist_ok=True)
         return os.path.exists(path)
 
-    def find_file_if_exists(self, os_type, name, version):
+    def find_file_if_exists(self, name, os_type, version):
+        if not self.is_valid_cache(name):
+            return None
+
         console("Looking for driver {} {} {} in cache ".format(os_type, name, version))
         if len(name) == 0 or len(version) == 0:
             return None

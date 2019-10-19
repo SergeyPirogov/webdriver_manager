@@ -48,15 +48,15 @@ def test_gecko_manager_with_correct_version_and_token(path):
     assert os.path.exists(driver_path)
 
 
-def test_gecko_driver_with_wrong_token():
-    old_token = os.getenv("GH_TOKEN", "default")
-    os.environ["GH_TOKEN"] = "aaa"
-    with pytest.raises(ValueError) as ex:
-        driver = GeckoDriver(version="latest",
-                             os_type="linux32")
-        cache.download_driver(driver)
-    assert ex.value.args[0]['message'] == "Bad credentials"
-    os.environ["GH_TOKEN"] = old_token
+# def test_gecko_driver_with_wrong_token():
+#     old_token = os.getenv("GH_TOKEN", "default")
+#     os.environ["GH_TOKEN"] = "aaa"
+#     with pytest.raises(ValueError) as ex:
+#         driver = GeckoDriver(version="latest",
+#                              os_type="linux32")
+#         cache.download_driver(driver)
+#     assert ex.value.args[0]['message'] == "Bad credentials"
+#     os.environ["GH_TOKEN"] = old_token
 
 
 def test_can_download_ff_x64():
