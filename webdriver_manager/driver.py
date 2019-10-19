@@ -107,7 +107,7 @@ class EdgeDriver(Driver):
         # type: () -> str
         return self._version
 
-    def get_url(self):
+    def get_url(self, version):
         # type: () -> str
         return "{}/{}.exe".format(self._url, self.name)
 
