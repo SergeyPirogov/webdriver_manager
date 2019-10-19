@@ -26,9 +26,9 @@ from webdriver_manager.phantomjs import PhantomJsDriverManager
 #     path = PhantomJsDriverManager(os_type=os_type).install()
 #     assert os.path.exists(path)
 
-
-@pytest.mark.parametrize('os_type', ['linux32', 'linux64'])
-def test_can_get_phantomjs_for_linux(os_type):
-    delete_cache()
-    path = PhantomJsDriverManager(os_type=os_type).install()
-    assert os.path.exists(path)
+#
+# @pytest.mark.parametrize('os_type', ['linux32', 'linux64'])
+# def test_can_get_phantomjs_for_linux(os_type):
+#     delete_cache()
+#     path = PhantomJsDriverManager(os_type=os_type).install()
+#     assert os.path.exists(path)

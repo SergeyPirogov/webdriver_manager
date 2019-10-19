@@ -1,9 +1,8 @@
 import os
-from webdriver_manager.driver import ChromeDriver
-from webdriver_manager.driver_cache import DriverCache
-from webdriver_manager.manager import DriverManager
+
 from webdriver_manager import utils
-from webdriver_manager.utils import download_driver
+from webdriver_manager.driver import ChromeDriver
+from webdriver_manager.manager import DriverManager
 
 
 class ChromeDriverManager(DriverManager):
