@@ -1,4 +1,7 @@
 import os
+
+from tests.test_cache import delete_cache
+
 try:
     from unittest.mock import patch
 except ImportError:
@@ -7,7 +10,6 @@ except ImportError:
 import pytest
 from selenium import webdriver
 
-from tests.test_cache import delete_cache
 from webdriver_manager import utils
 from webdriver_manager.chrome import ChromeDriverManager
 

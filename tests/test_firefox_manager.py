@@ -39,8 +39,8 @@ def test_gecko_manager_with_wrong_version():
         driver_path = GeckoDriverManager("0.2").install()
         ff = webdriver.Firefox(executable_path=driver_path)
         ff.quit()
-    assert ex.value.args[
-               0] in "There is no such driver by url https://api.github.com/repos/mozilla/geckodriver/releases/tags/0.2"
+    assert "There is no such driver by url https://api.github.com/repos/mozilla/geckodriver/releases/tags/0.2" in \
+           ex.value.args[0]
 
 
 @pytest.mark.parametrize('path', [PATH, None])
