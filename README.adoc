@@ -9,9 +9,7 @@ For now support:
 
 - ChromeDriver
 - GeckoDriver
-- EdgeDriver
 - IEDriver
-- PhantomJS
 
 Before:
 You should download binary chromedriver, unzip it somewhere in you PC and set path to this driver like this:
@@ -50,14 +48,6 @@ If you face error related to github credentials, you need to place github token:
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 ```
 (*) access_token required to work with Github API more info https://help.github.com/articles/creating-an-access-token-for-command-line-use/. You can set **gh_token** using config.ini file see Configuration section below.
-
-Use with Edge:
-
-```python
-from webdriver_manager.microsoft import EdgeDriverManager
-
-driver = webdriver.Edge(EdgeDriverManager().install())
-```
 
 Use with IE
 
