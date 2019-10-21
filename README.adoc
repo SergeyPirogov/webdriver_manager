@@ -9,6 +9,7 @@ For now support:
 
 - ChromeDriver
 - GeckoDriver
+- EdgeDriver
 - IEDriver
 - PhantomJS
 - OperaDriver
