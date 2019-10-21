@@ -24,17 +24,13 @@ class DriverCache(object):
             os.makedirs(path, exist_ok=True)
         return os.path.exists(path)
 
-    def find_file_if_exists(self, name, os_type, version):
-        if not self.is_valid_cache(name):
-            return None
+    def __get_path(self, name, version, os_type):
+        return [f for f in glob.glob(os.path.join(self._root_dir, self._drivers_root, name, version, os_type) + "/**",
+                                     recursive=True)]
 
-        console("Looking for driver {} {} {} in cache ".format(os_type, name, version))
+    def __find_file(self, paths, name, version, os_type):
+        console("\nLooking for [{} {} {}] driver in cache ".format(name, version, os_type))
         if len(name) == 0 or len(version) == 0:
-            return None
-
-        paths = [f for f in glob.glob(os.path.join(self._root_dir, self._drivers_root, name, version, os_type) + "/**",
-                                      recursive=True)]
-        if len(paths) == 0:
             return None
 
         if "win" in os_type:
@@ -42,9 +38,17 @@ class DriverCache(object):
 
         for path in paths:
             if os.path.isfile(path) and path.endswith(name):
-                console("File found by path [{}]".format(path))
+                console("File found in cache by path [{}]".format(path))
                 return path
         return None
+
+    def find_file_if_exists(self, name, os_type, version, is_latest):
+        if is_latest and not self.is_valid_cache(name):
+            return None
+
+        paths = self.__get_path(name, version, os_type)
+
+        return self.__find_file(paths, name, version, os_type)
 
     def save_driver_to_cache(self, response, driver_name, version, os_type):
         driver_path = os.path.join(self._root_dir, self._drivers_root, driver_name, version, os_type)
