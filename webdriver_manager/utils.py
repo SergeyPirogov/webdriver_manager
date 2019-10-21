@@ -1,9 +1,11 @@
+import datetime
 import os
 import platform
 import re
 import sys
 
 import crayons
+import requests
 
 
 class OSType(object):
@@ -33,13 +35,46 @@ def os_type():
     return os_name() + str(os_architecture())
 
 
-def validate_response(self, resp):
+def validate_response(resp):
     if resp.status_code == 404:
-        raise ValueError(
-            "There is no such driver {0} with version {1}".format(
-                self.name, self._version))
+        raise ValueError("There is no such driver by url {}".format(resp.url))
     elif resp.status_code != 200:
         raise ValueError(resp.json())
+
+
+def write_file(content, path):
+    with open(path, "wb") as code:
+        code.write(content)
+        code.close()
+    return path
+
+
+def download_driver(url):
+    console("Trying to download new driver from {}".format(url))
+    response = requests.get(url, stream=True)
+    validate_response(response)
+    return response
+
+
+def get_date_diff(date1, date2, date_format):
+    a = datetime.datetime.strptime(date1, date_format)
+    b = datetime.datetime.strptime(str(date2.strftime(date_format)), date_format)
+
+    return (b - a).days
+
+
+def get_filename_from_response(response, name):
+    try:
+        filename = re.findall("filename=(.+)", response.headers["content-disposition"])[0]
+    except KeyError:
+        filename = "{}.zip".format(name)
+    except IndexError:
+        filename = name + ".exe"
+
+    if '"' in filename:
+        filename = filename.replace('"', "")
+
+    return filename
 
 
 def console(text, bold=False):

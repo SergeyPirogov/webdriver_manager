@@ -20,18 +20,16 @@ class Driver(object):
         self._version = self.config.version
         self.os_type = os_type
 
-    def get_url(self):
-        # type: () -> str
+    def get_url(self, version):
         url = "{url}/{ver}/{name}_{os}.zip"
         return url.format(url=self._url,
-                          ver=self.get_version(),
+                          ver=version,
                           name=self.name,
                           os=self.os_type)
 
     def get_version(self):
-        # type: () -> str
-        if self._version == "latest":
-            return self.get_latest_release_version()
+        # if self._version == "latest":
+        #     return self.get_latest_release_version(), True
         return self._version
 
     def get_latest_release_version(self):
@@ -46,9 +44,9 @@ class ChromeDriver(Driver):
 
     def get_latest_release_version(self):
         # type: () -> str
-        url = self.config.driver_latest_release_url + '_' + chrome_version()
-        resp = requests.get(url)
-        validate_response(self, resp)
+        resp = requests.get(
+            self.config.driver_latest_release_url + '_' + chrome_version())
+        validate_response(resp)
         return resp.text.rstrip()
 
 
@@ -60,20 +58,19 @@ class GeckoDriver(Driver):
     def get_latest_release_version(self):
         # type: () -> str
         resp = requests.get(self.latest_release_url)
-        validate_response(self, resp)
+        validate_response(resp)
         return resp.json()["tag_name"]
 
-    def get_url(self):
-        # type: () -> str
+    def get_url(self, version):
         # https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz
         console(
             "Getting latest mozilla release info for {0}".format(
-                self.get_version()))
-        resp = requests.get(self.tagged_release_url)
-        validate_response(self, resp)
+                version))
+        resp = requests.get(self.tagged_release_url(version))
+        validate_response(resp)
         assets = resp.json()["assets"]
-        ver = self.get_version()
-        name = "{0}-{1}-{2}".format(self.name, ver, self.os_type)
+
+        name = "{0}-{1}-{2}".format(self.name, version, self.os_type)
         output_dict = [asset for asset in assets if
                        asset['name'].startswith(name)]
         return output_dict[0]['browser_download_url']
@@ -88,11 +85,10 @@ class GeckoDriver(Driver):
                 base_url=url, access_token=token)
         return url
 
-    @property
-    def tagged_release_url(self):
+    def tagged_release_url(self, version):
         # type: () -> str
         token = self.config.gh_token
-        url = self.config.mozila_release_tag.format(self.get_version())
+        url = self.config.mozila_release_tag.format(version)
         if token:
             return url + "?access_token={0}".format(token)
         return url
@@ -111,7 +107,7 @@ class EdgeDriver(Driver):
         # type: () -> str
         return self._version
 
-    def get_url(self):
+    def get_url(self, version):
         # type: () -> str
         return "{}/{}.exe".format(self._url, self.name)
 
@@ -158,16 +154,15 @@ class IEDriver(Driver):
             os_type = "Win32"
         super(IEDriver, self).__init__(version, os_type)
 
-    def get_url(self):
-        # type: () -> str
-        major, minor, patch = self.__get_divided_version()
+    def get_url(self, version):
+        major, minor, patch = self.__get_divided_version(version)
         return ("{url}/{major}.{minor}/"
                 "{name}_{os}_{major}.{minor}.{patch}.zip").format(
-                    url=self.config.url, name=self.name, os=self.os_type,
-                    major=major, minor=minor, patch=patch)
+            url=self.config.url, name=self.name, os=self.os_type,
+            major=major, minor=minor, patch=patch)
 
-    def __get_divided_version(self):
-        divided_version = self.get_version().split('.')
+    def __get_divided_version(self, version):
+        divided_version = version.split('.')
         if len(divided_version) == 2:
             return divided_version[0], divided_version[1], '0'
         elif len(divided_version) == 3:

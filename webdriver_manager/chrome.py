@@ -1,13 +1,12 @@
 import os
 
-from webdriver_manager.archive import unpack
+from webdriver_manager import utils
 from webdriver_manager.driver import ChromeDriver
 from webdriver_manager.manager import DriverManager
-from webdriver_manager import utils
 
 
 class ChromeDriverManager(DriverManager):
-    def __init__(self, version=None, os_type=utils.os_type()):
+    def __init__(self, version="latest", os_type=utils.os_type()):
         # type: (str, str) -> None
         super(ChromeDriverManager, self).__init__()
         # there is no driver with 64 bit
@@ -17,7 +16,7 @@ class ChromeDriverManager(DriverManager):
                                    os_type=os_type)
 
     def install(self, path=None):
-        # type: () -> str
-        bin_file = self._file_manager.download_driver(self.driver, path)
-        os.chmod(bin_file.path, 0o755)
-        return bin_file.path
+        driver_path = self.download_driver(self.driver)
+
+        os.chmod(driver_path, 0o755)
+        return driver_path

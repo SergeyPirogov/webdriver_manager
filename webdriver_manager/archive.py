@@ -11,11 +11,11 @@ def extract_zip(zip_file, to_directory):
     return archive.namelist()
 
 
-def extract_tar_file(tar_file, to_dir):
+def extract_tar_file(tar_file_path, to_dir):
     try:
-        tar = tarfile.open(tar_file.name, mode="r:gz")
+        tar = tarfile.open(tar_file_path, mode="r:gz")
     except tarfile.ReadError:
-        tar = tarfile.open(tar_file.name, mode="r:bz2")
+        tar = tarfile.open(tar_file_path, mode="r:bz2")
     members = tar.getmembers()
     tar.extractall(to_dir)
     tar.close()
