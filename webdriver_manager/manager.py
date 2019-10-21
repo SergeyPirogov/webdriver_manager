@@ -10,7 +10,7 @@ class DriverManager(object):
         raise NotImplementedError("Please Implement this method")
 
     def __get_latest_driver_version(self, driver):
-        latest_cached = self.driver_cache.get_latest_cached_driver_version(driver.name)
+        latest_cached = self.driver_cache.get_latest_cached_driver_version(driver.get_name())
         if latest_cached is not None:
             return latest_cached
 
@@ -25,13 +25,13 @@ class DriverManager(object):
 
     def __download_and_save_driver_to_cache(self, driver, driver_version):
         response = download_driver(driver.get_url(driver_version))
-        return self.driver_cache.save_driver_to_cache(response, driver.name, driver_version,
-                                                      driver.os_type)
+        return self.driver_cache.save_driver_to_cache(response, driver.get_name(), driver_version,
+                                                      driver.get_os_type())
 
     def download_driver(self, driver):
         driver_version, is_latest = self.__get_version_to_download(driver)
 
-        cached_path = self.driver_cache.find_file_if_exists(driver.name, driver.os_type,
+        cached_path = self.driver_cache.find_file_if_exists(driver.get_name(), driver.get_os_type(),
                                                             driver_version, is_latest)
         if cached_path is not None:
             return cached_path
@@ -39,6 +39,6 @@ class DriverManager(object):
         path = self.__download_and_save_driver_to_cache(driver, driver_version)
 
         if is_latest:
-            self.driver_cache.save_latest_driver_version_number_to_cache(driver.name, driver_version)
+            self.driver_cache.save_latest_driver_version_number_to_cache(driver.get_name(), driver_version)
 
         return path

@@ -1,35 +1,38 @@
+import os
 import re
 from xml.etree import ElementTree
 
 import requests
 
-from webdriver_manager import config
-from webdriver_manager.config import Configuration
 from webdriver_manager.utils import validate_response, console, chrome_version
 
 
 class Driver(object):
-    def __init__(self, version, os_type):
-        # type: (str, str) -> None
-        self.config = Configuration(file_name=config.filename,
-                                    config_folder=config.folder,
-                                    section=self.__class__.__name__)
-        self.config.set("version", version)
-        self._url = self.config.url
-        self.name = self.config.name
-        self._version = self.config.version
-        self.os_type = os_type
+    def __init__(self, name,
+                 version,
+                 os_type,
+                 url,
+                 latest_release_url):
+        self._name = name
+        self._url = url
+        self._version = version
+        self._os_type = os_type
+        self._latest_release_url = latest_release_url
+
+    def get_name(self):
+        return self._name
+
+    def get_os_type(self):
+        return self._os_type
 
     def get_url(self, version):
         url = "{url}/{ver}/{name}_{os}.zip"
         return url.format(url=self._url,
                           ver=version,
-                          name=self.name,
-                          os=self.os_type)
+                          name=self.get_name(),
+                          os=self._os_type)
 
     def get_version(self):
-        # if self._version == "latest":
-        #     return self.get_latest_release_version(), True
         return self._version
 
     def get_latest_release_version(self):
@@ -38,26 +41,30 @@ class Driver(object):
 
 
 class ChromeDriver(Driver):
-    def __init__(self, version, os_type):
-        # type: (str, str) -> ChromeDriver
-        super(ChromeDriver, self).__init__(version, os_type)
+    def __init__(self, name, version, os_type, url, latest_release_url):
+        super(ChromeDriver, self).__init__(name, version, os_type, url, latest_release_url)
 
     def get_latest_release_version(self):
-        # type: () -> str
         resp = requests.get(
-            self.config.driver_latest_release_url + '_' + chrome_version())
+            self._latest_release_url + '_' + chrome_version())
         validate_response(resp)
         return resp.text.rstrip()
 
 
 class GeckoDriver(Driver):
-    def __init__(self, version, os_type):
-        # type: (str, str) -> None
-        super(GeckoDriver, self).__init__(version, os_type)
+    def __init__(self, name,
+                 version,
+                 os_type,
+                 url,
+                 latest_release_url,
+                 mozila_release_tag):
+        super(GeckoDriver, self).__init__(name, version, os_type, url, latest_release_url)
+        self._mozila_release_tag = mozila_release_tag
+        self._os_token = os.getenv("GH_TOKEN", None)
 
     def get_latest_release_version(self):
         # type: () -> str
-        resp = requests.get(self.latest_release_url)
+        resp = requests.get(self._latest_release_url)
         validate_response(resp)
         return resp.json()["tag_name"]
 
@@ -70,49 +77,44 @@ class GeckoDriver(Driver):
         validate_response(resp)
         assets = resp.json()["assets"]
 
-        name = "{0}-{1}-{2}".format(self.name, version, self.os_type)
+        name = "{0}-{1}-{2}".format(self.get_name(), version, self._os_type)
         output_dict = [asset for asset in assets if
                        asset['name'].startswith(name)]
         return output_dict[0]['browser_download_url']
 
     @property
     def latest_release_url(self):
-        # type: () -> str
-        token = self.config.gh_token
-        url = self.config.driver_latest_release_url
+        token = self._os_token
+        url = self._latest_release_url
         if token:
             return "{base_url}?access_token={access_token}".format(
                 base_url=url, access_token=token)
         return url
 
     def tagged_release_url(self, version):
-        # type: () -> str
-        token = self.config.gh_token
-        url = self.config.mozila_release_tag.format(version)
+        token = self._os_token
+        url = self._mozila_release_tag.format(version)
         if token:
             return url + "?access_token={0}".format(token)
         return url
 
 
-class EdgeDriver(Driver):
-    def get_latest_release_version(self):
-        # type: () -> str
-        return self.get_version()
-
-    def __init__(self, version, os_type):
-        # type: (str, str) -> None
-        super(EdgeDriver, self).__init__(version, os_type)
-
-    def get_version(self):
-        # type: () -> str
-        return self._version
-
-    def get_url(self, version):
-        # type: () -> str
-        return "{}/{}.exe".format(self._url, self.name)
-
-
 class IEDriver(Driver):
+    def __init__(self, name, version,
+                 os_type,
+                 url,
+                 latest_release_url):
+
+        if os_type == "win64":
+            os_type = "x64"
+        else:
+            os_type = "Win32"
+        super(IEDriver, self).__init__(version=version,
+                                       os_type=os_type,
+                                       url=url,
+                                       latest_release_url=latest_release_url,
+                                       name=name)
+
     def sortchildrenby(self, container):
         data = []
         for elem in container.iter("Contents"):
@@ -122,9 +124,7 @@ class IEDriver(Driver):
         data.sort()
 
     def get_latest_release_version(self):
-        # type: () -> str
-        url = self.config.url
-        resp = requests.get(url)
+        resp = requests.get(self._url)
         root = ElementTree.fromstring(resp.text)
 
         values = {}
@@ -133,32 +133,24 @@ class IEDriver(Driver):
 
         for child in root.findall(xmlns + 'Contents'):
             key = child.find(xmlns + 'Key').text
-            if self.config.name in key and self.os_type in key:
+            if self.get_name() in key and self._os_type in key:
                 last_modified = child.find(xmlns + 'LastModified').text
                 values[last_modified] = key
 
         latest_key = values[max(values)]
         # 2.39/IEDriverServer_Win32_2.39.0.zip
-        m = re.match(r".*_{os}_(.*)\.zip".format(os=self.os_type), latest_key)
+        m = re.match(r".*_{os}_(.*)\.zip".format(os=self._os_type), latest_key)
         if m:
             return m.group(1)
         else:
             raise ValueError("Can't parse latest version {key} | {os}".format(
-                key=latest_key, os=self.os_type))
-
-    def __init__(self, version, os_type):
-        # type: (str, str) -> None
-        if os_type == "win64":
-            os_type = "x64"
-        else:
-            os_type = "Win32"
-        super(IEDriver, self).__init__(version, os_type)
+                key=latest_key, os=self._os_type))
 
     def get_url(self, version):
         major, minor, patch = self.__get_divided_version(version)
         return ("{url}/{major}.{minor}/"
                 "{name}_{os}_{major}.{minor}.{patch}.zip").format(
-            url=self.config.url, name=self.name, os=self.os_type,
+            url=self._url, name=self.get_name(), os=self._os_type,
             major=major, minor=minor, patch=patch)
 
     def __get_divided_version(self, version):
@@ -171,28 +163,3 @@ class IEDriver(Driver):
             raise ValueError(
                 "Version must consist of major, minor and/or patch, "
                 "but given was: {version}".format(version=self.get_version()))
-
-
-class PhantomJsDriver(Driver):
-    def __init__(self, version, os_type):
-        # type: (str, str) -> PhantomJsDriver
-        super(PhantomJsDriver, self).__init__(version, os_type)
-
-    def get_latest_release_version(self):
-        # type: () -> str
-        return self.config.latest_version
-
-    def get_url(self):
-        # type: () -> str
-
-        url = None
-        if self.os_type.startswith("win"):
-            url = self.config.win_url
-        elif self.os_type.startswith("mac"):
-            url = self.config.mac_url
-        elif self.os_type == "linux32":
-            url = self.config.linux32_url
-        elif self.os_type == "linux64":
-            url = self.config.linux64_url
-
-        return url.format(self.get_version())

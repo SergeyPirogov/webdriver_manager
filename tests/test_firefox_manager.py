@@ -25,8 +25,7 @@ def test_gecko_manager_with_correct_version():
 
 def test_gecko_manager_with_selenium():
     driver_path = GeckoDriverManager().install()
-    ff = webdriver.Firefox(executable_path=driver_path,
-                           log_path=os.path.join(os.path.dirname(__file__), "log.log"))
+    ff = webdriver.Firefox(executable_path=driver_path)
     ff.get("http://automation-remarks.com")
     ff.quit()
 
@@ -43,7 +42,7 @@ def test_gecko_manager_with_wrong_version():
 
 @pytest.mark.parametrize('path', [PATH, None])
 def test_gecko_manager_with_correct_version_and_token(path):
-    driver_path = GeckoDriverManager("v0.11.0").install(path)
+    driver_path = GeckoDriverManager("v0.11.0").install()
     assert os.path.exists(driver_path)
 
 
