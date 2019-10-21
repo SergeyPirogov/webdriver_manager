@@ -2,7 +2,6 @@ import os
 
 import pytest
 
-from webdriver_manager.driver import IEDriver
 from webdriver_manager.microsoft import IEDriverManager
 
 PATH = '.'
