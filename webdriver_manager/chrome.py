@@ -6,9 +6,8 @@ from webdriver_manager.manager import DriverManager
 
 
 class ChromeDriverManager(DriverManager):
-    def __init__(self, version="latest", os_type=utils.os_type()):
-        # type: (str, str) -> None
-        super(ChromeDriverManager, self).__init__()
+    def __init__(self, version="latest", os_type=utils.os_type(), path=None):
+        super(ChromeDriverManager, self).__init__(path)
         # there is no driver with 64 bit
         if os_type == "win64":
             os_type = "win32"
