@@ -1,11 +1,11 @@
 import os
 import shutil
+import glob
 
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome import service
 
-from tests.test_cache import cache, delete_cache
 from webdriver_manager.driver import OperaDriver
 from webdriver_manager.opera import OperaDriverManager
 from webdriver_manager.utils import os_type as get_os_type
@@ -38,9 +38,13 @@ def test_operadriver_manager_with_selenium():
     options.add_argument('allow-elevated-browser')
 
     if get_os_type() == "win64":
-        options.binary_location = ("C:\\Users\\{0}\\AppData\\Local\\Programs"
-                                   "\\Opera\\{1}\\opera.exe"
-                                   .format(os.getlogin(), "64.0.3417.54"))
+        paths = [f for f in glob.glob("C:\\Users\\{0}\\AppData\\Local"
+                                      "\\Programs\\Opera\\"
+                                      .format(os.getlogin()) + "/**",
+                                      recursive=True)]
+        for path in paths:
+            if os.path.isfile(path) and path.endswith("opera.exe"):
+                options.binary_location = path
     elif get_os_type() == "linux64" or "linux32" or "mac":
         options.binary_location = "/usr/bin/opera"
 
@@ -55,9 +59,9 @@ def test_opera_driver_manager_with_wrong_version():
         driver_path = OperaDriverManager("0.2").install()
         ff = webdriver.Opera(executable_path=driver_path)
         ff.quit()
-        print(ex.value.args[0])
-    assert ex.value.args[0] == "There is no such driver operadriver with "\
-                               "version 0.2"
+    assert ex.value.args[0] == "There is no such driver by url "\
+        "https://api.github.com/repos/operasoftware/operachromiumdriver/"\
+        "releases/tags/0.2"
 
 
 @pytest.mark.parametrize('path', [PATH])
@@ -70,9 +74,10 @@ def test_opera_driver_driver_with_wrong_token():
     old_token = os.getenv("GH_TOKEN", "default")
     os.environ["GH_TOKEN"] = "aaa"
     with pytest.raises(ValueError) as ex:
-        driver = OperaDriver(version="latest",
-                             os_type="linux32")
-        cache.download_driver(driver)
+        driver_path = OperaDriverManager(version="latest",
+                                         os_type="linux32").install()
+        ff = webdriver.Opera(executable_path=driver_path)
+        ff.quit()
     assert ex.value.args[0]['message'] == "Bad credentials"
     os.environ["GH_TOKEN"] = old_token
 
@@ -82,7 +87,6 @@ def test_opera_driver_driver_with_wrong_token():
                                      'linux64',
                                      'mac64'])
 def test_can_get_driver_from_cache(os_type):
-    delete_cache()
     OperaDriverManager(os_type=os_type).install()
     driver_path = OperaDriverManager(os_type=os_type).install()
     assert os.path.exists(driver_path)

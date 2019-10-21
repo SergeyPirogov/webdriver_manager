@@ -205,20 +205,18 @@ class OperaDriver(Driver):
 
     def get_latest_release_version(self):
         # type: () -> str
-        link = self.latest_release_url
-        print(link)
-        resp = requests.get(link)
-        validate_response(self, resp)
+        resp = requests.get(self.latest_release_url)
+        validate_response(resp)
         return resp.json()["tag_name"]
 
-    def get_url(self):
+    def get_url(self, version):
         # type: () -> str
         # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
         console(
             "Getting latest opera release info for {0}".format(
-                self.get_version()))
-        resp = requests.get(self.tagged_release_url)
-        validate_response(self, resp)
+                version))
+        resp = requests.get(self.tagged_release_url(version))
+        validate_response(resp)
         assets = resp.json()["assets"]
         name = "{0}_{1}".format(self.name, self.os_type)
         output_dict = [asset for asset in assets if
@@ -235,11 +233,10 @@ class OperaDriver(Driver):
                 base_url=url, access_token=token)
         return url
 
-    @property
-    def tagged_release_url(self):
+    def tagged_release_url(self, version):
         # type: () -> str
         token = self.config.gh_token
-        url = self.config.opera_release_tag.format(self.get_version())
+        url = self.config.opera_release_tag.format(version)
         if token:
             return url + "?access_token={0}".format(token)
         return url

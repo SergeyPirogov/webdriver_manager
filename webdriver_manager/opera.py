@@ -16,7 +16,6 @@ class OperaDriverManager(DriverManager):
                                   os_type=os_type)
 
     def install(self, path=None):
-        # type: (str) -> str
-        bin_file = self._file_manager.download_driver(self.driver, path)
-        os.chmod(bin_file.path, 0o755)
-        return bin_file.path
+        driver_path = self.download_driver(self.driver)
+        os.chmod(driver_path, 0o755)
+        return driver_path
