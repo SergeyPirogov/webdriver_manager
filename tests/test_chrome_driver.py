@@ -14,6 +14,14 @@ def test_chrome_manager_with_specific_version():
     assert os.path.exists(bin)
 
 
+def test_driver_can_be_saved_to_custom_path():
+    custom_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "custom")
+
+    path = ChromeDriverManager(version="2.26", path=custom_path).install()
+    assert os.path.exists(path)
+    assert custom_path in path
+
+
 @pytest.mark.parametrize('path', [PATH, None])
 def test_chrome_manager_with_latest_version(path):
     bin = ChromeDriverManager().install(path)
@@ -23,9 +31,7 @@ def test_chrome_manager_with_latest_version(path):
 def test_chrome_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
         ChromeDriverManager("0.2").install()
-    assert ex.value.args[
-               0] == "There is no such driver by url http://chromedriver.storage.googleapis.com/0.2/chromedriver_{0}.zip".format(
-        utils.os_type())
+    assert "There is no such driver by url" in ex.value.args[0]
 
 
 def test_chrome_manager_with_selenium():

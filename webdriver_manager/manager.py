@@ -3,8 +3,8 @@ from webdriver_manager.utils import download_driver
 
 
 class DriverManager(object):
-    def __init__(self):
-        self.driver_cache = DriverCache()
+    def __init__(self, root_dir=None):
+        self.driver_cache = DriverCache(root_dir)
 
     def install(self):
         raise NotImplementedError("Please Implement this method")
@@ -32,7 +32,7 @@ class DriverManager(object):
         driver_version, is_latest = self.__get_version_to_download(driver)
 
         cached_path = self.driver_cache.find_file_if_exists(driver.name, driver.os_type,
-                                                            driver_version)
+                                                            driver_version, is_latest)
         if cached_path is not None:
             return cached_path
 
