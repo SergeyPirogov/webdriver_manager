@@ -13,9 +13,7 @@ class ChromeDriverManager(DriverManager):
                  url="http://chromedriver.storage.googleapis.com",
                  latest_release_url="http://chromedriver.storage.googleapis.com/LATEST_RELEASE"):
         super(ChromeDriverManager, self).__init__(path)
-        # there is no driver with 64 bit
-        if os_type == "win64":
-            os_type = "win32"
+
         self.driver = ChromeDriver(name=name,
                                    version=version,
                                    os_type=os_type,

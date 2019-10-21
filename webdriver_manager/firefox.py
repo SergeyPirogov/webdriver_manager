@@ -12,8 +12,6 @@ class GeckoDriverManager(DriverManager):
                  latest_release_url="https://api.github.com/repos/mozilla/geckodriver/releases/latest",
                  mozila_release_tag="https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}"):
         super(GeckoDriverManager, self).__init__(path)
-        if os_type.startswith("mac"):
-            os_type = "macos"
 
         self.driver = GeckoDriver(version=version,
                                   os_type=os_type,

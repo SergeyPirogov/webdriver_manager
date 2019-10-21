@@ -30,7 +30,7 @@ class Driver(object):
         return url.format(url=self._url,
                           ver=version,
                           name=self.get_name(),
-                          os=self._os_type)
+                          os=self.get_os_type())
 
     def get_version(self):
         return self._version
@@ -43,6 +43,11 @@ class Driver(object):
 class ChromeDriver(Driver):
     def __init__(self, name, version, os_type, url, latest_release_url):
         super(ChromeDriver, self).__init__(name, version, os_type, url, latest_release_url)
+
+    def get_os_type(self):
+        if "win" in super().get_os_type():
+            return "win32"
+        return super().get_os_type()
 
     def get_latest_release_version(self):
         resp = requests.get(
@@ -77,10 +82,15 @@ class GeckoDriver(Driver):
         validate_response(resp)
         assets = resp.json()["assets"]
 
-        name = "{0}-{1}-{2}".format(self.get_name(), version, self._os_type)
+        name = "{0}-{1}-{2}".format(self.get_name(), version, self.get_os_type())
         output_dict = [asset for asset in assets if
                        asset['name'].startswith(name)]
         return output_dict[0]['browser_download_url']
+
+    def get_os_type(self):
+        if super().get_os_type().startswith("mac"):
+            return "macos"
+        return super().get_os_type()
 
     @property
     def latest_release_url(self):
@@ -139,18 +149,18 @@ class IEDriver(Driver):
 
         latest_key = values[max(values)]
         # 2.39/IEDriverServer_Win32_2.39.0.zip
-        m = re.match(r".*_{os}_(.*)\.zip".format(os=self._os_type), latest_key)
+        m = re.match(r".*_{os}_(.*)\.zip".format(os=self.get_os_type()), latest_key)
         if m:
             return m.group(1)
         else:
             raise ValueError("Can't parse latest version {key} | {os}".format(
-                key=latest_key, os=self._os_type))
+                key=latest_key, os=self.get_os_type()))
 
     def get_url(self, version):
         major, minor, patch = self.__get_divided_version(version)
         return ("{url}/{major}.{minor}/"
                 "{name}_{os}_{major}.{minor}.{patch}.zip").format(
-            url=self._url, name=self.get_name(), os=self._os_type,
+            url=self._url, name=self.get_name(), os=self.get_os_type(),
             major=major, minor=minor, patch=patch)
 
     def __get_divided_version(self, version):
