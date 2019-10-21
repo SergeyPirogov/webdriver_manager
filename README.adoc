@@ -49,7 +49,7 @@ If you face error related to github credentials, you need to place github token:
 ```python
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 ```
-(*) access_token required to work with Github API more info https://help.github.com/articles/creating-an-access-token-for-command-line-use/. You can set **gh_token** using config.ini file see Configuration section below.
+(*) access_token required to work with Github API more info https://help.github.com/articles/creating-an-access-token-for-command-line-use/.
 
 Use with IE
 
