@@ -10,7 +10,6 @@ For now support:
 - ChromeDriver
 - GeckoDriver
 - IEDriver
-- PhantomJS
 - OperaDriver
 
 Before:
@@ -63,15 +62,6 @@ from webdriver_manager.microsoft import IEDriverManager
 
 driver = webdriver.Ie(IEDriverManager().install())
 
-```
-
-Use with PhantomJS
-
-```python
-from selenium import webdriver
-from webdriver_manager.phantom import PhantomJsDriverManager
-
-driver = webdriver.PhantomJS(PhantomJsDriverManager().install())
 ```
 
 Use with Opera
