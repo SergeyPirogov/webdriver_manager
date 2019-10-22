@@ -64,9 +64,9 @@ def test_opera_driver_manager_with_wrong_version():
         "releases/tags/0.2"
 
 
-@pytest.mark.parametrize('path', [PATH])
+@pytest.mark.parametrize('path', [PATH, None])
 def test_opera_driver_manager_with_correct_version_and_token(path):
-    driver_path = OperaDriverManager("v.2.45").install(path)
+    driver_path = OperaDriverManager(version="v.2.45", path=path).install()
     assert os.path.exists(driver_path)
 
 
@@ -83,7 +83,7 @@ def test_opera_driver_driver_with_wrong_token():
 
 
 @pytest.mark.parametrize('os_type', ['win32',
-                                     'win64',
+                                     'win64',                                     
                                      'linux64',
                                      'mac64'])
 def test_can_get_driver_from_cache(os_type):

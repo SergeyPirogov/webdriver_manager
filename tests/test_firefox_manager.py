@@ -42,7 +42,7 @@ def test_gecko_manager_with_wrong_version():
 
 @pytest.mark.parametrize('path', [PATH, None])
 def test_gecko_manager_with_correct_version_and_token(path):
-    driver_path = GeckoDriverManager("v0.11.0").install()
+    driver_path = GeckoDriverManager(version="v0.11.0", path=path).install()
     assert os.path.exists(driver_path)
 
 
