@@ -83,7 +83,7 @@ def test_opera_driver_driver_with_wrong_token():
 
 
 @pytest.mark.parametrize('os_type', ['win32',
-                                     'win64',                                     
+                                     'win64',
                                      'linux64',
                                      'mac64'])
 def test_can_get_driver_from_cache(os_type):

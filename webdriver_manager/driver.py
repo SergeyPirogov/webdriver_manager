@@ -205,7 +205,7 @@ class OperaDriver(Driver):
         name = "{0}_{1}".format(self.get_name(), self.get_os_type())
         output_dict = [asset for asset in assets if
                        asset['name'].startswith(name)]
-        return output_dict[0]['browser_download_url']    
+        return output_dict[0]['browser_download_url']
 
     @property
     def latest_release_url(self):
