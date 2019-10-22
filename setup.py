@@ -17,7 +17,7 @@ setuptools.setup(
     name='webdriver_manager',
     packages=setuptools.find_packages(exclude=['tests']),
     include_package_data=True,
-    version='2.1.0',
+    version='2.2.0',
     description=('Library provides the way to automatically manage drivers for different browsers'),
     author='Sergey Pirogov',
     author_email='automationremarks@gmail.com',
@@ -27,7 +27,6 @@ setuptools.setup(
         'License :: OSI Approved :: Apache Software License',
         'Intended Audience :: Information Technology',
         'Intended Audience :: Developers',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.5',
         'Topic :: Software Development :: '
         'Libraries :: Python Modules',

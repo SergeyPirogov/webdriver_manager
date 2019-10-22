@@ -1,12 +1,9 @@
 import os
-
+from webdriver_manager.chrome import ChromeDriverManager
 import pytest
 from selenium import webdriver
 
-from webdriver_manager import utils
-from webdriver_manager.chrome import ChromeDriverManager
 
-PATH = '.'
 
 
 def test_chrome_manager_with_specific_version():
@@ -22,9 +19,9 @@ def test_driver_can_be_saved_to_custom_path():
     assert custom_path in path
 
 
-@pytest.mark.parametrize('path', [PATH, None])
+@pytest.mark.parametrize('path', [".", None])
 def test_chrome_manager_with_latest_version(path):
-    bin = ChromeDriverManager().install(path)
+    bin = ChromeDriverManager(path=path).install()
     assert os.path.exists(bin)
 
 
@@ -41,11 +38,15 @@ def test_chrome_manager_with_selenium():
     driver.close()
 
 
-def test_chrome_manager_cached_driver_with_selenium():
-    ChromeDriverManager().install()
-    driver = webdriver.Chrome(ChromeDriverManager().install())
-    driver.get("http://automation-remarks.com")
-    driver.close()
+@pytest.mark.parametrize('path', [".", None])
+def test_chrome_manager_cached_driver_with_selenium(path):
+    ChromeDriverManager(path=path).install()
+    webdriver.Chrome(ChromeDriverManager(path=path).install())
+
+
+@pytest.mark.parametrize('path', [".", None])
+def test_chrome_manager_with_win64_os(path):
+    ChromeDriverManager(os_type="win64", path=path).install()
 
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])

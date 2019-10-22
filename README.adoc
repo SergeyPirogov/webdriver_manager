@@ -53,7 +53,7 @@ If you face error related to github credentials, you need to place github token:
 ```python
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 ```
-(*) access_token required to work with Github API more info https://help.github.com/articles/creating-an-access-token-for-command-line-use/. You can set **gh_token** using config.ini file see Configuration section below.
+(*) access_token required to work with Github API more info https://help.github.com/articles/creating-an-access-token-for-command-line-use/.
 
 Use with IE
 
@@ -90,42 +90,13 @@ driver = webdriver.Opera(executable_path=OperaDriverManager().install(), options
 ```
 
 == Configuration
-Create file **${USER_HOME}/.wdm/config.ini** with such content:
-
-```
-[GeckoDriver]
-driver_path =
-gh_token =
-version = latest
-offline = False
-```
-* gh_token - Github access token to solve issues with API rate limit
-* driver_path - path to driver that was already downloaded 
-* version - by default driver lookup for the latest version of the driver, you can freeze it
-* offline - mode that will disable automatic driver lookup. In this case you need either specify exact driver version that is already in cache **${user_home}/.wdm** or set path to the driver using **driver_path** variable.
-
-Same variables can be set for **[ChromeDriver]** and **[EdgeDriver]**
-
-Config example:
-
-```
-[ChromeDriver]
-driver_path = /home/user/.wdm/chromedriver/2.27/chromedriver
-gh_token = ada23fsdfdfsdfdf
-version = 2.27
-offline = True
-```
-
-It will automatically download latest release of chromedriver and set path. Moreover when the new version of the driver
-will be released, webdriver manager will download it and update path.
 
 There is also possibility to set same variables via ENV VARIABLES.
 
 Example:
 
 ```
-GH_TOKEN = "asdasdasdasd"
-VERSION = 2.56
+export GH_TOKEN = "asdasdasdasd"
 ```
 
 This will make your test automation more elegant and robust!
