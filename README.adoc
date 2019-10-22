@@ -34,7 +34,6 @@ pip install webdriver_manager
 Use with Chrome:
 
 ```python
-from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
 webdriver.Chrome(ChromeDriverManager().install())
@@ -42,7 +41,6 @@ webdriver.Chrome(ChromeDriverManager().install())
 Use with FireFox:
 
 ```python
-from selenium import webdriver
 from webdriver_manager.firefox import GeckoDriverManager
 
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
@@ -57,7 +55,6 @@ driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 Use with IE
 
 ```python
-from selenium import webdriver
 from webdriver_manager.microsoft import IEDriverManager
 
 driver = webdriver.Ie(IEDriverManager().install())
@@ -67,7 +64,6 @@ driver = webdriver.Ie(IEDriverManager().install())
 Use with Opera
 
 ```python
-from selenium import webdriver
 from webdriver_manager.opera import OperaDriverManager
 
 options = webdriver.ChromeOptions()

@@ -1,0 +1,9 @@
+{    
+    "python.linting.pylintEnabled": true,
+    "python.linting.pycodestyleEnabled": true,
+    "python.linting.pycodestyleArgs": [
+        "--ignore=E303"
+    ],
+    "python.linting.pylintUseMinimalCheckers": true ,
+    "python.pythonPath": "d:\\Python\\webdriver-manager-forked\\webdriver_manager\\.venv\\Scripts\\python.exe"
+}
