@@ -9,7 +9,7 @@ PATH = '.'
 
 
 def delete_old_install(path=None):
-    if not path is None:
+    if path is not None:
         path = os.path.abspath(path)
         try:
             os.remove(os.path.join(path, 'geckodriver.exe'))

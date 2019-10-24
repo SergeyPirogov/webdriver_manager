@@ -58,12 +58,7 @@ class DriverCache(object):
         write_file(response.content, file_path)
         files = self.__unpack(file_path)
         file_path = os.path.join(driver_path, files[0])
-        if os.path.isfile(file_path):
-            return file_path
-        elif os.path.isdir(file_path):
-            return os.path.join(file_path, os.listdir(file_path)[0])
-        else:
-            raise FileNotFoundError
+        return file_path
 
     def save_latest_driver_version_number_to_cache(self, name, version, date=None):
         if date is None:
