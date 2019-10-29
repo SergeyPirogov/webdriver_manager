@@ -31,12 +31,8 @@ class OperaDriverManager(DriverManager):
             os.chmod(driver_path, 0o755)
             return driver_path
         else:
-            file_path = None
             for name in os.listdir(driver_path):
-                abs_path = os.path.join(driver_path, name)
-                if 'opera' in name:
-                    os.chmod(abs_path, 0o755)
-                    file_path = abs_path
-                elif 'sha512_sum' in name:
-                    os.remove(abs_path)
-            return file_path
+                if 'sha512_sum' in name:
+                    os.remove(os.path.join(driver_path, name))
+                    break
+            return os.path.join(driver_path, os.listdir(driver_path)[0])

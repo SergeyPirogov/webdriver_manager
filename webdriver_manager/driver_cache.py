@@ -51,14 +51,14 @@ class DriverCache(object):
         return self.__find_file(paths, name, version, os_type)
 
     def save_driver_to_cache(self, response, driver_name, version, os_type):
-        driver_path = os.path.join(self._root_dir, self._drivers_root, driver_name, version, os_type)
+        driver_path = os.path.join(self._root_dir, self._drivers_root,
+                                   driver_name, version, os_type)
         filename = get_filename_from_response(response, driver_name)
         self.create_cache_dir_for_driver(driver_path)
         file_path = os.path.join(driver_path, filename)
         write_file(response.content, file_path)
         files = self.__unpack(file_path)
-        file_path = os.path.join(driver_path, files[0])
-        return file_path
+        return os.path.join(driver_path, files[0])
 
     def save_latest_driver_version_number_to_cache(self, name, version, date=None):
         if date is None:
