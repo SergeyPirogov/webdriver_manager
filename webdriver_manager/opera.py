@@ -35,4 +35,6 @@ class OperaDriverManager(DriverManager):
                 if 'sha512_sum' in name:
                     os.remove(os.path.join(driver_path, name))
                     break
-            return os.path.join(driver_path, os.listdir(driver_path)[0])
+            file_path = os.path.join(driver_path, os.listdir(driver_path)[0])
+            os.chmod(file_path, 0o755)
+            return file_path
