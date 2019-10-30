@@ -59,9 +59,9 @@ def test_opera_driver_manager_with_wrong_version():
         driver_path = OperaDriverManager("0.2").install()
         ff = webdriver.Opera(executable_path=driver_path)
         ff.quit()
-    assert ex.value.args[0] == "There is no such driver by url "\
+    assert  "There is no such driver by url "\
         "https://api.github.com/repos/operasoftware/operachromiumdriver/"\
-        "releases/tags/0.2"
+        "releases/tags/0.2" in ex.value.args[0]
 
 
 @pytest.mark.parametrize('path', [PATH, None])
