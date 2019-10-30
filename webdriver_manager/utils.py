@@ -94,6 +94,7 @@ def chrome_version():
     version = re.search(pattern, stdout)
     if not version:
         raise ValueError(
-            'Could not get version for Chrome with this command: {}'.format(cmd)
+            'Could not get version for Chrome with this command: {}'
+            .format(cmd)
         )
     return version.group(0)

@@ -1,4 +1,4 @@
-= python webdriver manager
+= Webdriver Manager for Python
 
 image:https://travis-ci.org/SergeyPirogov/webdriver_manager.svg?branch=master["Build Status", link="https://travis-ci.org/SergeyPirogov/webdriver_manager"]
 image:https://img.shields.io/pypi/v/webdriver_manager.svg["PyPI", link="https://pypi.org/project/webdriver-manager/"]
@@ -10,6 +10,7 @@ For now support:
 - ChromeDriver
 - GeckoDriver
 - IEDriver
+- OperaDriver
 
 Before:
 You should download binary chromedriver, unzip it somewhere in you PC and set path to this driver like this:
@@ -57,6 +58,27 @@ Use with IE
 from webdriver_manager.microsoft import IEDriverManager
 
 driver = webdriver.Ie(IEDriverManager().install())
+
+```
+
+Use with Opera
+
+```python
+from webdriver_manager.opera import OperaDriverManager
+
+driver = webdriver.Opera(executable_path=OperaDriverManager().install()
+```
+
+If the opera browser is installed in a location other than C:/Program Files or C:/Program Files (x86) on windows
+and /usr/bin/opera for all unix variants and mac, then use the below code,
+
+```python
+from webdriver_manager.opera import OperaDriverManager
+
+options = webdriver.ChromeOptions()
+options.add_argument('allow-elevated-browser')
+options.binary_location = "C:\\Users\\USERNAME\\FOLDERLOCATION\\Opera\\VERSION\\opera.exe"
+driver = webdriver.Opera(executable_path=OperaDriverManager().install(), options=options)
 ```
 
 == Configuration

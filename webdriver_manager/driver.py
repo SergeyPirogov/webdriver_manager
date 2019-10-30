@@ -173,3 +173,54 @@ class IEDriver(Driver):
             raise ValueError(
                 "Version must consist of major, minor and/or patch, "
                 "but given was: {version}".format(version=self.get_version()))
+
+
+class OperaDriver(Driver):
+    def __init__(self, name,
+                 version,
+                 os_type,
+                 url,
+                 latest_release_url,
+                 opera_release_tag):
+        super(OperaDriver, self).__init__(name, version, os_type, url,
+                                          latest_release_url)
+        self.opera_release_tag = opera_release_tag
+        self._os_token = os.getenv("GH_TOKEN", None)
+
+    def get_latest_release_version(self):
+        # type: () -> str
+        resp = requests.get(self.latest_release_url)
+        validate_response(resp)
+        return resp.json()["tag_name"]
+
+    def get_url(self, version):
+        # type: () -> str
+        # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
+        console(
+            "Getting latest opera release info for {0}".format(
+                version))
+        resp = requests.get(self.tagged_release_url(version))
+        validate_response(resp)
+        assets = resp.json()["assets"]
+        name = "{0}_{1}".format(self.get_name(), self.get_os_type())
+        output_dict = [asset for asset in assets if
+                       asset['name'].startswith(name)]
+        return output_dict[0]['browser_download_url']
+
+    @property
+    def latest_release_url(self):
+        # type: () -> str
+        token = self._os_token
+        url = self._latest_release_url
+        if token:
+            return "{base_url}?access_token={access_token}".format(
+                base_url=url, access_token=token)
+        return url
+
+    def tagged_release_url(self, version):
+        # type: () -> str
+        token = self._os_token
+        url = self.opera_release_tag.format(version)
+        if token:
+            return url + "?access_token={0}".format(token)
+        return url

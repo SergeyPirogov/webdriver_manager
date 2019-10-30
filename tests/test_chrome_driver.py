@@ -33,7 +33,9 @@ def test_chrome_manager_with_wrong_version():
 
 def test_chrome_manager_with_selenium():
     driver_path = ChromeDriverManager().install()
-    webdriver.Chrome(driver_path)
+    driver = webdriver.Chrome(driver_path)
+    driver.get("http://automation-remarks.com")
+    driver.close()
 
 
 @pytest.mark.parametrize('path', [".", None])
