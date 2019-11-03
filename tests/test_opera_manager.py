@@ -4,10 +4,8 @@ import glob
 
 import pytest
 from selenium import webdriver
-from selenium.webdriver.chrome import service
 
-from webdriver_manager.driver import OperaDriver
-from webdriver_manager.opera import OperaDriverManager
+from webdriver_manager.drivers.opera import OperaDriverManager
 from webdriver_manager.utils import os_type as get_os_type
 
 PATH = '.'

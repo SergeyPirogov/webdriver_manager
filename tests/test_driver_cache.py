@@ -1,7 +1,7 @@
 import datetime
 import os
 
-from webdriver_manager.driver_cache import DriverCache
+from webdriver_manager.utils.driver_cache import DriverCache
 from webdriver_manager.utils import download_driver
 
 project_root = os.path.dirname(os.path.dirname(__file__))
