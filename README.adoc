@@ -1,4 +1,4 @@
-= python webdriver manager
+= Webdriver Manager for Python
 
 image:https://travis-ci.org/SergeyPirogov/webdriver_manager.svg?branch=master["Build Status", link="https://travis-ci.org/SergeyPirogov/webdriver_manager"]
 image:https://img.shields.io/pypi/v/webdriver_manager.svg["PyPI", link="https://pypi.org/project/webdriver-manager/"]
@@ -9,15 +9,16 @@ For now support:
 
 - ChromeDriver
 - GeckoDriver
-- EdgeDriver
 - IEDriver
-- PhantomJS
+- OperaDriver
 
 Before:
 You should download binary chromedriver, unzip it somewhere in you PC and set path to this driver like this:
 
 ```
 webdriver.Chrome('/home/user/drivers/chromedriver')
+
+ChromeDriverManager(path=custom_path).install()
 ```
 
 It's boring!!! Moreover every time the new version of driver released, you should go and repeat all steps again and again.
@@ -49,15 +50,7 @@ If you face error related to github credentials, you need to place github token:
 ```python
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 ```
-(*) access_token required to work with Github API more info https://help.github.com/articles/creating-an-access-token-for-command-line-use/. You can set **gh_token** using config.ini file see Configuration section below.
-
-Use with Edge:
-
-```python
-from webdriver_manager.microsoft import EdgeDriverManager
-
-driver = webdriver.Edge(EdgeDriverManager().install())
-```
+(*) access_token required to work with Github API more info https://help.github.com/articles/creating-an-access-token-for-command-line-use/.
 
 Use with IE
 
@@ -65,45 +58,37 @@ Use with IE
 from webdriver_manager.microsoft import IEDriverManager
 
 driver = webdriver.Ie(IEDriverManager().install())
+
+```
+
+Use with Opera
+
+```python
+from webdriver_manager.opera import OperaDriverManager
+
+driver = webdriver.Opera(executable_path=OperaDriverManager().install()
+```
+
+If the opera browser is installed in a location other than C:/Program Files or C:/Program Files (x86) on windows
+and /usr/bin/opera for all unix variants and mac, then use the below code,
+
+```python
+from webdriver_manager.opera import OperaDriverManager
+
+options = webdriver.ChromeOptions()
+options.add_argument('allow-elevated-browser')
+options.binary_location = "C:\\Users\\USERNAME\\FOLDERLOCATION\\Opera\\VERSION\\opera.exe"
+driver = webdriver.Opera(executable_path=OperaDriverManager().install(), options=options)
 ```
 
 == Configuration
-Create file **${USER_HOME}/.wdm/config.ini** with such content:
-
-```
-[GeckoDriver]
-driver_path =
-gh_token =
-version = latest
-offline = False
-```
-* gh_token - Github access token to solve issues with API rate limit
-* driver_path - path to driver that was already downloaded 
-* version - by default driver lookup for the latest version of the driver, you can freeze it
-* offline - mode that will disable automatic driver lookup. In this case you need either specify exact driver version that is already in cache **${user_home}/.wdm** or set path to the driver using **driver_path** variable.
-
-Same variables can be set for **[ChromeDriver]** and **[EdgeDriver]**
-
-Config example:
-
-```
-[ChromeDriver]
-driver_path = /home/user/.wdm/chromedriver/2.27/chromedriver
-gh_token = ada23fsdfdfsdfdf
-version = 2.27
-offline = True
-```
-
-It will automatically download latest release of chromedriver and set path. Moreover when the new version of the driver
-will be released, webdriver manager will download it and update path.
 
 There is also possibility to set same variables via ENV VARIABLES.
 
 Example:
 
 ```
-GH_TOKEN = "asdasdasdasd"
-VERSION = 2.56
+export GH_TOKEN = "asdasdasdasd"
 ```
 
 This will make your test automation more elegant and robust!
