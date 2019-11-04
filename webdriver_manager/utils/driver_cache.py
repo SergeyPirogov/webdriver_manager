@@ -3,12 +3,11 @@ import glob
 import json
 import os
 
-from webdriver_manager.archive import extract_zip, extract_tar_file
-from webdriver_manager.utils import write_file, get_filename_from_response, console, get_date_diff
+from webdriver_manager.utils.archive import extract_zip, extract_tar_file
+from webdriver_manager.utils.utils import write_file, get_filename_from_response, console, get_date_diff
 
 
 class DriverCache(object):
-
     def __init__(self, root_dir=None):
         self._root_dir = root_dir
         if root_dir is None:
@@ -18,6 +17,11 @@ class DriverCache(object):
         self._date_format = "%d/%m/%Y"
 
     def create_cache_dir_for_driver(self, driver_path):
+        """
+
+        :param driver_path:
+        :return:
+        """
         path = os.path.join(self._root_dir, driver_path)
 
         if not os.path.exists(path):
@@ -25,10 +29,25 @@ class DriverCache(object):
         return os.path.exists(path)
 
     def __get_path(self, name, version, os_type):
+        """
+
+        :param name:
+        :param version:
+        :param os_type:
+        :return:
+        """
         return [f for f in glob.glob(os.path.join(self._root_dir, self._drivers_root, name, version, os_type) + "/**",
                                      recursive=True)]
 
     def __find_file(self, paths, name, version, os_type):
+        """
+
+        :param paths:
+        :param name:
+        :param version:
+        :param os_type:
+        :return:
+        """
         console("\nLooking for [{} {} {}] driver in cache ".format(name, version, os_type))
         if len(name) == 0 or len(version) == 0:
             return None
@@ -43,6 +62,14 @@ class DriverCache(object):
         return None
 
     def find_file_if_exists(self, name, os_type, version, is_latest):
+        """
+
+        :param name:
+        :param os_type:
+        :param version:
+        :param is_latest:
+        :return:
+        """
         if is_latest and not self.is_valid_cache(name):
             return None
 
@@ -51,6 +78,14 @@ class DriverCache(object):
         return self.__find_file(paths, name, version, os_type)
 
     def save_driver_to_cache(self, response, driver_name, version, os_type):
+        """
+
+        :param response:
+        :param driver_name:
+        :param version:
+        :param os_type:
+        :return:
+        """
         driver_path = os.path.join(self._root_dir, self._drivers_root,
                                    driver_name, version, os_type)
         filename = get_filename_from_response(response, driver_name)
@@ -61,6 +96,13 @@ class DriverCache(object):
         return os.path.join(driver_path, files[0])
 
     def save_latest_driver_version_number_to_cache(self, name, version, date=None):
+        """
+
+        :param name:
+        :param version:
+        :param date:
+        :return:
+        """
         if date is None:
             date = datetime.date.today()
 
@@ -71,6 +113,11 @@ class DriverCache(object):
             json.dump(metadata, outfile, indent=4)
 
     def is_valid_cache(self, driver_name):
+        """
+
+        :param driver_name:
+        :return:
+        """
         metadata = self.read_metadata()
         if driver_name in metadata:
             driver_data = metadata[driver_name]
@@ -80,18 +127,33 @@ class DriverCache(object):
         return False
 
     def get_latest_cached_driver_version(self, driver_name):
+        """
+
+        :param driver_name:
+        :return:
+        """
         if not self.is_valid_cache(driver_name):
             return None
 
         return self.read_metadata()[driver_name]["latest_version"]
 
     def read_metadata(self):
+        """
+
+        :return:
+        """
         if os.path.exists(self._drivers_json_path):
             with open(self._drivers_json_path, 'r') as outfile:
                 return json.load(outfile)
         return {}
 
     def __unpack(self, path, to_directory=None):
+        """
+
+        :param path:
+        :param to_directory:
+        :return:
+        """
         console("Unpack archive {}".format(path))
         if not to_directory:
             to_directory = os.path.dirname(path)

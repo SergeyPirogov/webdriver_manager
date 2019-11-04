@@ -1,6 +1,6 @@
-from webdriver_manager import utils
-from webdriver_manager.driver import GeckoDriver
-from webdriver_manager.manager import DriverManager
+from webdriver_manager.utils import utils
+from webdriver_manager.drivers.driver import GeckoDriver
+from webdriver_manager.drivers.manager import DriverManager
 
 
 class GeckoDriverManager(DriverManager):

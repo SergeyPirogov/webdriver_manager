@@ -3,7 +3,7 @@ import os
 import pytest
 from selenium import webdriver
 
-from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.drivers.firefox import GeckoDriverManager
 
 PATH = '.'
 

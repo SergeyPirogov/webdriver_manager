@@ -1,14 +1,13 @@
 import os
-from webdriver_manager.chrome import ChromeDriverManager
 import pytest
 from selenium import webdriver
 
-
+from webdriver_manager.drivers.chrome import ChromeDriverManager
 
 
 def test_chrome_manager_with_specific_version():
-    bin = ChromeDriverManager("2.26").install()
-    assert os.path.exists(bin)
+    bin_path = ChromeDriverManager("2.26").install()
+    assert os.path.exists(bin_path)
 
 
 def test_driver_can_be_saved_to_custom_path():
@@ -21,8 +20,8 @@ def test_driver_can_be_saved_to_custom_path():
 
 @pytest.mark.parametrize('path', [".", None])
 def test_chrome_manager_with_latest_version(path):
-    bin = ChromeDriverManager(path=path).install()
-    assert os.path.exists(bin)
+    bin_path = ChromeDriverManager(path=path).install()
+    assert os.path.exists(bin_path)
 
 
 def test_chrome_manager_with_wrong_version():
