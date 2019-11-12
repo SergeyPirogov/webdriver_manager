@@ -97,6 +97,7 @@ class GeckoDriver(Driver):
         token = self._os_token
         url = self._latest_release_url
         if token:
+            console("GH_TOKEN will be used to perform requests")
             return "{base_url}?access_token={access_token}".format(
                 base_url=url, access_token=token)
         return url
@@ -105,6 +106,7 @@ class GeckoDriver(Driver):
         token = self._os_token
         url = self._mozila_release_tag.format(version)
         if token:
+            console("GH_TOKEN will be used to perform requests")
             return url + "?access_token={0}".format(token)
         return url
 
