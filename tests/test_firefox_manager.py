@@ -18,11 +18,6 @@ def delete_old_install(path=None):
             pass
 
 
-def test_gecko_manager_with_correct_version():
-    driver_path = GeckoDriverManager("v0.11.0").install()
-    assert os.path.exists(driver_path)
-
-
 def test_gecko_manager_with_selenium():
     driver_path = GeckoDriverManager().install()
     ff = webdriver.Firefox(executable_path=driver_path)
