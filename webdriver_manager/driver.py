@@ -56,14 +56,7 @@ class ChromeDriver(Driver):
         return resp.text.rstrip()
 
 
-class ChromiumDriver(Driver):
-    def __init__(self, name, version, os_type, url, latest_release_url):
-        super(ChromiumDriver, self).__init__(name, version, os_type, url, latest_release_url)
-
-    def get_os_type(self):
-        if "win" in super().get_os_type():
-            return "win32"
-        return super().get_os_type()
+class ChromiumDriver(ChromeDriver):
 
     def get_latest_release_version(self):
         resp = requests.get(

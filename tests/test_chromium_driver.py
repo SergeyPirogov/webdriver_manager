@@ -21,8 +21,8 @@ def test_driver_can_be_saved_to_custom_path():
 
 @pytest.mark.parametrize('path', [".", None])
 def test_chromium_manager_with_latest_version(path):
-    bin = ChromiumDriverManager(path=path).install()
-    assert os.path.exists(bin)
+    bin_path = ChromiumDriverManager(path=path).install()
+    assert os.path.exists(bin_path)
 
 
 def test_chromium_manager_with_wrong_version():
