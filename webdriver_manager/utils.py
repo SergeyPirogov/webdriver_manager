@@ -98,3 +98,22 @@ def chrome_version():
             .format(cmd)
         )
     return version.group(0)
+
+
+def chromium_version():
+    pattern = r'\d+\.\d+\.\d+'
+    cmd_mapping = {
+        OSType.LINUX: 'chromium --version',
+        OSType.MAC: r'/Applications/Chromium.app/Contents/MacOS/Chromium --version',
+        OSType.WIN: r'reg query "HKEY_CURRENT_USER\Software\Chromium\BLBeacon" /v version'
+    }
+
+    cmd = cmd_mapping[os_name()]
+    stdout = os.popen(cmd).read()
+    version = re.search(pattern, stdout)
+    if not version:
+        raise ValueError(
+            'Could not get version for Chromium with this command: {}'
+            .format(cmd)
+        )
+    return version.group(0)

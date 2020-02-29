@@ -4,7 +4,7 @@ from xml.etree import ElementTree
 
 import requests
 
-from webdriver_manager.utils import validate_response, console, chrome_version
+from webdriver_manager.utils import validate_response, console, chrome_version, chromium_version
 
 
 class Driver(object):
@@ -52,6 +52,22 @@ class ChromeDriver(Driver):
     def get_latest_release_version(self):
         resp = requests.get(
             self._latest_release_url + '_' + chrome_version())
+        validate_response(resp)
+        return resp.text.rstrip()
+
+
+class ChromiumDriver(Driver):
+    def __init__(self, name, version, os_type, url, latest_release_url):
+        super(ChromiumDriver, self).__init__(name, version, os_type, url, latest_release_url)
+
+    def get_os_type(self):
+        if "win" in super().get_os_type():
+            return "win32"
+        return super().get_os_type()
+
+    def get_latest_release_version(self):
+        resp = requests.get(
+            self._latest_release_url + '_' + chromium_version())
         validate_response(resp)
         return resp.text.rstrip()
 
