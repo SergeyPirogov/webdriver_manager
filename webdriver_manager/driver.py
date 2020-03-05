@@ -107,7 +107,8 @@ class GeckoDriver(Driver):
         url = self._mozila_release_tag.format(version)
         if token:
             console("GH_TOKEN will be used to perform requests")
-            return url + "?access_token={0}".format(token)
+            return "{base_url}?access_token={access_token}".format(
+                base_url=url, access_token=token)
         return url
 
 
@@ -224,5 +225,6 @@ class OperaDriver(Driver):
         token = self._os_token
         url = self.opera_release_tag.format(version)
         if token:
-            return url + "?access_token={0}".format(token)
+            return "{base_url}?access_token={access_token}".format(
+                base_url=url, access_token=token)
         return url
