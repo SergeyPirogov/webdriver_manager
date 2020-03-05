@@ -14,6 +14,11 @@ class OSType(object):
     WIN = "win"
 
 
+class ChromeType(object):
+    GOOGLE = 'google-chrome'
+    CHROMIUM = 'chromium'
+
+
 def os_name():
     pl = sys.platform
     if pl == "linux" or pl == "linux2":
@@ -81,39 +86,27 @@ def console(text, bold=False):
     print(crayons.yellow(text, bold=bold))
 
 
-def chrome_version():
+def chrome_version(browser_type=ChromeType.GOOGLE):
     pattern = r'\d+\.\d+\.\d+'
     cmd_mapping = {
-        OSType.LINUX: 'google-chrome --version',
-        OSType.MAC: r'/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version',
-        OSType.WIN: r'reg query "HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon" /v version'
+        ChromeType.GOOGLE: {
+            OSType.LINUX: 'google-chrome --version',
+            OSType.MAC: r'/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version',
+            OSType.WIN: r'reg query "HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon" /v version'
+        },
+        ChromeType.CHROMIUM: {
+            OSType.LINUX: 'chromium --version',
+            OSType.MAC: r'/Applications/Chromium.app/Contents/MacOS/Chromium --version',
+            OSType.WIN: r'reg query "HKEY_CURRENT_USER\Software\Chromium\BLBeacon" /v version'
+        }
     }
 
-    cmd = cmd_mapping[os_name()]
+    cmd = cmd_mapping[browser_type][os_name()]
     stdout = os.popen(cmd).read()
     version = re.search(pattern, stdout)
     if not version:
         raise ValueError(
             'Could not get version for Chrome with this command: {}'
-            .format(cmd)
-        )
-    return version.group(0)
-
-
-def chromium_version():
-    pattern = r'\d+\.\d+\.\d+'
-    cmd_mapping = {
-        OSType.LINUX: 'chromium --version',
-        OSType.MAC: r'/Applications/Chromium.app/Contents/MacOS/Chromium --version',
-        OSType.WIN: r'reg query "HKEY_CURRENT_USER\Software\Chromium\BLBeacon" /v version'
-    }
-
-    cmd = cmd_mapping[os_name()]
-    stdout = os.popen(cmd).read()
-    version = re.search(pattern, stdout)
-    if not version:
-        raise ValueError(
-            'Could not get version for Chromium with this command: {}'
             .format(cmd)
         )
     return version.group(0)
