@@ -66,12 +66,14 @@ class GeckoDriver(Driver):
         super(GeckoDriver, self).__init__(name, version, os_type, url, latest_release_url)
         self._mozila_release_tag = mozila_release_tag
         self._os_token = os.getenv("GH_TOKEN", None)
+        self.auth_header = None
+        if self._os_token:
+            self.auth_header = {'Authorization': f'token {self._os_token}'}
 
     def get_latest_release_version(self):
         # type: () -> str
         resp = requests.get(url=self.latest_release_url,
-                            headers={
-                                'Authorization': f'token {self._os_token}'})
+                            headers=self.auth_header)
         validate_response(resp)
         return resp.json()["tag_name"]
 
@@ -81,8 +83,7 @@ class GeckoDriver(Driver):
             "Getting latest mozilla release info for {0}".format(
                 version))
         resp = requests.get(url=self.tagged_release_url(version),
-                            headers={
-                                'Authorization': f'token {self._os_token}'})
+                            headers=self.auth_header)
         validate_response(resp)
         assets = resp.json()["assets"]
 
@@ -181,12 +182,13 @@ class OperaDriver(Driver):
                                           latest_release_url)
         self.opera_release_tag = opera_release_tag
         self._os_token = os.getenv("GH_TOKEN", None)
+        self.auth_header = None
+        if self._os_token:
+            self.auth_header = {'Authorization': f'token {self._os_token}'}
 
     def get_latest_release_version(self):
         # type: () -> str
-        resp = requests.get(url=self.latest_release_url,
-                            headers={
-                                'Authorization': f'token {self._os_token}'})
+        resp = requests.get(self.latest_release_url, headers=self.auth_header)
         validate_response(resp)
         return resp.json()["tag_name"]
 
@@ -197,8 +199,7 @@ class OperaDriver(Driver):
             "Getting latest opera release info for {0}".format(
                 version))
         resp = requests.get(url=self.tagged_release_url(version),
-                            headers={
-                                'Authorization': f'token {self._os_token}'})
+                            headers=self.auth_header)
         validate_response(resp)
         assets = resp.json()["assets"]
         name = "{0}_{1}".format(self.get_name(), self.get_os_type())
