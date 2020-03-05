@@ -98,22 +98,10 @@ class GeckoDriver(Driver):
 
     @property
     def latest_release_url(self):
-        token = self._os_token
-        url = self._latest_release_url
-        # if token:
-        #     console("GH_TOKEN will be used to perform requests")
-        #     return "{base_url}?access_token={access_token}".format(
-        #         base_url=url, access_token=token)
-        return url
+        return self._latest_release_url
 
     def tagged_release_url(self, version):
-        token = self._os_token
-        url = self._mozila_release_tag.format(version)
-        # if token:
-        #     console("GH_TOKEN will be used to perform requests")
-        #     return "{base_url}?access_token={access_token}".format(
-        #         base_url=url, access_token=token)
-        return url
+        return self._mozila_release_tag.format(version)
 
 
 class IEDriver(Driver):
@@ -221,18 +209,8 @@ class OperaDriver(Driver):
     @property
     def latest_release_url(self):
         # type: () -> str
-        token = self._os_token
-        url = self._latest_release_url
-        # if token:
-        #     return "{base_url}?access_token={access_token}".format(
-        #         base_url=url, access_token=token)
-        return url
+        return self._latest_release_url
 
     def tagged_release_url(self, version):
         # type: () -> str
-        token = self._os_token
-        url = self.opera_release_tag.format(version)
-        # if token:
-        #     return "{base_url}?access_token={access_token}".format(
-        #         base_url=url, access_token=token)
-        return url
+        return self.opera_release_tag.format(version)
