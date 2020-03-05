@@ -3,6 +3,7 @@ dist: bionic
 addons:
   firefox: latest
   chrome: stable
+services: xvfb
 language: python
 python:
 - '3.6'
@@ -12,10 +13,6 @@ before_install:
 - sudo add-apt-repository "deb [arch=i386,amd64] https://deb.opera.com/opera-stable/ stable non-free"
 - sudo apt-get update -y
 - sudo apt install opera-stable
-- export DISPLAY=:99.0
-- sh -e /etc/init.d/xvfb start
-- "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile
-  --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
 
 install:
 - pip install pipenv
