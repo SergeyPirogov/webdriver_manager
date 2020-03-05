@@ -69,7 +69,9 @@ class GeckoDriver(Driver):
 
     def get_latest_release_version(self):
         # type: () -> str
-        resp = requests.get(self.latest_release_url)
+        resp = requests.get(url=self.latest_release_url,
+                            headers={'Authorization': f'token {self._os_token}'}
+                            )
         validate_response(resp)
         return resp.json()["tag_name"]
 
@@ -78,7 +80,9 @@ class GeckoDriver(Driver):
         console(
             "Getting latest mozilla release info for {0}".format(
                 version))
-        resp = requests.get(self.tagged_release_url(version))
+        resp = requests.get(url=self.tagged_release_url(version),
+                            headers={'Authorization': f'token {self._os_token}'}
+                            )
         validate_response(resp)
         assets = resp.json()["assets"]
 
@@ -192,7 +196,9 @@ class OperaDriver(Driver):
 
     def get_latest_release_version(self):
         # type: () -> str
-        resp = requests.get(self.latest_release_url)
+        resp = requests.get(url=self.latest_release_url,
+                            headers={'Authorization': f'token {self._os_token}'}
+                            )
         validate_response(resp)
         return resp.json()["tag_name"]
 
@@ -202,7 +208,9 @@ class OperaDriver(Driver):
         console(
             "Getting latest opera release info for {0}".format(
                 version))
-        resp = requests.get(self.tagged_release_url(version))
+        resp = requests.get(url=self.tagged_release_url(version),
+                            headers={'Authorization': f'token {self._os_token}'}
+                            )
         validate_response(resp)
         assets = resp.json()["assets"]
         name = "{0}_{1}".format(self.get_name(), self.get_os_type())
