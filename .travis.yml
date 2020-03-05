@@ -1,5 +1,5 @@
 sudo: required
-dist: bionic
+dist: xenial
 addons:
   firefox: latest
   chrome: stable
