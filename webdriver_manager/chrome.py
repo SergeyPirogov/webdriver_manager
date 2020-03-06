@@ -27,7 +27,7 @@ class ChromeDriverManager(DriverManager):
         return driver_path
 
 
-class ChromiumDriverManager(ChromeDriverManager):
+class ChromiumDriverManager(DriverManager):
     def __init__(self, version="latest",
                  os_type=utils.os_type(),
                  path=None,
@@ -41,3 +41,9 @@ class ChromiumDriverManager(ChromeDriverManager):
                                      os_type=os_type,
                                      url=url,
                                      latest_release_url=latest_release_url)
+
+    def install(self):
+        driver_path = self.download_driver(self.driver)
+
+        os.chmod(driver_path, 0o755)
+        return driver_path
