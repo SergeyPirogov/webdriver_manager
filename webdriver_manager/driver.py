@@ -4,7 +4,8 @@ from xml.etree import ElementTree
 
 import requests
 
-from webdriver_manager.utils import validate_response, console, chrome_version, ChromeType
+from webdriver_manager.utils import validate_response, console, \
+    chrome_version, ChromeType
 
 
 class Driver(object):
@@ -41,7 +42,8 @@ class Driver(object):
 
 
 class ChromeDriver(Driver):
-    def __init__(self, name, version, os_type, url, latest_release_url, chrome_type=ChromeType.GOOGLE):
+    def __init__(self, name, version, os_type, url, latest_release_url,
+                 chrome_type=ChromeType.GOOGLE):
         super(ChromeDriver, self).__init__(name, version, os_type, url, latest_release_url)
         self.chrome_type = chrome_type
 
