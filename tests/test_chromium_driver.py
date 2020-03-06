@@ -7,14 +7,14 @@ from webdriver_manager.chrome import ChromiumDriverManager
 
 
 def test_chromium_manager_with_specific_version():
-    bin_path = ChromiumDriverManager("2.26").install()
+    bin_path = ChromiumDriverManager("2.27").install()
     assert os.path.exists(bin_path)
 
 
 def test_driver_can_be_saved_to_custom_path():
     custom_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "custom")
 
-    path = ChromiumDriverManager(version="2.26", path=custom_path).install()
+    path = ChromiumDriverManager(version="2.27", path=custom_path).install()
     assert os.path.exists(path)
     assert custom_path in path
 
