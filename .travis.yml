@@ -11,8 +11,9 @@ python:
 cache:
   directories:
     - $HOME/.wdm/drivers
-    - ./drivers
     - ./custom/drivers
+    - ./.wdm/drivers
+    - ./drivers
 
 before_install:
 - wget -qO- https://deb.opera.com/archive.key | sudo apt-key add -
