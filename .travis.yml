@@ -13,8 +13,8 @@ cache:
     - $HOME/.wdm/drivers/
     - ./.wdm/drivers/
     - ./custom/drivers/
+    - ./tests/drivers/
     - ./drivers/
-    - drivers/
 
 before_install:
 - wget -qO- https://deb.opera.com/archive.key | sudo apt-key add -
