@@ -12,6 +12,7 @@ cache:
   directories:
     - $HOME/.wdm/drivers/
     - $HOME/custom/
+    - /home/travis/.wdm/
     - ./.wdm/drivers/
     - ./custom/drivers/
     - ./tests/drivers/
