@@ -3,6 +3,7 @@ import os
 from webdriver_manager import utils
 from webdriver_manager.driver import ChromeDriver
 from webdriver_manager.manager import DriverManager
+from webdriver_manager.utils import ChromeType
 
 
 class ChromeDriverManager(DriverManager):
@@ -11,14 +12,16 @@ class ChromeDriverManager(DriverManager):
                  path=None,
                  name="chromedriver",
                  url="http://chromedriver.storage.googleapis.com",
-                 latest_release_url="http://chromedriver.storage.googleapis.com/LATEST_RELEASE"):
+                 latest_release_url="http://chromedriver.storage.googleapis.com/LATEST_RELEASE",
+                 chrome_type=ChromeType.GOOGLE):
         super(ChromeDriverManager, self).__init__(path)
 
         self.driver = ChromeDriver(name=name,
                                    version=version,
                                    os_type=os_type,
                                    url=url,
-                                   latest_release_url=latest_release_url)
+                                   latest_release_url=latest_release_url,
+                                   chrome_type=chrome_type)
 
     def install(self):
         driver_path = self.download_driver(self.driver)
