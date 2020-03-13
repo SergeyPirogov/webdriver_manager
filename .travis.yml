@@ -11,6 +11,7 @@ python:
 cache:
   directories:
     - $HOME/.wdm/drivers/
+    - $HOME/custom/
     - ./.wdm/drivers/
     - ./custom/drivers/
     - ./tests/drivers/
