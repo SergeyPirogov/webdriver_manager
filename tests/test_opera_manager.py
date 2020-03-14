@@ -1,29 +1,11 @@
-import os
-import shutil
 import glob
+import os
 
 import pytest
 from selenium import webdriver
-from selenium.webdriver.chrome import service
 
-from webdriver_manager.driver import OperaDriver
 from webdriver_manager.opera import OperaDriverManager
 from webdriver_manager.utils import os_type as get_os_type
-
-PATH = '.'
-
-
-def delete_old_install(path=None):
-    if path is not None:
-        path = os.path.abspath(path)
-    os_type = get_os_type()
-    try:
-        os.remove(os.path.join(path, 'operadriver_{}.zip'.format(os_type)))
-        shutil.rmtree(os.path.join(path, 'operadriver_{}'.format(os_type)))
-    except OSError:
-        pass
-    except Exception:
-        pass
 
 
 def test_opera_driver_manager_with_correct_version():
@@ -55,16 +37,15 @@ def test_operadriver_manager_with_selenium():
 
 def test_opera_driver_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
-        delete_old_install(PATH)
         driver_path = OperaDriverManager("0.2").install()
         ff = webdriver.Opera(executable_path=driver_path)
         ff.quit()
-    assert  "There is no such driver by url "\
-        "https://api.github.com/repos/operasoftware/operachromiumdriver/"\
-        "releases/tags/0.2" in ex.value.args[0]
+    assert "There is no such driver by url " \
+           "https://api.github.com/repos/operasoftware/operachromiumdriver/" \
+           "releases/tags/0.2" in ex.value.args[0]
 
 
-@pytest.mark.parametrize('path', [PATH, None])
+@pytest.mark.parametrize('path', ['.', None])
 def test_opera_driver_manager_with_correct_version_and_token(path):
     driver_path = OperaDriverManager(version="v.2.45", path=path).install()
     assert os.path.exists(driver_path)
