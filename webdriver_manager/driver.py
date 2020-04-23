@@ -220,3 +220,14 @@ class OperaDriver(Driver):
     def tagged_release_url(self, version):
         # type: () -> str
         return self.opera_release_tag.format(version)
+
+class EdgeChromiumDriver(Driver):
+    def __init__(self, name, version, os_type, url, latest_release_url,
+                 latest_version):
+        super(EdgeChromiumDriver, self).__init__(name, version, os_type, url,
+                                                 latest_release_url)
+        self._latest_version = latest_version
+
+    def get_latest_release_version(self):
+        # type: () -> str
+        return self._latest_version  
