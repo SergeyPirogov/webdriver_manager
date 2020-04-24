@@ -11,6 +11,7 @@ For now support:
 - GeckoDriver
 - IEDriver
 - OperaDriver
+- EdgeChromiumDriver
 
 Before:
 You should download binary chromedriver, unzip it somewhere in you PC and set path to this driver like this:
@@ -79,6 +80,15 @@ options = webdriver.ChromeOptions()
 options.add_argument('allow-elevated-browser')
 options.binary_location = "C:\\Users\\USERNAME\\FOLDERLOCATION\\Opera\\VERSION\\opera.exe"
 driver = webdriver.Opera(executable_path=OperaDriverManager().install(), options=options)
+```
+
+Use with Edge
+
+```python
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
+
+driver = webdriver.Edge(EdgeChromiumDriverManager().install())
+
 ```
 
 == Configuration
