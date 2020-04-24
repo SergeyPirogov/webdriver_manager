@@ -58,7 +58,13 @@ class DriverCache(object):
         file_path = os.path.join(driver_path, filename)
         write_file(response.content, file_path)
         files = self.__unpack(file_path)
-        return os.path.join(driver_path, files[0])
+        if "win" in os_type:
+            for item in files:
+                if item.endswith('.exe'):
+                    binary_file = item
+        else:
+            binary_file = files[0]
+        return os.path.join(driver_path, binary_file)
 
     def save_latest_driver_version_number_to_cache(self, name, version, date=None):
         if date is None:

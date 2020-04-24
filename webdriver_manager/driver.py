@@ -222,12 +222,12 @@ class OperaDriver(Driver):
         return self.opera_release_tag.format(version)
 
 class EdgeChromiumDriver(Driver):
-    def __init__(self, name, version, os_type, url, latest_release_url,
-                 latest_version):
+    def __init__(self, name, version, os_type, url, latest_release_url):
         super(EdgeChromiumDriver, self).__init__(name, version, os_type, url,
                                                  latest_release_url)
-        self._latest_version = latest_version
 
     def get_latest_release_version(self):
         # type: () -> str
-        return self._latest_version  
+        resp = requests.get(self._latest_release_url)
+        validate_response(resp)
+        return resp.text.rstrip()
