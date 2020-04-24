@@ -44,7 +44,8 @@ class Driver(object):
 class ChromeDriver(Driver):
     def __init__(self, name, version, os_type, url, latest_release_url,
                  chrome_type=ChromeType.GOOGLE):
-        super(ChromeDriver, self).__init__(name, version, os_type, url, latest_release_url)
+        super(ChromeDriver, self).__init__(name, version, os_type, url,
+                                           latest_release_url)
         self.chrome_type = chrome_type
 
     def get_os_type(self):
@@ -66,7 +67,8 @@ class GeckoDriver(Driver):
                  url,
                  latest_release_url,
                  mozila_release_tag):
-        super(GeckoDriver, self).__init__(name, version, os_type, url, latest_release_url)
+        super(GeckoDriver, self).__init__(name, version, os_type, url,
+                                          latest_release_url)
         self._mozila_release_tag = mozila_release_tag
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = None
@@ -91,7 +93,8 @@ class GeckoDriver(Driver):
         validate_response(resp)
         assets = resp.json()["assets"]
 
-        name = "{0}-{1}-{2}".format(self.get_name(), version, self.get_os_type())
+        name = "{0}-{1}-{2}".format(self.get_name(), version,
+                                    self.get_os_type())
         output_dict = [asset for asset in assets if
                        asset['name'].startswith(name)]
         return output_dict[0]['browser_download_url']
@@ -149,7 +152,8 @@ class IEDriver(Driver):
 
         latest_key = values[max(values)]
         # 2.39/IEDriverServer_Win32_2.39.0.zip
-        m = re.match(r".*_{os}_(.*)\.zip".format(os=self.get_os_type()), latest_key)
+        m = re.match(r".*_{os}_(.*)\.zip".format(os=self.get_os_type()),
+                     latest_key)
         if m:
             return m.group(1)
         else:
@@ -220,6 +224,7 @@ class OperaDriver(Driver):
     def tagged_release_url(self, version):
         # type: () -> str
         return self.opera_release_tag.format(version)
+
 
 class EdgeChromiumDriver(Driver):
     def __init__(self, name, version, os_type, url, latest_release_url):
