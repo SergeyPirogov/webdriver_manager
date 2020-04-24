@@ -14,7 +14,7 @@ def test_edge_manager_with_selenium():
 def test_edge_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
         driver_path = EdgeChromiumDriverManager("0.2",
-                                                os_type='win64').install()                        
+                                                os_type='win64').install()
         driver = webdriver.Edge(executable_path=driver_path)
         driver.quit()
     assert "There is no such driver by url "\
