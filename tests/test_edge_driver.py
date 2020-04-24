@@ -1,5 +1,4 @@
 import os
-import stat
 import pytest
 from selenium import webdriver
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
@@ -7,10 +6,12 @@ from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
 def test_edge_manager_with_selenium():
     driver_path = EdgeChromiumDriverManager(os_type='win32').install()
-    os.chmod(driver_path, stat.S_IEXEC)
-    driver = webdriver.Edge(executable_path=driver_path)
-    driver.get("http://automation-remarks.com")
-    driver.quit()
+    if os.name == 'nt':
+        driver = webdriver.Edge(executable_path=driver_path)
+        driver.get("http://automation-remarks.com")
+        driver.quit()
+    else:
+        assert os.path.exists(driver_path)
 
 
 def test_edge_manager_with_wrong_version():

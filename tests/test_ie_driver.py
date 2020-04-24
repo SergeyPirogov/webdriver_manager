@@ -14,9 +14,12 @@ def test_ie_manager_with_different_versions(version):
 
 def test_ie_manager_with_selenium():
     driver_path = IEDriverManager().install()
-    driver = webdriver.Ie(executable_path=driver_path)
-    driver.get("http://automation-remarks.com")
-    driver.quit()
+    if os.name == 'nt':
+        driver = webdriver.Ie(executable_path=driver_path)
+        driver.get("http://automation-remarks.com")
+        driver.quit()
+    else:
+        assert os.path.exists(driver_path)    
 
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])
