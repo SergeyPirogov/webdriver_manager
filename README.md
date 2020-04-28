@@ -1,34 +1,38 @@
-= Webdriver Manager for Python
+# Webdriver Manager for Python
 
-image:https://travis-ci.org/SergeyPirogov/webdriver_manager.svg?branch=master["Build Status", link="https://travis-ci.org/SergeyPirogov/webdriver_manager"]
-image:https://img.shields.io/pypi/v/webdriver_manager.svg["PyPI", link="https://pypi.org/project/webdriver-manager/"]
+![Build Status](https://travis-ci.org/SergeyPirogov/webdriver_manager.svg?branch=master)
+![PyPI](https://img.shields.io/pypi/v/webdriver_manager.svg)
 
 The main idea is to simplify management of binary drivers for different browsers.
 
 For now support:
 
 - ChromeDriver
+
 - GeckoDriver
+
 - IEDriver
+
 - OperaDriver
+
 - EdgeChromiumDriver
 
 Before:
 You should download binary chromedriver, unzip it somewhere in you PC and set path to this driver like this:
 
-```
+```python
 webdriver.Chrome('/home/user/drivers/chromedriver')
 
 ChromeDriverManager(path=custom_path).install()
 ```
 
-It's boring!!! Moreover every time the new version of driver released, you should go and repeat all steps again and again.
+It’s boring!!! Moreover every time the new version of driver released, you should go and repeat all steps again and again.
 
 With webdriver manager, you just need to do two simple steps:
 
 Install manager:
 
-```
+```bash
 pip install webdriver_manager
 ```
 
@@ -39,6 +43,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 webdriver.Chrome(ChromeDriverManager().install())
 ```
+
 Use with FireFox:
 
 ```python
@@ -46,12 +51,14 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 ```
-If you face error related to github credentials, you need to place github token: (*)
+
+If you face error related to github credentials, you need to place github token: (\*)
 
 ```python
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 ```
-(*) access_token required to work with Github API more info https://help.github.com/articles/creating-an-access-token-for-command-line-use/.
+
+(\*) access_token required to work with Github API more info <https://help.github.com/articles/creating-an-access-token-for-command-line-use/>.
 
 Use with IE
 
@@ -59,7 +66,6 @@ Use with IE
 from webdriver_manager.microsoft import IEDriverManager
 
 driver = webdriver.Ie(IEDriverManager().install())
-
 ```
 
 Use with Opera
@@ -88,18 +94,16 @@ Use with Edge
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
 driver = webdriver.Edge(EdgeChromiumDriverManager().install())
-
 ```
 
-== Configuration
+## Configuration
 
 There is also possibility to set same variables via ENV VARIABLES.
 
 Example:
 
-```
+```bash
 export GH_TOKEN = "asdasdasdasd"
 ```
 
 This will make your test automation more elegant and robust!
-
