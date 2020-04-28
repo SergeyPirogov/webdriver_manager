@@ -5,8 +5,10 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest]
+        # os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest, windows-latest]
         python-version: [3.6, 3.7, 3.8]
 
     steps:
@@ -23,6 +25,10 @@ jobs:
           sudo apt-get update
           sudo apt-get -y --no-install-recommends install opera-stable chromium-browser
           opera --version
+      - name: Install Windows dependencies
+        if: runner.os == 'Windows'
+        run: |
+          choco install chromium opera
 
       - name: Install Python dependencies
         run: |
