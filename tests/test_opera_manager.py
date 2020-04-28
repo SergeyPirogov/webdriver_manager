@@ -18,15 +18,13 @@ def test_operadriver_manager_with_selenium():
     options = webdriver.ChromeOptions()
     options.add_argument('allow-elevated-browser')
 
-    if get_os_type() == "win64" or "win32":
-        paths = [f for f in glob.glob("C:\\Users\\{0}\\AppData\\Local"
-                                      "\\Programs\\Opera\\"
-                                      .format(os.getlogin()) + "/**",
+    if get_os_type() in ["win64", "win32"]:
+        paths = [f for f in glob.glob(f"C:/Users/{os.getlogin()}/AppData/Local/Programs/Opera/**",
                                       recursive=True)]
         for path in paths:
             if os.path.isfile(path) and path.endswith("opera.exe"):
                 options.binary_location = path
-    elif ((get_os_type() == "linux64" or "linux32" or "mac64") and not
+    elif ((get_os_type() in ["linux64", "linux32", "mac64"]) and not
           os.path.exists('/usr/bin/opera')):
         options.binary_location = "/usr/bin/opera"
 
