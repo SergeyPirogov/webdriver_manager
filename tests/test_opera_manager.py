@@ -19,7 +19,7 @@ def test_operadriver_manager_with_selenium():
     options.add_argument('allow-elevated-browser')
 
     if get_os_type() in ["win64", "win32"]:
-        paths = [f for f in glob.glob(f"C:/Users/{os.getlogin()}/AppData/"
+        paths = [f for f in glob.glob(f"C:/Users/{os.getlogin()}/AppData/" \
                                       "Local/Programs/Opera/**",
                                       recursive=True)]
         for path in paths:
