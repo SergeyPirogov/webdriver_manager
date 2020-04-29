@@ -2,6 +2,7 @@
 
 ![Build Status](https://travis-ci.org/SergeyPirogov/webdriver_manager.svg?branch=master)
 ![PyPI](https://img.shields.io/pypi/v/webdriver_manager.svg)
+[![codecov](https://codecov.io/gh/SergeyPirogov/webdriver_manager/branch/master/graph/badge.svg)](https://codecov.io/gh/SergeyPirogov/webdriver_manager)
 
 The main idea is to simplify management of binary drivers for different browsers.
 
