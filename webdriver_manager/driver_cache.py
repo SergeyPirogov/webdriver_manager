@@ -4,7 +4,8 @@ import json
 import os
 
 from webdriver_manager.archive import extract_zip, extract_tar_file
-from webdriver_manager.utils import write_file, get_filename_from_response, console, get_date_diff
+from webdriver_manager.utils import write_file, get_filename_from_response, \
+     console, get_date_diff
 
 
 class DriverCache(object):
@@ -25,11 +26,14 @@ class DriverCache(object):
         return os.path.exists(path)
 
     def __get_path(self, name, version, os_type):
-        return [f for f in glob.glob(os.path.join(self._root_dir, self._drivers_root, name, version, os_type) + "/**",
+        return [f for f in glob.glob(os.path.join(self._root_dir,
+                                                  self._drivers_root, name,
+                                                  version, os_type) + "/**",
                                      recursive=True)]
 
     def __find_file(self, paths, name, version, os_type):
-        console("\nLooking for [{} {} {}] driver in cache ".format(name, version, os_type))
+        console("\nLooking for [{} {} {}] driver in cache ".format(name,
+                version, os_type))
         if len(name) == 0 or len(version) == 0:
             return None
 
@@ -58,14 +62,22 @@ class DriverCache(object):
         file_path = os.path.join(driver_path, filename)
         write_file(response.content, file_path)
         files = self.__unpack(file_path)
-        return os.path.join(driver_path, files[0])
+        if "win" in os_type:
+            for item in files:
+                if item.endswith('.exe'):
+                    binary_file = item
+        else:
+            binary_file = files[0]
+        return os.path.join(driver_path, binary_file)
 
-    def save_latest_driver_version_number_to_cache(self, name, version, date=None):
+    def save_latest_driver_version_number_to_cache(self, name, version,
+                                                   date=None):
         if date is None:
             date = datetime.date.today()
 
         metadata = self.read_metadata()
-        new = {name: {"latest_version": version, "timestamp": date.strftime(self._date_format)}}
+        new = {name: {"latest_version": version,
+                      "timestamp": date.strftime(self._date_format)}}
         metadata.update(new)
         with open(self._drivers_json_path, 'w+') as outfile:
             json.dump(metadata, outfile, indent=4)
@@ -74,7 +86,9 @@ class DriverCache(object):
         metadata = self.read_metadata()
         if driver_name in metadata:
             driver_data = metadata[driver_name]
-            dates_diff = get_date_diff(driver_data['timestamp'], datetime.date.today(), self._date_format)
+            dates_diff = get_date_diff(driver_data['timestamp'],
+                                       datetime.date.today(),
+                                       self._date_format)
             return dates_diff < 1
 
         return False

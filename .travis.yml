@@ -1,5 +1,5 @@
 sudo: required
-dist: xenial
+dist: bionic
 addons:
   firefox: latest
   chrome: stable
@@ -7,6 +7,16 @@ services: xvfb
 language: python
 python:
 - '3.6'
+
+cache:
+  directories:
+    - $HOME/.wdm/drivers/
+    - $HOME/custom/
+    - /home/travis/.wdm/
+    - ./.wdm/drivers/
+    - ./custom/drivers/
+    - ./tests/drivers/
+    - ./drivers/
 
 before_install:
 - wget -qO- https://deb.opera.com/archive.key | sudo apt-key add -

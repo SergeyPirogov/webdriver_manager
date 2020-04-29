@@ -81,6 +81,7 @@ celerybeat-schedule
 .env
 
 # virtualenv
+.venv/
 venv/
 ENV/
 
@@ -91,3 +92,6 @@ ENV/
 .ropeproject
 .idea/
 .drivers/
+
+# VS code config
+.vscode

@@ -13,11 +13,18 @@
 
 import setuptools
 
+with open("README.md", encoding="utf-8") as readme_file:
+    readme = readme_file.read()
+
+
 setuptools.setup(
     name='webdriver_manager',
+    python_requires=">=3.6",
+    long_description=readme,
+    long_description_content_type="text/markdown",
     packages=setuptools.find_packages(exclude=['tests']),
     include_package_data=True,
-    version='2.3.0',
+    version='2.4.0',
     description=('Library provides the way to automatically manage drivers for different browsers'),
     author='Sergey Pirogov',
     author_email='automationremarks@gmail.com',
@@ -27,7 +34,9 @@ setuptools.setup(
         'License :: OSI Approved :: Apache Software License',
         'Intended Audience :: Information Technology',
         'Intended Audience :: Developers',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Topic :: Software Development :: '
         'Libraries :: Python Modules',
         'Operating System :: Microsoft :: Windows',
