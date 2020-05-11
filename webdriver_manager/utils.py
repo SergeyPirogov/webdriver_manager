@@ -1,9 +1,10 @@
 import datetime
+import logging
 import os
 import platform
 import re
 import sys
-
+import logging.config
 import crayons
 import requests
 
@@ -82,8 +83,31 @@ def get_filename_from_response(response, name):
     return filename
 
 
-def console(text, bold=False):
-    print(crayons.yellow(text, bold=bold))
+def console(text: str, level=logging.INFO):
+    logger = logging.getLogger('')
+    logging.config.dictConfig({
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'standard': {
+                'format': '%(asctime)s [WDM-%(levelname)s] %(message)s (%(pathname)s:%(filename)s:%(lineno)4d)'
+            },
+        },
+        'handlers': {
+            'default': {
+                'class': 'logging.StreamHandler',
+                'formatter': 'standard',
+                'level': 'INFO'
+            },
+        },
+        'loggers': {
+            '': {
+                'handlers': ['default'],
+                'level': 'INFO',
+            }
+        }
+    })
+    logger.log(level, text)
 
 
 def chrome_version(browser_type=ChromeType.GOOGLE):
