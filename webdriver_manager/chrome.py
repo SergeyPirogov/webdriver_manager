@@ -12,10 +12,12 @@ class ChromeDriverManager(DriverManager):
                  path=None,
                  name="chromedriver",
                  url="http://chromedriver.storage.googleapis.com",
-                 latest_release_url="http://chromedriver.storage.googleapis.com/LATEST_RELEASE",
-                 chrome_type=ChromeType.GOOGLE):
+                 latest_release_url="http://chromedriver.storage.google"
+                 "apis.com/LATEST_RELEASE",
+                 chrome_type=ChromeType.GOOGLE,
+                 DEBUG_LOGGING=True):
         super(ChromeDriverManager, self).__init__(path)
-
+        self.DEBUG_LOGGING = DEBUG_LOGGING
         self.driver = ChromeDriver(name=name,
                                    version=version,
                                    os_type=os_type,
@@ -24,7 +26,7 @@ class ChromeDriverManager(DriverManager):
                                    chrome_type=chrome_type)
 
     def install(self):
-        driver_path = self.download_driver(self.driver)
+        driver_path = self.download_driver(self.driver, self.DEBUG_LOGGING)
 
         os.chmod(driver_path, 0o755)
         return driver_path

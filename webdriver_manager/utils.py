@@ -54,8 +54,11 @@ def write_file(content, path):
     return path
 
 
-def download_driver(url):
-    console("Trying to download new driver from {}".format(url))
+def download_driver(url, DEBUG_LOGGING=True):
+    console(
+                "Trying to download new driver from {}".format(url),
+                DEBUG_LOGGING=DEBUG_LOGGING
+            )
     response = requests.get(url, stream=True)
     validate_response(response)
     return response
@@ -82,8 +85,9 @@ def get_filename_from_response(response, name):
     return filename
 
 
-def console(text, bold=False):
-    print(crayons.yellow(text, bold=bold))
+def console(text, bold=False, DEBUG_LOGGING=True):
+    if DEBUG_LOGGING:
+        print(crayons.yellow(text, bold=bold))
 
 
 def chrome_version(browser_type=ChromeType.GOOGLE):

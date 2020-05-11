@@ -4,21 +4,30 @@ from webdriver_manager.manager import DriverManager
 
 
 class GeckoDriverManager(DriverManager):
-    def __init__(self, version="latest",
-                 os_type=utils.os_type(),
-                 path=None,
-                 name="geckodriver",
-                 url="https://github.com/mozilla/geckodriver/releases/download",
-                 latest_release_url="https://api.github.com/repos/mozilla/geckodriver/releases/latest",
-                 mozila_release_tag="https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}"):
+    def __init__(
+            self,
+            version="latest",
+            os_type=utils.os_type(),
+            path=None,
+            name="geckodriver",
+            url="https://github.com/mozilla/geckodriver/"
+            "releases/download",
+            latest_release_url="https://api.github.com/repos/mozilla/"
+            "geckodriver/releases/latest",
+            mozila_release_tag="https://api.github.com/repos/mozilla/"
+            "geckodriver/releases/tags/{0}",
+            DEBUG_LOGGING=True):
         super(GeckoDriverManager, self).__init__(path)
-
-        self.driver = GeckoDriver(version=version,
-                                  os_type=os_type,
-                                  name=name,
-                                  url=url,
-                                  latest_release_url=latest_release_url,
-                                  mozila_release_tag=mozila_release_tag)
+        self.DEBUG_LOGGING = DEBUG_LOGGING
+        self.driver = GeckoDriver(
+                        version=version,
+                        os_type=os_type,
+                        name=name,
+                        url=url,
+                        latest_release_url=latest_release_url,
+                        mozila_release_tag=mozila_release_tag,
+                        DEBUG_LOGGING=DEBUG_LOGGING
+                        )
 
     def install(self):
-        return self.download_driver(self.driver)
+        return self.download_driver(self.driver, self.DEBUG_LOGGING)

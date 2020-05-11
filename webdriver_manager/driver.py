@@ -43,7 +43,7 @@ class Driver(object):
 
 class ChromeDriver(Driver):
     def __init__(self, name, version, os_type, url, latest_release_url,
-                 chrome_type=ChromeType.GOOGLE):
+                 chrome_type=ChromeType.GOOGLE, DEBUG_LOGGING=True):
         super(ChromeDriver, self).__init__(name, version, os_type, url,
                                            latest_release_url)
         self.chrome_type = chrome_type
@@ -66,14 +66,21 @@ class GeckoDriver(Driver):
                  os_type,
                  url,
                  latest_release_url,
-                 mozila_release_tag):
+                 mozila_release_tag,
+                 DEBUG_LOGGING=True):
         super(GeckoDriver, self).__init__(name, version, os_type, url,
                                           latest_release_url)
+
         self._mozila_release_tag = mozila_release_tag
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = None
+        self.DEBUG_LOGGING = DEBUG_LOGGING
+
         if self._os_token:
-            console("GH_TOKEN will be used to perform requests")
+            console(
+                        "GH_TOKEN will be used to perform requests",
+                        DEBUG_LOGGING=self.DEBUG_LOGGING
+                    )
             self.auth_header = {'Authorization': f'token {self._os_token}'}
 
     def get_latest_release_version(self):
@@ -86,8 +93,10 @@ class GeckoDriver(Driver):
     def get_url(self, version):
         # https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz
         console(
-            "Getting latest mozilla release info for {0}".format(
-                version))
+                    "Getting latest mozilla release info for {0}".format(
+                        version),
+                    DEBUG_LOGGING=self.DEBUG_LOGGING
+                )
         resp = requests.get(url=self.tagged_release_url(version),
                             headers=self.auth_header)
         validate_response(resp)
@@ -116,8 +125,9 @@ class IEDriver(Driver):
     def __init__(self, name, version,
                  os_type,
                  url,
-                 latest_release_url):
-
+                 latest_release_url,
+                 DEBUG_LOGGING=True):
+        self.DEBUG_LOGGING = DEBUG_LOGGING
         if os_type == "win64":
             os_type = "x64"
         else:
@@ -185,14 +195,19 @@ class OperaDriver(Driver):
                  os_type,
                  url,
                  latest_release_url,
-                 opera_release_tag):
+                 opera_release_tag,
+                 DEBUG_LOGGING=True):
         super(OperaDriver, self).__init__(name, version, os_type, url,
                                           latest_release_url)
         self.opera_release_tag = opera_release_tag
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = None
+        self.DEBUG_LOGGING = DEBUG_LOGGING
         if self._os_token:
-            console("GH_TOKEN will be used to perform requests")
+            console(
+                        "GH_TOKEN will be used to perform requests",
+                        DEBUG_LOGGING=self.DEBUG_LOGGING
+                    )
             self.auth_header = {'Authorization': f'token {self._os_token}'}
 
     def get_latest_release_version(self):
@@ -205,8 +220,10 @@ class OperaDriver(Driver):
         # type: () -> str
         # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
         console(
-            "Getting latest opera release info for {0}".format(
-                version))
+                    "Getting latest opera release info for {0}".format(
+                        version),
+                    DEBUG_LOGGING=self.DEBUG_LOGGING
+                )
         resp = requests.get(url=self.tagged_release_url(version),
                             headers=self.auth_header)
         validate_response(resp)
@@ -227,10 +244,17 @@ class OperaDriver(Driver):
 
 
 class EdgeChromiumDriver(Driver):
-    def __init__(self, name, version, os_type, url, latest_release_url):
+    def __init__(
+                self,
+                name,
+                version,
+                os_type,
+                url,
+                latest_release_url,
+                DEBUG_LOGGING):
         super(EdgeChromiumDriver, self).__init__(name, version, os_type, url,
                                                  latest_release_url)
-
+        self.DEBUG_LOGGING = True
     def get_latest_release_version(self):
         # type: () -> str
         resp = requests.get(self._latest_release_url)
