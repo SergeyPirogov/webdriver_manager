@@ -27,6 +27,7 @@ def test_driver_cash_can_create_folder_on_init():
     driver_cache.create_cache_dir_for_driver(os.path.join(project_root, cache_root_dir, name, version, os_type))
     assert os.path.exists(driver_cache._root_dir)
 
+
 def test_driver_cache_can_save_driver_to_cache():
     response = download_driver("http://chromedriver.storage.googleapis.com/77.0.3865.40/chromedriver_linux64.zip")
     path = driver_cache.save_driver_to_cache(response, name, version, os_type)

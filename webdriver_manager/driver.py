@@ -204,9 +204,8 @@ class OperaDriver(Driver):
     def get_url(self, version):
         # type: () -> str
         # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
-        console(
-            "Getting latest opera release info for {0}".format(
-                version))
+        console("Getting latest opera release info for {0}"
+                .format(version))
         resp = requests.get(url=self.tagged_release_url(version),
                             headers=self.auth_header)
         validate_response(resp)

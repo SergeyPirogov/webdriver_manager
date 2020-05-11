@@ -5,7 +5,7 @@ import os
 
 from webdriver_manager.archive import extract_zip, extract_tar_file
 from webdriver_manager.utils import write_file, get_filename_from_response, \
-     console, get_date_diff
+    console, get_date_diff
 
 
 class DriverCache(object):
@@ -32,8 +32,8 @@ class DriverCache(object):
                                      recursive=True)]
 
     def __find_file(self, paths, name, version, os_type):
-        console("\nLooking for [{} {} {}] driver in cache ".format(name,
-                version, os_type))
+        console("Looking for [{} {} {}] driver in cache "
+                .format(name, version, os_type))
         if len(name) == 0 or len(version) == 0:
             return None
 
