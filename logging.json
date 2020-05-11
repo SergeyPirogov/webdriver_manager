@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "disable_existing_loggers": false,
+  "formatters": {
+    "standard": {
+      "format": "%(asctime)s [WDM-%(levelname)s] %(message)s (%(pathname)s:%(filename)s:%(lineno)4d)"
+    }
+  },
+  "handlers": {
+    "default": {
+      "level": "INFO",
+      "class": "logging.StreamHandler"
+    }
+  },
+  "loggers": {
+    "": {
+      "handlers": [
+        "default"
+      ],
+      "level": "INFO",
+      "propagate": true
+    }
+  }
+}
