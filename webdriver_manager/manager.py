@@ -23,20 +23,20 @@ class DriverManager(object):
             return self.__get_latest_driver_version(driver), True
         return driver_version, False
 
-    def __download_and_save_driver_to_cache(self, driver, driver_version):
-        response = download_driver(driver.get_url(driver_version))
+    def __download_and_save_driver_to_cache(self, driver, driver_version, DEBUG_LOGGING=True):
+        response = download_driver(driver.get_url(driver_version), DEBUG_LOGGING=DEBUG_LOGGING)
         return self.driver_cache.save_driver_to_cache(response, driver.get_name(), driver_version,
-                                                      driver.get_os_type())
+                                                      driver.get_os_type(), DEBUG_LOGGING=DEBUG_LOGGING)
 
-    def download_driver(self, driver):
+    def download_driver(self, driver, DEBUG_LOGGING=True):
         driver_version, is_latest = self.__get_version_to_download(driver)
 
         cached_path = self.driver_cache.find_file_if_exists(driver.get_name(), driver.get_os_type(),
-                                                            driver_version, is_latest)
+                                                            driver_version, is_latest, DEBUG_LOGGING=DEBUG_LOGGING)
         if cached_path is not None:
             return cached_path
 
-        path = self.__download_and_save_driver_to_cache(driver, driver_version)
+        path = self.__download_and_save_driver_to_cache(driver, driver_version, DEBUG_LOGGING=DEBUG_LOGGING)
 
         if is_latest:
             self.driver_cache.save_latest_driver_version_number_to_cache(driver.get_name(), driver_version)

@@ -31,9 +31,10 @@ class DriverCache(object):
                                                   version, os_type) + "/**",
                                      recursive=True)]
 
-    def __find_file(self, paths, name, version, os_type):
-        console("\nLooking for [{} {} {}] driver in cache ".format(name,
-                version, os_type))
+    def __find_file(self, paths, name, version, os_type, DEBUG_LOGGING=True):
+        if DEBUG_LOGGING:
+            console("\nLooking for [{} {} {}] driver in cache ".format(name,
+                    version, os_type))
         if len(name) == 0 or len(version) == 0:
             return None
 
@@ -42,26 +43,27 @@ class DriverCache(object):
 
         for path in paths:
             if os.path.isfile(path) and path.endswith(name):
-                console("File found in cache by path [{}]".format(path))
+                if DEBUG_LOGGING:
+                    console("File found in cache by path [{}]".format(path))
                 return path
         return None
 
-    def find_file_if_exists(self, name, os_type, version, is_latest):
+    def find_file_if_exists(self, name, os_type, version, is_latest, DEBUG_LOGGING=True):
         if is_latest and not self.is_valid_cache(name):
             return None
 
         paths = self.__get_path(name, version, os_type)
 
-        return self.__find_file(paths, name, version, os_type)
+        return self.__find_file(paths, name, version, os_type, DEBUG_LOGGING)
 
-    def save_driver_to_cache(self, response, driver_name, version, os_type):
+    def save_driver_to_cache(self, response, driver_name, version, os_type, DEBUG_LOGGING=True):
         driver_path = os.path.join(self._root_dir, self._drivers_root,
                                    driver_name, version, os_type)
         filename = get_filename_from_response(response, driver_name)
         self.create_cache_dir_for_driver(driver_path)
         file_path = os.path.join(driver_path, filename)
         write_file(response.content, file_path)
-        files = self.__unpack(file_path)
+        files = self.__unpack(file_path, DEBUG_LOGGING=DEBUG_LOGGING)
         if "win" in os_type:
             for item in files:
                 if item.endswith('.exe'):
@@ -105,8 +107,9 @@ class DriverCache(object):
                 return json.load(outfile)
         return {}
 
-    def __unpack(self, path, to_directory=None):
-        console("Unpack archive {}".format(path))
+    def __unpack(self, path, to_directory=None, DEBUG_LOGGING=True):
+        if DEBUG_LOGGING:
+            console("Unpack archive {}".format(path))
         if not to_directory:
             to_directory = os.path.dirname(path)
         if path.endswith(".zip"):
