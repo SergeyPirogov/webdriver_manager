@@ -92,7 +92,7 @@ def console(text: str):
         'disable_existing_loggers': False,
         'formatters': {
             'standard': {
-                'format': '%(asctime)s [WDM-%(levelname)s] %(message)s (%(pathname)s:%(filename)s:%(lineno)4d)'
+                'format': '%(asctime)s [WDM-%(levelname)s] %(message)s'
             },
         },
         'handlers': {
