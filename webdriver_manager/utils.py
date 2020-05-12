@@ -83,10 +83,8 @@ def get_filename_from_response(response, name):
     return filename
 
 
-def console(text: str, level=logging.INFO):
-    os_wdm_log_level = os.getenv('WDM_LOG_LEVEL')
-    if os_wdm_log_level:
-        level = int(os_wdm_log_level)
+def console(text: str):
+    os_wdm_log_level = int(os.getenv('WDM_LOG_LEVEL', logging.INFO))
 
     logger = logging.getLogger('')
     logging.config.dictConfig({
@@ -111,7 +109,7 @@ def console(text: str, level=logging.INFO):
             }
         }
     })
-    logger.log(level, text)
+    logger.log(os_wdm_log_level, text)
 
 
 def chrome_version(browser_type=ChromeType.GOOGLE):
