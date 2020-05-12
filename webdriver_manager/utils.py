@@ -84,6 +84,10 @@ def get_filename_from_response(response, name):
 
 
 def console(text: str, level=logging.INFO):
+    os_wdm_log_level = os.getenv('WDM_LOG_LEVEL')
+    if os_wdm_log_level:
+        level = int(os_wdm_log_level)
+
     logger = logging.getLogger('')
     logging.config.dictConfig({
         'version': 1,
