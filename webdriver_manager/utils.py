@@ -5,7 +5,6 @@ import platform
 import re
 import sys
 import logging.config
-import crayons
 import requests
 
 
