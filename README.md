@@ -91,7 +91,7 @@ from webdriver_manager.opera import OperaDriverManager
 driver = webdriver.Opera(executable_path=OperaDriverManager().install()
 ```
 
-If the opera browser is installed in a location other than C:/Program Files or C:/Program Files (x86) on windows
+If the Opera browser is installed in a location other than C:/Program Files or C:/Program Files (x86) on windows
 and /usr/bin/opera for all unix variants and mac, then use the below code,
 
 ```python
@@ -117,5 +117,13 @@ export GH_TOKEN = "asdasdasdasd"
 (\*) access_token required to work with Github API more info <https://help.github.com/articles/creating-an-access-token-for-command-line-use/>.
 
 There is also possibility to set same variables via ENV VARIABLES.
+
+To silent `webdriver_manager` logs and remove them from console, initialize env variable `WDM_LOG_LEVEL` with `'0'` value before your selenium tests:
+
+```python
+import os
+
+os.environ['WDM_LOG_LEVEL'] = '0'
+``` 
 
 This will make your test automation more elegant and robust!
