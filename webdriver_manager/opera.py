@@ -1,4 +1,3 @@
-import logging
 import os
 
 from webdriver_manager import utils
@@ -17,7 +16,7 @@ class OperaDriverManager(DriverManager):
                  "operasoftware/operachromiumdriver/releases/latest",
                  opera_release_tag="https://api.github.com/repos/"
                  "operasoftware/operachromiumdriver/releases/tags/{0}",
-                 log_level=logging.INFO):
+                 log_level=None):
         super().__init__(path, log_level)
 
         self.driver = OperaDriver(name=name,

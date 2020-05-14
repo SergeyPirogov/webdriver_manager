@@ -13,7 +13,7 @@ class IEDriverManager(DriverManager):
                  name="IEDriverServer",
                  url="http://selenium-release.storage.googleapis.com",
                  latest_release_url=None,
-                 log_level=logging.INFO):
+                 log_level=None):
         super().__init__(path, log_level)
         self.driver = IEDriver(version=version,
                                os_type=os_type,
@@ -33,7 +33,7 @@ class EdgeChromiumDriverManager(DriverManager):
                  url="https://msedgedriver.azureedge.net",
                  latest_release_url="https://msedgedriver.azureedge.net/"
                                     "LATEST_STABLE",
-                 log_level=logging.INFO):
+                 log_level=None):
         super().__init__(path, log_level)
         self.driver = EdgeChromiumDriver(version=version,
                                          os_type=os_type,
