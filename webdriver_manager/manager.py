@@ -1,10 +1,14 @@
+import os
+
 from webdriver_manager.driver_cache import DriverCache
 from webdriver_manager.utils import download_driver
 
 
 class DriverManager(object):
-    def __init__(self, root_dir=None):
+    def __init__(self, root_dir=None, log_level=None):
         self.driver_cache = DriverCache(root_dir)
+        if log_level:
+            os.environ['WDM_LOG_LEVEL'] = str(log_level)
 
     def install(self):
         raise NotImplementedError("Please Implement this method")
