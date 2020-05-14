@@ -126,4 +126,10 @@ import os
 os.environ['WDM_LOG_LEVEL'] = '0'
 ``` 
 
+of via constructor:
+
+```python
+ChromeDriverManager("2.26", log_level=0).install()
+```
+
 This will make your test automation more elegant and robust!
