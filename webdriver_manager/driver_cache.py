@@ -32,8 +32,7 @@ class DriverCache(object):
                                      recursive=True)]
 
     def __find_file(self, paths, name, version, os_type):
-        console("Looking for [{} {} {}] driver in cache "
-                .format(name, version, os_type))
+        console(f"Looking for [{name} {version} {os_type}] driver in cache ")
         if len(name) == 0 or len(version) == 0:
             return None
 

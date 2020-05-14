@@ -1,3 +1,5 @@
+import logging
+
 from webdriver_manager import utils
 from webdriver_manager.driver import GeckoDriver
 from webdriver_manager.manager import DriverManager
@@ -10,8 +12,9 @@ class GeckoDriverManager(DriverManager):
                  name="geckodriver",
                  url="https://github.com/mozilla/geckodriver/releases/download",
                  latest_release_url="https://api.github.com/repos/mozilla/geckodriver/releases/latest",
-                 mozila_release_tag="https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}"):
-        super(GeckoDriverManager, self).__init__(path)
+                 mozila_release_tag="https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}",
+                 log_level=logging.INFO):
+        super(GeckoDriverManager, self).__init__(path, log_level)
 
         self.driver = GeckoDriver(version=version,
                                   os_type=os_type,

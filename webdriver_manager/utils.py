@@ -91,7 +91,7 @@ def console(text: str):
         'disable_existing_loggers': False,
         'formatters': {
             'standard': {
-                'format': '%(asctime)s [WDM-%(levelname)s] %(message)s'
+                'format': '[WDM-%(levelname)s] %(message)s'
             },
         },
         'handlers': {
