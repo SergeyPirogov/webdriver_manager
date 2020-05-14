@@ -39,47 +39,63 @@ pip install webdriver_manager
 Use with Chrome:
 
 ```python
+from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
-webdriver.Chrome(ChromeDriverManager().install())
+driver = webdriver.Chrome(ChromeDriverManager().install())
+```
+
+Use with Chromium:
+
+```python
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.utils import ChromeType
+
+driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
 ```
 
 Use with FireFox:
 
 ```python
+from selenium import webdriver
 from webdriver_manager.firefox import GeckoDriverManager
 
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 ```
 
-If you face error related to github credentials, you need to place github token: (\*)
-
-```python
-driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
-```
-
-(\*) access_token required to work with Github API more info <https://help.github.com/articles/creating-an-access-token-for-command-line-use/>.
-
 Use with IE
 
 ```python
+from selenium import webdriver
 from webdriver_manager.microsoft import IEDriverManager
 
 driver = webdriver.Ie(IEDriverManager().install())
 ```
 
+Use with Edge
+
+```python
+from selenium import webdriver
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
+
+driver = webdriver.Edge(EdgeChromiumDriverManager().install())
+```
+
 Use with Opera
 
 ```python
+from selenium import webdriver
 from webdriver_manager.opera import OperaDriverManager
 
 driver = webdriver.Opera(executable_path=OperaDriverManager().install()
 ```
 
-If the opera browser is installed in a location other than C:/Program Files or C:/Program Files (x86) on windows
+If the Opera browser is installed in a location other than C:/Program Files or C:/Program Files (x86) on windows
 and /usr/bin/opera for all unix variants and mac, then use the below code,
 
 ```python
+from selenium import webdriver
 from webdriver_manager.opera import OperaDriverManager
 
 options = webdriver.ChromeOptions()
@@ -88,22 +104,26 @@ options.binary_location = "C:\\Users\\USERNAME\\FOLDERLOCATION\\Opera\\VERSION\\
 driver = webdriver.Opera(executable_path=OperaDriverManager().install(), options=options)
 ```
 
-Use with Edge
-
-```python
-from webdriver_manager.microsoft import EdgeChromiumDriverManager
-
-driver = webdriver.Edge(EdgeChromiumDriverManager().install())
-```
-
 ## Configuration
 
-There is also possibility to set same variables via ENV VARIABLES.
+If you face error related to github credentials, you need to place github token: (\*)
 
 Example:
 
 ```bash
 export GH_TOKEN = "asdasdasdasd"
 ```
+
+(\*) access_token required to work with Github API more info <https://help.github.com/articles/creating-an-access-token-for-command-line-use/>.
+
+There is also possibility to set same variables via ENV VARIABLES.
+
+To silent `webdriver_manager` logs and remove them from console, initialize env variable `WDM_LOG_LEVEL` with `'0'` value before your selenium tests:
+
+```python
+import os
+
+os.environ['WDM_LOG_LEVEL'] = '0'
+``` 
 
 This will make your test automation more elegant and robust!

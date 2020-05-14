@@ -4,8 +4,6 @@ import pytest
 from selenium import webdriver
 
 
-
-
 def test_chrome_manager_with_specific_version():
     bin = ChromeDriverManager("2.26").install()
     assert os.path.exists(bin)
