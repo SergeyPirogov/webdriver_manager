@@ -4,8 +4,11 @@ import os
 import platform
 import re
 import sys
-import logging.config
 import requests
+
+from webdriver_manager.logger import Logger
+
+logger = Logger()
 
 
 class OSType(object):
@@ -83,32 +86,8 @@ def get_filename_from_response(response, name):
 
 
 def console(text: str):
-    os_wdm_log_level = int(os.getenv('WDM_LOG_LEVEL', logging.INFO))
-
-    logger = logging.getLogger('')
-    logging.config.dictConfig({
-        'version': 1,
-        'disable_existing_loggers': False,
-        'formatters': {
-            'standard': {
-                'format': '[WDM-%(levelname)s] %(message)s'
-            },
-        },
-        'handlers': {
-            'default': {
-                'class': 'logging.StreamHandler',
-                'formatter': 'standard',
-                'level': 'INFO'
-            },
-        },
-        'loggers': {
-            '': {
-                'handlers': ['default'],
-                'level': 'INFO',
-            }
-        }
-    })
-    logger.log(os_wdm_log_level, text)
+    global logger
+    logger.log(text)
 
 
 def chrome_version(browser_type=ChromeType.GOOGLE):
@@ -132,6 +111,6 @@ def chrome_version(browser_type=ChromeType.GOOGLE):
     if not version:
         raise ValueError(
             'Could not get version for Chrome with this command: {}'
-            .format(cmd)
+                .format(cmd)
         )
     return version.group(0)
