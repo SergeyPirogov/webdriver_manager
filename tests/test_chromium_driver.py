@@ -2,6 +2,7 @@ import os
 
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.utils import ChromeType
@@ -35,9 +36,12 @@ def test_chromium_manager_with_wrong_version():
 
 
 def test_chromium_manager_with_selenium():
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+
     driver_path = ChromeDriverManager(
         chrome_type=ChromeType.CHROMIUM).install()
-    driver = webdriver.Chrome(driver_path)
+    driver = webdriver.Chrome(driver_path, chrome_options=chrome_options)
     driver.get("http://automation-remarks.com")
     driver.close()
 
