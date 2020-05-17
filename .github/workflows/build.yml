@@ -35,6 +35,14 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
+    - name: Install Opera browser
+      run: |
+        wget -qO- https://deb.opera.com/archive.key | sudo apt-key add -
+        sudo add-apt-repository "deb [arch=i386,amd64] https://deb.opera.com/opera-stable/ stable non-free"
+        sudo apt-get update -y
+        sudo apt-get -y --no-install-recommends install opera-stable
+        opera --version
+
     - name: Run headless test
       uses: GabrielBB/xvfb-action@v1.2
       with:
