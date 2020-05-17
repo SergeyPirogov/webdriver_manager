@@ -45,7 +45,10 @@ def test_chrome_manager_with_selenium():
 @pytest.mark.parametrize('path', [".", None])
 def test_chrome_manager_cached_driver_with_selenium(path):
     ChromeDriverManager(path=path).install()
-    webdriver.Chrome(ChromeDriverManager(path=path).install())
+
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    webdriver.Chrome(ChromeDriverManager(path=path).install(), chrome_options=chrome_options)
 
 
 @pytest.mark.parametrize('path', [".", None])
