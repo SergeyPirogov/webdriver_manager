@@ -16,6 +16,7 @@ def test_opera_driver_manager_with_correct_version():
 def test_operadriver_manager_with_selenium():
     driver_path = OperaDriverManager().install()
     options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
     options.add_argument('allow-elevated-browser')
 
     if get_os_type() == "win64" or "win32":
