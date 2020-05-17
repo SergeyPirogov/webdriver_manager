@@ -2,13 +2,17 @@ import os
 
 import pytest
 from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
 
 from webdriver_manager.firefox import GeckoDriverManager
 
 
 def test_gecko_manager_with_selenium():
     driver_path = GeckoDriverManager().install()
-    ff = webdriver.Firefox(executable_path=driver_path)
+
+    options = Options()
+    options.headless = True
+    ff = webdriver.Firefox(executable_path=driver_path, options=options)
     ff.get("http://automation-remarks.com")
     ff.quit()
 

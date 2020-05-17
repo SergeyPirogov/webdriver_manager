@@ -44,6 +44,4 @@ jobs:
         opera --version
 
     - name: Run headless test
-      uses: GabrielBB/xvfb-action@v1.2
-      with:
-        run: pipenv run pytest -sv
+      run: pipenv run pytest -sv
