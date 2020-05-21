@@ -83,11 +83,6 @@ def get_filename_from_response(response, name):
     return filename
 
 
-# def console(text: str):
-#     global logger
-#     logger.log(text)
-
-
 def chrome_version(browser_type=ChromeType.GOOGLE):
     pattern = r'\d+\.\d+\.\d+'
     cmd_mapping = {
