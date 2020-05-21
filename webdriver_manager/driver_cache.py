@@ -107,7 +107,7 @@ class DriverCache(object):
         return {}
 
     def __unpack(self, path, to_directory=None):
-        logger.log(f"Unpack archive {path}")
+        log(f"Unpack archive {path}")
         if not to_directory:
             to_directory = os.path.dirname(path)
         if path.endswith(".zip"):
