@@ -189,7 +189,7 @@ class OperaDriver(Driver):
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = None
         if self._os_token:
-            logger.log("GH_TOKEN will be used to perform requests")
+            log("GH_TOKEN will be used to perform requests")
             self.auth_header = {'Authorization': f'token {self._os_token}'}
 
     def get_latest_release_version(self):
