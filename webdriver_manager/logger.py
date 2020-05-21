@@ -1,20 +1,22 @@
 import logging
 import os
 
+loggers = {}
 
-class Logger(object):
 
-    def __init__(self):
-        os_wdm_log_level = int(os.getenv('WDM_LOG_LEVEL', logging.INFO))
-
-        logger = logging.getLogger('WDM')
+def log(text, level=logging.INFO, name="WDM"):
+    log_level = os.getenv('WDM_LOG_LEVEL')
+    if log_level:
+        level = int(log_level)
+    if loggers.get(name):
+        loggers.get(name).info(text)
+    else:
+        _logger = logging.getLogger(name)
 
         handler = logging.StreamHandler()
         formatter = logging.Formatter('[%(name)s] - %(message)s')
         handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        logger.setLevel(os_wdm_log_level)
-        self.logger = logger
-
-    def log(self, text):
-        self.logger.info(text)
+        _logger.addHandler(handler)
+        _logger.setLevel(level)
+        loggers[name] = _logger
+        _logger.info(text)

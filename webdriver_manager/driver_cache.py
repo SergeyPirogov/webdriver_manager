@@ -4,8 +4,8 @@ import json
 import os
 
 from webdriver_manager.archive import extract_zip, extract_tar_file
-from webdriver_manager.utils import write_file, get_filename_from_response, \
-    console, get_date_diff
+from webdriver_manager.logger import log
+from webdriver_manager.utils import write_file, get_filename_from_response, get_date_diff
 
 
 class DriverCache(object):
@@ -32,7 +32,7 @@ class DriverCache(object):
                                      recursive=True)]
 
     def __find_file(self, paths, name, version, os_type):
-        console(f"Looking for [{name} {version} {os_type}] driver in cache ")
+        log(f"Looking for [{name} {version} {os_type}] driver in cache ")
         if len(name) == 0 or len(version) == 0:
             return None
 
@@ -41,7 +41,7 @@ class DriverCache(object):
 
         for path in paths:
             if os.path.isfile(path) and path.endswith(name):
-                console("File found in cache by path [{}]".format(path))
+                log(f"File found in cache by path [{path}]")
                 return path
         return None
 
@@ -61,6 +61,8 @@ class DriverCache(object):
         file_path = os.path.join(driver_path, filename)
         write_file(response.content, file_path)
         files = self.__unpack(file_path)
+
+        binary_file = None
         if "win" in os_type:
             for item in files:
                 if item.endswith('.exe'):
@@ -105,7 +107,7 @@ class DriverCache(object):
         return {}
 
     def __unpack(self, path, to_directory=None):
-        console("Unpack archive {}".format(path))
+        log(f"Unpack archive {path}")
         if not to_directory:
             to_directory = os.path.dirname(path)
         if path.endswith(".zip"):

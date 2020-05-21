@@ -1,14 +1,12 @@
 import datetime
-import logging
 import os
 import platform
 import re
 import sys
+
 import requests
 
-from webdriver_manager.logger import Logger
-
-logger = Logger()
+from webdriver_manager.logger import log
 
 
 class OSType(object):
@@ -58,7 +56,7 @@ def write_file(content, path):
 
 
 def download_driver(url):
-    console("Trying to download new driver from {}".format(url))
+    log(f"Trying to download new driver from {url}")
     response = requests.get(url, stream=True)
     validate_response(response)
     return response
@@ -83,11 +81,6 @@ def get_filename_from_response(response, name):
         filename = filename.replace('"', "")
 
     return filename
-
-
-def console(text: str):
-    global logger
-    logger.log(text)
 
 
 def chrome_version(browser_type=ChromeType.GOOGLE):

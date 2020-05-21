@@ -1,3 +1,4 @@
+import logging
 import os
 
 from webdriver_manager import utils
@@ -14,8 +15,8 @@ class ChromeDriverManager(DriverManager):
                  url="http://chromedriver.storage.googleapis.com",
                  latest_release_url="http://chromedriver.storage.googleapis.com/LATEST_RELEASE",
                  chrome_type=ChromeType.GOOGLE,
-                 log_level=None):
-        super().__init__(path, log_level)
+                 log_level=logging.INFO):
+        super().__init__(path, log_level=log_level)
 
         self.driver = ChromeDriver(name=name,
                                    version=version,
