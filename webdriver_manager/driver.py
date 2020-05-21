@@ -4,8 +4,8 @@ from xml.etree import ElementTree
 
 import requests
 
-from webdriver_manager.utils import validate_response, console, \
-    chrome_version, ChromeType
+from webdriver_manager.logger import log
+from webdriver_manager.utils import validate_response, chrome_version, ChromeType
 
 
 class Driver(object):
@@ -73,7 +73,7 @@ class GeckoDriver(Driver):
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = None
         if self._os_token:
-            console("GH_TOKEN will be used to perform requests")
+            log("GH_TOKEN will be used to perform requests")
             self.auth_header = {'Authorization': f'token {self._os_token}'}
 
     def get_latest_release_version(self):
@@ -85,16 +85,13 @@ class GeckoDriver(Driver):
 
     def get_url(self, version):
         # https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz
-        console(
-            "Getting latest mozilla release info for {0}".format(
-                version))
+        log(f"Getting latest mozilla release info for {version}")
         resp = requests.get(url=self.tagged_release_url(version),
                             headers=self.auth_header)
         validate_response(resp)
         assets = resp.json()["assets"]
 
-        name = "{0}-{1}-{2}".format(self.get_name(), version,
-                                    self.get_os_type())
+        name = f"{self.get_name()}-{version}-{self.get_os_type()}"
         output_dict = [asset for asset in assets if
                        asset['name'].startswith(name)]
         return output_dict[0]['browser_download_url']
@@ -192,7 +189,7 @@ class OperaDriver(Driver):
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = None
         if self._os_token:
-            console("GH_TOKEN will be used to perform requests")
+            logger.log("GH_TOKEN will be used to perform requests")
             self.auth_header = {'Authorization': f'token {self._os_token}'}
 
     def get_latest_release_version(self):
@@ -204,8 +201,8 @@ class OperaDriver(Driver):
     def get_url(self, version):
         # type: () -> str
         # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
-        console("Getting latest opera release info for {0}"
-                .format(version))
+        logger.log("Getting latest opera release info for {0}"
+                   .format(version))
         resp = requests.get(url=self.tagged_release_url(version),
                             headers=self.auth_header)
         validate_response(resp)
