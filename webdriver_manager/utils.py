@@ -6,6 +6,8 @@ import sys
 
 import requests
 
+from webdriver_manager.logger import log
+
 
 class OSType(object):
     LINUX = "linux"
@@ -54,7 +56,7 @@ def write_file(content, path):
 
 
 def download_driver(url):
-    logger.log(f"Trying to download new driver from {url}")
+    log(f"Trying to download new driver from {url}")
     response = requests.get(url, stream=True)
     validate_response(response)
     return response
