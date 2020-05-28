@@ -104,5 +104,5 @@ def chrome_version(browser_type=ChromeType.GOOGLE):
     if not version:
         raise ValueError(f'Could not get version for Chrome with this command: {cmd}')
     current_version = version.group(0)
-    log(f"Current {browser_type} version {current_version}")
+    log(f"Current {browser_type} version {current_version}", first_line=True)
     return current_version

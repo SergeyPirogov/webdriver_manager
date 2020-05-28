@@ -98,7 +98,9 @@ class DriverCache(object):
         if not self.is_valid_cache(driver_name):
             return None
 
-        return self.read_metadata()[driver_name]["latest_version"]
+        metadata = self.read_metadata()[driver_name]
+        log(f"Cache is valid for [{metadata['timestamp']}]")
+        return metadata["latest_version"]
 
     def read_metadata(self):
         if os.path.exists(self._drivers_json_path):

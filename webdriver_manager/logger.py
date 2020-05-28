@@ -4,7 +4,9 @@ import os
 loggers = {}
 
 
-def log(text, level=logging.INFO, name="WDM"):
+def log(text, level=logging.INFO, name="WDM", first_line=False):
+    if first_line:
+        print(" ")
     log_level = os.getenv('WDM_LOG_LEVEL')
     if log_level:
         level = int(log_level)
