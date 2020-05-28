@@ -41,7 +41,7 @@ class DriverCache(object):
 
         for path in paths:
             if os.path.isfile(path) and path.endswith(name):
-                log(f"File found in cache by path [{path}]")
+                log(f"Driver found in cache [{path}]")
                 return path
         return None
 
@@ -99,7 +99,7 @@ class DriverCache(object):
             return None
 
         metadata = self.read_metadata()[driver_name]
-        log(f"Cache is valid for [{metadata['timestamp']}]")
+        log(f"Cache is valid for [{metadata['timestamp']}]", first_line=True)
         return metadata["latest_version"]
 
     def read_metadata(self):

@@ -73,7 +73,7 @@ class GeckoDriver(Driver):
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = None
         if self._os_token:
-            log("GH_TOKEN will be used to perform requests")
+            log("GH_TOKEN will be used to perform requests", first_line=True)
             self.auth_header = {'Authorization': f'token {self._os_token}'}
 
     def get_latest_release_version(self):
@@ -202,7 +202,7 @@ class OperaDriver(Driver):
         # type: () -> str
         # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
         log("Getting latest opera release info for {0}"
-                   .format(version))
+            .format(version))
         resp = requests.get(url=self.tagged_release_url(version),
                             headers=self.auth_header)
         validate_response(resp)
