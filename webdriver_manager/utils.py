@@ -51,7 +51,6 @@ def validate_response(resp):
 def write_file(content, path):
     with open(path, "wb") as code:
         code.write(content)
-        code.close()
     return path
 
 
