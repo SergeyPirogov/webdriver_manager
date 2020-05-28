@@ -87,12 +87,12 @@ def chrome_version(browser_type=ChromeType.GOOGLE):
     pattern = r'\d+\.\d+\.\d+'
     cmd_mapping = {
         ChromeType.GOOGLE: {
-            OSType.LINUX: 'google-chrome --version',
+            OSType.LINUX: 'google-chrome --version || google-chrome-stable --version',
             OSType.MAC: r'/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version',
             OSType.WIN: r'reg query "HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon" /v version'
         },
         ChromeType.CHROMIUM: {
-            OSType.LINUX: 'chromium --version',
+            OSType.LINUX: 'chromium --version || chromium-browser --version',
             OSType.MAC: r'/Applications/Chromium.app/Contents/MacOS/Chromium --version',
             OSType.WIN: r'reg query "HKEY_CURRENT_USER\Software\Chromium\BLBeacon" /v version'
         }
@@ -101,10 +101,8 @@ def chrome_version(browser_type=ChromeType.GOOGLE):
     cmd = cmd_mapping[browser_type][os_name()]
     stdout = os.popen(cmd).read()
     version = re.search(pattern, stdout)
-    log(f"Current {browser_type} version {version.group(0)}")
     if not version:
-        raise ValueError(
-            'Could not get version for Chrome with this command: {}'
-                .format(cmd)
-        )
-    return version.group(0)
+        raise ValueError(f'Could not get version for Chrome with this command: {cmd}')
+    current_version = version.group(0)
+    log(f"Current {browser_type} version {current_version}")
+    return current_version
