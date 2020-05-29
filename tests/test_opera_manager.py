@@ -25,9 +25,11 @@ def test_operadriver_manager_with_selenium():
         for path in paths:
             if os.path.isfile(path) and path.endswith("opera.exe"):
                 options.binary_location = path
-    elif ((get_os_type() in ["linux64", "linux32", "mac64"]) and not
+    elif ((get_os_type() in ["linux64", "linux32"]) and not
           os.path.exists('/usr/bin/opera')):
         options.binary_location = "/usr/bin/opera"
+    elif get_os_type() in "mac64":
+        options.binary_location = "/Applications/Opera.app/Contents/MacOS/Opera"
 
     ff = webdriver.Opera(executable_path=driver_path, options=options)
     ff.get("http://automation-remarks.com")
