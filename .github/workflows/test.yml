@@ -33,7 +33,7 @@ jobs:
           .github\set_win_reg_keys.ps1
       - name: Install Python dependencies
         run: |
-          python -m pip install -U pip
+          python -m pip install -U pip wheel
           pip install pipenv
           pipenv install --dev
       - name: Run tests with xvfb
