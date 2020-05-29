@@ -32,7 +32,7 @@ class EdgeChromiumDriverManager(DriverManager):
                  name="edgedriver",
                  url="https://msedgedriver.azureedge.net",
                  latest_release_url="https://msedgedriver.azureedge.net/"
-                                    "LATEST_STABLE",
+                                    "LATEST_RELEASE",
                  log_level=None):
         super().__init__(path, log_level)
         self.driver = EdgeChromiumDriver(version=version,

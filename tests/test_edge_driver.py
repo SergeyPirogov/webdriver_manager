@@ -2,6 +2,7 @@ import os
 import pytest
 from selenium import webdriver
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
+from webdriver_manager.utils import chrome_version, ChromeType
 
 
 def test_edge_manager_with_selenium():

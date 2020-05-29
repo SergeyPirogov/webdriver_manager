@@ -18,6 +18,7 @@ class OSType(object):
 class ChromeType(object):
     GOOGLE = 'google-chrome'
     CHROMIUM = 'chromium'
+    MSEDGE = 'edge'
 
 
 def os_name():
@@ -84,6 +85,7 @@ def get_filename_from_response(response, name):
 
 def chrome_version(browser_type=ChromeType.GOOGLE):
     pattern = r'\d+\.\d+\.\d+'
+
     cmd_mapping = {
         ChromeType.GOOGLE: {
             OSType.LINUX: 'google-chrome --version || google-chrome-stable --version',
@@ -94,6 +96,9 @@ def chrome_version(browser_type=ChromeType.GOOGLE):
             OSType.LINUX: 'chromium --version || chromium-browser --version',
             OSType.MAC: r'/Applications/Chromium.app/Contents/MacOS/Chromium --version',
             OSType.WIN: r'reg query "HKEY_CURRENT_USER\Software\Chromium\BLBeacon" /v version'
+        },
+        ChromeType.MSEDGE: {
+            OSType.WIN: r'reg query "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Edge\BLBeacon" /v version'
         }
     }
 
