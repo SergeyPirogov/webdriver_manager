@@ -29,16 +29,20 @@ def test_edge_manager_with_wrong_version():
            ex.value.args[0]
 
 
-# TODO: add "mac64" when https://msedgedriver.azureedge.net/LATEST_STABLE return edgedriver > 82
-# see: https://msedgewebdriverstorage.z22.web.core.windows.net/?prefix=82.0.418.0/
+# TODO: add "mac64" when https://msedgedriver.azureedge.net/LATEST_STABLE
+# return edgedriver > 82
+# see:
+# https://msedgewebdriverstorage.z22.web.core.windows.net/?prefix=82.0.418.0/
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])
 def test_can_download_edge_driver(os_type):
     path = EdgeChromiumDriverManager(os_type=os_type).install()
     assert os.path.exists(path)
 
 
-# TODO: add "mac64" when https://msedgedriver.azureedge.net/LATEST_STABLE return edgedriver > 82
-# see: https://msedgewebdriverstorage.z22.web.core.windows.net/?prefix=82.0.418.0/
+# TODO: add "mac64" when https://msedgedriver.azureedge.net/LATEST_STABLE
+# return edgedriver > 82
+# see:
+# https://msedgewebdriverstorage.z22.web.core.windows.net/?prefix=82.0.418.0/
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])
 def test_can_get_edge_driver_from_cache(os_type):
     EdgeChromiumDriverManager(os_type=os_type).install()

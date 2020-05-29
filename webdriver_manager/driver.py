@@ -238,7 +238,7 @@ class EdgeChromiumDriver(Driver):
             latest_release_url = "https://msedgedriver.azureedge.net/LATEST_STABLE"
         else:
             major_edge_version = chrome_version(ChromeType.MSEDGE).split(".")[0]
-            latest_release_url = self._latest_release_url+ '_' + major_edge_version
+            latest_release_url = self._latest_release_url + '_' + major_edge_version
         resp = requests.get(latest_release_url)
         validate_response(resp)
         return resp.text.rstrip()
