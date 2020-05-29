@@ -36,10 +36,22 @@ jobs:
           python -m pip install -U pip wheel
           pip install pipenv
           pipenv install --dev
-      - name: Run tests with xvfb
+
+      - name: Run tests with xvfb (Linux)
+        if: runner.os == 'Linux'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: GabrielBB/xvfb-action@v1.0
         with:
           run: pipenv run py.test -sv --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
+
+      - name: Run tests without xvfb (Win/MacOs)
+        if: runner.os != 'Linux'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pipenv run py.test -sv --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
+
       - name: Codecov Upload
         uses: codecov/codecov-action@v1
         with:
