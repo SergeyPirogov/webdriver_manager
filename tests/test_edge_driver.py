@@ -2,15 +2,19 @@ import os
 import pytest
 from selenium import webdriver
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
+from webdriver_manager.utils import os_name, os_type
 
 
+# TODO: set 'if os_name() != 'linux':
+# when edge > 82 is installed on mac os worker
 def test_edge_manager_with_selenium():
-    driver_path = EdgeChromiumDriverManager(os_type='win32').install()
-    if os.name == 'nt':
+    if os_name() == 'win':
+        driver_path = EdgeChromiumDriverManager(os_type=os_type()).install()
         driver = webdriver.Edge(executable_path=driver_path)
         driver.get("http://automation-remarks.com")
         driver.quit()
     else:
+        driver_path = EdgeChromiumDriverManager(os_type="win32").install()
         assert os.path.exists(driver_path)
 
 
@@ -25,12 +29,20 @@ def test_edge_manager_with_wrong_version():
            ex.value.args[0]
 
 
+# TODO: add "mac64" when https://msedgedriver.azureedge.net/LATEST_STABLE
+# return edgedriver > 82
+# see:
+# https://msedgewebdriverstorage.z22.web.core.windows.net/?prefix=82.0.418.0/
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])
 def test_can_download_edge_driver(os_type):
     path = EdgeChromiumDriverManager(os_type=os_type).install()
     assert os.path.exists(path)
 
 
+# TODO: add "mac64" when https://msedgedriver.azureedge.net/LATEST_STABLE
+# return edgedriver > 82
+# see:
+# https://msedgewebdriverstorage.z22.web.core.windows.net/?prefix=82.0.418.0/
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])
 def test_can_get_edge_driver_from_cache(os_type):
     EdgeChromiumDriverManager(os_type=os_type).install()

@@ -1,7 +1,9 @@
 # Webdriver Manager for Python
 
-![Build Status](https://travis-ci.org/SergeyPirogov/webdriver_manager.svg?branch=master)
-![PyPI](https://img.shields.io/pypi/v/webdriver_manager.svg)
+![Tests](https://github.com/SergeyPirogov/webdriver_manager/workflows/Tests/badge.svg)
+[![PyPI](https://img.shields.io/pypi/v/webdriver_manager.svg)](https://pypi.org/project/webdriver-manager)
+[![Supported Python Versions](https://img.shields.io/pypi/pyversions/webdriver_manager.svg)](https://pypi.org/project/webdriver-manager/)
+[![codecov](https://codecov.io/gh/SergeyPirogov/webdriver_manager/branch/master/graph/badge.svg)](https://codecov.io/gh/SergeyPirogov/webdriver_manager)
 
 The main idea is to simplify management of binary drivers for different browsers.
 

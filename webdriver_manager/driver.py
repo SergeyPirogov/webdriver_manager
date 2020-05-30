@@ -5,7 +5,12 @@ from xml.etree import ElementTree
 import requests
 
 from webdriver_manager.logger import log
-from webdriver_manager.utils import validate_response, chrome_version, ChromeType
+from webdriver_manager.utils import (
+    validate_response,
+    chrome_version,
+    ChromeType,
+    os_name,
+    OSType)
 
 
 class Driver(object):
@@ -229,6 +234,11 @@ class EdgeChromiumDriver(Driver):
 
     def get_latest_release_version(self):
         # type: () -> str
-        resp = requests.get(self._latest_release_url)
+        if os_name() == OSType.LINUX:
+            latest_release_url = "https://msedgedriver.azureedge.net/LATEST_STABLE"
+        else:
+            major_edge_version = chrome_version(ChromeType.MSEDGE).split(".")[0]
+            latest_release_url = self._latest_release_url + '_' + major_edge_version
+        resp = requests.get(latest_release_url)
         validate_response(resp)
         return resp.text.rstrip()
