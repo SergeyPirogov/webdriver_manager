@@ -10,12 +10,13 @@ Steps::
     tox -esphinx-docs
 
 
-Declare package version
-------------------------
+Release new version
+-------------------
 
-In setup.py bump version to the next::
+In repo root and master branch run::
 
-    version='X.X.X'  to version='X.X.Y'
+    bump2version <release_kind {major|minor|patch}>
+    git push --follow-tags
 
 Cut off stable branch
 ---------------------
@@ -59,13 +60,4 @@ Steps::
     virtualenv .test_venv
     source .test_venv/bin/activate
     pip install dist/testcontainer-X.X.X-py2.py3-none-any.whl
-
-
-Submit release to PYPI
-----------------------
-
-Steps::
-
-  python setup.py bdist_wheel
-  twine upload dist/*
 
