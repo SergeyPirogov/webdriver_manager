@@ -90,7 +90,7 @@ Use with Opera
 from selenium import webdriver
 from webdriver_manager.opera import OperaDriverManager
 
-driver = webdriver.Opera(executable_path=OperaDriverManager().install()
+driver = webdriver.Opera(executable_path=OperaDriverManager().install())
 ```
 
 If the Opera browser is installed in a location other than C:/Program Files or C:/Program Files (x86) on windows
