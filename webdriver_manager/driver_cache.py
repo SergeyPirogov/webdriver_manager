@@ -5,7 +5,7 @@ import os
 
 from webdriver_manager.archive import extract_zip, extract_tar_file
 from webdriver_manager.logger import log
-from webdriver_manager.utils import write_file, get_filename_from_response, get_date_diff
+from webdriver_manager.utils import write_file, get_filename_from_response, get_date_diff, File, save_file
 
 
 class DriverCache(object):
@@ -17,6 +17,49 @@ class DriverCache(object):
         self._drivers_root = "drivers"
         self._drivers_json_path = os.path.join(self._root_dir, "drivers.json")
         self._date_format = "%d/%m/%Y"
+        self._drivers_directory = f"{self._root_dir}{os.sep}{self._drivers_root}"
+
+    def save_file_to_cache(self, file: File, browser_version, driver_name, os_type, driver_version):
+        path = os.path.join(self._drivers_directory, driver_name, os_type, driver_version)
+        archive = save_file(file, path)
+        files = archive.unpack(path)
+        binary_path = os.path.join(path, files[0])
+        self.save_metadata(browser_version, driver_name, os_type, driver_version, binary_path)
+        log(f"Driver has been saved in cache [{path}]")
+        return binary_path
+
+    def save_metadata(self, browser_version, driver_name, os_type, driver_version, binary_path,
+                      date=None):
+        if date is None:
+            date = datetime.date.today()
+
+        metadata = self.read_metadata()
+
+        key = f"{os_type}_{driver_name}_{driver_version}_for_{browser_version}"
+
+        data = {
+            key: {
+                "timestamp": date.strftime(self._date_format),
+                "binary_path": binary_path
+            }
+        }
+
+        metadata.update(data)
+        with open(self._drivers_json_path, 'w+') as outfile:
+            json.dump(metadata, outfile, indent=4)
+
+    def find_driver_in_cache(self, browser_version, driver_name, os_type, driver_version):
+        metadata = self.read_metadata()
+
+        key = f"{os_type}_{driver_name}_{driver_version}_for_{browser_version}"
+        if key not in metadata:
+            log(f"There is no [{os_type}] {driver_name} for browser {browser_version} in cache")
+            return None
+
+        driver_info = metadata[key]
+        path = driver_info['binary_path']
+        log(f"Driver [{path}] found in cache")
+        return path
 
     def create_cache_dir_for_driver(self, driver_path):
         path = os.path.join(self._root_dir, driver_path)

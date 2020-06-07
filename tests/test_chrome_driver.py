@@ -1,18 +1,9 @@
 import os
-from webdriver_manager.chrome import ChromeDriverManager
+
 import pytest
 from selenium import webdriver
 
-from webdriver_manager.driver import ChromeDriver
-from webdriver_manager.utils import ChromeType
-
-
-def test_chrome_driver_for_win32():
-    chrome_driver = ChromeDriver(name="chromedriver", version="latest", os_type="win32",
-                                 url="http://chromedriver.storage.googleapis.com",
-                                 latest_release_url="http://chromedriver.storage.googleapis.com/LATEST_RELEASE",
-                                 chrome_type=ChromeType.GOOGLE)
-    assert chrome_driver
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 def test_chrome_manager_with_specific_version():
@@ -22,16 +13,9 @@ def test_chrome_manager_with_specific_version():
 
 def test_driver_can_be_saved_to_custom_path():
     custom_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "custom")
-
     path = ChromeDriverManager(version="2.26", path=custom_path).install()
     assert os.path.exists(path)
     assert custom_path in path
-
-
-@pytest.mark.parametrize('path', [".", None])
-def test_chrome_manager_with_latest_version(path):
-    bin = ChromeDriverManager(path=path).install()
-    assert os.path.exists(bin)
 
 
 def test_chrome_manager_with_wrong_version():
@@ -47,15 +31,9 @@ def test_chrome_manager_with_selenium():
     driver.close()
 
 
-@pytest.mark.parametrize('path', [".", None])
-def test_chrome_manager_cached_driver_with_selenium(path):
-    ChromeDriverManager(path=path).install()
-    webdriver.Chrome(ChromeDriverManager(path=path).install())
-
-
-@pytest.mark.parametrize('path', [".", None])
-def test_chrome_manager_with_win64_os(path):
-    ChromeDriverManager(os_type="win64", path=path).install()
+def test_chrome_manager_cached_driver_with_selenium():
+    ChromeDriverManager().install()
+    webdriver.Chrome(ChromeDriverManager().install())
 
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])

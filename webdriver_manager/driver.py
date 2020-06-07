@@ -10,7 +10,7 @@ from webdriver_manager.utils import (
     chrome_version,
     ChromeType,
     os_name,
-    OSType)
+    OSType, Version)
 
 
 class Driver(object):
@@ -31,12 +31,13 @@ class Driver(object):
     def get_os_type(self):
         return self._os_type
 
-    def get_url(self, version):
-        return f"{self._url}/{version}/{self.get_name()}_{self.get_os_type()}.zip"
+    def get_url(self):
+        driver_version = self.get_version()
+        if driver_version == "latest":
+            driver_version = self.get_latest_release_version()
+        return f"{self._url}/{driver_version}/{self.get_name()}_{self.get_os_type()}.zip"
 
     def get_version(self):
-        if self._version == "latest":
-            self.get_latest_release_version()
         return self._version
 
     def get_latest_release_version(self):
@@ -50,6 +51,7 @@ class ChromeDriver(Driver):
         super(ChromeDriver, self).__init__(name, version, os_type, url,
                                            latest_release_url)
         self.chrome_type = chrome_type
+        self.chrome_version = chrome_version(chrome_type)
 
     def get_os_type(self):
         if "win" in super().get_os_type():
@@ -57,8 +59,8 @@ class ChromeDriver(Driver):
         return super().get_os_type()
 
     def get_latest_release_version(self):
-        resp = requests.get(
-            self._latest_release_url + '_' + chrome_version(self.chrome_type))
+        log(f"Get LATEST driver version for {self.chrome_version}", )
+        resp = requests.get(f"{self._latest_release_url}_{self.chrome_version}")
         validate_response(resp)
         return resp.text.rstrip()
 

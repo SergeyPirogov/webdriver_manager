@@ -32,6 +32,15 @@ class File(object):
         return filename
 
 
+class Version(object):
+
+    def __init__(self, value):
+        self.value = value
+
+    def is_latest(self):
+        return
+
+
 def save_file(file: File, directory: str):
     os.makedirs(directory, exist_ok=True)
 
@@ -148,5 +157,4 @@ def chrome_version(browser_type=ChromeType.GOOGLE):
     if not version:
         raise ValueError(f'Could not get version for Chrome with this command: {cmd}')
     current_version = version.group(0)
-    log(f"Current {browser_type} version {current_version}", first_line=True)
     return current_version
