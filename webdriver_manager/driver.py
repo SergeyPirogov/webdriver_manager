@@ -32,13 +32,11 @@ class Driver(object):
         return self._os_type
 
     def get_url(self, version):
-        url = "{url}/{ver}/{name}_{os}.zip"
-        return url.format(url=self._url,
-                          ver=version,
-                          name=self.get_name(),
-                          os=self.get_os_type())
+        return f"{self._url}/{version}/{self.get_name()}_{self.get_os_type()}.zip"
 
     def get_version(self):
+        if self._version == "latest":
+            self.get_latest_release_version()
         return self._version
 
     def get_latest_release_version(self):

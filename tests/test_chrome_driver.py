@@ -3,6 +3,17 @@ from webdriver_manager.chrome import ChromeDriverManager
 import pytest
 from selenium import webdriver
 
+from webdriver_manager.driver import ChromeDriver
+from webdriver_manager.utils import ChromeType
+
+
+def test_chrome_driver_for_win32():
+    chrome_driver = ChromeDriver(name="chromedriver", version="latest", os_type="win32",
+                                 url="http://chromedriver.storage.googleapis.com",
+                                 latest_release_url="http://chromedriver.storage.googleapis.com/LATEST_RELEASE",
+                                 chrome_type=ChromeType.GOOGLE)
+    assert chrome_driver
+
 
 def test_chrome_manager_with_specific_version():
     bin = ChromeDriverManager("2.26").install()
