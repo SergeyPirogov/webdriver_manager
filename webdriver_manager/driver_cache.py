@@ -57,9 +57,22 @@ class DriverCache(object):
             return None
 
         driver_info = metadata[key]
+
+        if not self.__is_valid(driver_info):
+            return None
+
         path = driver_info['binary_path']
         log(f"Driver [{path}] found in cache")
         return path
+
+    def __is_valid(self, driver_info):
+        dates_diff = get_date_diff(driver_info['timestamp'],
+                                   datetime.date.today(),
+                                   self._date_format)
+        return dates_diff < 1
+
+
+
 
     def create_cache_dir_for_driver(self, driver_path):
         path = os.path.join(self._root_dir, driver_path)
