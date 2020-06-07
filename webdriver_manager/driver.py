@@ -59,7 +59,7 @@ class ChromeDriver(Driver):
         return super().get_os_type()
 
     def get_latest_release_version(self):
-        log(f"Get LATEST driver version for {self.chrome_version}", )
+        log(f"Get LATEST driver version for {self.chrome_version}")
         resp = requests.get(f"{self._latest_release_url}_{self.chrome_version}")
         validate_response(resp)
         return resp.text.rstrip()
