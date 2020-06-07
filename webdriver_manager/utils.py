@@ -6,6 +6,7 @@ import sys
 
 import requests
 
+from webdriver_manager.archive import Archive
 from webdriver_manager.logger import log
 
 
@@ -37,7 +38,7 @@ def save_file(file: File, directory: str):
     archive_path = f"{directory}{os.sep}{file.filename}"
     with open(archive_path, "wb") as code:
         code.write(file.content)
-    return archive_path
+    return Archive(archive_path)
 
 
 class OSType(object):
