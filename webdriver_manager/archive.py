@@ -4,7 +4,11 @@ import zipfile
 
 def extract_zip(zip_file, to_directory):
     archive = zipfile.ZipFile(zip_file)
-    archive.extractall(to_directory)
+    try:
+        archive.extractall(to_directory)
+    except Exception as e:
+        if e.args[0] != 26:
+            raise e
     return archive.namelist()
 
 
