@@ -43,6 +43,7 @@ def test_chrome_manager_cached_driver_with_selenium():
     with open(metadata_file) as json_file:
         data = json.load(json_file)
 
+    print(data)
     driver = manager.driver
     data[f"{driver.get_os_type()}_chromedriver_latest_for_{driver.browser_version}"]['timestamp'] = "08/06/2019"
 
