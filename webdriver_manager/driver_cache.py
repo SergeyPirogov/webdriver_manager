@@ -21,13 +21,19 @@ class DriverCache(object):
         path = os.path.join(self._drivers_directory, driver_name, os_type, driver_version)
         archive = save_file(file, path)
         files = archive.unpack(path)
-        binary_path = os.path.join(path, files[0])
+
+        binary = None
+        for f in files:
+            if driver_name in f:
+                binary = f
+
+        binary_path = os.path.join(path, binary)
         self.__save_metadata(browser_version, driver_name, os_type, driver_version, binary_path)
         log(f"Driver has been saved in cache [{path}]")
         return binary_path
 
     def __save_metadata(self, browser_version, driver_name, os_type, driver_version, binary_path,
-                      date=None):
+                        date=None):
         if date is None:
             date = datetime.date.today()
 
