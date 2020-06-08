@@ -32,12 +32,12 @@ class Driver(object):
         return self._os_type
 
     def get_url(self):
-        driver_version = self.get_version()
-        if driver_version == "latest":
-            driver_version = self.get_latest_release_version()
-        return f"{self._url}/{driver_version}/{self.get_name()}_{self.get_os_type()}.zip"
+        return f"{self._url}/{self.get_version()}/{self.get_name()}_{self.get_os_type()}.zip"
 
     def get_version(self):
+        driver_version = self._version
+        if driver_version == "latest":
+            return self.get_latest_release_version()
         return self._version
 
     def get_latest_release_version(self):
@@ -51,7 +51,7 @@ class ChromeDriver(Driver):
         super(ChromeDriver, self).__init__(name, version, os_type, url,
                                            latest_release_url)
         self.chrome_type = chrome_type
-        self.chrome_version = chrome_version(chrome_type)
+        self.browser_version = chrome_version(chrome_type)
 
     def get_os_type(self):
         if "win" in super().get_os_type():
@@ -77,6 +77,7 @@ class GeckoDriver(Driver):
         self._mozila_release_tag = mozila_release_tag
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = None
+        self.browser_version = ""
         if self._os_token:
             log("GH_TOKEN will be used to perform requests", first_line=True)
             self.auth_header = {'Authorization': f'token {self._os_token}'}
@@ -88,15 +89,15 @@ class GeckoDriver(Driver):
         validate_response(resp)
         return resp.json()["tag_name"]
 
-    def get_url(self, version):
+    def get_url(self):
         # https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz
-        log(f"Getting latest mozilla release info for {version}")
-        resp = requests.get(url=self.tagged_release_url(version),
+        log(f"Getting latest mozilla release info for {self.get_version()}")
+        resp = requests.get(url=self.tagged_release_url(self.get_version()),
                             headers=self.auth_header)
         validate_response(resp)
         assets = resp.json()["assets"]
 
-        name = f"{self.get_name()}-{version}-{self.get_os_type()}"
+        name = f"{self.get_name()}-{self.get_version()}-{self.get_os_type()}"
         output_dict = [asset for asset in assets if
                        asset['name'].startswith(name)]
         return output_dict[0]['browser_download_url']

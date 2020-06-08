@@ -27,25 +27,8 @@ class ChromeDriverManager(DriverManager):
                                    chrome_type=chrome_type)
 
     def install(self):
-        driver_path = self.__get_driver_path(self.driver)
+        log(f"Current {self.driver.chrome_type} version is {self.driver.browser_version}", first_line=True)
+        driver_path = self._get_driver_path(self.driver)
 
         os.chmod(driver_path, 0o755)
         return driver_path
-
-    def __get_driver_path(self, driver):
-        chrome_browser_version = driver.chrome_version
-        log(f"Current {self.driver.chrome_type} version is {chrome_browser_version}", first_line=True)
-
-        driver_name = driver.get_name()
-        os_type = driver.get_os_type()
-        driver_version = driver.get_version()
-
-        binary_path = self.driver_cache.find_driver_in_cache(chrome_browser_version, driver_name, os_type,
-                                                             driver_version)
-        if binary_path:
-            return binary_path
-
-        file = download_file(driver.get_url())
-        binary_path = self.driver_cache.save_file_to_cache(file, chrome_browser_version,
-                                                           driver_name, os_type, driver_version)
-        return binary_path
