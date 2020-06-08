@@ -10,7 +10,7 @@ from webdriver_manager.utils import (
     chrome_version,
     ChromeType,
     os_name,
-    OSType, Version)
+    OSType)
 
 
 class Driver(object):
@@ -59,8 +59,8 @@ class ChromeDriver(Driver):
         return super().get_os_type()
 
     def get_latest_release_version(self):
-        log(f"Get LATEST driver version for {self.chrome_version}")
-        resp = requests.get(f"{self._latest_release_url}_{self.chrome_version}")
+        log(f"Get LATEST driver version for {self.browser_version}")
+        resp = requests.get(f"{self._latest_release_url}_{self.browser_version}")
         validate_response(resp)
         return resp.text.rstrip()
 
@@ -163,8 +163,8 @@ class IEDriver(Driver):
             raise ValueError("Can't parse latest version {key} | {os}".format(
                 key=latest_key, os=self.get_os_type()))
 
-    def get_url(self, version):
-        major, minor, patch = self.__get_divided_version(version)
+    def get_url(self):
+        major, minor, patch = self.__get_divided_version(self.get_version())
         return ("{url}/{major}.{minor}/"
                 "{name}_{os}_{major}.{minor}.{patch}.zip").format(
             url=self._url, name=self.get_name(), os=self.get_os_type(),
@@ -221,11 +221,9 @@ class OperaDriver(Driver):
 
     @property
     def latest_release_url(self):
-        # type: () -> str
         return self._latest_release_url
 
     def tagged_release_url(self, version):
-        # type: () -> str
         return self.opera_release_tag.format(version)
 
 
