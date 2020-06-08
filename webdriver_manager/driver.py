@@ -130,6 +130,7 @@ class IEDriver(Driver):
                                        url=url,
                                        latest_release_url=latest_release_url,
                                        name=name)
+        self.browser_version = ""
 
     def sortchildrenby(self, container):
         data = []
