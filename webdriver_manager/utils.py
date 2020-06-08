@@ -6,7 +6,39 @@ import sys
 
 import requests
 
+from webdriver_manager.archive import Archive
 from webdriver_manager.logger import log
+
+
+class File(object):
+
+    def __init__(self, stream):
+        self.content = stream.content
+        self.__stream = stream
+        self.__temp_name = "driver"
+
+    @property
+    def filename(self) -> str:
+        try:
+            filename = re.findall("filename=(.+)", self.__stream.headers["content-disposition"])[0]
+        except KeyError:
+            filename = f"{self.__temp_name}.zip"
+        except IndexError:
+            filename = f"{self.__temp_name}.exe"
+
+        if '"' in filename:
+            filename = filename.replace('"', "")
+
+        return filename
+
+
+def save_file(file: File, directory: str):
+    os.makedirs(directory, exist_ok=True)
+
+    archive_path = f"{directory}{os.sep}{file.filename}"
+    with open(archive_path, "wb") as code:
+        code.write(file.content)
+    return Archive(archive_path)
 
 
 class OSType(object):
@@ -55,11 +87,11 @@ def write_file(content, path):
     return path
 
 
-def download_driver(url):
+def download_file(url: str) -> File:
     log(f"Trying to download new driver from {url}")
     response = requests.get(url, stream=True)
     validate_response(response)
-    return response
+    return File(response)
 
 
 def get_date_diff(date1, date2, date_format):
@@ -109,5 +141,4 @@ def chrome_version(browser_type=ChromeType.GOOGLE):
     if not version:
         raise ValueError(f'Could not get version for Chrome with this command: {cmd}')
     current_version = version.group(0)
-    log(f"Current {browser_type} version {current_version}", first_line=True)
     return current_version

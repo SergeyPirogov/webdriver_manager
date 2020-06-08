@@ -31,14 +31,13 @@ class Driver(object):
     def get_os_type(self):
         return self._os_type
 
-    def get_url(self, version):
-        url = "{url}/{ver}/{name}_{os}.zip"
-        return url.format(url=self._url,
-                          ver=version,
-                          name=self.get_name(),
-                          os=self.get_os_type())
+    def get_url(self):
+        return f"{self._url}/{self.get_version()}/{self.get_name()}_{self.get_os_type()}.zip"
 
     def get_version(self):
+        driver_version = self._version
+        if driver_version == "latest":
+            return self.get_latest_release_version()
         return self._version
 
     def get_latest_release_version(self):
@@ -52,6 +51,7 @@ class ChromeDriver(Driver):
         super(ChromeDriver, self).__init__(name, version, os_type, url,
                                            latest_release_url)
         self.chrome_type = chrome_type
+        self.browser_version = chrome_version(chrome_type)
 
     def get_os_type(self):
         if "win" in super().get_os_type():
@@ -59,8 +59,8 @@ class ChromeDriver(Driver):
         return super().get_os_type()
 
     def get_latest_release_version(self):
-        resp = requests.get(
-            self._latest_release_url + '_' + chrome_version(self.chrome_type))
+        log(f"Get LATEST driver version for {self.browser_version}")
+        resp = requests.get(f"{self._latest_release_url}_{self.browser_version}")
         validate_response(resp)
         return resp.text.rstrip()
 
@@ -77,6 +77,7 @@ class GeckoDriver(Driver):
         self._mozila_release_tag = mozila_release_tag
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = None
+        self.browser_version = ""
         if self._os_token:
             log("GH_TOKEN will be used to perform requests", first_line=True)
             self.auth_header = {'Authorization': f'token {self._os_token}'}
@@ -88,15 +89,15 @@ class GeckoDriver(Driver):
         validate_response(resp)
         return resp.json()["tag_name"]
 
-    def get_url(self, version):
+    def get_url(self):
         # https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz
-        log(f"Getting latest mozilla release info for {version}")
-        resp = requests.get(url=self.tagged_release_url(version),
+        log(f"Getting latest mozilla release info for {self.get_version()}")
+        resp = requests.get(url=self.tagged_release_url(self.get_version()),
                             headers=self.auth_header)
         validate_response(resp)
         assets = resp.json()["assets"]
 
-        name = f"{self.get_name()}-{version}-{self.get_os_type()}"
+        name = f"{self.get_name()}-{self.get_version()}-{self.get_os_type()}"
         output_dict = [asset for asset in assets if
                        asset['name'].startswith(name)]
         return output_dict[0]['browser_download_url']
@@ -129,6 +130,7 @@ class IEDriver(Driver):
                                        url=url,
                                        latest_release_url=latest_release_url,
                                        name=name)
+        self.browser_version = ""
 
     def sortchildrenby(self, container):
         data = []
@@ -162,8 +164,8 @@ class IEDriver(Driver):
             raise ValueError("Can't parse latest version {key} | {os}".format(
                 key=latest_key, os=self.get_os_type()))
 
-    def get_url(self, version):
-        major, minor, patch = self.__get_divided_version(version)
+    def get_url(self):
+        major, minor, patch = self.__get_divided_version(self.get_version())
         return ("{url}/{major}.{minor}/"
                 "{name}_{os}_{major}.{minor}.{patch}.zip").format(
             url=self._url, name=self.get_name(), os=self.get_os_type(),
@@ -193,6 +195,7 @@ class OperaDriver(Driver):
         self.opera_release_tag = opera_release_tag
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = None
+        self.browser_version = ""
         if self._os_token:
             log("GH_TOKEN will be used to perform requests")
             self.auth_header = {'Authorization': f'token {self._os_token}'}
@@ -203,11 +206,11 @@ class OperaDriver(Driver):
         validate_response(resp)
         return resp.json()["tag_name"]
 
-    def get_url(self, version):
+    def get_url(self):
         # type: () -> str
         # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
-        log("Getting latest opera release info for {0}"
-            .format(version))
+        version = self.get_version()
+        log(f"Getting latest opera release info for {version}")
         resp = requests.get(url=self.tagged_release_url(version),
                             headers=self.auth_header)
         validate_response(resp)
@@ -219,11 +222,9 @@ class OperaDriver(Driver):
 
     @property
     def latest_release_url(self):
-        # type: () -> str
         return self._latest_release_url
 
     def tagged_release_url(self, version):
-        # type: () -> str
         return self.opera_release_tag.format(version)
 
 
@@ -231,6 +232,7 @@ class EdgeChromiumDriver(Driver):
     def __init__(self, name, version, os_type, url, latest_release_url):
         super(EdgeChromiumDriver, self).__init__(name, version, os_type, url,
                                                  latest_release_url)
+        self.browser_version = ""
 
     def get_latest_release_version(self):
         # type: () -> str

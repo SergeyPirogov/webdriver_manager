@@ -21,10 +21,8 @@ def test_driver_can_be_saved_to_custom_path():
     assert custom_path in path
 
 
-@pytest.mark.parametrize('path', [".", None])
-def test_chromium_manager_with_latest_version(path):
-    bin_path = ChromeDriverManager(path=path,
-                                   chrome_type=ChromeType.CHROMIUM).install()
+def test_chromium_manager_with_latest_version():
+    bin_path = ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
     assert os.path.exists(bin_path)
 
 
@@ -42,17 +40,13 @@ def test_chromium_manager_with_selenium():
     driver.close()
 
 
-@pytest.mark.parametrize('path', [".", None])
-def test_chromium_manager_cached_driver_with_selenium(path):
-    ChromeDriverManager(path=path, chrome_type=ChromeType.CHROMIUM).install()
-    webdriver.Chrome(ChromeDriverManager(
-        path=path, chrome_type=ChromeType.CHROMIUM).install())
+def test_chromium_manager_cached_driver_with_selenium():
+    ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
+    webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
 
 
-@pytest.mark.parametrize('path', [".", None])
-def test_chromium_manager_with_win64_os(path):
-    ChromeDriverManager(os_type="win64", path=path,
-                        chrome_type=ChromeType.CHROMIUM).install()
+def test_chromium_manager_with_win64_os():
+    ChromeDriverManager(os_type="win64", chrome_type=ChromeType.CHROMIUM).install()
 
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])

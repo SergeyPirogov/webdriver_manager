@@ -24,4 +24,4 @@ class GeckoDriverManager(DriverManager):
                                   mozila_release_tag=mozila_release_tag)
 
     def install(self):
-        return self.download_driver(self.driver)
+        return self._get_driver_path(self.driver)
