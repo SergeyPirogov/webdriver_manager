@@ -1,3 +1,4 @@
+import json
 import os
 
 import pytest
@@ -32,8 +33,21 @@ def test_chrome_manager_with_selenium():
 
 
 def test_chrome_manager_cached_driver_with_selenium():
-    ChromeDriverManager().install()
-    webdriver.Chrome(ChromeDriverManager().install())
+    custom_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "custom")
+    driver = webdriver.Chrome(ChromeDriverManager(path=custom_path).install())
+    driver.get("http://automation-remarks.com")
+
+    metadata_file = os.path.join(custom_path, 'drivers.json')
+
+    with open(metadata_file) as json_file:
+        data = json.load(json_file)
+
+    data["linux64_chromedriver_latest_for_83.0.4103"]['timestamp'] = "08/06/2019"
+
+    with open(metadata_file, 'w') as outfile:
+        json.dump(data, outfile)
+
+    ChromeDriverManager(path=custom_path).install()
 
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])

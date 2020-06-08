@@ -15,7 +15,11 @@ class Archive(object):
 
     def __extract_zip(self, to_directory):
         archive = zipfile.ZipFile(self.file_path)
-        archive.extractall(to_directory)
+        try:
+            archive.extractall(to_directory)
+        except Exception as e:
+            if e.args[0] != 26 and e.args[1] != 'Text file busy':
+                raise e
         return archive.namelist()
 
     def __extract_tar_file(self, to_directory):

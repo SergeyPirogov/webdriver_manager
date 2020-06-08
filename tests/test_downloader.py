@@ -42,3 +42,4 @@ def test_can_download_chrome_driver(delete_drivers_dir, version):
     assert file.filename == "driver.zip"
     archive = save_file(file, driver_directory)
     assert archive.unpack(driver_directory) == ["chromedriver.exe"]
+
