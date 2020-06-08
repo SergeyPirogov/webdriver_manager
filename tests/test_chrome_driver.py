@@ -34,7 +34,8 @@ def test_chrome_manager_with_selenium():
 
 def test_chrome_manager_cached_driver_with_selenium():
     custom_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "custom")
-    driver = webdriver.Chrome(ChromeDriverManager(path=custom_path).install())
+    manager = ChromeDriverManager(path=custom_path)
+    driver = webdriver.Chrome(manager.install())
     driver.get("http://automation-remarks.com")
 
     metadata_file = os.path.join(custom_path, 'drivers.json')
@@ -42,7 +43,8 @@ def test_chrome_manager_cached_driver_with_selenium():
     with open(metadata_file) as json_file:
         data = json.load(json_file)
 
-    data["linux64_chromedriver_latest_for_83.0.4103"]['timestamp'] = "08/06/2019"
+    driver = manager.driver
+    data[f"{driver.get_os_type()}_chromedriver_latest_for_{driver.browser_version}"]['timestamp'] = "08/06/2019"
 
     with open(metadata_file, 'w') as outfile:
         json.dump(data, outfile)
