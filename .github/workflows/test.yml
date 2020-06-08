@@ -1,7 +1,11 @@
 name: "Tests"
 on:
   push:
+    branches:
+      - master
   pull_request:
+    branches:
+      - master
   schedule:
     - cron: "0 7 * * 1" # At 07:00 UTC on each Monday.
 
