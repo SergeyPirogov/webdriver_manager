@@ -21,16 +21,21 @@ class DriverCache(object):
         path = os.path.join(self._drivers_directory, driver_name, os_type, driver_version)
         archive = save_file(file, path)
         files = archive.unpack(path)
-
-        binary = None
-        for f in files:
-            if driver_name in f:
-                binary = f
-
+        binary = self.__get_binary(files, driver_name)
         binary_path = os.path.join(path, binary)
         self.__save_metadata(browser_version, driver_name, os_type, driver_version, binary_path)
         log(f"Driver has been saved in cache [{path}]")
         return binary_path
+
+    def __get_binary(self, files, driver_name):
+        if len(files) == 1:
+            return files[0]
+
+        for f in files:
+            if driver_name in f:
+                return f
+
+        raise Exception(f"Can't find binary for {driver_name} among {files}")
 
     def __save_metadata(self, browser_version, driver_name, os_type, driver_version, binary_path,
                         date=None):
