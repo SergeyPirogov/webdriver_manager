@@ -18,7 +18,7 @@ class Archive(object):
         try:
             archive.extractall(to_directory)
         except Exception as e:
-            if e.args[0] != 26 and e.args[1] != 'Text file busy':
+            if e.args[0] not in [26, 13] and e.args[1] not in ['Text file busy', 'Permission denied']:
                 raise e
         return archive.namelist()
 
