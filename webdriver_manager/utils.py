@@ -32,15 +32,6 @@ class File(object):
         return filename
 
 
-class Version(object):
-
-    def __init__(self, value):
-        self.value = value
-
-    def is_latest(self):
-        return
-
-
 def save_file(file: File, directory: str):
     os.makedirs(directory, exist_ok=True)
 
@@ -94,13 +85,6 @@ def write_file(content, path):
     with open(path, "wb") as code:
         code.write(content)
     return path
-
-
-def download_driver(url):
-    log(f"Trying to download new driver from {url}")
-    response = requests.get(url, stream=True)
-    validate_response(response)
-    return response
 
 
 def download_file(url: str) -> File:
