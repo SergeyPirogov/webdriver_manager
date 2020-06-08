@@ -42,4 +42,4 @@ class EdgeChromiumDriverManager(DriverManager):
                                          latest_release_url=latest_release_url)
 
     def install(self):
-        return self.download_driver(self.driver)
+        return self._get_driver_path(self.driver)

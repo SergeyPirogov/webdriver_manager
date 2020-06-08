@@ -232,6 +232,7 @@ class EdgeChromiumDriver(Driver):
     def __init__(self, name, version, os_type, url, latest_release_url):
         super(EdgeChromiumDriver, self).__init__(name, version, os_type, url,
                                                  latest_release_url)
+        self.browser_version = ""
 
     def get_latest_release_version(self):
         # type: () -> str
