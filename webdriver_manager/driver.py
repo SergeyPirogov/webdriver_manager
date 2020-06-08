@@ -194,6 +194,7 @@ class OperaDriver(Driver):
         self.opera_release_tag = opera_release_tag
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = None
+        self.browser_version = ""
         if self._os_token:
             log("GH_TOKEN will be used to perform requests")
             self.auth_header = {'Authorization': f'token {self._os_token}'}
@@ -204,11 +205,11 @@ class OperaDriver(Driver):
         validate_response(resp)
         return resp.json()["tag_name"]
 
-    def get_url(self, version):
+    def get_url(self):
         # type: () -> str
         # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
-        log("Getting latest opera release info for {0}"
-            .format(version))
+        version = self.get_version()
+        log(f"Getting latest opera release info for {version}")
         resp = requests.get(url=self.tagged_release_url(version),
                             headers=self.auth_header)
         validate_response(resp)
