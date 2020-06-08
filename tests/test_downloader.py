@@ -10,7 +10,8 @@ from webdriver_manager.utils import download_file, save_file, ChromeType
 
 @pytest.fixture()
 def delete_drivers_dir():
-    shutil.rmtree(driver_directory)
+    if os.path.exists(driver_directory):
+        shutil.rmtree(driver_directory)
 
 
 def test_can_download_driver_as_zip_file(delete_drivers_dir):
