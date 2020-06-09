@@ -1,6 +1,7 @@
 import datetime
 import json
 import os
+import sys
 
 from webdriver_manager.logger import log
 from webdriver_manager.utils import get_date_diff, File, save_file
@@ -10,7 +11,10 @@ class DriverCache(object):
 
     def __init__(self, root_dir=None):
         self._root_dir = root_dir
-        if root_dir is None:
+
+        if self._root_dir is None and os.environ.get("WDM_LOCAL", '0') == '1':
+            self._root_dir = os.path.join(sys.path[0], ".wdm")
+        if self._root_dir is None:
             self._root_dir = os.path.join(os.path.expanduser("~"), ".wdm")
         self._drivers_root = "drivers"
         self._drivers_json_path = os.path.join(self._root_dir, "drivers.json")
