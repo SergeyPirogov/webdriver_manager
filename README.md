@@ -134,4 +134,12 @@ or via constructor:
 ChromeDriverManager("2.26", log_level=0).install()
 ```
 
+By default all driver binaries are saved to user.home/.wdm folder. You can override this setting and save binaries to project.root/.wdm.
+
+```
+import os
+
+os.environ['WDM_LOCAL'] = '1'
+```
+
 This will make your test automation more elegant and robust!
