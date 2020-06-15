@@ -142,4 +142,10 @@ import os
 os.environ['WDM_LOCAL'] = '1'
 ```
 
+Driver cache by default is valid for 1 day. You are able to change this value using constructor parameter:
+
+```python
+ChromeDriverManager("2.26", cache_valid_range=1).install()
+```
+
 This will make your test automation more elegant and robust!

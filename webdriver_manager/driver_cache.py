@@ -9,7 +9,7 @@ from webdriver_manager.utils import get_date_diff, File, save_file
 
 class DriverCache(object):
 
-    def __init__(self, root_dir=None):
+    def __init__(self, root_dir=None, valid_range=1):
         self._root_dir = root_dir
 
         if self._root_dir is None and os.environ.get("WDM_LOCAL", '0') == '1':
@@ -20,6 +20,7 @@ class DriverCache(object):
         self._drivers_json_path = os.path.join(self._root_dir, "drivers.json")
         self._date_format = "%d/%m/%Y"
         self._drivers_directory = f"{self._root_dir}{os.sep}{self._drivers_root}"
+        self.valid_range = valid_range
 
     def save_file_to_cache(self, file: File, browser_version, driver_name, os_type, driver_version):
         path = os.path.join(self._drivers_directory, driver_name, os_type, driver_version)
@@ -82,7 +83,7 @@ class DriverCache(object):
         dates_diff = get_date_diff(driver_info['timestamp'],
                                    datetime.date.today(),
                                    self._date_format)
-        return dates_diff < 1
+        return dates_diff < self.valid_range
 
     def get_metadata(self):
         if os.path.exists(self._drivers_json_path):

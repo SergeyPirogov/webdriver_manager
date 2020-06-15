@@ -5,8 +5,8 @@ from webdriver_manager.utils import download_file
 
 
 class DriverManager(object):
-    def __init__(self, root_dir=None, log_level=None):
-        self.driver_cache = DriverCache(root_dir)
+    def __init__(self, root_dir=None, log_level=None, cache_valid_range=1):
+        self.driver_cache = DriverCache(root_dir, cache_valid_range)
         global_log_level = os.getenv('WDM_LOG_LEVEL')
         if not global_log_level and log_level:
             os.environ['WDM_LOG_LEVEL'] = str(log_level)
