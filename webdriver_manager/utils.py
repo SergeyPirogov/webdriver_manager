@@ -127,7 +127,7 @@ def chrome_version(browser_type=ChromeType.GOOGLE):
         ChromeType.CHROMIUM: {
             OSType.LINUX: 'chromium --version || chromium-browser --version',
             OSType.MAC: r'/Applications/Chromium.app/Contents/MacOS/Chromium --version',
-            OSType.WIN: r'reg query "HKEY_CURRENT_USER\Software\Chromium\BLBeacon" /v version'
+            OSType.WIN: r'reg query "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome" /v version'
         },
         ChromeType.MSEDGE: {
             OSType.MAC: r'/Applications/Microsoft\ Edge.app/Contents/MacOS/Microsoft\ Edge --version',
