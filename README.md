@@ -5,6 +5,8 @@
 [![Supported Python Versions](https://img.shields.io/pypi/pyversions/webdriver_manager.svg)](https://pypi.org/project/webdriver-manager/)
 [![codecov](https://codecov.io/gh/SergeyPirogov/webdriver_manager/branch/master/graph/badge.svg)](https://codecov.io/gh/SergeyPirogov/webdriver_manager)
 
+[Patreon](https://www.patreon.com/automation_remarks)
+
 The main idea is to simplify management of binary drivers for different browsers.
 
 For now support:
