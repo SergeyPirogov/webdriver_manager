@@ -136,6 +136,20 @@ or via constructor:
 ChromeDriverManager("2.26", log_level=0).install()
 ```
 
+By default webdriver manager prints a blank space before its log output if logging is enabled. If you want to disable this, initialize `WDM_PRINT_FIRST_LINE` with `'False'` before your tests:
+
+```python
+import os
+
+os.environ['WDM_PRINT_FIRST_LINE'] = 'False'
+``` 
+
+or via constructor:
+
+```python
+ChromeDriverManager("2.26", print_first_line=False).install()
+```
+
 By default all driver binaries are saved to user.home/.wdm folder. You can override this setting and save binaries to project.root/.wdm.
 
 ```
