@@ -37,7 +37,7 @@ With webdriver manager, you just need to do two simple steps:
 Install manager:
 
 ```bash
-pip install webdriver_manager
+pip install webdriver-manager
 ```
 
 Use with Chrome:
