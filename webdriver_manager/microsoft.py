@@ -1,9 +1,7 @@
-import logging
-
 from webdriver_manager import utils
+from webdriver_manager.driver import EdgeChromiumDriver
 from webdriver_manager.driver import IEDriver
 from webdriver_manager.manager import DriverManager
-from webdriver_manager.driver import EdgeChromiumDriver
 
 
 class IEDriverManager(DriverManager):
@@ -14,7 +12,7 @@ class IEDriverManager(DriverManager):
                  url="http://selenium-release.storage.googleapis.com",
                  latest_release_url=None,
                  log_level=None,
-                 print_first_line=None,
+                 print_first_line=True,
                  cache_valid_range=1):
         super().__init__(path, log_level, print_first_line, cache_valid_range)
         self.driver = IEDriver(version=version,

@@ -14,7 +14,7 @@ class GeckoDriverManager(DriverManager):
                  latest_release_url="https://api.github.com/repos/mozilla/geckodriver/releases/latest",
                  mozila_release_tag="https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}",
                  log_level=logging.INFO,
-                 print_first_line=None,
+                 print_first_line=True,
                  cache_valid_range=1):
         super(GeckoDriverManager, self).__init__(path, log_level, print_first_line, cache_valid_range)
 
