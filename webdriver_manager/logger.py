@@ -4,7 +4,7 @@ import os
 loggers = {}
 
 
-def log(text, level=logging.INFO, name="WDM", first_line=False):
+def log(text, level=logging.INFO, name="WDM", first_line=False, formatter='[%(name)s] - %(message)s'):
     log_level = os.getenv('WDM_LOG_LEVEL')
     if log_level:
         level = int(log_level)
@@ -14,7 +14,7 @@ def log(text, level=logging.INFO, name="WDM", first_line=False):
         _logger = logging.getLogger(name)
 
         handler = logging.StreamHandler()
-        formatter = logging.Formatter('[%(name)s] - %(message)s')
+        formatter = logging.Formatter(formatter)
         handler.setFormatter(formatter)
         _logger.addHandler(handler)
         _logger.setLevel(level)
