@@ -17,6 +17,7 @@ def test_driver_can_be_saved_to_custom_path():
     path = ChromeDriverManager(version="2.26", path=custom_path).install()
     assert os.path.exists(path)
     assert custom_path in path
+    print("This is just a test")
 
 
 def test_chrome_manager_with_wrong_version():
