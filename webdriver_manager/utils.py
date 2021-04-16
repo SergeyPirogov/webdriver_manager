@@ -136,8 +136,11 @@ def chrome_version(browser_type=ChromeType.GOOGLE):
     }
 
     cmd = cmd_mapping[browser_type][os_name()]
-    stdout = os.popen(cmd).read()
-    version = re.search(pattern, stdout)
+    version = None
+    with os.popen(cmd) as stream:
+        stdout = stream.read()
+        version = re.search(pattern, stdout)
+
     if not version:
         raise ValueError(f'Could not get version for Chrome with this command: {cmd}')
     current_version = version.group(0)
