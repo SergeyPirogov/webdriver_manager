@@ -97,7 +97,7 @@ class GeckoDriver(Driver):
         validate_response(resp)
         assets = resp.json()["assets"]
 
-        name = f"{self.get_name()}-{self.get_version()}-{self.get_os_type()}"
+        name = f"{self.get_name()}-{self.get_version()}-{self.get_os_type()}{'-aarch64' if (self.get_os_type() == 'macos' and not platform.processor() == 'i386') else ''}" + "."
         output_dict = [asset for asset in assets if
                        asset['name'].startswith(name)]
         return output_dict[0]['browser_download_url']
