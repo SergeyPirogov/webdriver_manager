@@ -3,6 +3,7 @@ import re
 from xml.etree import ElementTree
 
 import requests
+import platform
 
 from webdriver_manager.logger import log
 from webdriver_manager.utils import (
