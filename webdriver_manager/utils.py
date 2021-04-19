@@ -145,3 +145,22 @@ def chrome_version(browser_type=ChromeType.GOOGLE):
         raise ValueError(f'Could not get version for Chrome with this command: {cmd}')
     current_version = version.group(0)
     return current_version
+
+
+def firefox_version():
+    pattern = r'\d+.*'
+    cmd_mapping = {
+        OSType.LINUX: 'firefox --version',
+        OSType.MAC: r'/Applications/Firefox.app/Contents/MacOS/firefox --version',
+        OSType.WIN: r"(Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\firefox.exe').'(Default)').VersionInfo.ProductVersion",
+    }
+    cmd = cmd_mapping[os_name()]
+    version = None
+    with os.popen(cmd) as stream:
+        stdout = stream.read()
+        version = re.search(pattern, stdout)
+
+    if not version:
+        raise ValueError(f'Could not get version for Chrome with this command: {cmd}')
+    current_version = version.group(0)
+    return current_version

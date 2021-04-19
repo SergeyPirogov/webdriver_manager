@@ -11,7 +11,9 @@ from webdriver_manager.utils import (
     chrome_version,
     ChromeType,
     os_name,
-    OSType)
+    OSType,
+    firefox_version,
+)
 
 
 class Driver(object):
@@ -78,13 +80,14 @@ class GeckoDriver(Driver):
         self._mozila_release_tag = mozila_release_tag
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = None
-        self.browser_version = ""
+        self.browser_version = firefox_version()
         if self._os_token:
             log("GH_TOKEN will be used to perform requests", first_line=True)
             self.auth_header = {'Authorization': f'token {self._os_token}'}
 
     def get_latest_release_version(self):
         # type: () -> str
+        log(f"Get LATEST driver version for {self.browser_version}")
         resp = requests.get(url=self.latest_release_url,
                             headers=self.auth_header)
         validate_response(resp)
