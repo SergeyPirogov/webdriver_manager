@@ -161,6 +161,6 @@ def firefox_version():
         version = re.search(pattern, stdout)
 
     if not version:
-        raise ValueError(f'Could not get version for Chrome with this command: {cmd}')
+        raise ValueError(f'Could not get version for Firefox with this command: {cmd}')
     current_version = version.group(0)
     return current_version
