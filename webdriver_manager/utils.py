@@ -162,7 +162,7 @@ def firefox_version():
     cmd_mapping = {
         OSType.LINUX: 'firefox --version',
         OSType.MAC: r'/Applications/Firefox.app/Contents/MacOS/firefox --version',
-        OSType.WIN: r"(Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\firefox.exe').'(Default)').VersionInfo.ProductVersion",
+        OSType.WIN: r"Powershell (Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\firefox.exe').'(Default)').VersionInfo.ProductVersion",
     }
     cmd = cmd_mapping[os_name()]
     version = None
