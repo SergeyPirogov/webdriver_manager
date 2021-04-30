@@ -115,17 +115,27 @@ def get_filename_from_response(response, name):
     return filename
 
 
+def linux_browser_apps_to_cmd(*apps: str) -> str:
+    """Create chrome version command from browser app names.
+
+    Result command example:
+        chromium --version || chromium-browser --version
+    """
+    ignore_errors_cmd_part = ' 2>/dev/null' if os.getenv('WDM_LOG_LEVEL') == '0' else ''
+    return ' || '.join(list(map(lambda i: f'{i} --version{ignore_errors_cmd_part}', apps)))
+
+
 def chrome_version(browser_type=ChromeType.GOOGLE):
     pattern = r'\d+\.\d+\.\d+'
 
     cmd_mapping = {
         ChromeType.GOOGLE: {
-            OSType.LINUX: 'google-chrome --version || google-chrome-stable --version',
+            OSType.LINUX: linux_browser_apps_to_cmd('google-chrome', 'google-chrome-stable'),
             OSType.MAC: r'/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version',
             OSType.WIN: r'reg query "HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon" /v version'
         },
         ChromeType.CHROMIUM: {
-            OSType.LINUX: 'chromium --version || chromium-browser --version',
+            OSType.LINUX: linux_browser_apps_to_cmd('chromium', 'chromium-browser'),
             OSType.MAC: r'/Applications/Chromium.app/Contents/MacOS/Chromium --version',
             OSType.WIN: r'reg query "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome" /v version'
         },
