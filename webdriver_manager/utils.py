@@ -148,7 +148,8 @@ def chrome_version(browser_type=ChromeType.GOOGLE):
 
     cmd = cmd_mapping[browser_type][os_name()]
     version = None
-    with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL) as stream:
+    with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL,
+                          shell=True) as stream:
         stdout = stream.communicate()[0].decode()
         version = re.search(pattern, stdout)
 
@@ -167,8 +168,9 @@ def firefox_version():
     }
     cmd = cmd_mapping[os_name()]
     version = None
-    with os.popen(cmd) as stream:
-        stdout = stream.read()
+    with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL,
+                          shell=True) as stream:
+        stdout = stream.communicate()[0].decode()
         version = re.search(pattern, stdout)
 
     if not version:
