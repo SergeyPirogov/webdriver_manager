@@ -39,7 +39,7 @@ def save_file(file: File, directory: str):
     archive_path = f"{directory}{os.sep}{file.filename}"
     with open(archive_path, "wb") as code:
         code.write(file.content)
-    return Archive(archive_path)
+    return Archive(archive_path, os_type=os_name())
 
 
 class OSType(object):
