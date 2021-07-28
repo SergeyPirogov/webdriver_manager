@@ -13,6 +13,7 @@ from webdriver_manager.utils import (
     os_name,
     OSType,
     firefox_version,
+    File,
 )
 
 
@@ -21,12 +22,20 @@ class Driver(object):
                  version,
                  os_type,
                  url,
-                 latest_release_url):
+                 latest_release_url,
+                 proxy={},
+                 ssl_verify=True):
         self._name = name
         self._url = url
         self._version = version
         self._os_type = os_type
         self._latest_release_url = latest_release_url
+        self._proxy = proxy
+        self._session = requests.Session()
+        self._ssl_verify = ssl_verify
+
+        if len(self._proxy) > 0:
+            self._session.proxies.update(self._proxy)
 
     def get_name(self):
         return self._name
@@ -47,14 +56,36 @@ class Driver(object):
         # type: () -> str
         raise NotImplementedError("Please implement this method")
 
+    def get_proxy(self):
+        return self._proxy
+
+    def get_session(self):
+        return self._session
+
+    def get_ssl_verify(self):
+        return self._ssl_verify
+
+    def get(self, uri):
+        return requests.get(uri, proxies=self.get_proxy(), verify=self.get_ssl_verify())
+
+    def download(self):
+        log(f"Trying to download new driver from {self.get_url()}")
+        response = requests.get(self.get_url(), proxies=self.get_proxy(), verify=self.get_ssl_verify(),
+                                stream=True)
+        validate_response(response)
+        return File(response)
+
 
 class ChromeDriver(Driver):
     def __init__(self, name, version, os_type, url, latest_release_url,
-                 chrome_type=ChromeType.GOOGLE):
+                 chrome_type=ChromeType.GOOGLE, proxy={}, ssl_verify=True, browser_version="latest"):
         super(ChromeDriver, self).__init__(name, version, os_type, url,
-                                           latest_release_url)
+                                           latest_release_url, proxy=proxy, ssl_verify=ssl_verify)
         self.chrome_type = chrome_type
-        self.browser_version = chrome_version(chrome_type)
+        if browser_version == "latest":
+            self.browser_version = chrome_version(chrome_type)
+        else:
+            self.browser_version = browser_version
 
     def get_os_type(self):
         if "win" in super().get_os_type():
@@ -63,7 +94,7 @@ class ChromeDriver(Driver):
 
     def get_latest_release_version(self):
         log(f"Get LATEST driver version for {self.browser_version}")
-        resp = requests.get(f"{self._latest_release_url}_{self.browser_version}")
+        resp = self.get(f"{self._latest_release_url}_{self.browser_version}")
         validate_response(resp)
         return resp.text.rstrip()
 
@@ -74,10 +105,11 @@ class GeckoDriver(Driver):
                  os_type,
                  url,
                  latest_release_url,
-                 mozila_release_tag):
+                 mozilla_release_tag,
+                 proxy={}):
         super(GeckoDriver, self).__init__(name, version, os_type, url,
-                                          latest_release_url)
-        self._mozila_release_tag = mozila_release_tag
+                                          latest_release_url, proxy)
+        self._mozilla_release_tag = mozilla_release_tag
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = None
         self.browser_version = firefox_version()
@@ -88,16 +120,16 @@ class GeckoDriver(Driver):
     def get_latest_release_version(self):
         # type: () -> str
         log(f"Get LATEST driver version for {self.browser_version}")
-        resp = requests.get(url=self.latest_release_url,
-                            headers=self.auth_header)
+        resp = super().get_session().get(url=self.latest_release_url,
+                                         headers=self.auth_header)
         validate_response(resp)
         return resp.json()["tag_name"]
 
     def get_url(self):
         # https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz
         log(f"Getting latest mozilla release info for {self.get_version()}")
-        resp = requests.get(url=self.tagged_release_url(self.get_version()),
-                            headers=self.auth_header)
+        resp = super().get_session().get(url=self.tagged_release_url(self.get_version()),
+                                         headers=self.auth_header)
         validate_response(resp)
         assets = resp.json()["assets"]
 
@@ -123,7 +155,8 @@ class IEDriver(Driver):
     def __init__(self, name, version,
                  os_type,
                  url,
-                 latest_release_url):
+                 latest_release_url,
+                 proxy={}):
 
         if os_type == "win64":
             os_type = "x64"
@@ -133,7 +166,8 @@ class IEDriver(Driver):
                                        os_type=os_type,
                                        url=url,
                                        latest_release_url=latest_release_url,
-                                       name=name)
+                                       name=name,
+                                       proxy=proxy)
         self.browser_version = ""
 
     def sortchildrenby(self, container):
@@ -193,9 +227,10 @@ class OperaDriver(Driver):
                  os_type,
                  url,
                  latest_release_url,
-                 opera_release_tag):
+                 opera_release_tag,
+                 proxy={}):
         super(OperaDriver, self).__init__(name, version, os_type, url,
-                                          latest_release_url)
+                                          latest_release_url, proxy)
         self.opera_release_tag = opera_release_tag
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = None
@@ -206,7 +241,7 @@ class OperaDriver(Driver):
 
     def get_latest_release_version(self):
         # type: () -> str
-        resp = requests.get(self.latest_release_url, headers=self.auth_header)
+        resp = super().get_session().get(self.latest_release_url, headers=self.auth_header)
         validate_response(resp)
         return resp.json()["tag_name"]
 
@@ -215,8 +250,8 @@ class OperaDriver(Driver):
         # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
         version = self.get_version()
         log(f"Getting latest opera release info for {version}")
-        resp = requests.get(url=self.tagged_release_url(version),
-                            headers=self.auth_header)
+        resp = super().get_session().get(url=self.tagged_release_url(version),
+                                         headers=self.auth_header)
         validate_response(resp)
         assets = resp.json()["assets"]
         name = "{0}_{1}".format(self.get_name(), self.get_os_type())
@@ -233,9 +268,9 @@ class OperaDriver(Driver):
 
 
 class EdgeChromiumDriver(Driver):
-    def __init__(self, name, version, os_type, url, latest_release_url):
+    def __init__(self, name, version, os_type, url, latest_release_url, proxy={}):
         super(EdgeChromiumDriver, self).__init__(name, version, os_type, url,
-                                                 latest_release_url)
+                                                 latest_release_url, proxy)
         self.browser_version = ""
 
     def get_latest_release_version(self):
@@ -245,6 +280,6 @@ class EdgeChromiumDriver(Driver):
         else:
             major_edge_version = chrome_version(ChromeType.MSEDGE).split(".")[0]
             latest_release_url = self._latest_release_url + '_' + major_edge_version
-        resp = requests.get(latest_release_url)
+        resp = super().get_session().get(latest_release_url)
         validate_response(resp)
         return resp.text.rstrip()

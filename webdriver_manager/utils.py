@@ -88,9 +88,9 @@ def write_file(content, path):
     return path
 
 
-def download_file(url: str) -> File:
-    log(f"Trying to download new driver from {url}")
-    response = requests.get(url, stream=True)
+def download_file(driver) -> File:
+    log(f"Trying to download new driver from {driver.get_url()}")
+    response = requests.get(driver.get_url(), proxies=driver.get_proxy(), verify=driver.get_ssl_verify(), stream=True)
     validate_response(response)
     return File(response)
 

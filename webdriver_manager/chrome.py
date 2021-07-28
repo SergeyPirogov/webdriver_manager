@@ -18,7 +18,10 @@ class ChromeDriverManager(DriverManager):
                  chrome_type=ChromeType.GOOGLE,
                  log_level=logging.INFO,
                  print_first_line=True,
-                 cache_valid_range=1):
+                 cache_valid_range=1,
+                 proxy={},
+                 ssl_verify=True,
+                 browser_version="latest"):
         super().__init__(path, log_level=log_level, print_first_line=print_first_line,
                          cache_valid_range=cache_valid_range)
 
@@ -27,7 +30,10 @@ class ChromeDriverManager(DriverManager):
                                    os_type=os_type,
                                    url=url,
                                    latest_release_url=latest_release_url,
-                                   chrome_type=chrome_type)
+                                   chrome_type=chrome_type,
+                                   proxy=proxy,
+                                   ssl_verify=ssl_verify,
+                                   browser_version=browser_version)
 
     def install(self):
         log(f"Current {self.driver.chrome_type} version is {self.driver.browser_version}", first_line=True)
