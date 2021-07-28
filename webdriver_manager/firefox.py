@@ -13,10 +13,13 @@ class GeckoDriverManager(DriverManager):
                  name="geckodriver",
                  url="https://github.com/mozilla/geckodriver/releases/download",
                  latest_release_url="https://api.github.com/repos/mozilla/geckodriver/releases/latest",
-                 mozila_release_tag="https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}",
+                 mozilla_release_tag="https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}",
                  log_level=logging.INFO,
                  print_first_line=True,
-                 cache_valid_range=1):
+                 cache_valid_range=1,
+                 proxy={},
+                 ssl_verify=True,
+                 browser_version="latest"):
         super(GeckoDriverManager, self).__init__(path, log_level, print_first_line, cache_valid_range)
 
         self.driver = GeckoDriver(version=version,
@@ -24,7 +27,10 @@ class GeckoDriverManager(DriverManager):
                                   name=name,
                                   url=url,
                                   latest_release_url=latest_release_url,
-                                  mozila_release_tag=mozila_release_tag)
+                                  mozilla_release_tag=mozilla_release_tag,
+                                  proxy=proxy,
+                                  ssl_verify=ssl_verify,
+                                  browser_version=browser_version)
 
     def install(self):
         log(f"Current firefox version is {self.driver.browser_version}", first_line=True)

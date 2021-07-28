@@ -13,13 +13,19 @@ class IEDriverManager(DriverManager):
                  latest_release_url=None,
                  log_level=None,
                  print_first_line=True,
-                 cache_valid_range=1):
+                 cache_valid_range=1,
+                 proxy={},
+                 ssl_verify=True,
+                 browser_version="latest"):
         super().__init__(path, log_level, print_first_line, cache_valid_range)
         self.driver = IEDriver(version=version,
                                os_type=os_type,
                                name=name,
                                url=url,
-                               latest_release_url=latest_release_url)
+                               latest_release_url=latest_release_url,
+                               proxy=proxy,
+                               ssl_verify=ssl_verify,
+                               browser_version=browser_version)
 
     def install(self):
         return self._get_driver_path(self.driver)

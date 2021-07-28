@@ -65,8 +65,8 @@ class Driver(object):
     def get_ssl_verify(self):
         return self._ssl_verify
 
-    def get(self, uri):
-        return requests.get(uri, proxies=self.get_proxy(), verify=self.get_ssl_verify())
+    def get(self, url, headers={}):
+        return requests.get(url, proxies=self.get_proxy(), verify=self.get_ssl_verify(), headers=headers)
 
     def download(self):
         log(f"Trying to download new driver from {self.get_url()}")
@@ -94,7 +94,7 @@ class ChromeDriver(Driver):
 
     def get_latest_release_version(self):
         log(f"Get LATEST driver version for {self.browser_version}")
-        resp = self.get(f"{self._latest_release_url}_{self.browser_version}")
+        resp = self.get(url=f"{self._latest_release_url}_{self.browser_version}")
         validate_response(resp)
         return resp.text.rstrip()
 
@@ -106,13 +106,16 @@ class GeckoDriver(Driver):
                  url,
                  latest_release_url,
                  mozilla_release_tag,
-                 proxy={}):
+                 proxy={}, ssl_verify=True, browser_version="latest"):
         super(GeckoDriver, self).__init__(name, version, os_type, url,
-                                          latest_release_url, proxy)
+                                          latest_release_url, proxy, ssl_verify)
         self._mozilla_release_tag = mozilla_release_tag
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = None
-        self.browser_version = firefox_version()
+        if browser_version == "latest":
+            self.browser_version = firefox_version()
+        else:
+            self.browser_version = browser_version
         if self._os_token:
             log("GH_TOKEN will be used to perform requests", first_line=True)
             self.auth_header = {'Authorization': f'token {self._os_token}'}
@@ -120,16 +123,14 @@ class GeckoDriver(Driver):
     def get_latest_release_version(self):
         # type: () -> str
         log(f"Get LATEST driver version for {self.browser_version}")
-        resp = super().get_session().get(url=self.latest_release_url,
-                                         headers=self.auth_header)
+        resp = self.get(url=self.latest_release_url, headers=self.auth_header)
         validate_response(resp)
         return resp.json()["tag_name"]
 
     def get_url(self):
         # https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz
         log(f"Getting latest mozilla release info for {self.get_version()}")
-        resp = super().get_session().get(url=self.tagged_release_url(self.get_version()),
-                                         headers=self.auth_header)
+        resp = self.get(url=self.tagged_release_url(self.get_version()), headers=self.auth_header)
         validate_response(resp)
         assets = resp.json()["assets"]
 
@@ -148,7 +149,7 @@ class GeckoDriver(Driver):
         return self._latest_release_url
 
     def tagged_release_url(self, version):
-        return self._mozila_release_tag.format(version)
+        return self._mozilla_release_tag.format(version)
 
 
 class IEDriver(Driver):
@@ -156,7 +157,9 @@ class IEDriver(Driver):
                  os_type,
                  url,
                  latest_release_url,
-                 proxy={}):
+                 proxy={},
+                 ssl_verify=True,
+                 browser_version="latest"):
 
         if os_type == "win64":
             os_type = "x64"
@@ -167,8 +170,9 @@ class IEDriver(Driver):
                                        url=url,
                                        latest_release_url=latest_release_url,
                                        name=name,
-                                       proxy=proxy)
-        self.browser_version = ""
+                                       proxy=proxy,
+                                       ssl_verify=ssl_verify)
+        self.browser_version = browser_version
 
     def sortchildrenby(self, container):
         data = []
@@ -179,7 +183,7 @@ class IEDriver(Driver):
         data.sort()
 
     def get_latest_release_version(self):
-        resp = requests.get(self._url)
+        resp = self.get(self._url)
         root = ElementTree.fromstring(resp.text)
 
         values = {}
