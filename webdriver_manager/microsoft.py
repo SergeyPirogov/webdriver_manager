@@ -41,13 +41,19 @@ class EdgeChromiumDriverManager(DriverManager):
                                     "LATEST_RELEASE",
                  log_level=None,
                  print_first_line=None,
-                 cache_valid_range=1):
+                 cache_valid_range=1,
+                 proxy={},
+                 ssl_verify=True,
+                 browser_version="latest"):
         super().__init__(path, log_level, print_first_line, cache_valid_range)
         self.driver = EdgeChromiumDriver(version=version,
                                          os_type=os_type,
                                          name=name,
                                          url=url,
-                                         latest_release_url=latest_release_url)
+                                         latest_release_url=latest_release_url,
+                                         proxy=proxy,
+                                         ssl_verify=ssl_verify,
+                                         browser_version=browser_version)
 
     def install(self):
         return self._get_driver_path(self.driver)

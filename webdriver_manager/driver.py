@@ -272,18 +272,22 @@ class OperaDriver(Driver):
 
 
 class EdgeChromiumDriver(Driver):
-    def __init__(self, name, version, os_type, url, latest_release_url, proxy={}):
+    def __init__(self, name, version, os_type, url, latest_release_url, proxy={}, ssl_verify=True, browser_version="latest"):
         super(EdgeChromiumDriver, self).__init__(name, version, os_type, url,
-                                                 latest_release_url, proxy)
-        self.browser_version = ""
+                                                 latest_release_url, proxy, ssl_verify=ssl_verify)
+        self.browser_version = browser_version
 
     def get_latest_release_version(self):
         # type: () -> str
         if os_name() == OSType.LINUX:
             latest_release_url = "https://msedgedriver.azureedge.net/LATEST_STABLE"
         else:
-            major_edge_version = chrome_version(ChromeType.MSEDGE).split(".")[0]
+            if self.browser_version == "latest":
+                major_edge_version = chrome_version(ChromeType.MSEDGE).split(".")[0]
+            else:
+                major_edge_version = self.browser_version.split(".")[0]
+
             latest_release_url = self._latest_release_url + '_' + major_edge_version
-        resp = super().get_session().get(latest_release_url)
+        resp = self.get(latest_release_url)
         validate_response(resp)
         return resp.text.rstrip()
