@@ -108,6 +108,42 @@ options.binary_location = "C:\\Users\\USERNAME\\FOLDERLOCATION\\Opera\\VERSION\\
 driver = webdriver.Opera(executable_path=OperaDriverManager().install(), options=options)
 ```
 
+Use with proxy
+```python
+import keyring
+import logging
+from webdriver_manager import (ChromeDriverManager, 
+	GeckoDriverManager, 
+	IEDriverManager, 
+	EdgeChromiumDriverManager, 
+	OperaDriverManager)
+
+username = "your username"
+proxy = "your proxy address"
+proxy_port = "your proxy port"
+proxy_password = keyring.get_password('proxy', username)
+
+proxies = {
+	"http": f"http://{username}:{proxy_password}@{proxy}:{proxy_port}",
+	"https": f"https://{username}:{proxy_password}@{proxy}:{proxy_port}"
+}
+
+opera_manager = OperaDriverManager(proxy=proxies, ssl_verify=False, browser_version="77.0.4054.277", log_level=logging.INFO)
+opera_manager.install()
+
+edge_manager = EdgeChromiumDriverManager(proxy=proxies, ssl_verify=False, browser_version="92.0.902", log_level=logging.INFO)
+edge_manager.install()
+
+ie_manager = IEDriverManager(proxy=proxies, ssl_verify=False, browser_version="19042.985", log_level=logging.INFO)
+ie_manager.install()
+
+firefox_manager = GeckoDriverManager(proxy=proxies, ssl_verify=False, browser_version="90.0.2", log_level=logging.INFO)
+firefox_manager.install()
+
+chrome_manager = ChromeDriverManager(proxy=proxies, ssl_verify=False, browser_version="91.0.4472", log_level=logging.INFO)
+chrome_manager.install()
+```
+
 ## Configuration
 
 If you face error related to github credentials, you need to place github token: (\*)
