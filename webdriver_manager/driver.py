@@ -232,20 +232,22 @@ class OperaDriver(Driver):
                  url,
                  latest_release_url,
                  opera_release_tag,
-                 proxy={}):
+                 proxy={},
+                 ssl_verify=True,
+                 browser_version="latest"):
         super(OperaDriver, self).__init__(name, version, os_type, url,
-                                          latest_release_url, proxy)
+                                          latest_release_url, proxy, ssl_verify)
         self.opera_release_tag = opera_release_tag
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = None
-        self.browser_version = ""
+        self.browser_version = browser_version
         if self._os_token:
             log("GH_TOKEN will be used to perform requests")
             self.auth_header = {'Authorization': f'token {self._os_token}'}
 
     def get_latest_release_version(self):
         # type: () -> str
-        resp = super().get_session().get(self.latest_release_url, headers=self.auth_header)
+        resp = self.get(self.latest_release_url, headers=self.auth_header)
         validate_response(resp)
         return resp.json()["tag_name"]
 
@@ -254,7 +256,7 @@ class OperaDriver(Driver):
         # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
         version = self.get_version()
         log(f"Getting latest opera release info for {version}")
-        resp = super().get_session().get(url=self.tagged_release_url(version),
+        resp = self.get(url=self.tagged_release_url(version),
                                          headers=self.auth_header)
         validate_response(resp)
         assets = resp.json()["assets"]
