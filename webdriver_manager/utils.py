@@ -166,8 +166,6 @@ def chrome_version(browser_type=ChromeType.GOOGLE):
     current_version = version.group(0)
     return current_version
 
-
-
 def get_version_via_com(filename):
     parser = Dispatch("Scripting.FileSystemObject")
     try:
