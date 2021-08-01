@@ -9,7 +9,7 @@ class DriverManager(object):
     def __init__(self, root_dir=None, log_level=None, print_first_line=None, cache_valid_range=1):
         self.driver_cache = DriverCache(root_dir, cache_valid_range)
         if os.environ.get('WDM_PRINT_FIRST_LINE', str(print_first_line)) == 'True':
-            log("\n", formatter='%(message)s')
+            log("\n", formatter='%(message)s', level=log_level)
         log("====== WebDriver manager ======", level=log_level)
 
     def install(self):
