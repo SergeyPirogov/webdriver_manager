@@ -4,6 +4,7 @@ import platform
 import re
 import sys
 import subprocess
+from win32com.client import Dispatch
 
 import requests
 
@@ -154,10 +155,26 @@ def chrome_version(browser_type=ChromeType.GOOGLE):
         version = re.search(pattern, stdout)
 
     if not version:
-        raise ValueError(f'Could not get version for Chrome with this command: {cmd}')
+        paths = [r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                 r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"]
+        version = list(filter(None, [get_version_via_com(p) for p in paths]))[0]
+        if version != None:
+            return version
+        elif version == None:
+            raise ValueError(f'Could not get version for Chrome with this command: {cmd}')
+    
     current_version = version.group(0)
     return current_version
 
+
+
+def get_version_via_com(filename):
+    parser = Dispatch("Scripting.FileSystemObject")
+    try:
+        version = parser.GetFileVersion(filename)
+    except Exception:
+        return None
+    return version
 
 def firefox_version():
     pattern = r'\d+.*'
