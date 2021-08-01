@@ -155,13 +155,14 @@ def chrome_version(browser_type=ChromeType.GOOGLE):
         version = re.search(pattern, stdout)
 
     if not version:
-        paths = [r"C:\Program Files\Google\Chrome\Application\chrome.exe",
-                 r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"]
-        version = list(filter(None, [get_version_via_com(p) for p in paths]))[0]
-        if version is not None:
-            return version
-        elif version is None:
-            raise ValueError(f'Could not get version for Chrome with this command: {cmd}')
+        if os_name() == "OSType.WIN":
+            paths = [r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                     r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"]
+            version = list(filter(None, [get_version_via_com(p) for p in paths]))[0]
+            if version is not None:
+                return version
+            elif version is None:
+                raise ValueError(f'Could not get version for Chrome with this command: {cmd}')
     
     current_version = version.group(0)
     return current_version
