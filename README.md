@@ -110,18 +110,30 @@ driver = webdriver.Opera(executable_path=OperaDriverManager().install(), options
 
 ## Configuration
 
-If you face error related to github credentials, you need to place github token: (\*)
+**webdriver_manager** has several configuration variables you can be interested in.
+
+### `GH_TOKEN`
+**webdriver_manager** downloading some webdrivers from their official GitHub repositories but GitHub has [limitations](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting) like 60 requests per hour for unauthenticated users.
+In case not to face an error related to github credentials, you need to [create](https://help.github.com/articles/creating-an-access-token-for-command-line-use) github token and place it into your environment: (\*)
 
 Example:
 
 ```bash
+# bash
 export GH_TOKEN = "asdasdasdasd"
 ```
 
-(\*) access_token required to work with Github API more info <https://help.github.com/articles/creating-an-access-token-for-command-line-use/>.
+(\*) access_token required to work with GitHub API [more info](https://help.github.com/articles/creating-an-access-token-for-command-line-use/).
 
-There is also possibility to set same variables via ENV VARIABLES.
+There is also possibility to set same variable via ENV VARIABLES, example:
 
+```python
+# python
+import os
+os.environ['GH_TOKEN'] = "asdasdasdasd"
+```
+
+### `WDM_LOG_LEVEL`
 To silent `webdriver_manager` logs and remove them from console, initialize env variable `WDM_LOG_LEVEL` with `'0'` value before your selenium tests:
 
 ```python
@@ -136,6 +148,7 @@ or via constructor:
 ChromeDriverManager("2.26", log_level=0).install()
 ```
 
+### `WDM_PRINT_FIRST_LINE`
 By default webdriver manager prints a blank space before its log output if logging is enabled. If you want to disable this, initialize `WDM_PRINT_FIRST_LINE` with `'False'` before your tests:
 
 ```python
@@ -150,6 +163,7 @@ or via constructor:
 ChromeDriverManager("2.26", print_first_line=False).install()
 ```
 
+### `WDM_LOCAL`
 By default all driver binaries are saved to user.home/.wdm folder. You can override this setting and save binaries to project.root/.wdm.
 
 ```
@@ -158,6 +172,7 @@ import os
 os.environ['WDM_LOCAL'] = '1'
 ```
 
+### `cache_valid_range`
 Driver cache by default is valid for 1 day. You are able to change this value using constructor parameter:
 
 ```python
