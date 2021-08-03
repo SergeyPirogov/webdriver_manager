@@ -8,6 +8,7 @@ pytest = "*"
 "pytest-cov" = "*"
 codecov = "*"
 bump2version = "*"
+pywin32 = "*"
 
 [packages]
 requests = "*"
