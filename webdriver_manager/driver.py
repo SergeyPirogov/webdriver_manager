@@ -157,8 +157,10 @@ class IEDriver(Driver):
             if self.get_name() in key and self._os_type in key:
                 last_modified = child.find(xmlns + 'LastModified').text
                 values[last_modified] = key
-
-        latest_key = values[max(values)]
+        
+        latest_key = values.pop(max(values))
+        while re.match(r".*_{os}_\.(.*)\.zip".format(os=self.get_os_type()), latest_key):
+            latest_key = values.pop(max(values))
         # 2.39/IEDriverServer_Win32_2.39.0.zip
         m = re.match(r".*_{os}_(.*)\.zip".format(os=self.get_os_type()),
                      latest_key)
