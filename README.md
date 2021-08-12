@@ -180,3 +180,5 @@ ChromeDriverManager("2.26", cache_valid_range=1).install()
 ```
 
 This will make your test automation more elegant and robust!
+
+Cheers
