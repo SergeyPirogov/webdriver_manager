@@ -14,6 +14,7 @@ class DriverManager(object):
 
     def dontVerifySsl(self):
         session().verify = False
+        return self
 
     def install(self):
         raise NotImplementedError("Please Implement this method")
