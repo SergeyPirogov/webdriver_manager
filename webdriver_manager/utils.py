@@ -10,6 +10,13 @@ import requests
 from webdriver_manager.archive import Archive
 from webdriver_manager.logger import log
 
+def new_session():
+    global _session
+    _session = requests.Session()
+
+def session():
+    return _session
+
 
 class File(object):
 
@@ -90,7 +97,7 @@ def write_file(content, path):
 
 def download_file(url: str) -> File:
     log(f"Trying to download new driver from {url}")
-    response = requests.get(url, stream=True)
+    response = session().get(url, stream=True)
     validate_response(response)
     return File(response)
 

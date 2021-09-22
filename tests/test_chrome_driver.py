@@ -24,13 +24,17 @@ def test_chrome_manager_with_wrong_version():
         ChromeDriverManager("0.2").install()
     assert "There is no such driver by url" in ex.value.args[0]
 
-
 def test_chrome_manager_with_selenium():
     driver_path = ChromeDriverManager().install()
     driver = webdriver.Chrome(driver_path)
     driver.get("http://automation-remarks.com")
     driver.close()
 
+def test_chrome_manager_without_verifying_with_selenium():
+    driver_path = ChromeDriverManager().dontVerifySsl().install()
+    driver = webdriver.Chrome(driver_path)
+    driver.get("http://automation-remarks.com")
+    driver.close()
 
 def test_chrome_manager_cached_driver_with_selenium():
     custom_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "custom")
