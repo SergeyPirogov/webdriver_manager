@@ -282,13 +282,13 @@ class EdgeChromiumDriver(Driver):
         )
         self.browser_version = get_browser_version_from_os(ChromeType.MSEDGE)
 
-    def get_latest_release_version(self):
-        # type: () -> str
-        if os_name() == OSType.LINUX:
-            latest_release_url = "https://msedgedriver.azureedge.net/LATEST_STABLE"
-        else:
-            major_edge_version = chrome_version(ChromeType.MSEDGE).split(".")[0]
-            latest_release_url = self._latest_release_url + '_' + major_edge_version
+    def get_latest_release_version(self) -> str:
+        major_edge_version = self.browser_version.split(".")[0]
+        latest_release_url = {
+            OSType.WIN in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_WINDOWS',
+            OSType.MAC in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_MACOS',
+            OSType.LINUX in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_LINUX',
+        }[True]
         resp = session().get(latest_release_url)
         validate_response(resp)
         return resp.text.rstrip()
