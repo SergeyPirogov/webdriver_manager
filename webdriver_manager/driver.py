@@ -63,7 +63,8 @@ class ChromeDriver(Driver):
 
     def get_latest_release_version(self):
         log(f"Get LATEST driver version for {self.browser_version}")
-        resp = session().get(f"{self._latest_release_url}_{self.browser_version}")
+        ses = session()
+        resp = ses.get(f"{self._latest_release_url}_{self.browser_version}")
         validate_response(resp)
         return resp.text.rstrip()
 

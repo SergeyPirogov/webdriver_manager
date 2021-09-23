@@ -10,9 +10,11 @@ import requests
 from webdriver_manager.archive import Archive
 from webdriver_manager.logger import log
 
+
 def new_session():
     global _session
     _session = requests.Session()
+
 
 def session():
     return _session
