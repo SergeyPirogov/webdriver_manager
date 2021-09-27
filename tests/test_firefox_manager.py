@@ -12,6 +12,12 @@ def test_gecko_manager_with_selenium():
     ff.get("http://automation-remarks.com")
     ff.quit()
 
+def test_gecko_manager_without_verifying_with_selenium():
+    driver_path = GeckoDriverManager().dont_verify_ssl().install()
+    ff = webdriver.Firefox(executable_path=driver_path)
+    ff.get("http://automation-remarks.com")
+    ff.quit()
+
 
 def test_gecko_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:

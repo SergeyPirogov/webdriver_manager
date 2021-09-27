@@ -12,7 +12,7 @@ class DriverManager(object):
         log("====== WebDriver manager ======", level=log_level)
         new_session()
 
-    def dontVerifySsl(self):
+    def dont_verify_ssl(self):
         session().verify = False
         return self
 

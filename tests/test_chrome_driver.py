@@ -33,7 +33,7 @@ def test_chrome_manager_with_selenium():
 
 
 def test_chrome_manager_without_verifying_with_selenium():
-    driver_path = ChromeDriverManager().dontVerifySsl().install()
+    driver_path = ChromeDriverManager().dont_verify_ssl().install()
     driver = webdriver.Chrome(driver_path)
     driver.get("http://automation-remarks.com")
     driver.close()
