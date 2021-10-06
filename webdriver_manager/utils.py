@@ -2,8 +2,8 @@ import datetime
 import os
 import platform
 import re
-import sys
 import subprocess
+import sys
 
 import requests
 
@@ -154,7 +154,9 @@ def chrome_version(browser_type=ChromeType.GOOGLE):
         version = re.search(pattern, stdout)
 
     if not version:
-        raise ValueError(f'Could not get version for Chrome with this command: {cmd}')
+        raise ValueError(
+            f'Could not get version for {browser_type} with the command: {cmd}'
+        )
     current_version = version.group(0)
     return current_version
 
