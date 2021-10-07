@@ -39,6 +39,7 @@ jobs:
       - name: Install Macos dependencies
         if: startsWith(runner.os, 'macOS')
         run: |
+          brew update
           brew install --cask chromium opera
 
       - name: Install Python dependencies
