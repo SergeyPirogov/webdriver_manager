@@ -23,7 +23,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(exclude=['tests']),
     include_package_data=True,
-    version='3.4.3',
+    version='3.5.0',
     description=('Library provides the way to automatically manage drivers for different browsers'),
     author='Sergey Pirogov',
     author_email='automationremarks@gmail.com',
@@ -36,6 +36,8 @@ setuptools.setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Topic :: Software Development :: '
         'Libraries :: Python Modules',
         'Operating System :: Microsoft :: Windows',

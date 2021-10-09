@@ -1,12 +1,20 @@
 import os
+
 import pytest
-from selenium import webdriver
+
 from webdriver_manager.microsoft import IEDriverManager
 
 
-@pytest.mark.parametrize("version", ["2.53.1",
-                                     "3.0",
-                                     "latest"])
+@pytest.mark.parametrize("version", [
+    "2.53.1",
+    "3.0",
+    "3.13.0",
+    "3.141.59",
+    "3.150.0",
+    # "3.150.1",
+    # "3.150.2",
+    "latest",
+])
 def test_ie_manager_with_different_versions(version):
     path = IEDriverManager(version).install()
     assert os.path.exists(path)
