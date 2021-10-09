@@ -3,20 +3,19 @@
 
 ## 3.5.0
 ### Fixes
-- Fix: WinError6 while executing script, packed in .exe by pyinstaller
-- Fix: stdio problem when making exe using pyinstaller with noconsole flag
-- Fix: error with execution right on linux afer extraction from zip
-- Fix: In Manager.DriverManager constructor named argument log_level is never passed to log()
-- Fix: first-line not hidden when logs disabled
+- Fix: WinError6 while executing script, packed in .exe by pyinstaller (#198)
+- Fix: stdio problem when making exe using pyinstaller with noconsole flag (#198)
+- Fix: error with execution right on linux afer extraction from zip (#208)
+- Fix: In Manager.DriverManager constructor named argument log_level is never passed to log() (#172
+- Fix: first-line not hidden when logs disabled (#212)
 
 ### Features
 - Download IEDriverServer from GitHub (#227)
 
 ### Other
-- webdriver_manager tested on 3.6, **3.7, 3.8, 3.9, 3.10** (#235)
-- webdriver_manager supports 3.6, 3.7, 3.8, **3.9, 3.10** (#235)
-- webdriver_manager releases to pypi on publishing GitHub release (#238)
-- renamed ci token from GITHUB_TOKEN to GH_TOKEN (#234)
+- webdriver_manager now tests on 3.6, **3.7, 3.8, 3.9, 3.10** (#235)
+- webdriver_manager now supports not only 3.6, 3.7, 3.8, but also **3.9, 3.10** (#235) (tbh always has been)
+- webdriver_manager now releases to pypi by clicking "Publish GitHub release" button (#238)
 ---
 
 lots releases ago...
