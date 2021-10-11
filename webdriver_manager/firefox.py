@@ -16,7 +16,8 @@ class GeckoDriverManager(DriverManager):
                  print_first_line=True,
                  cache_valid_range=1):
         super(GeckoDriverManager, self).__init__(path, print_first_line, cache_valid_range)
-        # Parameter log_level is no longer used, remains to avoid breaking external calls
+        # Parameter log_level is no longer used,
+        # it remains to avoid breaking external calls
 
         self.driver = GeckoDriver(version=version,
                                   os_type=os_type,
