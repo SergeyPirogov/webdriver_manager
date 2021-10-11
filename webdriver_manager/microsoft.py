@@ -18,7 +18,8 @@ class IEDriverManager(DriverManager):
         print_first_line=True,
         cache_valid_range=1,
     ):
-        super().__init__(path, log_level, print_first_line, cache_valid_range)
+        super().__init__(path, print_first_line, cache_valid_range)
+        # Parameter log_level is no longer used, remains to avoid breaking external calls
         self.driver = IEDriver(
             version=version,
             os_type=os_type,
@@ -45,7 +46,8 @@ class EdgeChromiumDriverManager(DriverManager):
         print_first_line=None,
         cache_valid_range=1,
     ):
-        super().__init__(path, log_level, print_first_line, cache_valid_range)
+        super().__init__(path, print_first_line, cache_valid_range)
+        # Parameter log_level is no longer used, remains to avoid breaking external calls
         self.driver = EdgeChromiumDriver(
             version=version,
             os_type=os_type,

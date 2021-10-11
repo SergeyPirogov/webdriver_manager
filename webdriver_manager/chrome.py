@@ -1,9 +1,8 @@
-import logging
 import os
 
 from webdriver_manager import utils
 from webdriver_manager.driver import ChromeDriver
-from webdriver_manager.logger import log
+from webdriver_manager.logger import logger
 from webdriver_manager.manager import DriverManager
 from webdriver_manager.utils import ChromeType
 
@@ -16,11 +15,12 @@ class ChromeDriverManager(DriverManager):
                  url="https://chromedriver.storage.googleapis.com",
                  latest_release_url="https://chromedriver.storage.googleapis.com/LATEST_RELEASE",
                  chrome_type=ChromeType.GOOGLE,
-                 log_level=logging.INFO,
+                 log_level=None,
                  print_first_line=True,
                  cache_valid_range=1):
-        super().__init__(path, log_level=log_level, print_first_line=print_first_line,
+        super().__init__(path, print_first_line=print_first_line,
                          cache_valid_range=cache_valid_range)
+        # Parameter log_level is no longer used, remains to avoid breaking external calls
 
         self.driver = ChromeDriver(name=name,
                                    version=version,
@@ -30,7 +30,7 @@ class ChromeDriverManager(DriverManager):
                                    chrome_type=chrome_type)
 
     def install(self):
-        log(f"Current {self.driver.chrome_type} version is {self.driver.browser_version}", first_line=True)
+        logger.info(f"Current {self.driver.chrome_type} version is {self.driver.browser_version}")
         driver_path = self._get_driver_path(self.driver)
 
         os.chmod(driver_path, 0o755)

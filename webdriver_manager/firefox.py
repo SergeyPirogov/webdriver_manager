@@ -1,9 +1,7 @@
-import logging
-
 from webdriver_manager import utils
 from webdriver_manager.driver import GeckoDriver
 from webdriver_manager.manager import DriverManager
-from webdriver_manager.logger import log
+from webdriver_manager.logger import logger
 
 
 class GeckoDriverManager(DriverManager):
@@ -14,10 +12,11 @@ class GeckoDriverManager(DriverManager):
                  url="https://github.com/mozilla/geckodriver/releases/download",
                  latest_release_url="https://api.github.com/repos/mozilla/geckodriver/releases/latest",
                  mozila_release_tag="https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}",
-                 log_level=logging.INFO,
+                 log_level=None,
                  print_first_line=True,
                  cache_valid_range=1):
-        super(GeckoDriverManager, self).__init__(path, log_level, print_first_line, cache_valid_range)
+        super(GeckoDriverManager, self).__init__(path, print_first_line, cache_valid_range)
+        # Parameter log_level is no longer used, remains to avoid breaking external calls
 
         self.driver = GeckoDriver(version=version,
                                   os_type=os_type,
@@ -27,5 +26,5 @@ class GeckoDriverManager(DriverManager):
                                   mozila_release_tag=mozila_release_tag)
 
     def install(self):
-        log(f"Current firefox version is {self.driver.browser_version}", first_line=True)
+        logger.info(f"Current firefox version is {self.driver.browser_version}")
         return self._get_driver_path(self.driver)

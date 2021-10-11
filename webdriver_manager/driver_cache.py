@@ -3,7 +3,7 @@ import json
 import os
 import sys
 
-from webdriver_manager.logger import log
+from webdriver_manager.logger import logger
 from webdriver_manager.utils import get_date_diff, File, save_file
 
 
@@ -29,7 +29,7 @@ class DriverCache(object):
         binary = self.__get_binary(files, driver_name)
         binary_path = os.path.join(path, binary)
         self.__save_metadata(browser_version, driver_name, os_type, driver_version, binary_path)
-        log(f"Driver has been saved in cache [{path}]")
+        logger.info(f"Driver has been saved in cache [{path}]")
         return binary_path
 
     def __get_binary(self, files, driver_name):
@@ -67,7 +67,7 @@ class DriverCache(object):
 
         key = f"{os_type}_{driver_name}_{driver_version}_for_{browser_version}"
         if key not in metadata:
-            log(f"There is no [{os_type}] {driver_name} for browser {browser_version} in cache")
+            logger.info(f"There is no [{os_type}] {driver_name} for browser {browser_version} in cache")
             return None
 
         driver_info = metadata[key]
@@ -76,7 +76,7 @@ class DriverCache(object):
             return None
 
         path = driver_info['binary_path']
-        log(f"Driver [{path}] found in cache")
+        logger.info(f"Driver [{path}] found in cache")
         return path
 
     def __is_valid(self, driver_info):
