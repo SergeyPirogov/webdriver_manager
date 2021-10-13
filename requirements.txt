@@ -1,4 +1,4 @@
-selenium==3.141.0
+selenium==4.0.0
 pytest==6.2.5
 pytest-cov==3.0.0
 codecov==2.1.12
