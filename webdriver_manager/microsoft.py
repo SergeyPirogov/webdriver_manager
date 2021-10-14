@@ -12,7 +12,7 @@ class IEDriverManager(DriverManager):
         path=None,
         name="IEDriverServer",
         url="https://github.com/seleniumhq/selenium/releases/download",
-        latest_release_url="https://api.github.com/repos/seleniumhq/selenium/releases/latest",
+        latest_release_url="https://api.github.com/repos/seleniumhq/selenium/releases",
         ie_release_tag="https://api.github.com/repos/seleniumhq/selenium/releases/tags/selenium-{0}",
         log_level=None,
         print_first_line=True,
