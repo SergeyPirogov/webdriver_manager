@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.5.1
+- Fix huge typo in IEDriver (appeared accidentally in 3.5.0 version)
+- Adopt finding latest IEDriverSever for irregular releases in selenium.
 
 ## 3.5.0
 ### Fixes
