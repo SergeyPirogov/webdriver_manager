@@ -148,8 +148,8 @@ class IEDriver(Driver):
         super(IEDriver, self).__init__(
             name,
             version,
-            url,
             os_type,
+            url,
             latest_release_url,
         )
         self.os_type = "x64" if os_type == "win64" else "Win32"
@@ -173,7 +173,14 @@ class IEDriver(Driver):
             headers=self.auth_header,
         )
         validate_response(resp)
-        return resp.json()["tag_name"].replace('selenium-', '')
+        releases = resp.json()
+        release = next(
+            release
+            for release in releases
+            for asset in release['assets']
+            if asset['name'].startswith(self.get_name())
+        )
+        return release['tag_name'].replace('selenium-', '')
 
     def get_url(self):
         """Like https://github.com/seleniumhq/selenium/releases/download/3.141.59/IEDriverServer_Win32_3.141.59.zip"""
