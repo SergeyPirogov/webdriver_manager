@@ -1,3 +1,5 @@
+import os
+
 from webdriver_manager import utils
 from webdriver_manager.driver import EdgeChromiumDriver
 from webdriver_manager.driver import IEDriver
@@ -55,4 +57,7 @@ class EdgeChromiumDriverManager(DriverManager):
         )
 
     def install(self):
-        return self._get_driver_path(self.driver)
+        driver_path = self._get_driver_path(self.driver)
+
+        os.chmod(driver_path, 0o755)
+        return driver_path

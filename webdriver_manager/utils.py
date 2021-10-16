@@ -135,7 +135,8 @@ def linux_browser_apps_to_cmd(*apps: str) -> str:
     return ' || '.join(list(map(lambda i: f'{i} --version{ignore_errors_cmd_part}', apps)))
 
 
-def chrome_version(browser_type=ChromeType.GOOGLE):
+def get_browser_version_from_os(browser_type=None):
+    """Return installed browser version."""
     pattern = r'\d+\.\d+\.\d+'
 
     cmd_mapping = {
@@ -150,6 +151,7 @@ def chrome_version(browser_type=ChromeType.GOOGLE):
             OSType.WIN: r'reg query "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome" /v version'
         },
         ChromeType.MSEDGE: {
+            OSType.LINUX: linux_browser_apps_to_cmd('microsoft-edge', 'microsoft-edge-stable', 'microsoft-edge-beta', 'microsoft-edge-dev'),
             OSType.MAC: r'/Applications/Microsoft\ Edge.app/Contents/MacOS/Microsoft\ Edge --version',
             OSType.WIN: r'reg query "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Edge\BLBeacon" /v version',
         }

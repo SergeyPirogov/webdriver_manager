@@ -6,7 +6,7 @@ import platform
 from webdriver_manager.logger import log
 from webdriver_manager.utils import (
     validate_response,
-    chrome_version,
+    get_browser_version_from_os,
     ChromeType,
     os_name,
     OSType,
@@ -52,7 +52,7 @@ class ChromeDriver(Driver):
         super(ChromeDriver, self).__init__(name, version, os_type, url,
                                            latest_release_url)
         self.chrome_type = chrome_type
-        self.browser_version = chrome_version(chrome_type)
+        self.browser_version = get_browser_version_from_os(chrome_type)
 
     def get_os_type(self):
         if "win" in super().get_os_type():
@@ -265,10 +265,22 @@ class OperaDriver(Driver):
 
 
 class EdgeChromiumDriver(Driver):
-    def __init__(self, name, version, os_type, url, latest_release_url):
-        super(EdgeChromiumDriver, self).__init__(name, version, os_type, url,
-                                                 latest_release_url)
-        self.browser_version = ""
+    def __init__(
+        self,
+        name,
+        version,
+        os_type,
+        url,
+        latest_release_url,
+    ):
+        super(EdgeChromiumDriver, self).__init__(
+            name,
+            version,
+            os_type,
+            url,
+            latest_release_url,
+        )
+        self.browser_version = get_browser_version_from_os(ChromeType.MSEDGE)
 
     def get_latest_release_version(self):
         # type: () -> str
