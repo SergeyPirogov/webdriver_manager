@@ -6,7 +6,7 @@ import requests
 from webdriver_manager.logger import log
 from webdriver_manager.utils import (
     validate_response,
-    chrome_version,
+    get_browser_version_from_os,
     ChromeType,
     os_name,
     OSType,
@@ -52,7 +52,7 @@ class ChromeDriver(Driver):
         super(ChromeDriver, self).__init__(name, version, os_type, url,
                                            latest_release_url)
         self.chrome_type = chrome_type
-        self.browser_version = chrome_version(chrome_type)
+        self.browser_version = get_browser_version_from_os(chrome_type)
 
     def get_os_type(self):
         if "win" in super().get_os_type():
@@ -264,18 +264,30 @@ class OperaDriver(Driver):
 
 
 class EdgeChromiumDriver(Driver):
-    def __init__(self, name, version, os_type, url, latest_release_url):
-        super(EdgeChromiumDriver, self).__init__(name, version, os_type, url,
-                                                 latest_release_url)
-        self.browser_version = ""
+    def __init__(
+        self,
+        name,
+        version,
+        os_type,
+        url,
+        latest_release_url,
+    ):
+        super(EdgeChromiumDriver, self).__init__(
+            name,
+            version,
+            os_type,
+            url,
+            latest_release_url,
+        )
+        self.browser_version = get_browser_version_from_os(ChromeType.MSEDGE)
 
-    def get_latest_release_version(self):
-        # type: () -> str
-        if os_name() == OSType.LINUX:
-            latest_release_url = "https://msedgedriver.azureedge.net/LATEST_STABLE"
-        else:
-            major_edge_version = chrome_version(ChromeType.MSEDGE).split(".")[0]
-            latest_release_url = self._latest_release_url + '_' + major_edge_version
+    def get_latest_release_version(self) -> str:
+        major_edge_version = self.browser_version.split(".")[0]
+        latest_release_url = {
+            OSType.WIN in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_WINDOWS',
+            OSType.MAC in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_MACOS',
+            OSType.LINUX in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_LINUX',
+        }[True]
         resp = requests.get(latest_release_url)
         validate_response(resp)
         return resp.text.rstrip()

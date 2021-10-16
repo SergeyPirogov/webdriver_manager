@@ -26,11 +26,22 @@ jobs:
       - name: Install browsers on Linux
         if: runner.os == 'Linux'
         run: |
+          sudo apt-get update
+          sudo apt-get install software-properties-common apt-transport-https wget
+
+          wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
+          sudo apt-get update && sudo apt install microsoft-edge-beta
+          microsoft-edge --version
+
           wget -qO- https://deb.opera.com/archive.key | sudo apt-key add -
           sudo add-apt-repository "deb [arch=i386,amd64] https://deb.opera.com/opera-stable/ stable non-free"
           sudo apt-get update
-          sudo apt-get -y --no-install-recommends install opera-stable chromium-browser
+          sudo apt-get -y --no-install-recommends install opera-stable
           opera --version
+
+          sudo apt-get install chromium-browser
+          chromium --version
 
       - name: Install browsers on Windows
         if: runner.os == 'Windows'
