@@ -25,9 +25,8 @@ Before:
 You should download binary chromedriver, unzip it somewhere in you PC and set path to this driver like this:
 
 ```python
-webdriver.Chrome('/home/user/drivers/chromedriver')
-
-ChromeDriverManager(path=custom_path).install()
+from selenium import webdriver
+driver = webdriver.Chrome('/home/user/drivers/chromedriver')
 ```
 
 It’s boring!!! Moreover every time the new version of driver released, you should go and repeat all steps again and again.
