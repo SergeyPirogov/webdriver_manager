@@ -179,6 +179,18 @@ Driver cache by default is valid for 1 day. You are able to change this value us
 ChromeDriverManager("2.26", cache_valid_range=1).install()
 ```
 
+### Dealing with https proxy
+
+In case you need to work with a proxy you can use http_proxy and https_proxy environment variables. 
+
+Yet, when https connections are handled by proxy, requests may find problems verifying ssl certificates. This can be avoided by calling method dont_verify_ssl() from DriverManager class:
+
+```python
+ChromeDriverManager().dont_verify_ssl().install()
+```
+
+In case you need any further configuration on requests session used by WDM, you can access to it by invoking function session().
+
 This will make your test automation more elegant and robust!
 
 Cheers
