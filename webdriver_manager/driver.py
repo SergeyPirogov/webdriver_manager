@@ -6,7 +6,7 @@ import platform
 from webdriver_manager.logger import log
 from webdriver_manager.utils import (
     validate_response,
-    chrome_version,
+    get_browser_version_from_os,
     ChromeType,
     os_name,
     OSType,
@@ -52,7 +52,7 @@ class ChromeDriver(Driver):
         super(ChromeDriver, self).__init__(name, version, os_type, url,
                                            latest_release_url)
         self.chrome_type = chrome_type
-        self.browser_version = chrome_version(chrome_type)
+        self.browser_version = get_browser_version_from_os(chrome_type)
 
     def get_os_type(self):
         if "win" in super().get_os_type():
@@ -148,8 +148,8 @@ class IEDriver(Driver):
         super(IEDriver, self).__init__(
             name,
             version,
-            url,
             os_type,
+            url,
             latest_release_url,
         )
         self.os_type = "x64" if os_type == "win64" else "Win32"
@@ -173,7 +173,14 @@ class IEDriver(Driver):
             headers=self.auth_header,
         )
         validate_response(resp)
-        return resp.json()["tag_name"].replace('selenium-', '')
+        releases = resp.json()
+        release = next(
+            release
+            for release in releases
+            for asset in release['assets']
+            if asset['name'].startswith(self.get_name())
+        )
+        return release['tag_name'].replace('selenium-', '')
 
     def get_url(self):
         """Like https://github.com/seleniumhq/selenium/releases/download/3.141.59/IEDriverServer_Win32_3.141.59.zip"""
@@ -258,18 +265,30 @@ class OperaDriver(Driver):
 
 
 class EdgeChromiumDriver(Driver):
-    def __init__(self, name, version, os_type, url, latest_release_url):
-        super(EdgeChromiumDriver, self).__init__(name, version, os_type, url,
-                                                 latest_release_url)
-        self.browser_version = ""
+    def __init__(
+        self,
+        name,
+        version,
+        os_type,
+        url,
+        latest_release_url,
+    ):
+        super(EdgeChromiumDriver, self).__init__(
+            name,
+            version,
+            os_type,
+            url,
+            latest_release_url,
+        )
+        self.browser_version = get_browser_version_from_os(ChromeType.MSEDGE)
 
-    def get_latest_release_version(self):
-        # type: () -> str
-        if os_name() == OSType.LINUX:
-            latest_release_url = "https://msedgedriver.azureedge.net/LATEST_STABLE"
-        else:
-            major_edge_version = chrome_version(ChromeType.MSEDGE).split(".")[0]
-            latest_release_url = self._latest_release_url + '_' + major_edge_version
+    def get_latest_release_version(self) -> str:
+        major_edge_version = self.browser_version.split(".")[0]
+        latest_release_url = {
+            OSType.WIN in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_WINDOWS',
+            OSType.MAC in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_MACOS',
+            OSType.LINUX in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_LINUX',
+        }[True]
         resp = session().get(latest_release_url)
         validate_response(resp)
         return resp.text.rstrip()
