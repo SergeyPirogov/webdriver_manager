@@ -13,6 +13,21 @@ def test_opera_driver_manager_with_correct_version():
     assert os.path.exists(driver_path)
 
 
+def test_driver_with_ssl_verify_disabled_can_be_downloaded():
+    try:
+        os.environ['WDM_SSL_VERIFY'] = '0'
+        custom_path = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)),
+            "ssl_disabled",
+        )
+        driver_path = OperaDriverManager(path=custom_path).install()
+
+        assert os.path.exists(driver_path)
+
+    finally:
+        os.environ['WDM_SSL_VERIFY'] = ''
+
+
 def test_operadriver_manager_with_selenium():
     driver_path = OperaDriverManager().install()
     options = webdriver.ChromeOptions()

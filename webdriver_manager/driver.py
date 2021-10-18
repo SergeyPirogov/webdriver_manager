@@ -8,7 +8,6 @@ from webdriver_manager.utils import (
     validate_response,
     get_browser_version_from_os,
     ChromeType,
-    os_name,
     OSType,
     firefox_version,
 )
@@ -25,6 +24,7 @@ class Driver(object):
         self._version = version
         self._os_type = os_type
         self._latest_release_url = latest_release_url
+        self.ssl_verify = False if os.getenv('WDM_SSL_VERIFY') == '0' else True
 
     def get_name(self):
         return self._name
@@ -61,7 +61,10 @@ class ChromeDriver(Driver):
 
     def get_latest_release_version(self):
         log(f"Get LATEST driver version for {self.browser_version}")
-        resp = requests.get(f"{self._latest_release_url}_{self.browser_version}")
+        resp = requests.get(
+            url=f"{self._latest_release_url}_{self.browser_version}",
+            verify=self.ssl_verify
+        )
         validate_response(resp)
         return resp.text.rstrip()
 
@@ -99,6 +102,7 @@ class GeckoDriver(Driver):
         resp = requests.get(
             url=self.latest_release_url,
             headers=self.auth_header,
+            verify=self.ssl_verify,
         )
         validate_response(resp)
         return resp.json()["tag_name"]
@@ -109,6 +113,7 @@ class GeckoDriver(Driver):
         resp = requests.get(
             url=self.tagged_release_url(self.get_version()),
             headers=self.auth_header,
+            verify=self.ssl_verify,
         )
         validate_response(resp)
         assets = resp.json()["assets"]
@@ -170,6 +175,7 @@ class IEDriver(Driver):
         resp = requests.get(
             url=self.latest_release_url,
             headers=self.auth_header,
+            verify=self.ssl_verify,
         )
         validate_response(resp)
         releases = resp.json()
@@ -187,6 +193,7 @@ class IEDriver(Driver):
         resp = requests.get(
             url=self.tagged_release_url(self.get_version()),
             headers=self.auth_header,
+            verify=self.ssl_verify,
         )
         validate_response(resp)
         assets = resp.json()["assets"]
@@ -235,19 +242,24 @@ class OperaDriver(Driver):
             log("GH_TOKEN will be used to perform requests")
             self.auth_header = {'Authorization': f'token {self._os_token}'}
 
-    def get_latest_release_version(self):
-        # type: () -> str
-        resp = requests.get(self.latest_release_url, headers=self.auth_header)
+    def get_latest_release_version(self) -> str:
+        resp = requests.get(
+            url=self.latest_release_url,
+            headers=self.auth_header,
+            verify=self.ssl_verify,
+        )
         validate_response(resp)
         return resp.json()["tag_name"]
 
-    def get_url(self):
-        # type: () -> str
+    def get_url(self) -> str:
         # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
         version = self.get_version()
         log(f"Getting latest opera release info for {version}")
-        resp = requests.get(url=self.tagged_release_url(version),
-                            headers=self.auth_header)
+        resp = requests.get(
+            url=self.tagged_release_url(version),
+            headers=self.auth_header,
+            verify=self.ssl_verify,
+        )
         validate_response(resp)
         assets = resp.json()["assets"]
         name = "{0}_{1}".format(self.get_name(), self.get_os_type())
@@ -288,6 +300,6 @@ class EdgeChromiumDriver(Driver):
             OSType.MAC in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_MACOS',
             OSType.LINUX in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_LINUX',
         }[True]
-        resp = requests.get(latest_release_url)
+        resp = requests.get(latest_release_url, verify=self.ssl_verify)
         validate_response(resp)
         return resp.text.rstrip()

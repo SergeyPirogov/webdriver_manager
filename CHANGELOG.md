@@ -1,5 +1,11 @@
 # Changelog
 
+---
+## 3.5.2
+### SSL
+- Feature: now you can disable SSL verification by setting `os.environ['WDM_SSL_VERIFY']='0'` in case if you have troubles with SSL Certificates or SSL Certificate Chain (like in issues
+  [#219](https://github.com/SergeyPirogov/webdriver_manager/issues/219), [#226](https://github.com/SergeyPirogov/webdriver_manager/issues/226))
+---
 ## 3.5.1
 ### IEDriver
 - Fix: huge typo in IEDriver (appeared accidentally in 3.5.0 version)
