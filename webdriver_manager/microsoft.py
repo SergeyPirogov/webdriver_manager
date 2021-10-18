@@ -14,13 +14,10 @@ class IEDriverManager(DriverManager):
         url="https://github.com/seleniumhq/selenium/releases/download",
         latest_release_url="https://api.github.com/repos/seleniumhq/selenium/releases/latest",
         ie_release_tag="https://api.github.com/repos/seleniumhq/selenium/releases/tags/selenium-{0}",
-        log_level=None,
         print_first_line=True,
         cache_valid_range=1,
     ):
         super().__init__(path, print_first_line, cache_valid_range)
-        # Parameter log_level is no longer used,
-        # it remains to avoid breaking external calls
         self.driver = IEDriver(
             version=version,
             os_type=os_type,
@@ -43,13 +40,10 @@ class EdgeChromiumDriverManager(DriverManager):
         name="edgedriver",
         url="https://msedgedriver.azureedge.net",
         latest_release_url="https://msedgedriver.azureedge.net/LATEST_RELEASE",
-        log_level=None,
         print_first_line=None,
         cache_valid_range=1,
     ):
         super().__init__(path, print_first_line, cache_valid_range)
-        # Parameter log_level is no longer used,
-        # it remains to avoid breaking external calls
         self.driver = EdgeChromiumDriver(
             version=version,
             os_type=os_type,

@@ -16,12 +16,9 @@ class OperaDriverManager(DriverManager):
                  "operasoftware/operachromiumdriver/releases/latest",
                  opera_release_tag="https://api.github.com/repos/"
                  "operasoftware/operachromiumdriver/releases/tags/{0}",
-                 log_level=None,
                  print_first_line=True,
                  cache_valid_range=1):
         super().__init__(path, print_first_line, cache_valid_range)
-        # Parameter log_level is no longer used,
-        # it remains to avoid breaking external calls
 
         self.driver = OperaDriver(name=name,
                                   version=version,
