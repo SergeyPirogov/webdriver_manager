@@ -60,7 +60,7 @@ class ChromeDriver(Driver):
         return super().get_os_type()
 
     def get_latest_release_version(self):
-        logger.info(f"Get LATEST driver version for {self.browser_version}")
+        logger.info("Get LATEST driver version for %s",self.browser_version)
         resp = requests.get(f"{self._latest_release_url}_{self.browser_version}")
         validate_response(resp)
         return resp.text.rstrip()
@@ -92,10 +92,10 @@ class GeckoDriver(Driver):
             else None
         )
         if self._os_token:
-            logger.info("GH_TOKEN will be used to perform requests", first_line=True)
+            logger.info("GH_TOKEN will be used to perform requests")
 
     def get_latest_release_version(self) -> str:
-        logger.info(f"Get LATEST driver version for {self.browser_version}")
+        logger.info("Get LATEST driver version for %s", self.browser_version)
         resp = requests.get(
             url=self.latest_release_url,
             headers=self.auth_header,
@@ -105,7 +105,7 @@ class GeckoDriver(Driver):
 
     def get_url(self):
         """Like https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz"""
-        logger.info(f"Getting latest mozilla release info for {self.get_version()}")
+        logger.info("Getting latest mozilla release info for %s", self.get_version())
         resp = requests.get(
             url=self.tagged_release_url(self.get_version()),
             headers=self.auth_header,
@@ -163,10 +163,10 @@ class IEDriver(Driver):
             else None
         )
         if self._os_token:
-            logger.info("GH_TOKEN will be used to perform requests", first_line=True)
+            logger.info("GH_TOKEN will be used to perform requests")
 
     def get_latest_release_version(self) -> str:
-        logger.info(f"Get LATEST driver version for {self.browser_version}")
+        logger.info("Get LATEST driver version for %s", self.browser_version)
         resp = requests.get(
             url=self.latest_release_url,
             headers=self.auth_header,
@@ -176,7 +176,7 @@ class IEDriver(Driver):
 
     def get_url(self):
         """Like https://github.com/seleniumhq/selenium/releases/download/3.141.59/IEDriverServer_Win32_3.141.59.zip"""
-        logger.info(f"Getting latest ie release info for {self.get_version()}")
+        logger.info("Getting latest ie release info for %s", self.get_version())
         resp = requests.get(
             url=self.tagged_release_url(self.get_version()),
             headers=self.auth_header,
@@ -238,7 +238,7 @@ class OperaDriver(Driver):
         # type: () -> str
         # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
         version = self.get_version()
-        logger.info(f"Getting latest opera release info for {version}")
+        logger.info("Getting latest opera release info for %s", version)
         resp = requests.get(url=self.tagged_release_url(version),
                             headers=self.auth_header)
         validate_response(resp)
