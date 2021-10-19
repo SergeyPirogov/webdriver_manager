@@ -66,7 +66,8 @@ class ChromeDriver(Driver):
 
     def get_latest_release_version(self):
         log(f"Get LATEST driver version for {self.browser_version}")
-        resp = self._session.get(f"{self._latest_release_url}_{self.browser_version}")
+        url = f"{self._latest_release_url}_{self.browser_version}"
+        resp = self._session.get(url)
         validate_response(resp)
         return resp.text.rstrip()
 
@@ -243,7 +244,10 @@ class OperaDriver(Driver):
 
     def get_latest_release_version(self):
         # type: () -> str
-        resp = self._session.get(self.latest_release_url, headers=self.auth_header)
+        resp = self._session.get(
+            self.latest_release_url,
+            headers=self.auth_header
+        )
         validate_response(resp)
         return resp.json()["tag_name"]
 
