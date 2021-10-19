@@ -11,6 +11,7 @@ from webdriver_manager.utils import (
     os_name,
     OSType,
     firefox_version,
+    handle_driver_download_ssl_verify,
 )
 
 
@@ -19,7 +20,11 @@ class Driver(object):
                  version,
                  os_type,
                  url,
-                 latest_release_url):
+                 latest_release_url,
+                 ):
+        session = requests.Session()
+        session.verify = handle_driver_download_ssl_verify()
+        self._session = session
         self._name = name
         self._url = url
         self._version = version
@@ -61,7 +66,7 @@ class ChromeDriver(Driver):
 
     def get_latest_release_version(self):
         log(f"Get LATEST driver version for {self.browser_version}")
-        resp = requests.get(f"{self._latest_release_url}_{self.browser_version}")
+        resp = self._session.get(f"{self._latest_release_url}_{self.browser_version}")
         validate_response(resp)
         return resp.text.rstrip()
 
@@ -96,7 +101,7 @@ class GeckoDriver(Driver):
 
     def get_latest_release_version(self) -> str:
         log(f"Get LATEST driver version for {self.browser_version}")
-        resp = requests.get(
+        resp = self._session.get(
             url=self.latest_release_url,
             headers=self.auth_header,
         )
@@ -106,7 +111,7 @@ class GeckoDriver(Driver):
     def get_url(self):
         """Like https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz"""
         log(f"Getting latest mozilla release info for {self.get_version()}")
-        resp = requests.get(
+        resp = self._session.get(
             url=self.tagged_release_url(self.get_version()),
             headers=self.auth_header,
         )
@@ -167,7 +172,7 @@ class IEDriver(Driver):
 
     def get_latest_release_version(self) -> str:
         log(f"Get LATEST driver version for {self.browser_version}")
-        resp = requests.get(
+        resp = self._session.get(
             url=self.latest_release_url,
             headers=self.auth_header,
         )
@@ -184,7 +189,7 @@ class IEDriver(Driver):
     def get_url(self):
         """Like https://github.com/seleniumhq/selenium/releases/download/3.141.59/IEDriverServer_Win32_3.141.59.zip"""
         log(f"Getting latest ie release info for {self.get_version()}")
-        resp = requests.get(
+        resp = self._session.get(
             url=self.tagged_release_url(self.get_version()),
             headers=self.auth_header,
         )
@@ -224,7 +229,8 @@ class OperaDriver(Driver):
                  os_type,
                  url,
                  latest_release_url,
-                 opera_release_tag):
+                 opera_release_tag,
+                 ):
         super(OperaDriver, self).__init__(name, version, os_type, url,
                                           latest_release_url)
         self.opera_release_tag = opera_release_tag
@@ -237,7 +243,7 @@ class OperaDriver(Driver):
 
     def get_latest_release_version(self):
         # type: () -> str
-        resp = requests.get(self.latest_release_url, headers=self.auth_header)
+        resp = self._session.get(self.latest_release_url, headers=self.auth_header)
         validate_response(resp)
         return resp.json()["tag_name"]
 
@@ -246,7 +252,7 @@ class OperaDriver(Driver):
         # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
         version = self.get_version()
         log(f"Getting latest opera release info for {version}")
-        resp = requests.get(url=self.tagged_release_url(version),
+        resp = self._session.get(url=self.tagged_release_url(version),
                             headers=self.auth_header)
         validate_response(resp)
         assets = resp.json()["assets"]
@@ -288,6 +294,6 @@ class EdgeChromiumDriver(Driver):
             OSType.MAC in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_MACOS',
             OSType.LINUX in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_LINUX',
         }[True]
-        resp = requests.get(latest_release_url)
+        resp = self._session.get(latest_release_url)
         validate_response(resp)
         return resp.text.rstrip()

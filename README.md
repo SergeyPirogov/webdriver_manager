@@ -172,6 +172,14 @@ import os
 os.environ['WDM_LOCAL'] = '1'
 ```
 
+### `WDM_DRIVER_DOWNLOAD_SSL_VERIFY`
+
+In case your organization is behind a https proxy, driver download won't work. To cope with this situation you use this environment variable with the value False or with the route to the proxy certificate.
+
+```
+export WDM_DRIVER_DOWNLOAD_SSL_VERIFY=False
+```
+
 ### `cache_valid_range`
 Driver cache by default is valid for 1 day. You are able to change this value using constructor parameter:
 

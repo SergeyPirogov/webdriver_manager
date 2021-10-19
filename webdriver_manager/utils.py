@@ -88,9 +88,14 @@ def write_file(content, path):
     return path
 
 
+def handle_driver_download_ssl_verify():
+    return False if os.getenv('WDM_DRIVER_DOWNLOAD_SSL_VERIFY') == 'False' else verify
+
 def download_file(url: str) -> File:
     log(f"Trying to download new driver from {url}")
-    response = requests.get(url, stream=True)
+    session = requests.Session()
+    session.verify = handle_driver_download_ssl_verify()
+    response = session.get(url, stream=True)
     validate_response(response)
     return File(response)
 
