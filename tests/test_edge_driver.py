@@ -15,6 +15,21 @@ def test_edge_manager_with_selenium():
     driver.quit()
 
 
+def test_driver_with_ssl_verify_disabled_can_be_downloaded():
+    try:
+        os.environ['WDM_SSL_VERIFY'] = '0'
+        custom_path = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)),
+            "ssl_disabled",
+        )
+        driver_path = EdgeChromiumDriverManager(path=custom_path).install()
+
+        assert os.path.exists(driver_path)
+
+    finally:
+        os.environ['WDM_SSL_VERIFY'] = ''
+
+
 def test_edge_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
         driver_path = EdgeChromiumDriverManager(
@@ -25,9 +40,9 @@ def test_edge_manager_with_wrong_version():
         driver.quit()
 
     assert (
-        "There is no such driver by url "
-        "https://msedgedriver.azureedge.net/0.2/edgedriver_win64.zip"
-    ) in ex.value.args[0]
+               "There is no such driver by url "
+               "https://msedgedriver.azureedge.net/0.2/edgedriver_win64.zip"
+           ) in ex.value.args[0]
 
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64', 'linux64', 'mac64'])

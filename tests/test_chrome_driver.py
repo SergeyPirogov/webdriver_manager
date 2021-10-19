@@ -32,6 +32,21 @@ def test_chrome_manager_with_selenium():
     driver.close()
 
 
+def test_driver_with_ssl_verify_disabled_can_be_downloaded():
+    try:
+        os.environ['WDM_SSL_VERIFY'] = '0'
+        custom_path = os.path.join(os.path.dirname(
+            os.path.dirname(__file__)),
+            "ssl_disabled",
+        )
+        driver_path = ChromeDriverManager(path=custom_path).install()
+
+        assert os.path.exists(driver_path)
+
+    finally:
+        os.environ['WDM_SSL_VERIFY'] = ''
+
+
 def test_chrome_manager_cached_driver_with_selenium():
     custom_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "custom")
     manager = ChromeDriverManager(path=custom_path)

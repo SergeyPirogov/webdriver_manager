@@ -27,7 +27,7 @@ class DriverManager(object):
         if binary_path:
             return binary_path
 
-        file = download_file(driver.get_url())
+        file = download_file(driver.get_url(), driver.ssl_verify)
         binary_path = self.driver_cache.save_file_to_cache(file, browser_version,
                                                            driver_name, os_type, driver_version)
         return binary_path
