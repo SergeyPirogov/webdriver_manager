@@ -23,4 +23,4 @@ def log(text, level=logging.INFO, name="WDM", first_line=False, formatter='[%(na
     _init_logger(level, name, first_line, formatter)
     loggers.get(name).info(text)
     
-_init_logger()
+# _init_logger()
