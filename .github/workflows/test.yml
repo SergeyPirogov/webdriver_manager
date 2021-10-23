@@ -9,6 +9,8 @@ on:
 jobs:
   test:
     runs-on: ${{ matrix.os }}
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       fail-fast: false
       matrix:
@@ -64,8 +66,6 @@ jobs:
 
       - name: Run tests on Linux (with xvfb)
         if: runner.os == 'Linux'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: GabrielBB/xvfb-action@v1.0
         with:
           run: |
@@ -73,15 +73,11 @@ jobs:
 
       - name: Run tests on Windows (without xvfb)
         if: runner.os == 'Windows'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pipenv run py.test -sv --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
 
       - name: Run tests on MacOS (without xvfb)
         if: startsWith(runner.os, 'macOS')
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pipenv run py.test -sv --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
 
