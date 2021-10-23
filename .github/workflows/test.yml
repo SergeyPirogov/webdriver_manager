@@ -55,8 +55,9 @@ jobs:
       - name: Install browsers on MacOS
         if: startsWith(runner.os, 'macOS')
         run: |
+          brew tap domt4/chromium
           brew update
-          brew install --cask chromium opera
+          brew install --cask mac-chromium opera
 
       - name: Install Python dependencies
         run: |
