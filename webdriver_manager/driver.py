@@ -72,7 +72,8 @@ class ChromeDriver(Driver):
             verify=self.ssl_verify
         )
         validate_response(resp)
-        return resp.text.rstrip()
+        self._version = resp.text.rstrip()
+        return self._version
 
 
 class GeckoDriver(Driver):
@@ -112,7 +113,8 @@ class GeckoDriver(Driver):
             verify=self.ssl_verify,
         )
         validate_response(resp)
-        return resp.json()["tag_name"]
+        self._version = resp.json()["tag_name"]
+        return self._version
 
     def get_url(self):
         """Like https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz"""
@@ -192,7 +194,8 @@ class IEDriver(Driver):
             for asset in release['assets']
             if asset['name'].startswith(self.get_name())
         )
-        return release['tag_name'].replace('selenium-', '')
+        self._version = release['tag_name'].replace('selenium-', '')
+        return self._version
 
     def get_url(self):
         """Like https://github.com/seleniumhq/selenium/releases/download/3.141.59/IEDriverServer_Win32_3.141.59.zip"""
@@ -256,7 +259,8 @@ class OperaDriver(Driver):
             verify=self.ssl_verify,
         )
         validate_response(resp)
-        return resp.json()["tag_name"]
+        self._version = resp.json()["tag_name"]
+        return self._version
 
     def get_url(self) -> str:
         # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
@@ -315,4 +319,5 @@ class EdgeChromiumDriver(Driver):
         )
         resp = requests.get(latest_release_url, verify=self.ssl_verify)
         validate_response(resp)
-        return resp.text.rstrip()
+        self._version = resp.text.rstrip()
+        return self._version
