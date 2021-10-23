@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest, macos-latest ]
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
         python-version: [ '3.6', '3.10' ]
 
     steps:
@@ -50,7 +50,6 @@ jobs:
         shell: powershell
         run: |
           choco install chromium opera --no-progress -y --force
-          .github\set_win_reg_keys.ps1
 
       - name: Install browsers on MacOS
         if: startsWith(runner.os, 'macOS')
