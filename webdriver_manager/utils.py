@@ -79,7 +79,11 @@ def validate_response(resp):
     if resp.status_code == 404:
         raise ValueError("There is no such driver by url {}".format(resp.url))
     elif resp.status_code != 200:
-        raise ValueError(resp.json())
+        raise ValueError(
+            f'response body:\n{resp.json()}\n'
+            f'request url:\n{resp.request.url}\n'
+            f'response headers:\n{dict(resp.headers)}\n'
+        )
 
 
 def write_file(content, path):
@@ -149,35 +153,45 @@ def get_browser_version_from_os(browser_type=None):
     }
 
     cmd = cmd_mapping[browser_type][os_name()]
-    version = None
-    with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL,
-                          shell=True) as stream:
-        stdout = stream.communicate()[0].decode()
-        version = re.search(pattern, stdout)
+    version = read_version_from_cmd(cmd, pattern)
 
     if not version:
-        raise ValueError(
-            f'Could not get version for {browser_type} with the command: {cmd}'
-        )
-    current_version = version.group(0)
+        log(f'Could not get version for {browser_type} with the any command: {cmd}')
+
+    current_version = version.group(0) if version else 'UNKNOWN'
+
+    log(f"Current {browser_type} version is {current_version}")
     return current_version
 
 
 def firefox_version():
-    pattern = r'\d+.*'
+    pattern = r'(\d+.\d+)'
     cmd_mapping = {
         OSType.LINUX: 'firefox --version',
         OSType.MAC: r'/Applications/Firefox.app/Contents/MacOS/firefox --version',
         OSType.WIN: r"Powershell (Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\firefox.exe').'(Default)').VersionInfo.ProductVersion",
     }
     cmd = cmd_mapping[os_name()]
-    version = None
-    with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL,
-                          shell=True) as stream:
-        stdout = stream.communicate()[0].decode()
-        version = re.search(pattern, stdout)
+
+    version = read_version_from_cmd(cmd, pattern)
 
     if not version:
-        raise ValueError(f'Could not get version for Firefox with this command: {cmd}')
-    current_version = version.group(0)
+        log(f'Could not get version for firefox with the any command: {cmd}')
+
+    current_version = version.group(0) if version else 'UNKNOWN'
+
+    log(f"Current firefox version is {current_version}")
     return current_version
+
+
+def read_version_from_cmd(cmd, pattern):
+    with subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            stdin=subprocess.DEVNULL,
+            shell=True,
+    ) as stream:
+        stdout = stream.communicate()[0].decode()
+        version = re.search(pattern, stdout)
+    return version

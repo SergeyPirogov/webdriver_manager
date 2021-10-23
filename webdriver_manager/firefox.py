@@ -3,7 +3,6 @@ import logging
 from webdriver_manager import utils
 from webdriver_manager.driver import GeckoDriver
 from webdriver_manager.manager import DriverManager
-from webdriver_manager.logger import log
 
 
 class GeckoDriverManager(DriverManager):
@@ -27,5 +26,4 @@ class GeckoDriverManager(DriverManager):
                                   mozila_release_tag=mozila_release_tag)
 
     def install(self):
-        log(f"Current firefox version is {self.driver.browser_version}", first_line=True)
         return self._get_driver_path(self.driver)

@@ -3,7 +3,6 @@ import os
 
 from webdriver_manager import utils
 from webdriver_manager.driver import ChromeDriver
-from webdriver_manager.logger import log
 from webdriver_manager.manager import DriverManager
 from webdriver_manager.utils import ChromeType
 
@@ -30,7 +29,6 @@ class ChromeDriverManager(DriverManager):
                                    chrome_type=chrome_type)
 
     def install(self):
-        log(f"Current {self.driver.chrome_type} version is {self.driver.browser_version}", first_line=True)
         driver_path = self._get_driver_path(self.driver)
 
         os.chmod(driver_path, 0o755)
