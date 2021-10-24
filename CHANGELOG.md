@@ -2,9 +2,16 @@
 
 ---
 ## 3.5.2
-### SSL
-- Feature: now you can disable SSL verification by setting `os.environ['WDM_SSL_VERIFY']='0'` in case if you have troubles with SSL Certificates or SSL Certificate Chain (like in issues
+### Features
+- SSL verification can be disabled by setting `os.environ['WDM_SSL_VERIFY']='0'` in case if you have troubles with SSL Certificates or SSL Certificate Chain (like in issues
   [#219](https://github.com/SergeyPirogov/webdriver_manager/issues/219), [#226](https://github.com/SergeyPirogov/webdriver_manager/issues/226))
+### Fixes
+- Log duplication ([#259](https://github.com/SergeyPirogov/webdriver_manager/issues/259))
+- Failed to Download the Edge driver for particular Version ([#251](https://github.com/SergeyPirogov/webdriver_manager/issues/251))
+- WDM_LOG_LEVEL not work ([#255](https://github.com/SergeyPirogov/webdriver_manager/issues/255))
+### Improvements
+- Softly download latest webdriver version even if browser version is unknown. ([#254](https://github.com/SergeyPirogov/webdriver_manager/issues/254), also fixes [#251](https://github.com/SergeyPirogov/webdriver_manager/issues/251))
+- Speed up when using "latest" version ([#259](https://github.com/SergeyPirogov/webdriver_manager/issues/259))
 ---
 ## 3.5.1
 ### IEDriver
