@@ -21,7 +21,8 @@ class File(object):
     @property
     def filename(self) -> str:
         try:
-            filename = re.findall("filename=(.+)", self.__stream.headers["content-disposition"])[0]
+            filename = re.findall("filename=(.+)", self.__stream.headers[
+                "content-disposition"])[0]
         except KeyError:
             filename = f"{self.__temp_name}.zip"
         except IndexError:
@@ -92,7 +93,8 @@ def write_file(content, path):
     return path
 
 
-def download_file(url: str, ssl_verify=True, session: requests.Session= None) -> File:
+def download_file(url: str, ssl_verify=True,
+                  session: requests.Session = None) -> File:
     log(f"Trying to download new driver from {url}")
     if session is None:
         session = requests.Session()
@@ -103,14 +105,16 @@ def download_file(url: str, ssl_verify=True, session: requests.Session= None) ->
 
 def get_date_diff(date1, date2, date_format):
     a = datetime.datetime.strptime(date1, date_format)
-    b = datetime.datetime.strptime(str(date2.strftime(date_format)), date_format)
+    b = datetime.datetime.strptime(str(date2.strftime(date_format)),
+                                   date_format)
 
     return (b - a).days
 
 
 def get_filename_from_response(response, name):
     try:
-        filename = re.findall("filename=(.+)", response.headers["content-disposition"])[0]
+        filename = \
+        re.findall("filename=(.+)", response.headers["content-disposition"])[0]
     except KeyError:
         filename = "{}.zip".format(name)
     except IndexError:
@@ -128,8 +132,10 @@ def linux_browser_apps_to_cmd(*apps: str) -> str:
     Result command example:
         chromium --version || chromium-browser --version
     """
-    ignore_errors_cmd_part = ' 2>/dev/null' if os.getenv('WDM_LOG_LEVEL') == '0' else ''
-    return ' || '.join(list(map(lambda i: f'{i} --version{ignore_errors_cmd_part}', apps)))
+    ignore_errors_cmd_part = ' 2>/dev/null' if os.getenv(
+        'WDM_LOG_LEVEL') == '0' else ''
+    return ' || '.join(
+        list(map(lambda i: f'{i} --version{ignore_errors_cmd_part}', apps)))
 
 
 def get_browser_version_from_os(browser_type=None):
@@ -138,17 +144,22 @@ def get_browser_version_from_os(browser_type=None):
 
     cmd_mapping = {
         ChromeType.GOOGLE: {
-            OSType.LINUX: linux_browser_apps_to_cmd('google-chrome', 'google-chrome-stable'),
+            OSType.LINUX: linux_browser_apps_to_cmd('google-chrome',
+                                                    'google-chrome-stable'),
             OSType.MAC: r'/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version',
             OSType.WIN: r'reg query "HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon" /v version'
         },
         ChromeType.CHROMIUM: {
-            OSType.LINUX: linux_browser_apps_to_cmd('chromium', 'chromium-browser'),
+            OSType.LINUX: linux_browser_apps_to_cmd('chromium',
+                                                    'chromium-browser'),
             OSType.MAC: r'/Applications/Chromium.app/Contents/MacOS/Chromium --version',
             OSType.WIN: r'reg query "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome" /v version'
         },
         ChromeType.MSEDGE: {
-            OSType.LINUX: linux_browser_apps_to_cmd('microsoft-edge', 'microsoft-edge-stable', 'microsoft-edge-beta', 'microsoft-edge-dev'),
+            OSType.LINUX: linux_browser_apps_to_cmd('microsoft-edge',
+                                                    'microsoft-edge-stable',
+                                                    'microsoft-edge-beta',
+                                                    'microsoft-edge-dev'),
             OSType.MAC: r'/Applications/Microsoft\ Edge.app/Contents/MacOS/Microsoft\ Edge --version',
             OSType.WIN: r'reg query "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Edge\BLBeacon" /v version',
         }

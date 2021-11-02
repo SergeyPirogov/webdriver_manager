@@ -1,8 +1,6 @@
 import os
 import platform
 
-import requests
-
 from webdriver_manager.logger import log
 from webdriver_manager.utils import (
     validate_response,
@@ -50,7 +48,8 @@ class Driver(object):
 
 
 class ChromeDriver(Driver):
-    def __init__(self, name, version, os_type, url, latest_release_url, session,
+    def __init__(self, name, version, os_type, url, latest_release_url,
+                 session,
                  chrome_type=ChromeType.GOOGLE):
         super(ChromeDriver, self).__init__(name, version, os_type, url,
                                            latest_release_url, session)
@@ -81,14 +80,14 @@ class ChromeDriver(Driver):
 
 class GeckoDriver(Driver):
     def __init__(
-        self,
-        name,
-        version,
-        os_type,
-        url,
-        latest_release_url,
-        session,
-        mozila_release_tag,
+            self,
+            name,
+            version,
+            os_type,
+            url,
+            latest_release_url,
+            session,
+            mozila_release_tag,
     ):
         super(GeckoDriver, self).__init__(
             name,
@@ -155,14 +154,14 @@ class GeckoDriver(Driver):
 
 class IEDriver(Driver):
     def __init__(
-        self,
-        name,
-        version,
-        os_type,
-        url,
-        latest_release_url,
-        session,
-        ie_release_tag,
+            self,
+            name,
+            version,
+            os_type,
+            url,
+            latest_release_url,
+            session,
+            ie_release_tag,
     ):
         super(IEDriver, self).__init__(
             name,
@@ -296,13 +295,13 @@ class OperaDriver(Driver):
 
 class EdgeChromiumDriver(Driver):
     def __init__(
-        self,
-        name,
-        version,
-        os_type,
-        url,
-        latest_release_url,
-        session,
+            self,
+            name,
+            version,
+            os_type,
+            url,
+            latest_release_url,
+            session,
     ):
         super(EdgeChromiumDriver, self).__init__(
             name,
@@ -317,7 +316,8 @@ class EdgeChromiumDriver(Driver):
     def get_latest_release_version(self) -> str:
         self.browser_version = get_browser_version_from_os(ChromeType.MSEDGE)
         log(f"Get LATEST {self._name} version for {self.browser_version} Edge")
-        major_edge_version = self.browser_version.split(".")[0] if self.browser_version != 'UNKNOWN' else None
+        major_edge_version = self.browser_version.split(".")[
+            0] if self.browser_version != 'UNKNOWN' else None
         latest_release_url = (
             {
                 OSType.WIN in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_WINDOWS',
@@ -325,7 +325,8 @@ class EdgeChromiumDriver(Driver):
                 OSType.LINUX in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_LINUX',
             }[True]
             if self.browser_version != "UNKNOWN"
-            else self._latest_release_url.replace('LATEST_RELEASE', 'LATEST_STABLE')
+            else self._latest_release_url.replace('LATEST_RELEASE',
+                                                  'LATEST_STABLE')
         )
         resp = self.session.get(latest_release_url, verify=self.ssl_verify)
         validate_response(resp)

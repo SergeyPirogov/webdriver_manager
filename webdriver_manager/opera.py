@@ -12,17 +12,18 @@ class OperaDriverManager(DriverManager):
                  path=None,
                  name="operadriver",
                  url="https://github.com/operasoftware/operachromiumdriver/"
-                 "releases/",
+                     "releases/",
                  latest_release_url="https://api.github.com/repos/"
-                 "operasoftware/operachromiumdriver/releases/latest",
+                                    "operasoftware/operachromiumdriver/releases/latest",
                  opera_release_tag="https://api.github.com/repos/"
-                 "operasoftware/operachromiumdriver/releases/tags/{0}",
+                                   "operasoftware/operachromiumdriver/releases/tags/{0}",
                  log_level=logging.INFO,
                  print_first_line=True,
                  cache_valid_range=1,
                  session=None,
                  ):
-        super().__init__(path, log_level, print_first_line, cache_valid_range, session=session)
+        super().__init__(path, log_level, print_first_line, cache_valid_range,
+                         session=session)
 
         self.driver = OperaDriver(name=name,
                                   version=version,

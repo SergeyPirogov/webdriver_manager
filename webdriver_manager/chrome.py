@@ -20,7 +20,8 @@ class ChromeDriverManager(DriverManager):
                  cache_valid_range=1,
                  session=None
                  ):
-        super().__init__(path, log_level=log_level, print_first_line=print_first_line,
+        super().__init__(path, log_level=log_level,
+                         print_first_line=print_first_line,
                          cache_valid_range=cache_valid_range, session=session)
 
         self.driver = ChromeDriver(name=name,

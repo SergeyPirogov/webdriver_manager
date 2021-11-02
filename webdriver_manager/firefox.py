@@ -18,7 +18,11 @@ class GeckoDriverManager(DriverManager):
                  cache_valid_range=1,
                  session=None,
                  ):
-        super(GeckoDriverManager, self).__init__(path, log_level, print_first_line, cache_valid_range, session=session)
+        super(GeckoDriverManager, self).__init__(path, log_level,
+                                                 print_first_line,
+                                                 cache_valid_range,
+                                                 session=session
+                                                 )
 
         self.driver = GeckoDriver(version=version,
                                   os_type=os_type,

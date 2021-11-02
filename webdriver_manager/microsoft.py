@@ -8,20 +8,21 @@ from webdriver_manager.manager import DriverManager
 
 class IEDriverManager(DriverManager):
     def __init__(
-        self,
-        version="latest",
-        os_type=utils.os_type(),
-        path=None,
-        name="IEDriverServer",
-        url="https://github.com/seleniumhq/selenium/releases/download",
-        latest_release_url="https://api.github.com/repos/seleniumhq/selenium/releases",
-        ie_release_tag="https://api.github.com/repos/seleniumhq/selenium/releases/tags/selenium-{0}",
-        log_level=None,
-        print_first_line=True,
-        cache_valid_range=1,
-        session=None,
+            self,
+            version="latest",
+            os_type=utils.os_type(),
+            path=None,
+            name="IEDriverServer",
+            url="https://github.com/seleniumhq/selenium/releases/download",
+            latest_release_url="https://api.github.com/repos/seleniumhq/selenium/releases",
+            ie_release_tag="https://api.github.com/repos/seleniumhq/selenium/releases/tags/selenium-{0}",
+            log_level=None,
+            print_first_line=True,
+            cache_valid_range=1,
+            session=None,
     ):
-        super().__init__(path, log_level, print_first_line, cache_valid_range, session=session)
+        super().__init__(path, log_level, print_first_line, cache_valid_range,
+                         session=session)
         self.driver = IEDriver(
             version=version,
             os_type=os_type,
@@ -38,19 +39,20 @@ class IEDriverManager(DriverManager):
 
 class EdgeChromiumDriverManager(DriverManager):
     def __init__(
-        self,
-        version="latest",
-        os_type=utils.os_type(),
-        path=None,
-        name="edgedriver",
-        url="https://msedgedriver.azureedge.net",
-        latest_release_url="https://msedgedriver.azureedge.net/LATEST_RELEASE",
-        log_level=None,
-        print_first_line=None,
-        cache_valid_range=1,
-        session=None,
+            self,
+            version="latest",
+            os_type=utils.os_type(),
+            path=None,
+            name="edgedriver",
+            url="https://msedgedriver.azureedge.net",
+            latest_release_url="https://msedgedriver.azureedge.net/LATEST_RELEASE",
+            log_level=None,
+            print_first_line=None,
+            cache_valid_range=1,
+            session=None,
     ):
-        super().__init__(path, log_level, print_first_line, cache_valid_range, session=session)
+        super().__init__(path, log_level, print_first_line, cache_valid_range,
+                         session=session)
         self.driver = EdgeChromiumDriver(
             version=version,
             os_type=os_type,
