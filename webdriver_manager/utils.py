@@ -92,9 +92,11 @@ def write_file(content, path):
     return path
 
 
-def download_file(url: str, ssl_verify=True) -> File:
+def download_file(url: str, ssl_verify=True, session: requests.Session= None) -> File:
     log(f"Trying to download new driver from {url}")
-    response = requests.get(url, stream=True, verify=ssl_verify)
+    if session is None:
+        session = requests.Session()
+    response = session.get(url, stream=True, verify=ssl_verify)
     validate_response(response)
     return File(response)
 

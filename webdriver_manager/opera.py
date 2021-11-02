@@ -19,14 +19,17 @@ class OperaDriverManager(DriverManager):
                  "operasoftware/operachromiumdriver/releases/tags/{0}",
                  log_level=logging.INFO,
                  print_first_line=True,
-                 cache_valid_range=1):
-        super().__init__(path, log_level, print_first_line, cache_valid_range)
+                 cache_valid_range=1,
+                 session=None,
+                 ):
+        super().__init__(path, log_level, print_first_line, cache_valid_range, session=session)
 
         self.driver = OperaDriver(name=name,
                                   version=version,
                                   os_type=os_type,
                                   url=url,
                                   latest_release_url=latest_release_url,
+                                  session=self.session,
                                   opera_release_tag=opera_release_tag)
 
     def install(self):

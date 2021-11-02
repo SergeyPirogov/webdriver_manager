@@ -16,4 +16,4 @@ from webdriver_manager.driver import Driver
 def test_driver_ssl_verify_env(verify_value, expected_ssl_verify):
     os.environ['WDM_SSL_VERIFY'] = verify_value
 
-    assert Driver('a', 'b', 'c', 'd', 'e').ssl_verify is expected_ssl_verify
+    assert Driver('a', 'b', 'c', 'd', 'e', 'f').ssl_verify is expected_ssl_verify

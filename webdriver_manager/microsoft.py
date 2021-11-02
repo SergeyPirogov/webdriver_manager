@@ -19,8 +19,9 @@ class IEDriverManager(DriverManager):
         log_level=None,
         print_first_line=True,
         cache_valid_range=1,
+        session=None,
     ):
-        super().__init__(path, log_level, print_first_line, cache_valid_range)
+        super().__init__(path, log_level, print_first_line, cache_valid_range, session=session)
         self.driver = IEDriver(
             version=version,
             os_type=os_type,
@@ -28,6 +29,7 @@ class IEDriverManager(DriverManager):
             url=url,
             latest_release_url=latest_release_url,
             ie_release_tag=ie_release_tag,
+            session=self.session
         )
 
     def install(self):
@@ -46,14 +48,16 @@ class EdgeChromiumDriverManager(DriverManager):
         log_level=None,
         print_first_line=None,
         cache_valid_range=1,
+        session=None,
     ):
-        super().__init__(path, log_level, print_first_line, cache_valid_range)
+        super().__init__(path, log_level, print_first_line, cache_valid_range, session=session)
         self.driver = EdgeChromiumDriver(
             version=version,
             os_type=os_type,
             name=name,
             url=url,
             latest_release_url=latest_release_url,
+            session=self.session
         )
 
     def install(self):

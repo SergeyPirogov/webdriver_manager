@@ -36,6 +36,7 @@ def test_can_download_chrome_driver(delete_drivers_dir, version):
     driver = ChromeDriver(name="chromedriver", version=version, os_type="win32",
                           url="http://chromedriver.storage.googleapis.com",
                           latest_release_url="http://chromedriver.storage.googleapis.com/LATEST_RELEASE",
+                          session=None,
                           chrome_type=ChromeType.GOOGLE)
 
     file = download_file(driver.get_url())

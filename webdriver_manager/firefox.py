@@ -15,14 +15,17 @@ class GeckoDriverManager(DriverManager):
                  mozila_release_tag="https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}",
                  log_level=logging.INFO,
                  print_first_line=True,
-                 cache_valid_range=1):
-        super(GeckoDriverManager, self).__init__(path, log_level, print_first_line, cache_valid_range)
+                 cache_valid_range=1,
+                 session=None,
+                 ):
+        super(GeckoDriverManager, self).__init__(path, log_level, print_first_line, cache_valid_range, session=session)
 
         self.driver = GeckoDriver(version=version,
                                   os_type=os_type,
                                   name=name,
                                   url=url,
                                   latest_release_url=latest_release_url,
+                                  session=self.session,
                                   mozila_release_tag=mozila_release_tag)
 
     def install(self):

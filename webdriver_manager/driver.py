@@ -18,13 +18,16 @@ class Driver(object):
                  version,
                  os_type,
                  url,
-                 latest_release_url):
+                 latest_release_url,
+                 session,
+                 ):
         self._name = name
         self._url = url
         self._version = version
         self._os_type = os_type
         self._latest_release_url = latest_release_url
         self.ssl_verify = False if os.getenv('WDM_SSL_VERIFY') == '0' else True
+        self.session = session
 
     def get_name(self):
         return self._name
@@ -47,10 +50,10 @@ class Driver(object):
 
 
 class ChromeDriver(Driver):
-    def __init__(self, name, version, os_type, url, latest_release_url,
+    def __init__(self, name, version, os_type, url, latest_release_url, session,
                  chrome_type=ChromeType.GOOGLE):
         super(ChromeDriver, self).__init__(name, version, os_type, url,
-                                           latest_release_url)
+                                           latest_release_url, session)
         self.chrome_type = chrome_type
         self.browser_version = ""
 
@@ -67,7 +70,7 @@ class ChromeDriver(Driver):
             if self.browser_version != "UNKNOWN"
             else self._latest_release_url
         )
-        resp = requests.get(
+        resp = self.session.get(
             url=latest_release_url,
             verify=self.ssl_verify
         )
@@ -84,6 +87,7 @@ class GeckoDriver(Driver):
         os_type,
         url,
         latest_release_url,
+        session,
         mozila_release_tag,
     ):
         super(GeckoDriver, self).__init__(
@@ -92,6 +96,7 @@ class GeckoDriver(Driver):
             os_type,
             url,
             latest_release_url,
+            session,
         )
         self._mozila_release_tag = mozila_release_tag
         self.browser_version = ""
@@ -107,7 +112,7 @@ class GeckoDriver(Driver):
     def get_latest_release_version(self) -> str:
         self.browser_version = firefox_version()
         log(f"Get LATEST {self._name} version for {self.browser_version} firefox")
-        resp = requests.get(
+        resp = self.session.get(
             url=self.latest_release_url,
             headers=self.auth_header,
             verify=self.ssl_verify,
@@ -119,7 +124,7 @@ class GeckoDriver(Driver):
     def get_url(self):
         """Like https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz"""
         log(f"Getting latest mozilla release info for {self.get_version()}")
-        resp = requests.get(
+        resp = self.session.get(
             url=self.tagged_release_url(self.get_version()),
             headers=self.auth_header,
             verify=self.ssl_verify,
@@ -156,6 +161,7 @@ class IEDriver(Driver):
         os_type,
         url,
         latest_release_url,
+        session,
         ie_release_tag,
     ):
         super(IEDriver, self).__init__(
@@ -164,6 +170,7 @@ class IEDriver(Driver):
             os_type,
             url,
             latest_release_url,
+            session,
         )
         self.os_type = "x64" if os_type == "win64" else "Win32"
         self._ie_release_tag = ie_release_tag
@@ -181,7 +188,7 @@ class IEDriver(Driver):
 
     def get_latest_release_version(self) -> str:
         log(f"Get LATEST driver version for {self.browser_version}")
-        resp = requests.get(
+        resp = self.session.get(
             url=self.latest_release_url,
             headers=self.auth_header,
             verify=self.ssl_verify,
@@ -200,7 +207,7 @@ class IEDriver(Driver):
     def get_url(self):
         """Like https://github.com/seleniumhq/selenium/releases/download/3.141.59/IEDriverServer_Win32_3.141.59.zip"""
         log(f"Getting latest ie release info for {self.get_version()}")
-        resp = requests.get(
+        resp = self.session.get(
             url=self.tagged_release_url(self.get_version()),
             headers=self.auth_header,
             verify=self.ssl_verify,
@@ -241,9 +248,10 @@ class OperaDriver(Driver):
                  os_type,
                  url,
                  latest_release_url,
+                 session,
                  opera_release_tag):
         super(OperaDriver, self).__init__(name, version, os_type, url,
-                                          latest_release_url)
+                                          latest_release_url, session)
         self.opera_release_tag = opera_release_tag
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = None
@@ -253,7 +261,7 @@ class OperaDriver(Driver):
             self.auth_header = {'Authorization': f'token {self._os_token}'}
 
     def get_latest_release_version(self) -> str:
-        resp = requests.get(
+        resp = self.session.get(
             url=self.latest_release_url,
             headers=self.auth_header,
             verify=self.ssl_verify,
@@ -266,7 +274,7 @@ class OperaDriver(Driver):
         # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
         version = self.get_version()
         log(f"Getting latest opera release info for {version}")
-        resp = requests.get(
+        resp = self.session.get(
             url=self.tagged_release_url(version),
             headers=self.auth_header,
             verify=self.ssl_verify,
@@ -294,6 +302,7 @@ class EdgeChromiumDriver(Driver):
         os_type,
         url,
         latest_release_url,
+        session,
     ):
         super(EdgeChromiumDriver, self).__init__(
             name,
@@ -301,6 +310,7 @@ class EdgeChromiumDriver(Driver):
             os_type,
             url,
             latest_release_url,
+            session,
         )
         self.browser_version = ""
 
@@ -317,7 +327,7 @@ class EdgeChromiumDriver(Driver):
             if self.browser_version != "UNKNOWN"
             else self._latest_release_url.replace('LATEST_RELEASE', 'LATEST_STABLE')
         )
-        resp = requests.get(latest_release_url, verify=self.ssl_verify)
+        resp = self.session.get(latest_release_url, verify=self.ssl_verify)
         validate_response(resp)
         self._version = resp.text.rstrip()
         return self._version

@@ -17,16 +17,20 @@ class ChromeDriverManager(DriverManager):
                  chrome_type=ChromeType.GOOGLE,
                  log_level=logging.INFO,
                  print_first_line=True,
-                 cache_valid_range=1):
+                 cache_valid_range=1,
+                 session=None
+                 ):
         super().__init__(path, log_level=log_level, print_first_line=print_first_line,
-                         cache_valid_range=cache_valid_range)
+                         cache_valid_range=cache_valid_range, session=session)
 
         self.driver = ChromeDriver(name=name,
                                    version=version,
                                    os_type=os_type,
                                    url=url,
                                    latest_release_url=latest_release_url,
-                                   chrome_type=chrome_type)
+                                   chrome_type=chrome_type,
+                                   session=self.session
+                                   )
 
     def install(self):
         driver_path = self._get_driver_path(self.driver)
