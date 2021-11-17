@@ -9,10 +9,12 @@ on:
 jobs:
   test:
     runs-on: ${{ matrix.os }}
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest, macos-latest ]
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
         python-version: [ '3.6', '3.10' ]
 
     steps:
@@ -26,24 +28,35 @@ jobs:
       - name: Install browsers on Linux
         if: runner.os == 'Linux'
         run: |
+          sudo apt-get update
+          sudo apt-get install software-properties-common apt-transport-https wget
+
+          wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
+          sudo apt-get update && sudo apt install microsoft-edge-beta
+          microsoft-edge --version
+
           wget -qO- https://deb.opera.com/archive.key | sudo apt-key add -
           sudo add-apt-repository "deb [arch=i386,amd64] https://deb.opera.com/opera-stable/ stable non-free"
           sudo apt-get update
-          sudo apt-get -y --no-install-recommends install opera-stable chromium-browser
+          sudo apt-get -y --no-install-recommends install opera-stable
           opera --version
+
+          sudo apt-get install chromium-browser
+          chromium --version
 
       - name: Install browsers on Windows
         if: runner.os == 'Windows'
         shell: powershell
         run: |
           choco install chromium opera --no-progress -y --force
-          .github\set_win_reg_keys.ps1
 
       - name: Install browsers on MacOS
         if: startsWith(runner.os, 'macOS')
         run: |
+          brew tap domt4/chromium
           brew update
-          brew install --cask chromium opera
+          brew install --cask mac-chromium opera
 
       - name: Install Python dependencies
         run: |
@@ -53,8 +66,6 @@ jobs:
 
       - name: Run tests on Linux (with xvfb)
         if: runner.os == 'Linux'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: GabrielBB/xvfb-action@v1.0
         with:
           run: |
@@ -62,15 +73,11 @@ jobs:
 
       - name: Run tests on Windows (without xvfb)
         if: runner.os == 'Windows'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pipenv run py.test -sv --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
 
       - name: Run tests on MacOS (without xvfb)
         if: startsWith(runner.os, 'macOS')
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pipenv run py.test -sv --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
 

@@ -24,5 +24,4 @@ class GeckoDriverManager(DriverManager):
                                   mozila_release_tag=mozila_release_tag)
 
     def install(self):
-        logger.info(f"Current firefox version is {self.driver.browser_version}")
         return self._get_driver_path(self.driver)

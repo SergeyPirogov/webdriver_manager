@@ -1,3 +1,5 @@
+import os
+
 from webdriver_manager import utils
 from webdriver_manager.driver import EdgeChromiumDriver
 from webdriver_manager.driver import IEDriver
@@ -12,7 +14,7 @@ class IEDriverManager(DriverManager):
         path=None,
         name="IEDriverServer",
         url="https://github.com/seleniumhq/selenium/releases/download",
-        latest_release_url="https://api.github.com/repos/seleniumhq/selenium/releases/latest",
+        latest_release_url="https://api.github.com/repos/seleniumhq/selenium/releases",
         ie_release_tag="https://api.github.com/repos/seleniumhq/selenium/releases/tags/selenium-{0}",
         print_first_line=True,
         cache_valid_range=1,
@@ -53,4 +55,7 @@ class EdgeChromiumDriverManager(DriverManager):
         )
 
     def install(self):
-        return self._get_driver_path(self.driver)
+        driver_path = self._get_driver_path(self.driver)
+
+        os.chmod(driver_path, 0o755)
+        return driver_path
