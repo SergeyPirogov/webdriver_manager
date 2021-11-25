@@ -9,6 +9,7 @@ import requests
 
 from webdriver_manager.archive import Archive
 from webdriver_manager.logger import log
+from json.decoder import JSONDecodeError
 
 
 class File(object):
@@ -75,12 +76,16 @@ def os_type():
     return os_name() + str(os_architecture())
 
 
-def validate_response(resp):
+def validate_response(resp: requests.Response):
     if resp.status_code == 404:
         raise ValueError("There is no such driver by url {}".format(resp.url))
     elif resp.status_code != 200:
+        try:
+            resp_body = resp.json()
+        except JSONDecodeError:
+            resp_body = resp.content if getattr(resp, 'content', None) else str(resp)
         raise ValueError(
-            f'response body:\n{resp.json()}\n'
+            f'response body:\n{resp_body}\n'
             f'request url:\n{resp.request.url}\n'
             f'response headers:\n{dict(resp.headers)}\n'
         )
