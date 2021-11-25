@@ -83,7 +83,8 @@ def validate_response(resp: requests.Response):
         try:
             resp_body = resp.json()
         except JSONDecodeError:
-            resp_body = resp.content if getattr(resp, 'content', None) else str(resp)
+            resp_body = resp.content \
+                if getattr(resp, 'content', None) else str(resp)
         raise ValueError(
             f'response body:\n{resp_body}\n'
             f'request url:\n{resp.request.url}\n'
