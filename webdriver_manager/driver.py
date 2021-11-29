@@ -88,7 +88,7 @@ class GeckoDriver(Driver):
         url,
         latest_release_url,
         mozila_release_tag,
-        raise_if_unknown,
+        raise_if_unknown=False,
     ):
         super(GeckoDriver, self).__init__(
             name,
@@ -299,7 +299,7 @@ class EdgeChromiumDriver(Driver):
         os_type,
         url,
         latest_release_url,
-        raise_if_unknown
+        raise_if_unknown=False
     ):
         super(EdgeChromiumDriver, self).__init__(
             name,

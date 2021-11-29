@@ -57,3 +57,9 @@ def test_can_get_driver_from_cache(os_type):
     GeckoDriverManager(os_type=os_type).install()
     driver_path = GeckoDriverManager(os_type=os_type).install()
     assert os.path.exists(driver_path)
+
+
+def test_gecko_manager_with_raise_if_unknown_enabled():
+    with pytest.raises(ValueError) as ex:
+        GeckoDriverManager(raise_if_unknown=True).install()
+    assert "Could not get version for" in ex.value.args[0]

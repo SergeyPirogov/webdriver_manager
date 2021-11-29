@@ -46,6 +46,7 @@ class EdgeChromiumDriverManager(DriverManager):
         log_level=None,
         print_first_line=None,
         cache_valid_range=1,
+        raise_if_unknown=False
     ):
         super().__init__(path, log_level, print_first_line, cache_valid_range)
         self.driver = EdgeChromiumDriver(
@@ -54,6 +55,7 @@ class EdgeChromiumDriverManager(DriverManager):
             name=name,
             url=url,
             latest_release_url=latest_release_url,
+            raise_if_unknown=raise_if_unknown
         )
 
     def install(self):
