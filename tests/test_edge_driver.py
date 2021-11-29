@@ -67,3 +67,9 @@ def test_can_get_edge_driver_from_cache(os_type, specific_version):
         os_type=os_type
     ).install()
     assert os.path.exists(driver_path)
+
+
+def test_chromium_manager_with_raise_if_unknown_enabled():
+    with pytest.raises(ValueError) as ex:
+        EdgeChromiumDriverManager(raise_if_unknown=True).install()
+    assert "Could not get version for" in ex.value.args[0]

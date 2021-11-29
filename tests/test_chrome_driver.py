@@ -71,3 +71,9 @@ def test_chrome_manager_cached_driver_with_selenium():
 def test_can_get_chrome_for_win(os_type):
     path = ChromeDriverManager(os_type=os_type).install()
     assert os.path.exists(path)
+
+
+def test_chrome_manager_with_raise_if_unknown_enabled():
+    with pytest.raises(ValueError) as ex:
+        ChromeDriverManager(raise_if_unknown=True).install()
+    assert "Could not get version for" in ex.value.args[0]

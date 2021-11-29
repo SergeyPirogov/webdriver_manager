@@ -50,3 +50,10 @@ def test_can_get_chromium_for_win(os_type):
     path = ChromeDriverManager(version="83.0.4103.39", os_type=os_type,
                                chrome_type=ChromeType.CHROMIUM).install()
     assert os.path.exists(path)
+
+
+def test_chromium_manager_with_raise_if_unknown_enabled():
+    with pytest.raises(ValueError) as ex:
+        ChromeDriverManager(chrome_type=ChromeType.CHROMIUM, 
+                            raise_if_unknown=True).install()
+    assert "Could not get version for" in ex.value.args[0]
