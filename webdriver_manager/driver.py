@@ -48,11 +48,12 @@ class Driver(object):
 
 class ChromeDriver(Driver):
     def __init__(self, name, version, os_type, url, latest_release_url,
-                 chrome_type=ChromeType.GOOGLE):
+                 chrome_type=ChromeType.GOOGLE, raise_if_unknown=False):
         super(ChromeDriver, self).__init__(name, version, os_type, url,
                                            latest_release_url)
         self.chrome_type = chrome_type
         self.browser_version = ""
+        self.raise_if_unknown = raise_if_unknown
 
     def get_os_type(self):
         if "win" in super().get_os_type():
@@ -60,7 +61,7 @@ class ChromeDriver(Driver):
         return super().get_os_type()
 
     def get_latest_release_version(self):
-        self.browser_version = get_browser_version_from_os(self.chrome_type)
+        self.browser_version = get_browser_version_from_os(self.chrome_type, self.raise_if_unknown)
         log(f"Get LATEST {self._name} version for {self.browser_version} {self.chrome_type}")
         latest_release_url = (
             f"{self._latest_release_url}_{self.browser_version}"
@@ -85,6 +86,7 @@ class GeckoDriver(Driver):
         url,
         latest_release_url,
         mozila_release_tag,
+        raise_if_unknown,
     ):
         super(GeckoDriver, self).__init__(
             name,
@@ -95,6 +97,7 @@ class GeckoDriver(Driver):
         )
         self._mozila_release_tag = mozila_release_tag
         self.browser_version = ""
+        self.raise_if_unknown = raise_if_unknown
         self._os_token = os.getenv("GH_TOKEN", None)
         self.auth_header = (
             {'Authorization': f'token {self._os_token}'}
@@ -105,7 +108,7 @@ class GeckoDriver(Driver):
             log("GH_TOKEN will be used to perform requests", first_line=True)
 
     def get_latest_release_version(self) -> str:
-        self.browser_version = firefox_version()
+        self.browser_version = firefox_version(self.raise_if_unknown)
         log(f"Get LATEST {self._name} version for {self.browser_version} firefox")
         resp = requests.get(
             url=self.latest_release_url,
@@ -305,7 +308,7 @@ class EdgeChromiumDriver(Driver):
         self.browser_version = ""
 
     def get_latest_release_version(self) -> str:
-        self.browser_version = get_browser_version_from_os(ChromeType.MSEDGE)
+        self.browser_version = get_browser_version_from_os(ChromeType.MSEDGE, self.raise_if_unknown)
         log(f"Get LATEST {self._name} version for {self.browser_version} Edge")
         major_edge_version = self.browser_version.split(".")[0] if self.browser_version != 'UNKNOWN' else None
         latest_release_url = (

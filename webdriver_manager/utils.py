@@ -130,7 +130,7 @@ def linux_browser_apps_to_cmd(*apps: str) -> str:
     return ' || '.join(list(map(lambda i: f'{i} --version{ignore_errors_cmd_part}', apps)))
 
 
-def get_browser_version_from_os(browser_type=None):
+def get_browser_version_from_os(browser_type=None, raise_if_unknown=False):
     """Return installed browser version."""
     pattern = r'\d+\.\d+\.\d+'
 
@@ -156,7 +156,10 @@ def get_browser_version_from_os(browser_type=None):
     version = read_version_from_cmd(cmd, pattern)
 
     if not version:
-        log(f'Could not get version for {browser_type} with the any command: {cmd}')
+        if raise_if_unknown:
+            raise ValueError(f'Could not get version for {browser_type} with this command: {cmd}')
+        else:
+            log(f'Could not get version for {browser_type} with the any command: {cmd}')
 
     current_version = version.group(0) if version else 'UNKNOWN'
 
@@ -164,7 +167,7 @@ def get_browser_version_from_os(browser_type=None):
     return current_version
 
 
-def firefox_version():
+def firefox_version(raise_if_unknown=False):
     pattern = r'(\d+.\d+)'
     cmd_mapping = {
         OSType.LINUX: 'firefox --version',
@@ -176,7 +179,10 @@ def firefox_version():
     version = read_version_from_cmd(cmd, pattern)
 
     if not version:
-        log(f'Could not get version for firefox with the any command: {cmd}')
+        if raise_if_unknown:
+            raise ValueError(f'Could not get version for firefox with this command: {cmd}')
+        else:
+            log(f'Could not get version for firefox with the any command: {cmd}')
 
     current_version = version.group(0) if version else 'UNKNOWN'
 
