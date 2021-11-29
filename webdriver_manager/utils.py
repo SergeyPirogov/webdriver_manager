@@ -157,9 +157,13 @@ def get_browser_version_from_os(browser_type=None, raise_if_unknown=False):
 
     if not version:
         if raise_if_unknown:
-            raise ValueError(f'Could not get version for {browser_type} with this command: {cmd}')
+            raise ValueError(
+                f'Could not get version for {browser_type} with this command: {cmd}'
+                )
         else:
-            log(f'Could not get version for {browser_type} with the any command: {cmd}')
+            log(
+                f'Could not get version for {browser_type} with the any command: {cmd}'
+                )
 
     current_version = version.group(0) if version else 'UNKNOWN'
 
@@ -180,9 +184,13 @@ def firefox_version(raise_if_unknown=False):
 
     if not version:
         if raise_if_unknown:
-            raise ValueError(f'Could not get version for firefox with this command: {cmd}')
+            raise ValueError(
+                f'Could not get version for firefox with this command: {cmd}'
+                )
         else:
-            log(f'Could not get version for firefox with the any command: {cmd}')
+            log(
+                f'Could not get version for firefox with the any command: {cmd}'
+                )
 
     current_version = version.group(0) if version else 'UNKNOWN'
 
