@@ -62,7 +62,7 @@ class ChromeDriver(Driver):
 
     def get_latest_release_version(self):
         self.browser_version = \
-            get_browser_version_from_os(self.chrome_type, 
+            get_browser_version_from_os(self.chrome_type,
                                         self.raise_if_unknown)
         log(f"Get LATEST {self._name} version for {self.browser_version} {self.chrome_type}")
         latest_release_url = (
@@ -313,7 +313,7 @@ class EdgeChromiumDriver(Driver):
 
     def get_latest_release_version(self) -> str:
         self.browser_version = \
-            get_browser_version_from_os(ChromeType.MSEDGE, 
+            get_browser_version_from_os(ChromeType.MSEDGE,
                                         self.raise_if_unknown)
         log(f"Get LATEST {self._name} version for {self.browser_version} Edge")
         major_edge_version = self.browser_version.split(".")[0] if self.browser_version != 'UNKNOWN' else None
