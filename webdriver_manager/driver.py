@@ -61,8 +61,9 @@ class ChromeDriver(Driver):
         return super().get_os_type()
 
     def get_latest_release_version(self):
-        self.browser_version = get_browser_version_from_os(self.chrome_type, 
-                                                           self.raise_if_unknown)
+        self.browser_version = \
+            get_browser_version_from_os(self.chrome_type, 
+                                        self.raise_if_unknown)
         log(f"Get LATEST {self._name} version for {self.browser_version} {self.chrome_type}")
         latest_release_url = (
             f"{self._latest_release_url}_{self.browser_version}"
@@ -298,6 +299,7 @@ class EdgeChromiumDriver(Driver):
         os_type,
         url,
         latest_release_url,
+        raise_if_unknown
     ):
         super(EdgeChromiumDriver, self).__init__(
             name,
@@ -307,10 +309,12 @@ class EdgeChromiumDriver(Driver):
             latest_release_url,
         )
         self.browser_version = ""
+        self.raise_if_unknown = raise_if_unknown
 
     def get_latest_release_version(self) -> str:
-        self.browser_version = get_browser_version_from_os(ChromeType.MSEDGE, 
-                                                           self.raise_if_unknown)
+        self.browser_version = \
+            get_browser_version_from_os(ChromeType.MSEDGE, 
+                                        self.raise_if_unknown)
         log(f"Get LATEST {self._name} version for {self.browser_version} Edge")
         major_edge_version = self.browser_version.split(".")[0] if self.browser_version != 'UNKNOWN' else None
         latest_release_url = (
