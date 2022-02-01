@@ -14,9 +14,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        selenium-version: ['3.141.0', '4.1.0']
-        os: [ ubuntu-latest ]
-        python-version: [ '3.9' ]
+        python-version: ['3.6']
+        selenium-version: ['3.141.0']
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        include:
+          - python-version: '3.7'
+            selenium-version: '4.1.0'
+            os: ubuntu-latest
+          - python-version: '3.10'
+            selenium-version: '3.141.0'
+            os: ubuntu-latest
+          - python-version: '3.10'
+            selenium-version: '4.1.0'
+            os: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
