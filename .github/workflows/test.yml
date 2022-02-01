@@ -14,8 +14,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
-        python-version: [ '3.6', '3.10' ]
+        selenium-version: ['3.141.0', '4.1.0']
+        os: [ ubuntu-latest ]
+        python-version: [ '3.9' ]
 
     steps:
       - uses: actions/checkout@v2
@@ -63,6 +64,7 @@ jobs:
           python -m pip install -U pip wheel
           pip install pipenv
           pipenv install --dev --skip-lock --python=${{ matrix.python-version }}
+          pipenv install selenium==${{ matrix.selenium-version }}
 
       - name: Run tests on Linux (with xvfb)
         if: runner.os == 'Linux'
