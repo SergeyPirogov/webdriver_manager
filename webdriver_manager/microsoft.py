@@ -1,3 +1,4 @@
+import logging
 import os
 
 from webdriver_manager import utils
