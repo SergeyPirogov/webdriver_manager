@@ -156,11 +156,11 @@ def get_browser_version_from_os(browser_type=None):
     version = read_version_from_cmd(cmd, pattern)
 
     if not version:
-        logger.info(f'Could not get version for {browser_type} with the any command: {cmd}')
+        logger.info("Could not get version for %s with the any command: %s",browser_type,cmd)
 
     current_version = version.group(0) if version else 'UNKNOWN'
 
-    logger.info(f"Current {browser_type} version is {current_version}")
+    logger.info("Current %s version is %s",browser_type,current_version)
     return current_version
 
 
@@ -176,11 +176,11 @@ def firefox_version():
     version = read_version_from_cmd(cmd, pattern)
 
     if not version:
-        logger.info(f'Could not get version for firefox with the any command: {cmd}')
+        logger.info("Could not get version for firefox with the any command: %s",cmd)
 
     current_version = version.group(0) if version else 'UNKNOWN'
 
-    logger.info(f"Current firefox version is {current_version}")
+    logger.info("Current firefox version is %s",current_version)
     return current_version
 
 
