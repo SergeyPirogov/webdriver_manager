@@ -1,3 +1,4 @@
+import logging
 import os
 
 from webdriver_manager import utils
@@ -16,7 +17,7 @@ class IEDriverManager(DriverManager):
         url="https://github.com/seleniumhq/selenium/releases/download",
         latest_release_url="https://api.github.com/repos/seleniumhq/selenium/releases",
         ie_release_tag="https://api.github.com/repos/seleniumhq/selenium/releases/tags/selenium-{0}",
-        log_level=None,
+        log_level=logging.INFO,
         print_first_line=True,
         cache_valid_range=1,
     ):
@@ -43,7 +44,7 @@ class EdgeChromiumDriverManager(DriverManager):
         name="edgedriver",
         url="https://msedgedriver.azureedge.net",
         latest_release_url="https://msedgedriver.azureedge.net/LATEST_RELEASE",
-        log_level=None,
+        log_level=logging.INFO,
         print_first_line=None,
         cache_valid_range=1,
     ):

@@ -171,6 +171,15 @@ import os
 os.environ['WDM_LOCAL'] = '1'
 ```
 
+### `WDM_SSL_VERIFY`
+SSL verification can be disabled for downloading webdriver binaries in case when you have troubles with SSL Certificates or SSL Certificate Chain. Just set the environment variable `WDM_SSL_VERIFY` to `"0"`.
+
+```
+import os
+
+os.environ['WDM_SSL_VERIFY'] = '0'
+```
+
 ### `cache_valid_range`
 Driver cache by default is valid for 1 day. You are able to change this value using constructor parameter:
 
