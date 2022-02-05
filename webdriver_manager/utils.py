@@ -80,13 +80,8 @@ def validate_response(resp: requests.Response):
     if resp.status_code == 404:
         raise ValueError("There is no such driver by url {}".format(resp.url))
     elif resp.status_code != 200:
-        try:
-            resp_body = resp.json()
-        except JSONDecodeError:
-            resp_body = resp.content \
-                if getattr(resp, 'content', None) else str(resp)
         raise ValueError(
-            f'response body:\n{resp_body}\n'
+            f'response body:\n{resp.text}\n'
             f'request url:\n{resp.request.url}\n'
             f'response headers:\n{dict(resp.headers)}\n'
         )
