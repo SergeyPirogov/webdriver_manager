@@ -9,7 +9,6 @@ from webdriver_manager.utils import (
     get_browser_version_from_os,
     ChromeType,
     OSType,
-    firefox_version,
 )
 
 
@@ -105,7 +104,7 @@ class GeckoDriver(Driver):
             log("GH_TOKEN will be used to perform requests", first_line=True)
 
     def get_latest_release_version(self) -> str:
-        self.browser_version = firefox_version()
+        self.browser_version = get_browser_version_from_os("firefox")
         log(f"Get LATEST {self._name} version for {self.browser_version} firefox")
         resp = requests.get(
             url=self.latest_release_url,
