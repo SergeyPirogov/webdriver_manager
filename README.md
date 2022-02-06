@@ -11,15 +11,17 @@ The main idea is to simplify management of binary drivers for different browsers
 
 For now support:
 
-- ChromeDriver
+- [ChromeDriver](#use-with-chrome)
 
-- GeckoDriver
+- [GeckoDriver](#use-with-firefox)
 
-- IEDriver
+- [IEDriver](#use-with-ie)
 
-- OperaDriver
+- [OperaDriver](#use-with-opera)
 
-- EdgeChromiumDriver
+- [EdgeChromiumDriver](#use-with-edge)
+
+Compatible with Selenium 4.x and below.
 
 Before:
 You should download binary chromedriver, unzip it somewhere in you PC and set path to this driver like this:
@@ -33,69 +35,116 @@ It’s boring!!! Moreover every time the new version of driver released, you sho
 
 With webdriver manager, you just need to do two simple steps:
 
-Install manager:
+#### Install manager:
 
 ```bash
 pip install webdriver-manager
 ```
 
-Use with Chrome:
+#### Use with Chrome
 
 ```python
+# selenium 3
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
 driver = webdriver.Chrome(ChromeDriverManager().install())
 ```
+```python
+# selenium 4
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
-Use with Chromium:
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+```
+
+#### Use with Chromium
 
 ```python
+# selenium 3
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.utils import ChromeType
 
 driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
 ```
+```python
+# selenium 4
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.utils import ChromeType
 
-Use with FireFox:
+driver = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()))
+```
+
+#### Use with Firefox
 
 ```python
+# selenium 3
 from selenium import webdriver
 from webdriver_manager.firefox import GeckoDriverManager
 
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 ```
+```python
+# selenium 4
+from selenium import webdriver
+from selenium.webdriver.firefox.service import Service
+from webdriver_manager.firefox import GeckoDriverManager
 
-Use with IE
+driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()))
+```
+
+#### Use with IE
 
 ```python
+# selenium 3
 from selenium import webdriver
 from webdriver_manager.microsoft import IEDriverManager
 
 driver = webdriver.Ie(IEDriverManager().install())
 ```
+```python
+# selenium 4
+from selenium import webdriver
+from selenium.webdriver.ie.service import Service
+from webdriver_manager.microsoft import IEDriverManager
 
-Use with Edge
+driver = webdriver.Ie(service=Service(IEDriverManager().install()))
+```
+
+#### Use with Edge
 
 ```python
+# selenium 3
 from selenium import webdriver
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
 driver = webdriver.Edge(EdgeChromiumDriverManager().install())
 ```
+```python
+# selenium 4
+from selenium import webdriver
+from selenium.webdriver.edge.service import Service
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
-Use with Opera
+driver = webdriver.Edge(service=Service(EdgeChromiumDriverManager().install()))
+```
+
+#### Use with Opera
 
 ```python
+# selenium 3 & 4
 from selenium import webdriver
 from webdriver_manager.opera import OperaDriverManager
 
 driver = webdriver.Opera(executable_path=OperaDriverManager().install())
 ```
 
-If the Opera browser is installed in a location other than C:/Program Files or C:/Program Files (x86) on windows
-and /usr/bin/opera for all unix variants and mac, then use the below code,
+If the Opera browser is installed in a location other than `C:/Program Files` or `C:/Program Files (x86)` on windows
+and `/usr/bin/opera` for all unix variants and mac, then use the below code,
 
 ```python
 from selenium import webdriver
