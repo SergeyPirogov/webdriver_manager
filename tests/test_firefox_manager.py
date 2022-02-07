@@ -26,8 +26,7 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
 
 def test_gecko_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
-        driver_path = GeckoDriverManager("0.2").install()
-        webdriver.Firefox(executable_path=driver_path)
+        GeckoDriverManager("0.2").install()
 
     assert "There is no such driver by url "\
         "https://api.github.com/repos/mozilla/geckodriver/releases/tags/0.2" \

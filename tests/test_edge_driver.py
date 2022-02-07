@@ -28,11 +28,10 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
 
 def test_edge_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
-        driver_path = EdgeChromiumDriverManager(
+        EdgeChromiumDriverManager(
             version="0.2",
             os_type='win64',
         ).install()
-        webdriver.Edge(executable_path=driver_path)
 
     assert (
                "There is no such driver by url "
