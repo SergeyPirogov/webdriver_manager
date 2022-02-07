@@ -9,7 +9,6 @@ import requests
 
 from webdriver_manager.archive import Archive
 from webdriver_manager.logger import log
-from json.decoder import JSONDecodeError
 
 
 class File(object):
