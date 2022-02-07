@@ -75,12 +75,12 @@ def os_type():
     return os_name() + str(os_architecture())
 
 
-def validate_response(resp):
+def validate_response(resp: requests.Response):
     if resp.status_code == 404:
         raise ValueError("There is no such driver by url {}".format(resp.url))
     elif resp.status_code != 200:
         raise ValueError(
-            f'response body:\n{resp.json()}\n'
+            f'response body:\n{resp.text}\n'
             f'request url:\n{resp.request.url}\n'
             f'response headers:\n{dict(resp.headers)}\n'
         )
@@ -121,66 +121,115 @@ def get_filename_from_response(response, name):
 
 
 def linux_browser_apps_to_cmd(*apps: str) -> str:
-    """Create chrome version command from browser app names.
+    """Create 'browser --version' command from browser app names.
 
     Result command example:
         chromium --version || chromium-browser --version
     """
     ignore_errors_cmd_part = ' 2>/dev/null' if os.getenv('WDM_LOG_LEVEL') == '0' else ''
-    return ' || '.join(list(map(lambda i: f'{i} --version{ignore_errors_cmd_part}', apps)))
+    return ' || '.join(f'{i} --version{ignore_errors_cmd_part}' for i in apps)
+
+
+def windows_browser_apps_to_cmd(*apps: str) -> str:
+    """Create analogue of browser --version command for windows.
+
+    From browser paths and registry keys.
+
+    Result command example:
+       cmd1; if (-not $? -or $? -match $error) { cmd2 }
+    """
+    ignore_errors_cmd_part = ' 2>$null' if os.getenv('WDM_LOG_LEVEL') == '0' else ''
+    powershell = determine_powershell()
+    return (
+            f" {powershell} \"$ErrorActionPreference='silentlycontinue' ; "
+            + f'{apps[0]}{ignore_errors_cmd_part} ;'
+            + ''.join(f" if (-not $? -or $? -match $error) {{ {i}{ignore_errors_cmd_part} }}" for i in apps[1:])
+            + '"'
+    )
 
 
 def get_browser_version_from_os(browser_type=None):
     """Return installed browser version."""
-    pattern = r'\d+\.\d+\.\d+'
+    pattern = (
+        r'(\d+.\d+)'
+        if browser_type == 'firefox'
+        else r'\d+\.\d+\.\d+'
+    )
 
     cmd_mapping = {
         ChromeType.GOOGLE: {
-            OSType.LINUX: linux_browser_apps_to_cmd('google-chrome', 'google-chrome-stable'),
+            OSType.LINUX: linux_browser_apps_to_cmd('google-chrome', 'google-chrome-stable', 'google-chrome-beta', 'google-chrome-dev'),
             OSType.MAC: r'/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version',
-            OSType.WIN: r'reg query "HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon" /v version'
+            OSType.WIN: windows_browser_apps_to_cmd(
+                r'(Get-Item -Path "$env:PROGRAMFILES\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
+                r'(Get-Item -Path "$env:PROGRAMFILES(x86)\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
+                r'(Get-Item -Path "$env:LOCALAPPDATA\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
+                r'reg query "HKCU\SOFTWARE\Google\Chrome\BLBeacon" /v version',
+                r'reg query "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome" /v version'
+            ),
         },
         ChromeType.CHROMIUM: {
             OSType.LINUX: linux_browser_apps_to_cmd('chromium', 'chromium-browser'),
             OSType.MAC: r'/Applications/Chromium.app/Contents/MacOS/Chromium --version',
-            OSType.WIN: r'reg query "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome" /v version'
+            OSType.WIN: windows_browser_apps_to_cmd(
+                r'(Get-Item -Path "$env:PROGRAMFILES\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
+                r'(Get-Item -Path "$env:PROGRAMFILES(x86)\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
+                r'(Get-Item -Path "$env:LOCALAPPDATA\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
+                r'reg query "HKCU\SOFTWARE\Chromium\BLBeacon" /v version',
+                r'reg query "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Chromium" /v version'
+            ),
         },
         ChromeType.MSEDGE: {
             OSType.LINUX: linux_browser_apps_to_cmd('microsoft-edge', 'microsoft-edge-stable', 'microsoft-edge-beta', 'microsoft-edge-dev'),
             OSType.MAC: r'/Applications/Microsoft\ Edge.app/Contents/MacOS/Microsoft\ Edge --version',
-            OSType.WIN: r'reg query "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Edge\BLBeacon" /v version',
-        }
+            OSType.WIN: windows_browser_apps_to_cmd(
+                # stable edge
+                r'(Get-Item -Path "$env:PROGRAMFILES\Microsoft\Edge\Application\msedge.exe").VersionInfo.FileVersion',
+                r'(Get-Item -Path "$env:PROGRAMFILES(x86)\Microsoft\Edge\Application\msedge.exe").VersionInfo.FileVersion',
+                r'reg query "HKCU\SOFTWARE\Microsoft\Edge\BLBeacon" /v version',
+                r'reg query "HKLM\SOFTWARE\Microsoft\EdgeUpdate\Clients\{56EB18F8-8008-4CBD-B6D2-8C97FE7E9062}" /v pv',
+                # beta edge
+                r'(Get-Item -Path "$env:LOCALAPPDATA\Microsoft\Edge Beta\Application\msedge.exe").VersionInfo.FileVersion',
+                r'(Get-Item -Path "$env:PROGRAMFILES\Microsoft\Edge Beta\Application\msedge.exe").VersionInfo.FileVersion',
+                r'(Get-Item -Path "$env:PROGRAMFILES(x86)\Microsoft\Edge Beta\Application\msedge.exe").VersionInfo.FileVersion',
+                r'reg query "HKCU\SOFTWARE\Microsoft\Edge Beta\BLBeacon" /v version',
+                # dev edge
+                r'(Get-Item -Path "$env:LOCALAPPDATA\Microsoft\Edge Dev\Application\msedge.exe").VersionInfo.FileVersion',
+                r'(Get-Item -Path "$env:PROGRAMFILES\Microsoft\Edge Dev\Application\msedge.exe").VersionInfo.FileVersion',
+                r'(Get-Item -Path "$env:PROGRAMFILES(x86)\Microsoft\Edge Dev\Application\msedge.exe").VersionInfo.FileVersion',
+                r'reg query "HKCU\SOFTWARE\Microsoft\Edge Dev\BLBeacon" /v version',
+                # canary edge
+                r'(Get-Item -Path "$env:LOCALAPPDATA\Microsoft\Edge SxS\Application\msedge.exe").VersionInfo.FileVersion',
+                r'reg query "HKCU\SOFTWARE\Microsoft\Edge SxS\BLBeacon" /v version',
+                # highest edge
+                r"(Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe').'(Default)').VersionInfo.ProductVersion",
+                r"[System.Diagnostics.FileVersionInfo]::GetVersionInfo((Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe').'(Default)').ProductVersion",
+                r'Get-AppxPackage -Name *MicrosoftEdge.* | Foreach Version',
+                r'reg query "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge" /v version'
+            ),
+        },
+        'firefox': {
+            OSType.LINUX: linux_browser_apps_to_cmd('firefox'),
+            OSType.MAC: r'/Applications/Firefox.app/Contents/MacOS/firefox --version',
+            OSType.WIN: windows_browser_apps_to_cmd(
+                r'(Get-Item -Path "$env:PROGRAMFILES\Mozilla Firefox\firefox.exe").VersionInfo.FileVersion',
+                r'(Get-Item -Path "$env:PROGRAMFILES(x86)\Mozilla Firefox\firefox.exe").VersionInfo.FileVersion',
+                r"(Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\firefox.exe').'(Default)').VersionInfo.ProductVersion",
+                r'reg query "HKLM\SOFTWARE\Mozilla\Mozilla Firefox" /v CurrentVersion'
+            ),
+        },
     }
 
     cmd = cmd_mapping[browser_type][os_name()]
     version = read_version_from_cmd(cmd, pattern)
 
     if not version:
-        logger.info("Could not get version for %s with the any command: %s",browser_type,cmd)
+        logger.info("Could not get version for %s with the command: %s",browser_type,cmd)
 
     current_version = version.group(0) if version else 'UNKNOWN'
 
     logger.info("Current %s version is %s",browser_type,current_version)
-    return current_version
-
-
-def firefox_version():
-    pattern = r'(\d+.\d+)'
-    cmd_mapping = {
-        OSType.LINUX: 'firefox --version',
-        OSType.MAC: r'/Applications/Firefox.app/Contents/MacOS/firefox --version',
-        OSType.WIN: r"Powershell (Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\firefox.exe').'(Default)').VersionInfo.ProductVersion",
-    }
-    cmd = cmd_mapping[os_name()]
-
-    version = read_version_from_cmd(cmd, pattern)
-
-    if not version:
-        logger.info("Could not get version for firefox with the any command: %s",cmd)
-
-    current_version = version.group(0) if version else 'UNKNOWN'
-
-    logger.info("Current firefox version is %s",current_version)
+    
     return current_version
 
 
@@ -195,3 +244,17 @@ def read_version_from_cmd(cmd, pattern):
         stdout = stream.communicate()[0].decode()
         version = re.search(pattern, stdout)
     return version
+
+
+def determine_powershell():
+    """Returns "powershell" if process runs in CMD console."""
+    cmd = '(dir 2>&1 *`|echo CMD);&<# rem #>echo powershell'
+    with subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            stdin=subprocess.DEVNULL,
+            shell=True,
+    ) as stream:
+        stdout = stream.communicate()[0].decode()
+    return '' if stdout == 'powershell' else 'powershell'

@@ -1,7 +1,13 @@
 # Changelog
 
 ---
-## 3.5.2
+## 3.5.3 Determine browser versions on Windows
+### Bugfixes
+- Fixed logger for EdgeChromiumDriverManager and IEDriverManager (Resolves [#269](https://github.com/SergeyPirogov/webdriver_manager/issues/269), [#272](https://github.com/SergeyPirogov/webdriver_manager/issues/272)).
+### Features
+- Determine browsers versions on Windows 32/64 bit by many ways. MSEdge, Chrome, Chromium, Firefox. PowerShell required. (Resolves [#261](https://github.com/SergeyPirogov/webdriver_manager/issues/261), [#193](https://github.com/SergeyPirogov/webdriver_manager/issues/193), [#293](https://github.com/SergeyPirogov/webdriver_manager/issues/293)).
+---
+- ## 3.5.2
 ### Features
 - SSL verification can be disabled by setting `os.environ['WDM_SSL_VERIFY']='0'` in case if you have troubles with SSL Certificates or SSL Certificate Chain (like in issues
   [#219](https://github.com/SergeyPirogov/webdriver_manager/issues/219), [#226](https://github.com/SergeyPirogov/webdriver_manager/issues/226))
