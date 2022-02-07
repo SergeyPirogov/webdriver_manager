@@ -13,19 +13,15 @@ def test_opera_driver_manager_with_correct_version():
     assert os.path.exists(driver_path)
 
 
-def test_driver_with_ssl_verify_disabled_can_be_downloaded():
-    try:
-        os.environ['WDM_SSL_VERIFY'] = '0'
-        custom_path = os.path.join(
-            os.path.dirname(os.path.dirname(__file__)),
-            "ssl_disabled",
-        )
-        driver_path = OperaDriverManager(path=custom_path).install()
+def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
+    os.environ['WDM_SSL_VERIFY'] = '0'
+    custom_path = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        "ssl_disabled",
+    )
+    driver_path = OperaDriverManager(path=custom_path).install()
 
-        assert os.path.exists(driver_path)
-
-    finally:
-        os.environ['WDM_SSL_VERIFY'] = ''
+    assert os.path.exists(driver_path)
 
 
 def test_operadriver_manager_with_selenium():
@@ -54,8 +50,8 @@ def test_operadriver_manager_with_selenium():
 def test_opera_driver_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
         driver_path = OperaDriverManager("0.2").install()
-        ff = webdriver.Opera(executable_path=driver_path)
-        ff.quit()
+        webdriver.Opera(executable_path=driver_path)
+
     assert "There is no such driver by url " \
            "https://api.github.com/repos/operasoftware/operachromiumdriver/" \
            "releases/tags/0.2" in ex.value.args[0]

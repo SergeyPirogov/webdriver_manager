@@ -6,23 +6,19 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.utils import ChromeType
 
 
-def test_driver_with_ssl_verify_disabled_can_be_downloaded():
-    try:
-        os.environ['WDM_SSL_VERIFY'] = '0'
-        custom_path = os.path.join(
-            os.path.dirname(os.path.dirname(__file__)),
-            "ssl_disabled",
-        )
-        driver_path = ChromeDriverManager(
-            version="83.0.4103.39",
-            path=custom_path,
-            chrome_type=ChromeType.CHROMIUM,
-        ).install()
+def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
+    os.environ['WDM_SSL_VERIFY'] = '0'
+    custom_path = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        "ssl_disabled",
+    )
+    driver_path = ChromeDriverManager(
+        version="83.0.4103.39",
+        path=custom_path,
+        chrome_type=ChromeType.CHROMIUM,
+    ).install()
 
-        assert os.path.exists(driver_path)
-
-    finally:
-        os.environ['WDM_SSL_VERIFY'] = ''
+    assert os.path.exists(driver_path)
 
 
 def test_chromium_manager_with_specific_version():
