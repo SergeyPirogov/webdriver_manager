@@ -229,6 +229,12 @@ import os
 os.environ['WDM_SSL_VERIFY'] = '0'
 ```
 
+### `version`
+Specify the version of webdriver you need. And webdriver-manager will download it from sources for your os.
+```python
+ChromeDriverManager(version="2.26").install()
+```
+
 ### `cache_valid_range`
 Driver cache by default is valid for 1 day. You are able to change this value using constructor parameter:
 

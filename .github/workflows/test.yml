@@ -1,10 +1,29 @@
 name: "Tests"
 on:
   push:
-
+    paths-ignore:
+      - CHANGELOG.md
+      - README.md
+      - LICESNSE.txt
+      - release-process.rst
+      - .gitignore
+      - .coveragerc
+      - .github/workflows/deploy.yml
+      - .github/workflows/codeql-analysis.yml
+      - .github/workflows/FUNDING.yml
   pull_request:
     branches:
       - master
+    paths-ignore:
+      - CHANGELOG.md
+      - README.md
+      - LICESNSE.txt
+      - release-process.rst
+      - .gitignore
+      - .coveragerc
+      - .github/workflows/deploy.yml
+      - .github/workflows/codeql-analysis.yml
+      - .github/workflows/FUNDING.yml
 
 jobs:
   test:
