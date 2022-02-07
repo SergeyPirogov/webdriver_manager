@@ -13,26 +13,22 @@ def test_gecko_manager_with_selenium():
     ff.quit()
 
 
-def test_driver_with_ssl_verify_disabled_can_be_downloaded():
-    try:
-        os.environ['WDM_SSL_VERIFY'] = '0'
-        custom_path = os.path.join(
-            os.path.dirname(os.path.dirname(__file__)),
-            "ssl_disabled",
-        )
-        driver_path = GeckoDriverManager(path=custom_path).install()
+def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
+    os.environ['WDM_SSL_VERIFY'] = '0'
+    custom_path = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        "ssl_disabled",
+    )
+    driver_path = GeckoDriverManager(path=custom_path).install()
 
-        assert os.path.exists(driver_path)
-
-    finally:
-        os.environ['WDM_SSL_VERIFY'] = ''
+    assert os.path.exists(driver_path)
 
 
 def test_gecko_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
         driver_path = GeckoDriverManager("0.2").install()
-        ff = webdriver.Firefox(executable_path=driver_path)
-        ff.quit()
+        webdriver.Firefox(executable_path=driver_path)
+
     assert "There is no such driver by url "\
         "https://api.github.com/repos/mozilla/geckodriver/releases/tags/0.2" \
         in ex.value.args[0]
