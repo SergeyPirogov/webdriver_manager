@@ -132,8 +132,38 @@ import os
 os.environ['GH_TOKEN'] = "asdasdasdasd"
 ```
 
-### `WDM_LOG_LEVEL`
-To silent `webdriver_manager` logs and remove them from console, initialize env variable `WDM_LOG_LEVEL` with `'0'` value before your selenium tests:
+### `Logging`
+Make sure to configure the logging facility the way it suits your use case before running your tests, to be able to capture your output.
+
+At the moment, in case no configuration is provided, log messages will be print to a console output and only for levels equal or higher than `Warning` [more info](https://docs.python.org/3/howto/logging.html).
+As of current version all messages logged by webdriver manager are of level `Info` so nothing will be printed out.
+
+To get log messages of level `Info` make sure to properly configure logging before using webdriver message, otherwise default configuration will be applied.
+
+E.g.
+```python
+import logging
+logging.basicConfig(level=logging.INFO)
+
+```
+
+#### `WDM_LOG_LEVEL`
+You can customize the loggin level of webdriver manager by using the env variable `WDM_LOG_LEVEL` before running your selenium tests.
+
+The values are set using logging setLevel method, you can find more info [here](https://docs.python.org/3/library/logging.html).
+
+At the moment the values are as follows:
+
+| Level    | Numeric value |
+|----------|---------------|
+| CRITICAL | 50            |
+| ERROR    | 40            |
+| WARNING  | 30            |
+| INFO     | 20            |
+| DEBUG    | 10            |
+| NOTSET   | 0             |
+
+E.g. to silent `webdriver_manager` logs and remove them from console, initialize env variable `WDM_LOG_LEVEL` with `'0'`:
 
 ```python
 import os
@@ -141,13 +171,7 @@ import os
 os.environ['WDM_LOG_LEVEL'] = '0'
 ``` 
 
-or via constructor:
-
-```python
-ChromeDriverManager("2.26", log_level=0).install()
-```
-
-### `WDM_PRINT_FIRST_LINE`
+#### `WDM_PRINT_FIRST_LINE`
 By default webdriver manager prints a blank space before its log output if logging is enabled. If you want to disable this, initialize `WDM_PRINT_FIRST_LINE` with `'False'` before your tests:
 
 ```python

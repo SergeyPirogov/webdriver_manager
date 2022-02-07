@@ -1,5 +1,12 @@
 # Changelog
 
+## TBD
+### Features
+- Being able to fine-tune logging configuration using standard python methods [#210](https://github.com/SergeyPirogov/webdriver_manager/issues/210)
+### Fixes
+- Fix: no unwanted logging messages will be print to console [#287](https://github.com/SergeyPirogov/webdriver_manager/issues/287), [#277](https://github.com/SergeyPirogov/webdriver_manager/issues/277)
+### Other
+- Removed log_level paramter for __init__ method of Driver object, same for child objects
 ---
 ## 3.5.2
 ### Features
