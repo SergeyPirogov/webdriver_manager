@@ -3,9 +3,11 @@
 ---
 ## 3.5.3 Determine browser versions on Windows
 ### Bugfixes
-- Fixed logger for EdgeChromiumDriverManager and IEDriverManager (Resolves [#269](https://github.com/SergeyPirogov/webdriver_manager/issues/269), [#272](https://github.com/SergeyPirogov/webdriver_manager/issues/272)).
+- Fixed logger for EdgeChromiumDriverManager and IEDriverManager ([#269](https://github.com/SergeyPirogov/webdriver_manager/issues/269), [#272](https://github.com/SergeyPirogov/webdriver_manager/issues/272)).
+- Fixed `JSONDecodeError` when raising `ValueError` message of failed request. ([#273](https://github.com/SergeyPirogov/webdriver_manager/issues/273)).
+- Fixed `geckodriver` permissions. When `webdriver.Firefox(GeckoDriverManager().install())` caused `os error 10061`.
 ### Features
-- Determine browsers versions on Windows 32/64 bit by many ways. MSEdge, Chrome, Chromium, Firefox. PowerShell required. (Resolves [#261](https://github.com/SergeyPirogov/webdriver_manager/issues/261), [#193](https://github.com/SergeyPirogov/webdriver_manager/issues/193), [#293](https://github.com/SergeyPirogov/webdriver_manager/issues/293)).
+- Determine browsers versions on Windows 32/64 bit by many ways. MSEdge, Chrome, Chromium, Firefox. PowerShell required. ([#261](https://github.com/SergeyPirogov/webdriver_manager/issues/261), [#193](https://github.com/SergeyPirogov/webdriver_manager/issues/193), [#293](https://github.com/SergeyPirogov/webdriver_manager/issues/293)).
 ---
 - ## 3.5.2
 ### Features

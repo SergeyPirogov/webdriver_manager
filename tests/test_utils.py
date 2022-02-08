@@ -1,27 +1,41 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from webdriver_manager import utils
-from unittest import mock
 import pytest
-import json
+from requests import Response, Request
+
+from webdriver_manager import utils
 
 
-def test_validate_response_json_decode_error():
-    resp = mock.Mock()
+def test_validate_response_value_error_not_200_and_not_404():
+    resp = Response()
     resp.headers = {}
-    resp.request.url = "http://example.com"
-    resp.content = "content"
-    resp.json = mock.Mock(side_effect=json.decoder.JSONDecodeError("", "", 0))
+    resp.request = Request()
+    resp.request.url = "https://example.com"
+    resp.status_code = 301
+    resp._content = b"abc"
+
     with pytest.raises(ValueError) as excinfo:
         utils.validate_response(resp)
+
     assert str(excinfo.value) == "\n".join(
         [
             "response body:",
-            "content",
+            "abc",
             "request url:",
-            "http://example.com",
+            "https://example.com",
             "response headers:",
             "{}",
             ""
         ]
     )
+
+
+def test_validate_response_value_error_404():
+    resp = Response()
+    resp.request = Request()
+    resp.url = "https://example.com"
+    resp.status_code = 404
+
+    with pytest.raises(ValueError) as excinfo:
+        utils.validate_response(resp)
+
+    expected_message = "There is no such driver by url https://example.com"
+    assert str(excinfo.value) == expected_message

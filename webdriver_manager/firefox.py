@@ -1,4 +1,5 @@
 import logging
+import os
 
 from webdriver_manager import utils
 from webdriver_manager.driver import GeckoDriver
@@ -26,4 +27,7 @@ class GeckoDriverManager(DriverManager):
                                   mozila_release_tag=mozila_release_tag)
 
     def install(self):
-        return self._get_driver_path(self.driver)
+        driver_path = self._get_driver_path(self.driver)
+
+        os.chmod(driver_path, 0o755)
+        return driver_path
