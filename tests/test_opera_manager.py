@@ -49,8 +49,7 @@ def test_operadriver_manager_with_selenium():
 
 def test_opera_driver_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
-        driver_path = OperaDriverManager("0.2").install()
-        webdriver.Opera(executable_path=driver_path)
+        OperaDriverManager("0.2").install()
 
     assert "There is no such driver by url " \
            "https://api.github.com/repos/operasoftware/operachromiumdriver/" \
