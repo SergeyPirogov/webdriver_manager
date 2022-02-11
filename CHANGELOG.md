@@ -8,6 +8,7 @@
 - Fixed `geckodriver` permissions. When `webdriver.Firefox(GeckoDriverManager().install())` caused `os error 10061`.
 ### Features
 - Determine browsers versions on Windows 32/64 bit by many ways. MSEdge, Chrome, Chromium, Firefox. PowerShell required. ([#261](https://github.com/SergeyPirogov/webdriver_manager/issues/261), [#193](https://github.com/SergeyPirogov/webdriver_manager/issues/193), [#293](https://github.com/SergeyPirogov/webdriver_manager/issues/293)).
+- Determine architecture of Mac M1 ARM64 for in ChromeDriverManager ([#299](https://github.com/SergeyPirogov/webdriver_manager/issues/299), [#205](https://github.com/SergeyPirogov/webdriver_manager/issues/205), [#285](https://github.com/SergeyPirogov/webdriver_manager/issues/285))
 ---
 - ## 3.5.2
 ### Features

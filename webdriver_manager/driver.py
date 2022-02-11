@@ -56,7 +56,8 @@ class ChromeDriver(Driver):
     def get_os_type(self):
         if "win" in super().get_os_type():
             return "win32"
-        return super().get_os_type()
+        mac = f'{super().get_os_type()}{"_m1" if "mac" in super().get_os_type() and not platform.processor() == "i386" else ""}'
+        return mac if 'mac' in super().get_os_type() else super().get_os_type()
 
     def get_latest_release_version(self):
         self.browser_version = get_browser_version_from_os(self.chrome_type)
@@ -126,18 +127,15 @@ class GeckoDriver(Driver):
         validate_response(resp)
         assets = resp.json()["assets"]
 
-        name = f"{self.get_name()}-{self.get_version()}-{self.get_os_type()}{'-aarch64' if (self.get_os_type() == 'macos' and not platform.processor() == 'i386') else ''}" + "."
+        name = f"{self.get_name()}-{self.get_version()}-{self.get_os_type()}."
         output_dict = [
             asset for asset in assets if asset['name'].startswith(name)
         ]
         return output_dict[0]['browser_download_url']
 
     def get_os_type(self):
-        return (
-            "macos"
-            if super().get_os_type().startswith("mac")
-            else super().get_os_type()
-        )
+        mac = f'macos{"-aarch64" if platform.processor() != "i386" else ""}'
+        return mac if 'mac' in super().get_os_type() else super().get_os_type()
 
     @property
     def latest_release_url(self):
