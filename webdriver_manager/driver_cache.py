@@ -70,6 +70,11 @@ class DriverCache(object):
             log(f"There is no [{os_type}] {driver_name} for browser {browser_version} in cache")
             return None
 
+        path = os.path.join(self._drivers_directory, driver_name, os_type, driver_version)
+        binary_path = os.path.join(path, driver_name)
+        if not os.path.exists(binary_path):
+            return None
+
         driver_info = metadata[key]
 
         if not self.__is_valid(driver_info):
