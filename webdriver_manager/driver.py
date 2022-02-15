@@ -301,19 +301,27 @@ class EdgeChromiumDriver(Driver):
         )
         self.browser_version = ""
 
+    def get_stable_release_version(self):
+        """Stable driver version when browser version was not determined."""
+        self._latest_release_url.replace('LATEST_RELEASE', 'LATEST_STABLE')
+        resp = requests.get(self._latest_release_url, verify=self.ssl_verify)
+        validate_response(resp)
+        return resp.text.rstrip()
+
     def get_latest_release_version(self) -> str:
-        self.browser_version = get_browser_version_from_os(ChromeType.MSEDGE)
-        log(f"Get LATEST {self._name} version for {self.browser_version} Edge")
-        major_edge_version = self.browser_version.split(".")[0] if self.browser_version != 'UNKNOWN' else None
-        latest_release_url = (
-            {
-                OSType.WIN in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_WINDOWS',
-                OSType.MAC in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_MACOS',
-                OSType.LINUX in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_LINUX',
-            }[True]
-            if self.browser_version != "UNKNOWN"
-            else self._latest_release_url.replace('LATEST_RELEASE', 'LATEST_STABLE')
+        browser_version = get_browser_version_from_os(ChromeType.MSEDGE)
+        self.browser_version = (
+            browser_version
+            if browser_version != 'UNKNOWN'
+            else self.get_stable_release_version()
         )
+        log(f"Get LATEST {self._name} version for {self.browser_version} Edge")
+        major_edge_version = self.browser_version.split(".")[0]
+        latest_release_url = {
+            OSType.WIN in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_WINDOWS',
+            OSType.MAC in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_MACOS',
+            OSType.LINUX in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_LINUX',
+        }[True]
         resp = requests.get(latest_release_url, verify=self.ssl_verify)
         validate_response(resp)
         self._version = resp.text.rstrip()
