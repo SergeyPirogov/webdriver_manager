@@ -56,7 +56,8 @@ class ChromeDriver(Driver):
     def get_os_type(self):
         if "win" in super().get_os_type():
             return "win32"
-        return super().get_os_type()
+        mac = f'{super().get_os_type()}{"_m1" if "mac" in super().get_os_type() and not platform.processor() == "i386" else ""}'
+        return mac if 'mac' in super().get_os_type() else super().get_os_type()
 
     def get_latest_release_version(self):
         self.browser_version = get_browser_version_from_os(self.chrome_type)
@@ -126,18 +127,15 @@ class GeckoDriver(Driver):
         validate_response(resp)
         assets = resp.json()["assets"]
 
-        name = f"{self.get_name()}-{self.get_version()}-{self.get_os_type()}{'-aarch64' if (self.get_os_type() == 'macos' and not platform.processor() == 'i386') else ''}" + "."
+        name = f"{self.get_name()}-{self.get_version()}-{self.get_os_type()}."
         output_dict = [
             asset for asset in assets if asset['name'].startswith(name)
         ]
         return output_dict[0]['browser_download_url']
 
     def get_os_type(self):
-        return (
-            "macos"
-            if super().get_os_type().startswith("mac")
-            else super().get_os_type()
-        )
+        mac = f'macos{"-aarch64" if platform.processor() != "i386" else ""}'
+        return mac if 'mac' in super().get_os_type() else super().get_os_type()
 
     @property
     def latest_release_url(self):
@@ -303,19 +301,27 @@ class EdgeChromiumDriver(Driver):
         )
         self.browser_version = ""
 
+    def get_stable_release_version(self):
+        """Stable driver version when browser version was not determined."""
+        self._latest_release_url.replace('LATEST_RELEASE', 'LATEST_STABLE')
+        resp = requests.get(self._latest_release_url, verify=self.ssl_verify)
+        validate_response(resp)
+        return resp.text.rstrip()
+
     def get_latest_release_version(self) -> str:
-        self.browser_version = get_browser_version_from_os(ChromeType.MSEDGE)
-        logger.info("Get LATEST %s version for %s Edge",self._name,self.browser_version)
-        major_edge_version = self.browser_version.split(".")[0] if self.browser_version != 'UNKNOWN' else None
-        latest_release_url = (
-            {
-                OSType.WIN in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_WINDOWS',
-                OSType.MAC in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_MACOS',
-                OSType.LINUX in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_LINUX',
-            }[True]
-            if self.browser_version != "UNKNOWN"
-            else self._latest_release_url.replace('LATEST_RELEASE', 'LATEST_STABLE')
+        browser_version = get_browser_version_from_os(ChromeType.MSEDGE)
+        self.browser_version = (
+            browser_version
+            if browser_version != 'UNKNOWN'
+            else self.get_stable_release_version()
         )
+        logger.info("Get LATEST %s version for %s Edge",self._name,self.browser_version)
+        major_edge_version = self.browser_version.split(".")[0]
+        latest_release_url = {
+            OSType.WIN in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_WINDOWS',
+            OSType.MAC in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_MACOS',
+            OSType.LINUX in self.get_os_type(): f'{self._latest_release_url}_{major_edge_version}_LINUX',
+        }[True]
         resp = requests.get(latest_release_url, verify=self.ssl_verify)
         validate_response(resp)
         self._version = resp.text.rstrip()
