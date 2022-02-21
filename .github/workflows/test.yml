@@ -4,7 +4,8 @@ on:
     paths-ignore:
       - CHANGELOG.md
       - README.md
-      - LICESNSE.txt
+      - LICENSE
+      - LICENSE.txt
       - release-process.rst
       - .gitignore
       - .coveragerc
@@ -17,7 +18,8 @@ on:
     paths-ignore:
       - CHANGELOG.md
       - README.md
-      - LICESNSE.txt
+      - LICENSE
+      - LICENSE.txt
       - release-process.rst
       - .gitignore
       - .coveragerc
