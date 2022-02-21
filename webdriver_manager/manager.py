@@ -16,18 +16,10 @@ class DriverManager(object):
         raise NotImplementedError("Please Implement this method")
 
     def _get_driver_path(self, driver):
-        browser_version = driver.browser_version
-
-        driver_name = driver.get_name()
-        os_type = driver.get_os_type()
-        driver_version = driver.get_version()
-
-        binary_path = self.driver_cache.find_driver(browser_version, driver_name, os_type,
-                                                    driver_version)
+        binary_path = self.driver_cache.find_driver(driver)
         if binary_path:
             return binary_path
 
         file = download_file(driver.get_url(), driver.ssl_verify)
-        binary_path = self.driver_cache.save_file_to_cache(file, browser_version,
-                                                           driver_name, os_type, driver_version)
+        binary_path = self.driver_cache.save_file_to_cache(driver, file)
         return binary_path

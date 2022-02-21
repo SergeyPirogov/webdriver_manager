@@ -22,7 +22,12 @@ class DriverCache(object):
         self._drivers_directory = f"{self._root_dir}{os.sep}{self._drivers_root}"
         self.valid_range = valid_range
 
-    def save_file_to_cache(self, file: File, browser_version, driver_name, os_type, driver_version):
+    def save_file_to_cache(self, driver, file: File):
+        driver_name = driver.get_name()
+        os_type = driver.get_os_type()
+        driver_version = driver.get_version()
+        browser_version = driver.browser_version
+
         path = os.path.join(self._drivers_directory, driver_name, os_type, driver_version)
         archive = save_file(file, path)
         files = archive.unpack(path)
@@ -62,7 +67,13 @@ class DriverCache(object):
         with open(self._drivers_json_path, 'w+') as outfile:
             json.dump(metadata, outfile, indent=4)
 
-    def find_driver(self, browser_version, driver_name, os_type, driver_version):
+    def find_driver(self, driver):
+        """Find driver by '{os_type}_{driver_name}_{driver_version}_{browser_version}'."""
+        os_type = driver.get_os_type()
+        driver_name = driver.get_name()
+        driver_version = driver.get_version()
+        browser_version = driver.browser_version
+
         metadata = self.get_metadata()
 
         key = f"{os_type}_{driver_name}_{driver_version}_for_{browser_version}"
@@ -71,9 +82,9 @@ class DriverCache(object):
             return None
 
         path = os.path.join(self._drivers_directory, driver_name, os_type, driver_version)
-        driver_name = 'msedgedriver' if driver_name == 'edgedriver' else driver_name
-        driver_name = f'{driver_name}.exe' if 'win' in os_type else driver_name
-        binary_path = os.path.join(path, driver_name)
+        driver_binary_name = 'msedgedriver' if driver_name == 'edgedriver' else driver_name
+        driver_binary_name = f'{driver_binary_name}.exe' if 'win' in os_type else driver_name
+        binary_path = os.path.join(path, driver_binary_name)
         if not os.path.exists(binary_path):
             return None
 

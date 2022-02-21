@@ -37,7 +37,7 @@ class Driver(object):
     def get_version(self):
         driver_version = self._version
         if driver_version == "latest":
-            return self.get_latest_release_version()
+            self._version = self.get_latest_release_version()
         return self._version
 
     def get_latest_release_version(self):
