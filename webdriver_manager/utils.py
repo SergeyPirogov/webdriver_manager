@@ -1,4 +1,5 @@
 import datetime
+import base64
 import os
 import platform
 import re
@@ -140,12 +141,17 @@ def windows_browser_apps_to_cmd(*apps: str) -> str:
     """
     ignore_errors_cmd_part = ' 2>$null' if os.getenv('WDM_LOG_LEVEL') == '0' else ''
     powershell = determine_powershell()
-    return (
-            f" {powershell} \"$ErrorActionPreference='silentlycontinue' ; "
+
+    script = (
+        "$ErrorActionPreference='silentlycontinue' ; "
             + f'{apps[0]}{ignore_errors_cmd_part} ;'
             + ''.join(f" if (-not $? -or $? -match $error) {{ {i}{ignore_errors_cmd_part} }}" for i in apps[1:])
-            + '"'
     )
+
+    b64script = str(base64.b64encode(script.encode("utf-16-le")), "utf-8")
+    
+    return f" {powershell} -EncodedCommand {b64script}"  
+            
 
 
 def get_browser_version_from_os(browser_type=None):
