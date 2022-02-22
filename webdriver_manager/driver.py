@@ -305,8 +305,8 @@ class EdgeChromiumDriver(Driver):
 
     def get_stable_release_version(self):
         """Stable driver version when browser version was not determined."""
-        self._latest_release_url.replace('LATEST_RELEASE', 'LATEST_STABLE')
-        resp = requests.get(self._latest_release_url, verify=self.ssl_verify)
+        stable = self._latest_release_url.replace('LATEST_RELEASE', 'LATEST_STABLE')
+        resp = requests.get(stable, verify=self.ssl_verify)
         validate_response(resp)
         return resp.text.rstrip()
 
