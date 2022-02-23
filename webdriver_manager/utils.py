@@ -13,7 +13,6 @@ from webdriver_manager.logger import log
 
 
 class File(object):
-
     def __init__(self, stream):
         self.content = stream.content
         self.__stream = stream
@@ -22,7 +21,9 @@ class File(object):
     @property
     def filename(self) -> str:
         try:
-            filename = re.findall("filename=(.+)", self.__stream.headers["content-disposition"])[0]
+            filename = re.findall(
+                "filename=(.+)", self.__stream.headers["content-disposition"]
+            )[0]
         except KeyError:
             filename = f"{self.__temp_name}.zip"
         except IndexError:
@@ -50,9 +51,9 @@ class OSType(object):
 
 
 class ChromeType(object):
-    GOOGLE = 'google-chrome'
-    CHROMIUM = 'chromium'
-    MSEDGE = 'edge'
+    GOOGLE = "google-chrome"
+    CHROMIUM = "chromium"
+    MSEDGE = "edge"
 
 
 def os_name():
@@ -66,7 +67,7 @@ def os_name():
 
 
 def os_architecture():
-    if platform.machine().endswith('64'):
+    if platform.machine().endswith("64"):
         return 64
     else:
         return 32
@@ -81,9 +82,9 @@ def validate_response(resp: requests.Response):
         raise ValueError("There is no such driver by url {}".format(resp.url))
     elif resp.status_code != 200:
         raise ValueError(
-            f'response body:\n{resp.text}\n'
-            f'request url:\n{resp.request.url}\n'
-            f'response headers:\n{dict(resp.headers)}\n'
+            f"response body:\n{resp.text}\n"
+            f"request url:\n{resp.request.url}\n"
+            f"response headers:\n{dict(resp.headers)}\n"
         )
 
 
@@ -109,7 +110,9 @@ def get_date_diff(date1, date2, date_format):
 
 def get_filename_from_response(response, name):
     try:
-        filename = re.findall("filename=(.+)", response.headers["content-disposition"])[0]
+        filename = re.findall("filename=(.+)", response.headers["content-disposition"])[
+            0
+        ]
     except KeyError:
         filename = "{}.zip".format(name)
     except IndexError:
@@ -127,8 +130,8 @@ def linux_browser_apps_to_cmd(*apps: str) -> str:
     Result command example:
         chromium --version || chromium-browser --version
     """
-    ignore_errors_cmd_part = ' 2>/dev/null' if os.getenv('WDM_LOG_LEVEL') == '0' else ''
-    return ' || '.join(f'{i} --version{ignore_errors_cmd_part}' for i in apps)
+    ignore_errors_cmd_part = " 2>/dev/null" if os.getenv("WDM_LOG_LEVEL") == "0" else ""
+    return " || ".join(f"{i} --version{ignore_errors_cmd_part}" for i in apps)
 
 
 def windows_browser_apps_to_cmd(*apps: str) -> str:
@@ -139,52 +142,61 @@ def windows_browser_apps_to_cmd(*apps: str) -> str:
     Result command example:
        cmd1; if (-not $? -or $? -match $error) { cmd2 }
     """
-    ignore_errors_cmd_part = ' 2>$null' if os.getenv('WDM_LOG_LEVEL') == '0' else ''
+    ignore_errors_cmd_part = " 2>$null" if os.getenv("WDM_LOG_LEVEL") == "0" else ""
     powershell = determine_powershell()
 
     script = (
         "$ErrorActionPreference='silentlycontinue' ; "
-            + f'{apps[0]}{ignore_errors_cmd_part} ;'
-            + ''.join(f" if (-not $? -or $? -match $error) {{ {i}{ignore_errors_cmd_part} }}" for i in apps[1:])
+        + f"{apps[0]}{ignore_errors_cmd_part} ;"
+        + "".join(
+            f" if (-not $? -or $? -match $error) {{ {i}{ignore_errors_cmd_part} }}"
+            for i in apps[1:]
+        )
     )
 
-    return f''' {powershell} -NoProfile "{script}"'''  
-            
+    return f''' {powershell} -NoProfile "{script}"'''
+
 
 def get_browser_version_from_os(browser_type=None):
     """Return installed browser version."""
-    pattern = (
-        r'(\d+.\d+)'
-        if browser_type == 'firefox'
-        else r'\d+\.\d+\.\d+'
-    )
+    pattern = r"(\d+.\d+)" if browser_type == "firefox" else r"\d+\.\d+\.\d+"
 
     cmd_mapping = {
         ChromeType.GOOGLE: {
-            OSType.LINUX: linux_browser_apps_to_cmd('google-chrome', 'google-chrome-stable', 'google-chrome-beta', 'google-chrome-dev'),
-            OSType.MAC: r'/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version',
+            OSType.LINUX: linux_browser_apps_to_cmd(
+                "google-chrome",
+                "google-chrome-stable",
+                "google-chrome-beta",
+                "google-chrome-dev",
+            ),
+            OSType.MAC: r"/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version",
             OSType.WIN: windows_browser_apps_to_cmd(
                 r'(Get-Item -Path "$env:PROGRAMFILES\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
                 r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
                 r'(Get-Item -Path "$env:LOCALAPPDATA\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
                 r'(Get-ItemProperty -Path Registry::"HKCU\SOFTWARE\Google\Chrome\BLBeacon").version',
-                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome").version'
+                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome").version',
             ),
         },
         ChromeType.CHROMIUM: {
-            OSType.LINUX: linux_browser_apps_to_cmd('chromium', 'chromium-browser'),
-            OSType.MAC: r'/Applications/Chromium.app/Contents/MacOS/Chromium --version',
+            OSType.LINUX: linux_browser_apps_to_cmd("chromium", "chromium-browser"),
+            OSType.MAC: r"/Applications/Chromium.app/Contents/MacOS/Chromium --version",
             OSType.WIN: windows_browser_apps_to_cmd(
                 r'(Get-Item -Path "$env:PROGRAMFILES\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
                 r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
                 r'(Get-Item -Path "$env:LOCALAPPDATA\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
                 r'(Get-ItemProperty -Path Registry::"HKCU\SOFTWARE\Chromium\BLBeacon").version',
-                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Chromium").version'
+                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Chromium").version',
             ),
         },
         ChromeType.MSEDGE: {
-            OSType.LINUX: linux_browser_apps_to_cmd('microsoft-edge', 'microsoft-edge-stable', 'microsoft-edge-beta', 'microsoft-edge-dev'),
-            OSType.MAC: r'/Applications/Microsoft\ Edge.app/Contents/MacOS/Microsoft\ Edge --version',
+            OSType.LINUX: linux_browser_apps_to_cmd(
+                "microsoft-edge",
+                "microsoft-edge-stable",
+                "microsoft-edge-beta",
+                "microsoft-edge-dev",
+            ),
+            OSType.MAC: r"/Applications/Microsoft\ Edge.app/Contents/MacOS/Microsoft\ Edge --version",
             OSType.WIN: windows_browser_apps_to_cmd(
                 # stable edge
                 r'(Get-Item -Path "$env:PROGRAMFILES\Microsoft\Edge\Application\msedge.exe").VersionInfo.FileVersion',
@@ -207,18 +219,18 @@ def get_browser_version_from_os(browser_type=None):
                 # highest edge
                 r"(Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe').'(Default)').VersionInfo.ProductVersion",
                 r"[System.Diagnostics.FileVersionInfo]::GetVersionInfo((Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe').'(Default)').ProductVersion",
-                r'Get-AppxPackage -Name *MicrosoftEdge.* | Foreach Version',
-                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge").version'
+                r"Get-AppxPackage -Name *MicrosoftEdge.* | Foreach Version",
+                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge").version',
             ),
         },
-        'firefox': {
-            OSType.LINUX: linux_browser_apps_to_cmd('firefox'),
-            OSType.MAC: r'/Applications/Firefox.app/Contents/MacOS/firefox --version',
+        "firefox": {
+            OSType.LINUX: linux_browser_apps_to_cmd("firefox"),
+            OSType.MAC: r"/Applications/Firefox.app/Contents/MacOS/firefox --version",
             OSType.WIN: windows_browser_apps_to_cmd(
                 r'(Get-Item -Path "$env:PROGRAMFILES\Mozilla Firefox\firefox.exe").VersionInfo.FileVersion',
                 r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Mozilla Firefox\firefox.exe").VersionInfo.FileVersion',
                 r"(Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\firefox.exe').'(Default)').VersionInfo.ProductVersion",
-                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Mozilla\Mozilla Firefox").CurrentVersion'
+                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Mozilla\Mozilla Firefox").CurrentVersion',
             ),
         },
     }
@@ -227,9 +239,9 @@ def get_browser_version_from_os(browser_type=None):
     version = read_version_from_cmd(cmd, pattern)
 
     if not version:
-        log(f'Could not get version for {browser_type} with the command: {cmd}')
+        log(f"Could not get version for {browser_type} with the command: {cmd}")
 
-    current_version = version.group(0) if version else 'UNKNOWN'
+    current_version = version.group(0) if version else "UNKNOWN"
 
     log(f"Current {browser_type} version is {current_version}")
 
@@ -238,11 +250,11 @@ def get_browser_version_from_os(browser_type=None):
 
 def read_version_from_cmd(cmd, pattern):
     with subprocess.Popen(
-            cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            stdin=subprocess.DEVNULL,
-            shell=True,
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        stdin=subprocess.DEVNULL,
+        shell=True,
     ) as stream:
         stdout = stream.communicate()[0].decode()
         version = re.search(pattern, stdout)
@@ -251,13 +263,13 @@ def read_version_from_cmd(cmd, pattern):
 
 def determine_powershell():
     """Returns "powershell" if process runs in CMD console."""
-    cmd = '(dir 2>&1 *`|echo CMD);&<# rem #>echo powershell'
+    cmd = "(dir 2>&1 *`|echo CMD);&<# rem #>echo powershell"
     with subprocess.Popen(
-            cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            stdin=subprocess.DEVNULL,
-            shell=True,
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        stdin=subprocess.DEVNULL,
+        shell=True,
     ) as stream:
         stdout = stream.communicate()[0].decode()
-    return '' if stdout == 'powershell' else 'powershell'
+    return "" if stdout == "powershell" else "powershell"
