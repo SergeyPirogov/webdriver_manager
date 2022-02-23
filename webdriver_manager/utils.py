@@ -120,6 +120,7 @@ def get_filename_from_response(response, name):
 
     return filename
 
+
 def determine_powershell():
     """Returns "powershell" if process runs in CMD console."""
     cmd = '(dir 2>&1 *`|echo CMD);&<# rem #>echo powershell'
