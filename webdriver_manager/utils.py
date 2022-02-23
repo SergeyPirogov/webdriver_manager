@@ -120,6 +120,18 @@ def get_filename_from_response(response, name):
 
     return filename
 
+def determine_powershell():
+    """Returns "powershell" if process runs in CMD console."""
+    cmd = '(dir 2>&1 *`|echo CMD);&<# rem #>echo powershell'
+    with subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            stdin=subprocess.DEVNULL,
+            shell=True,
+    ) as stream:
+        stdout = stream.communicate()[0].decode()
+    return '' if stdout == 'powershell' else 'powershell'
 
 def linux_browser_apps_to_cmd(*apps: str) -> str:
     """Create 'browser --version' command from browser app names.
@@ -152,20 +164,6 @@ def windows_browser_apps_to_cmd(*apps: str) -> str:
     
     return f" {powershell} -EncodedCommand {b64script}"  
             
-
-def determine_powershell():
-    """Returns "powershell" if process runs in CMD console."""
-    cmd = '(dir 2>&1 *`|echo CMD);&<# rem #>echo powershell'
-    with subprocess.Popen(
-            cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            stdin=subprocess.DEVNULL,
-            shell=True,
-    ) as stream:
-        stdout = stream.communicate()[0].decode()
-    return '' if stdout == 'powershell' else 'powershell'
-
 
 CMD_MAPPING = {
     ChromeType.GOOGLE: {
@@ -231,6 +229,7 @@ CMD_MAPPING = {
     },
 }
 
+
 def get_browser_version_from_os(browser_type=None):
     """Return installed browser version."""
     pattern = (
@@ -238,8 +237,6 @@ def get_browser_version_from_os(browser_type=None):
         if browser_type == 'firefox'
         else r'\d+\.\d+\.\d+'
     )
-
-
 
     cmd = CMD_MAPPING[browser_type][os_name()]
     version = read_version_from_cmd(cmd, pattern)
@@ -265,5 +262,3 @@ def read_version_from_cmd(cmd, pattern):
         stdout = stream.communicate()[0].decode()
         version = re.search(pattern, stdout)
     return version
-
-
