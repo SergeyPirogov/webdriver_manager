@@ -148,7 +148,7 @@ def windows_browser_apps_to_cmd(*apps: str) -> str:
         ''.join(f" if (-not $? -or $? -match $error) {{ {i}{ignore_errors_cmd_part} }}" for i in apps[1:])
     )
 
-    return f"{powershell}{script}"
+    return f"{powershell} -NoProfile {script}"
             
 
 def get_browser_version_from_os(browser_type=None):
