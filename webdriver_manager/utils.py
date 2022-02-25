@@ -52,6 +52,7 @@ class OSType(object):
 class ChromeType(object):
     GOOGLE = 'google-chrome'
     CHROMIUM = 'chromium'
+    BRAVE = "brave-browser"
     MSEDGE = 'edge'
 
 
@@ -180,6 +181,17 @@ def get_browser_version_from_os(browser_type=None):
                 r'(Get-Item -Path "$env:LOCALAPPDATA\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
                 r'(Get-ItemProperty -Path Registry::"HKCU\SOFTWARE\Chromium\BLBeacon").version',
                 r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Chromium").version'
+            ),
+        },
+        ChromeType.BRAVE: {
+            OSType.LINUX: linux_browser_apps_to_cmd('brave-browser', 'brave-browser-stable', 'brave-browser-beta', 'brave-browser-dev'),
+            OSType.MAC: r'/Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --version',
+            OSType.WIN: windows_browser_apps_to_cmd(
+                r'(Get-Item -Path "$env:PROGRAMFILES\BraveSoftware\Brave-Browser\Application\brave.exe").VersionInfo.FileVersion',
+                r'(Get-Item -Path "$env:PROGRAMFILES (x86)\BraveSoftware\Brave-Browser\Application\brave.exe").VersionInfo.FileVersion',
+                r'(Get-Item -Path "$env:LOCALAPPDATA\BraveSoftware\Brave-Browser\Application\brave.exe").VersionInfo.FileVersion',
+                r'(Get-ItemProperty -Path Registry::"HKCU\SOFTWARE\BraveSoftware\Brave-Browser\BLBeacon").version',
+                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\BraveSoftware Brave-Browser").version'
             ),
         },
         ChromeType.MSEDGE: {
