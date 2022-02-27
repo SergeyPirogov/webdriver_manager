@@ -1,5 +1,4 @@
 import datetime
-import base64
 import os
 import platform
 import re
@@ -144,11 +143,11 @@ def windows_browser_apps_to_cmd(*apps: str) -> str:
 
     script = (
         "$ErrorActionPreference='silentlycontinue' ; "
-        f'{apps[0]}{ignore_errors_cmd_part} ;'
-        ''.join(f" if (-not $? -or $? -match $error) {{ {i}{ignore_errors_cmd_part} }}" for i in apps[1:])
+        + f'{apps[0]}{ignore_errors_cmd_part} ;'
+        + ''.join(f" if (-not $? -or $? -match $error) {{ {i}{ignore_errors_cmd_part} }}" for i in apps[1:])
     )
 
-    return f"{powershell}{script}"
+    return script if powershell else f'powershell "{script}"'
             
 
 def get_browser_version_from_os(browser_type=None):
@@ -250,7 +249,7 @@ def read_version_from_cmd(cmd, pattern):
 
 
 def determine_powershell():
-    """Returns "powershell" if process runs in CMD console."""
+    """Returns "True" if runs in Powershell and "False" if another console."""
     cmd = '(dir 2>&1 *`|echo CMD);&<# rem #>echo powershell'
     with subprocess.Popen(
             cmd,
@@ -260,4 +259,4 @@ def determine_powershell():
             shell=True,
     ) as stream:
         stdout = stream.communicate()[0].decode()
-    return '' if stdout == 'powershell' else 'powershell '
+    return True if stdout == 'powershell' else False
