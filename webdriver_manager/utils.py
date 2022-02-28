@@ -164,13 +164,13 @@ def windows_browser_apps_to_cmd(*apps: str) -> str:
     b64script = str(base64.b64encode(script.encode("utf-16-le")), "utf-8")
     
     return f" {powershell} -EncodedCommand {b64script}"  
-            
+         
 
-CMD_MAPPING = {
+_CMD_MAPPING = {
     ChromeType.GOOGLE: {
-        OSType.LINUX: linux_browser_apps_to_cmd('google-chrome', 'google-chrome-stable', 'google-chrome-beta', 'google-chrome-dev'),
+        OSType.LINUX: ('google-chrome', 'google-chrome-stable', 'google-chrome-beta', 'google-chrome-dev'),
         OSType.MAC: r'/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version',
-        OSType.WIN: windows_browser_apps_to_cmd(
+        OSType.WIN: (
             r'(Get-Item -Path "$env:PROGRAMFILES\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
             r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
             r'(Get-Item -Path "$env:LOCALAPPDATA\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
@@ -179,9 +179,9 @@ CMD_MAPPING = {
         ),
     },
     ChromeType.CHROMIUM: {
-        OSType.LINUX: linux_browser_apps_to_cmd('chromium', 'chromium-browser'),
+        OSType.LINUX: ('chromium', 'chromium-browser'),
         OSType.MAC: r'/Applications/Chromium.app/Contents/MacOS/Chromium --version',
-        OSType.WIN: windows_browser_apps_to_cmd(
+        OSType.WIN: (
             r'(Get-Item -Path "$env:PROGRAMFILES\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
             r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
             r'(Get-Item -Path "$env:LOCALAPPDATA\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
@@ -190,9 +190,9 @@ CMD_MAPPING = {
         ),
     },
     ChromeType.MSEDGE: {
-        OSType.LINUX: linux_browser_apps_to_cmd('microsoft-edge', 'microsoft-edge-stable', 'microsoft-edge-beta', 'microsoft-edge-dev'),
+        OSType.LINUX: ('microsoft-edge', 'microsoft-edge-stable', 'microsoft-edge-beta', 'microsoft-edge-dev'),
         OSType.MAC: r'/Applications/Microsoft\ Edge.app/Contents/MacOS/Microsoft\ Edge --version',
-        OSType.WIN: windows_browser_apps_to_cmd(
+        OSType.WIN: (
             # stable edge
             r'(Get-Item -Path "$env:PROGRAMFILES\Microsoft\Edge\Application\msedge.exe").VersionInfo.FileVersion',
             r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Microsoft\Edge\Application\msedge.exe").VersionInfo.FileVersion',
@@ -219,9 +219,9 @@ CMD_MAPPING = {
         ),
     },
     'firefox': {
-        OSType.LINUX: linux_browser_apps_to_cmd('firefox'),
+        OSType.LINUX: ('firefox',),
         OSType.MAC: r'/Applications/Firefox.app/Contents/MacOS/firefox --version',
-        OSType.WIN: windows_browser_apps_to_cmd(
+        OSType.WIN: (
             r'(Get-Item -Path "$env:PROGRAMFILES\Mozilla Firefox\firefox.exe").VersionInfo.FileVersion',
             r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Mozilla Firefox\firefox.exe").VersionInfo.FileVersion',
             r"(Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\firefox.exe').'(Default)').VersionInfo.ProductVersion",
@@ -229,6 +229,46 @@ CMD_MAPPING = {
         ),
     },
 }
+
+CMD_MAPPING_FUNCS = {
+    OSType.LINUX: linux_browser_apps_to_cmd,
+    OSType.WIN: windows_browser_apps_to_cmd,
+    OSType.MAC: lambda x: x, # dummy function for mac
+}
+
+def get_command_to_read_browser_version(browser_type, os_name):
+    """
+    Get the command line command that can be executed to obtain 
+    the browser version.
+
+    Parameters
+    ----------
+    browser_type: str
+        The used browser. Accepted values are ChromeType.GOOGLE,
+        ChromeType.CHROMIUM, ChromeType.MSEDGE and "firefox".
+    os_type: str
+        The used operating system. Accepted values are OSType.WIN,
+        OSType.MAC and OSType.LINUX.
+
+    Returns
+    -------s
+    cmd_string: str
+        The command to run to obtain the browser version.
+
+    Notes
+    -----
+        This function will also update the `webdriver_manager_utils.CMD_MAPPING` for the
+        `browser_type` and `os_type` for caching purposes.
+    """
+    try: 
+        cmd_string = _CMD_MAPPING[browser_type][os_name]
+    except KeyError:
+        return '' # will raise helpful error message later on.
+    if not isinstance(cmd_string, str):
+        cmd_string = CMD_MAPPING_FUNCS[os_name](cmd_string)
+        # Caching: save the results to CMD_MAPPING
+        _CMD_MAPPING[browser_type][os_name] = cmd_string
+    return cmd_string
 
 
 def get_browser_version_from_os(browser_type=None):
@@ -239,7 +279,7 @@ def get_browser_version_from_os(browser_type=None):
         else r'\d+\.\d+\.\d+'
     )
 
-    cmd = CMD_MAPPING[browser_type][os_name()]
+    cmd = get_command_to_read_browser_version(browser_type, os_name())
     version = read_version_from_cmd(cmd, pattern)
 
     if not version:
