@@ -251,7 +251,7 @@ def get_command_to_read_browser_version(browser_type, os_name):
         OSType.MAC and OSType.LINUX.
 
     Returns
-    -------s
+    -------
     cmd_string: str
         The command to run to obtain the browser version.
 
