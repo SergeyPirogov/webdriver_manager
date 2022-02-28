@@ -154,11 +154,14 @@ def windows_browser_apps_to_cmd(*apps: str) -> str:
 
 def get_browser_version_from_os(browser_type=None):
     """Return installed browser version."""
-    pattern = (
-        r'(\d+.\d+)'
-        if browser_type == 'firefox'
-        else r'\d+\.\d+\.\d+'
-    )
+
+    pattern = {
+        ChromeType.CHROMIUM: r'\d+\.\d+\.\d+',
+        ChromeType.GOOGLE: r'\d+\.\d+\.\d+',
+        ChromeType.MSEDGE: r'\d+\.\d+\.\d+',
+        'brave-browser': r'(\d+)',
+        'firefox': r'(\d+.\d+)',
+    }[browser_type]
 
     cmd_mapping = {
         ChromeType.GOOGLE: {
@@ -184,7 +187,7 @@ def get_browser_version_from_os(browser_type=None):
             ),
         },
         ChromeType.BRAVE: {
-            OSType.LINUX: linux_browser_apps_to_cmd('brave-browser', 'brave-browser-stable', 'brave-browser-beta', 'brave-browser-dev'),
+            OSType.LINUX: linux_browser_apps_to_cmd('brave-browser', 'brave-browser-beta', 'brave-browser-nightly'),
             OSType.MAC: r'/Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --version',
             OSType.WIN: windows_browser_apps_to_cmd(
                 r'(Get-Item -Path "$env:PROGRAMFILES\BraveSoftware\Brave-Browser\Application\brave.exe").VersionInfo.FileVersion',

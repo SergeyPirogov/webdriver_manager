@@ -61,7 +61,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install software-properties-common apt-transport-https wget
+          sudo apt-get install software-properties-common apt-transport-https wget curl
 
           wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
           sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
@@ -76,19 +76,25 @@ jobs:
 
           sudo apt-get install chromium-browser
           chromium --version
+          
+          sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+          sudo apt-get update
+          sudo apt-get install brave-browser
+          brave-browser --version
 
       - name: Install browsers on Windows
         if: runner.os == 'Windows'
         shell: powershell
         run: |
-          choco install chromium opera --no-progress -y --force
+          choco install chromium opera brave --no-progress -y --force
 
       - name: Install browsers on MacOS
         if: startsWith(runner.os, 'macOS')
         run: |
           brew tap domt4/chromium
           brew update
-          brew install --cask mac-chromium opera
+          brew install --cask mac-chromium opera brave-browser
 
       - name: Install Python dependencies
         run: |
