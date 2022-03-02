@@ -1,8 +1,18 @@
 # Changelog
 
 ---
+## 3.5.4 
+### Features
+- Add Brave support, look "Use with Brave" chapter in README.md ([#331](https://github.com/SergeyPirogov/webdriver_manager/issues/331))
+- Speed up webdriver-manager in `driver.Driver.get_version()` method.
+### Fixes
+- Error in `webdriver.util` `get_browser_version_from_os` for 32 bit applications ([#315](https://github.com/SergeyPirogov/webdriver_manager/issues/315))
+- `EdgeChromiumDriverManager().install()` fails in 3.5.3 when no Edge found ([#312](https://github.com/SergeyPirogov/webdriver_manager/issues/312))
+- Driver cache doesn't work with WDM 3.5.3 (Win) ([#311](https://github.com/SergeyPirogov/webdriver_manager/issues/311))
+- `google-chrome` version is "UNKNOWN" with webdriver_manager 3.5.3 (Win) ([#307](https://github.com/SergeyPirogov/webdriver_manager/issues/307))
+---
 ## 3.5.3 Determine browser versions on Windows
-### Bugfixes
+### Fixes
 - Fixed logger for EdgeChromiumDriverManager and IEDriverManager ([#269](https://github.com/SergeyPirogov/webdriver_manager/issues/269), [#272](https://github.com/SergeyPirogov/webdriver_manager/issues/272)).
 - Fixed `JSONDecodeError` when raising `ValueError` message of failed request. ([#273](https://github.com/SergeyPirogov/webdriver_manager/issues/273)).
 - Fixed `geckodriver` permissions. When `webdriver.Firefox(GeckoDriverManager().install())` caused `os error 10061`.
@@ -51,7 +61,7 @@
 - webdriver_manager now releases to pypi by clicking "Publish GitHub release" button ([#238](https://github.com/SergeyPirogov/webdriver_manager/issues/238))
 ---
 
-lots releases ago...
+lots of releases ago...
 
 ---
 
