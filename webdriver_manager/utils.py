@@ -245,9 +245,9 @@ def get_browser_version_from_os(browser_type=None, supress_errors=False):
 
     current_version = version.group(0) if version else None
 
-    log(f"Current {browser_type} version is {
+    log(f"""Current {browser_type} version is {
             current_version if current_version else 'UNKNOW'
-        }")
+        }""")
 
     if not current_version:
         log("")
