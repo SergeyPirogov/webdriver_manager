@@ -240,13 +240,14 @@ def get_browser_version_from_os(browser_type=None, supress_errors=False):
     cmd = cmd_mapping[browser_type][os_name()]
     version = read_version_from_cmd(cmd, pattern)
 
-    if not version:
-        if not supress_errors:
-            log(f'Could not get version for {browser_type} with the command: {cmd}')
+    if not version and not supress_errors:
+        log(f'Could not get version for {browser_type} with the command: {cmd}')
 
     current_version = version.group(0) if version else None
 
-    log(f"Current {browser_type} version is {current_version if current_version else 'UNKNOW'}")
+    log(f"Current {browser_type} version is {
+            current_version if current_version else 'UNKNOW'
+        }")
 
     if not current_version:
         log("")
