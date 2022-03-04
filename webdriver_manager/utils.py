@@ -149,9 +149,9 @@ def windows_browser_apps_to_cmd(*apps: str) -> str:
     )
 
     return script if powershell else f'powershell "{script}"'
-            
 
-def get_browser_version_from_os(browser_type=None):
+
+def get_browser_version_from_os(browser_type=None, supress_errors=False):
     """Return installed browser version."""
 
     pattern = {
@@ -241,11 +241,17 @@ def get_browser_version_from_os(browser_type=None):
     version = read_version_from_cmd(cmd, pattern)
 
     if not version:
-        log(f'Could not get version for {browser_type} with the command: {cmd}')
+        if not supress_errors:
+            log(f'Could not get version for {browser_type} with the command: {cmd}')
 
-    current_version = version.group(0) if version else 'UNKNOWN'
+    current_version = version.group(0) if version else None
 
-    log(f"Current {browser_type} version is {current_version}")
+    log(f"Current {browser_type} version is {current_version if current_version else 'UNKNOW'}")
+
+    if not current_version:
+        log("")
+        log("")
+        log(f"Is {browser_type} installed?")
 
     return current_version
 
