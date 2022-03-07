@@ -143,13 +143,12 @@ def windows_browser_apps_to_cmd(*apps: str) -> str:
     powershell = determine_powershell()
 
     script = (
-        "-NoProfile $ErrorActionPreference='silentlycontinue' ; "
+        "$ErrorActionPreference='silentlycontinue' ; "
         + f'{apps[0]}{ignore_errors_cmd_part} ;'
         + ''.join(f" if (-not $? -or $? -match $error) {{ {i}{ignore_errors_cmd_part} }}" for i in apps[1:])
     )
 
-    return script if powershell else f'powershell "{script}"'
-
+    return f'{powershell} -NoProfile "{script}"'
 
 def get_browser_version_from_os(browser_type=None):
     """Return installed browser version."""
@@ -275,4 +274,4 @@ def determine_powershell():
             shell=True,
     ) as stream:
         stdout = stream.communicate()[0].decode()
-    return True if stdout == 'powershell' else False
+    return "" if stdout == 'powershell' else "powershell"
