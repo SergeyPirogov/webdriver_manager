@@ -132,20 +132,12 @@ def linux_browser_apps_to_cmd(*apps: str) -> str:
 
 
 def windows_browser_apps_to_cmd(*apps: str) -> str:
-    """Create analogue of browser --version command for windows.
-
-    From browser paths and registry keys.
-
-    Result command example:
-       cmd1; if (-not $? -or $? -match $error) { cmd2 }
-    """
-    ignore_errors_cmd_part = ' 2>$null' if os.getenv('WDM_LOG_LEVEL') == '0' else ''
+    """Create analogue of browser --version command for windows."""
     powershell = determine_powershell()
 
-    script = (
-        "$ErrorActionPreference='silentlycontinue' ; "
-        + f'{apps[0]}{ignore_errors_cmd_part} ;'
-        + ''.join(f" if (-not $? -or $? -match $error) {{ {i}{ignore_errors_cmd_part} }}" for i in apps[1:])
+    first_hit_template = """$tmp = {expression}; if ($tmp) {{echo $tmp; Exit;}};"""
+    script = "$ErrorActionPreference='silentlycontinue'; " + " ".join(
+        first_hit_template.format(expression=e) for e in apps
     )
 
     return f'{powershell} -NoProfile "{script}"'
