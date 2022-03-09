@@ -5,6 +5,7 @@
 ### Features
 - Add Brave support, look "Use with Brave" chapter in README.md ([#331](https://github.com/SergeyPirogov/webdriver_manager/issues/331))
 - Speed up webdriver-manager in `driver.Driver.get_version()` method.
+- Disable logs by `os.environ['WDM_LOG'] = '0'` (Resolves [#277](https://github.com/SergeyPirogov/webdriver_manager/issues/277))
 ### Fixes
 - Error in `webdriver.util` `get_browser_version_from_os` for 32 bit applications ([#315](https://github.com/SergeyPirogov/webdriver_manager/issues/315))
 - `EdgeChromiumDriverManager().install()` fails in 3.5.3 when no Edge found ([#312](https://github.com/SergeyPirogov/webdriver_manager/issues/312))
