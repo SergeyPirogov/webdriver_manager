@@ -227,10 +227,9 @@ def get_browser_version_from_os(browser_type=None):
                 r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Mozilla\Mozilla Firefox").CurrentVersion'
             ),
         },
-    }
+    }[browser_type][os_name()]
 
-    cmd = cmd_mapping[browser_type][os_name()]
-    version = read_version_from_cmd(cmd, pattern)
+    version = read_version_from_cmd(cmd_mapping, pattern)
 
     if not version:
         log(
