@@ -37,7 +37,8 @@ jobs:
       matrix:
         python-version: ['3.6']
         selenium-version: ['3.141.0']
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        os: [ macos-latest, windows-latest ]
+        wdm-log: ['']
         include:
           - python-version: '3.7'
             selenium-version: '4.1.0'
@@ -45,9 +46,7 @@ jobs:
           - python-version: '3.10'
             selenium-version: '3.141.0'
             os: ubuntu-latest
-          - python-version: '3.10'
-            selenium-version: '4.1.0'
-            os: ubuntu-latest
+            wdm-log: '0'
 
     steps:
       - uses: actions/checkout@v2
@@ -106,6 +105,8 @@ jobs:
       - name: Run tests on Linux (with xvfb)
         if: runner.os == 'Linux'
         uses: GabrielBB/xvfb-action@v1.0
+        env:
+          WDM_LOG: ${{ matrix.wdm-log }}
         with:
           run: |
             pipenv run py.test -sv --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
