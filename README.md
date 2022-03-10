@@ -201,6 +201,14 @@ import os
 os.environ['GH_TOKEN'] = "asdasdasdasd"
 ```
 
+### `WDM_LOG`
+Turn off webdriver-manager logs with `os.environ['WDM_LOG'] == '0'`
+```python
+import os
+
+os.environ['WDM_LOG'] = '0'
+```
+
 ### `WDM_LOG_LEVEL`
 To silent `webdriver_manager` logs and remove them from console, initialize env variable `WDM_LOG_LEVEL` with `'0'` value before your selenium tests:
 
