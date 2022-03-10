@@ -233,7 +233,10 @@ def get_browser_version_from_os(browser_type=None):
     version = read_version_from_cmd(cmd, pattern)
 
     if not version:
-        log(f'Could not get version for {browser_type} with the command: {cmd}')
+        log(
+            f'Could not get version for {browser_type}.'
+            f'Is {browser_type} installed?'
+        )
 
     current_version = version.group(0) if version else 'UNKNOWN'
 
