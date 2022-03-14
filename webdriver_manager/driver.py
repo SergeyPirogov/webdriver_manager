@@ -35,9 +35,11 @@ class Driver(object):
         return f"{self._url}/{self.get_version()}/{self.get_name()}_{self.get_os_type()}.zip"
 
     def get_version(self):
-        driver_version = self._version
-        if driver_version == "latest":
-            return self.get_latest_release_version()
+        self._version = (
+            self.get_latest_release_version()
+            if self._version == "latest"
+            else self._version
+        )
         return self._version
 
     def get_latest_release_version(self):
@@ -303,8 +305,8 @@ class EdgeChromiumDriver(Driver):
 
     def get_stable_release_version(self):
         """Stable driver version when browser version was not determined."""
-        self._latest_release_url.replace('LATEST_RELEASE', 'LATEST_STABLE')
-        resp = requests.get(self._latest_release_url, verify=self.ssl_verify)
+        stable = self._latest_release_url.replace('LATEST_RELEASE', 'LATEST_STABLE')
+        resp = requests.get(stable, verify=self.ssl_verify)
         validate_response(resp)
         return resp.text.rstrip()
 

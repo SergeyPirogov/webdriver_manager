@@ -4,7 +4,8 @@ on:
     paths-ignore:
       - CHANGELOG.md
       - README.md
-      - LICESNSE.txt
+      - LICENSE
+      - LICENSE.txt
       - release-process.rst
       - .gitignore
       - .coveragerc
@@ -17,7 +18,8 @@ on:
     paths-ignore:
       - CHANGELOG.md
       - README.md
-      - LICESNSE.txt
+      - LICENSE
+      - LICENSE.txt
       - release-process.rst
       - .gitignore
       - .coveragerc
@@ -35,7 +37,8 @@ jobs:
       matrix:
         python-version: ['3.6']
         selenium-version: ['3.141.0']
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        os: [ macos-latest, windows-latest ]
+        wdm-log: ['']
         include:
           - python-version: '3.7'
             selenium-version: '4.1.0'
@@ -43,9 +46,7 @@ jobs:
           - python-version: '3.10'
             selenium-version: '3.141.0'
             os: ubuntu-latest
-          - python-version: '3.10'
-            selenium-version: '4.1.0'
-            os: ubuntu-latest
+            wdm-log: '0'
 
     steps:
       - uses: actions/checkout@v2
@@ -59,7 +60,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install software-properties-common apt-transport-https wget
+          sudo apt-get install software-properties-common apt-transport-https wget curl
 
           wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
           sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
@@ -74,19 +75,25 @@ jobs:
 
           sudo apt-get install chromium-browser
           chromium --version
+          
+          sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+          sudo apt-get update
+          sudo apt-get install brave-browser
+          brave-browser --version
 
       - name: Install browsers on Windows
         if: runner.os == 'Windows'
         shell: powershell
         run: |
-          choco install chromium opera --no-progress -y --force
+          choco install chromium opera brave --no-progress -y --force
 
       - name: Install browsers on MacOS
         if: startsWith(runner.os, 'macOS')
         run: |
           brew tap domt4/chromium
           brew update
-          brew install --cask mac-chromium opera
+          brew install --cask mac-chromium opera brave-browser
 
       - name: Install Python dependencies
         run: |
@@ -98,6 +105,8 @@ jobs:
       - name: Run tests on Linux (with xvfb)
         if: runner.os == 'Linux'
         uses: GabrielBB/xvfb-action@v1.0
+        env:
+          WDM_LOG: ${{ matrix.wdm-log }}
         with:
           run: |
             pipenv run py.test -sv --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
@@ -114,6 +123,7 @@ jobs:
 
       - name: Codecov Upload
         uses: codecov/codecov-action@v1
+        if: always()
         with:
           file: ./coverage.xml
           name: ${{ matrix.os }}-py${{ matrix.python-version }}

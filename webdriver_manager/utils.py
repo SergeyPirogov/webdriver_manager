@@ -51,6 +51,7 @@ class OSType(object):
 class ChromeType(object):
     GOOGLE = 'google-chrome'
     CHROMIUM = 'chromium'
+    BRAVE = "brave-browser"
     MSEDGE = 'edge'
 
 
@@ -131,30 +132,27 @@ def linux_browser_apps_to_cmd(*apps: str) -> str:
 
 
 def windows_browser_apps_to_cmd(*apps: str) -> str:
-    """Create analogue of browser --version command for windows.
-
-    From browser paths and registry keys.
-
-    Result command example:
-       cmd1; if (-not $? -or $? -match $error) { cmd2 }
-    """
-    ignore_errors_cmd_part = ' 2>$null' if os.getenv('WDM_LOG_LEVEL') == '0' else ''
+    """Create analogue of browser --version command for windows."""
     powershell = determine_powershell()
-    return (
-            f" {powershell} \"$ErrorActionPreference='silentlycontinue' ; "
-            + f'{apps[0]}{ignore_errors_cmd_part} ;'
-            + ''.join(f" if (-not $? -or $? -match $error) {{ {i}{ignore_errors_cmd_part} }}" for i in apps[1:])
-            + '"'
+
+    first_hit_template = """$tmp = {expression}; if ($tmp) {{echo $tmp; Exit;}};"""
+    script = "$ErrorActionPreference='silentlycontinue'; " + " ".join(
+        first_hit_template.format(expression=e) for e in apps
     )
 
+    return f'{powershell} -NoProfile "{script}"'
+            
 
 def get_browser_version_from_os(browser_type=None):
     """Return installed browser version."""
-    pattern = (
-        r'(\d+.\d+)'
-        if browser_type == 'firefox'
-        else r'\d+\.\d+\.\d+'
-    )
+
+    pattern = {
+        ChromeType.CHROMIUM: r'\d+\.\d+\.\d+',
+        ChromeType.GOOGLE: r'\d+\.\d+\.\d+',
+        ChromeType.MSEDGE: r'\d+\.\d+\.\d+',
+        'brave-browser': r'(\d+)',
+        'firefox': r'(\d+.\d+)',
+    }[browser_type]
 
     cmd_mapping = {
         ChromeType.GOOGLE: {
@@ -162,10 +160,10 @@ def get_browser_version_from_os(browser_type=None):
             OSType.MAC: r'/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version',
             OSType.WIN: windows_browser_apps_to_cmd(
                 r'(Get-Item -Path "$env:PROGRAMFILES\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
-                r'(Get-Item -Path "$env:PROGRAMFILES(x86)\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
+                r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
                 r'(Get-Item -Path "$env:LOCALAPPDATA\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
-                r'reg query "HKCU\SOFTWARE\Google\Chrome\BLBeacon" /v version',
-                r'reg query "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome" /v version'
+                r'(Get-ItemProperty -Path Registry::"HKCU\SOFTWARE\Google\Chrome\BLBeacon").version',
+                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome").version'
             ),
         },
         ChromeType.CHROMIUM: {
@@ -173,10 +171,21 @@ def get_browser_version_from_os(browser_type=None):
             OSType.MAC: r'/Applications/Chromium.app/Contents/MacOS/Chromium --version',
             OSType.WIN: windows_browser_apps_to_cmd(
                 r'(Get-Item -Path "$env:PROGRAMFILES\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
-                r'(Get-Item -Path "$env:PROGRAMFILES(x86)\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
+                r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
                 r'(Get-Item -Path "$env:LOCALAPPDATA\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
-                r'reg query "HKCU\SOFTWARE\Chromium\BLBeacon" /v version',
-                r'reg query "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Chromium" /v version'
+                r'(Get-ItemProperty -Path Registry::"HKCU\SOFTWARE\Chromium\BLBeacon").version',
+                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Chromium").version'
+            ),
+        },
+        ChromeType.BRAVE: {
+            OSType.LINUX: linux_browser_apps_to_cmd('brave-browser', 'brave-browser-beta', 'brave-browser-nightly'),
+            OSType.MAC: r'/Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --version',
+            OSType.WIN: windows_browser_apps_to_cmd(
+                r'(Get-Item -Path "$env:PROGRAMFILES\BraveSoftware\Brave-Browser\Application\brave.exe").VersionInfo.FileVersion',
+                r'(Get-Item -Path "$env:PROGRAMFILES (x86)\BraveSoftware\Brave-Browser\Application\brave.exe").VersionInfo.FileVersion',
+                r'(Get-Item -Path "$env:LOCALAPPDATA\BraveSoftware\Brave-Browser\Application\brave.exe").VersionInfo.FileVersion',
+                r'(Get-ItemProperty -Path Registry::"HKCU\SOFTWARE\BraveSoftware\Brave-Browser\BLBeacon").version',
+                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\BraveSoftware Brave-Browser").version'
             ),
         },
         ChromeType.MSEDGE: {
@@ -185,27 +194,27 @@ def get_browser_version_from_os(browser_type=None):
             OSType.WIN: windows_browser_apps_to_cmd(
                 # stable edge
                 r'(Get-Item -Path "$env:PROGRAMFILES\Microsoft\Edge\Application\msedge.exe").VersionInfo.FileVersion',
-                r'(Get-Item -Path "$env:PROGRAMFILES(x86)\Microsoft\Edge\Application\msedge.exe").VersionInfo.FileVersion',
-                r'reg query "HKCU\SOFTWARE\Microsoft\Edge\BLBeacon" /v version',
-                r'reg query "HKLM\SOFTWARE\Microsoft\EdgeUpdate\Clients\{56EB18F8-8008-4CBD-B6D2-8C97FE7E9062}" /v pv',
+                r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Microsoft\Edge\Application\msedge.exe").VersionInfo.FileVersion',
+                r'(Get-ItemProperty -Path Registry::"HKCU\SOFTWARE\Microsoft\Edge\BLBeacon").version',
+                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Microsoft\EdgeUpdate\Clients\{56EB18F8-8008-4CBD-B6D2-8C97FE7E9062}").pv',
                 # beta edge
                 r'(Get-Item -Path "$env:LOCALAPPDATA\Microsoft\Edge Beta\Application\msedge.exe").VersionInfo.FileVersion',
                 r'(Get-Item -Path "$env:PROGRAMFILES\Microsoft\Edge Beta\Application\msedge.exe").VersionInfo.FileVersion',
-                r'(Get-Item -Path "$env:PROGRAMFILES(x86)\Microsoft\Edge Beta\Application\msedge.exe").VersionInfo.FileVersion',
-                r'reg query "HKCU\SOFTWARE\Microsoft\Edge Beta\BLBeacon" /v version',
+                r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Microsoft\Edge Beta\Application\msedge.exe").VersionInfo.FileVersion',
+                r'(Get-ItemProperty -Path Registry::"HKCU\SOFTWARE\Microsoft\Edge Beta\BLBeacon").version',
                 # dev edge
                 r'(Get-Item -Path "$env:LOCALAPPDATA\Microsoft\Edge Dev\Application\msedge.exe").VersionInfo.FileVersion',
                 r'(Get-Item -Path "$env:PROGRAMFILES\Microsoft\Edge Dev\Application\msedge.exe").VersionInfo.FileVersion',
-                r'(Get-Item -Path "$env:PROGRAMFILES(x86)\Microsoft\Edge Dev\Application\msedge.exe").VersionInfo.FileVersion',
-                r'reg query "HKCU\SOFTWARE\Microsoft\Edge Dev\BLBeacon" /v version',
+                r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Microsoft\Edge Dev\Application\msedge.exe").VersionInfo.FileVersion',
+                r'(Get-ItemProperty -Path Registry::"HKCU\SOFTWARE\Microsoft\Edge Dev\BLBeacon").version',
                 # canary edge
                 r'(Get-Item -Path "$env:LOCALAPPDATA\Microsoft\Edge SxS\Application\msedge.exe").VersionInfo.FileVersion',
-                r'reg query "HKCU\SOFTWARE\Microsoft\Edge SxS\BLBeacon" /v version',
+                r'(Get-ItemProperty -Path Registry::"HKCU\SOFTWARE\Microsoft\Edge SxS\BLBeacon").version',
                 # highest edge
                 r"(Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe').'(Default)').VersionInfo.ProductVersion",
                 r"[System.Diagnostics.FileVersionInfo]::GetVersionInfo((Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe').'(Default)').ProductVersion",
                 r'Get-AppxPackage -Name *MicrosoftEdge.* | Foreach Version',
-                r'reg query "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge" /v version'
+                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge").version'
             ),
         },
         'firefox': {
@@ -213,18 +222,17 @@ def get_browser_version_from_os(browser_type=None):
             OSType.MAC: r'/Applications/Firefox.app/Contents/MacOS/firefox --version',
             OSType.WIN: windows_browser_apps_to_cmd(
                 r'(Get-Item -Path "$env:PROGRAMFILES\Mozilla Firefox\firefox.exe").VersionInfo.FileVersion',
-                r'(Get-Item -Path "$env:PROGRAMFILES(x86)\Mozilla Firefox\firefox.exe").VersionInfo.FileVersion',
+                r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Mozilla Firefox\firefox.exe").VersionInfo.FileVersion',
                 r"(Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\firefox.exe').'(Default)').VersionInfo.ProductVersion",
-                r'reg query "HKLM\SOFTWARE\Mozilla\Mozilla Firefox" /v CurrentVersion'
+                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Mozilla\Mozilla Firefox").CurrentVersion'
             ),
         },
-    }
+    }[browser_type][os_name()]
 
-    cmd = cmd_mapping[browser_type][os_name()]
-    version = read_version_from_cmd(cmd, pattern)
+    version = read_version_from_cmd(cmd_mapping, pattern)
 
     if not version:
-        logger.info("Could not get version for %s with the command: %s",browser_type,cmd)
+        logger.info("Could not get version for %s. Is %s installed?",browser_type,browser_type)
 
     current_version = version.group(0) if version else 'UNKNOWN'
 
@@ -247,7 +255,7 @@ def read_version_from_cmd(cmd, pattern):
 
 
 def determine_powershell():
-    """Returns "powershell" if process runs in CMD console."""
+    """Returns "True" if runs in Powershell and "False" if another console."""
     cmd = '(dir 2>&1 *`|echo CMD);&<# rem #>echo powershell'
     with subprocess.Popen(
             cmd,
@@ -257,4 +265,4 @@ def determine_powershell():
             shell=True,
     ) as stream:
         stdout = stream.communicate()[0].decode()
-    return '' if stdout == 'powershell' else 'powershell'
+    return "" if stdout == 'powershell' else "powershell"

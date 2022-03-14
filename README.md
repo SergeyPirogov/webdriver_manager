@@ -1,6 +1,6 @@
 # Webdriver Manager for Python
 
-![Tests](https://github.com/SergeyPirogov/webdriver_manager/workflows/Tests/badge.svg)
+[![Tests](https://github.com/SergeyPirogov/webdriver_manager/actions/workflows/test.yml/badge.svg)](https://github.com/SergeyPirogov/webdriver_manager/actions/workflows/test.yml)
 [![PyPI](https://img.shields.io/pypi/v/webdriver_manager.svg)](https://pypi.org/project/webdriver-manager)
 [![Supported Python Versions](https://img.shields.io/pypi/pyversions/webdriver_manager.svg)](https://pypi.org/project/webdriver-manager/)
 [![codecov](https://codecov.io/gh/SergeyPirogov/webdriver_manager/branch/master/graph/badge.svg)](https://codecov.io/gh/SergeyPirogov/webdriver_manager)
@@ -77,6 +77,26 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.utils import ChromeType
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()))
+```
+
+#### Use with Brave
+
+```python
+# selenium 3
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.utils import ChromeType
+
+driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install())
+```
+```python
+# selenium 4
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.utils import ChromeType
+
+driver = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install()))
 ```
 
 #### Use with Firefox
@@ -183,6 +203,7 @@ os.environ['GH_TOKEN'] = "asdasdasdasd"
 
 ### `Logging`
 Make sure to configure the logging facility the way it suits your use case before running your tests, to be able to capture your output.
+
 
 At the moment, in case no configuration is provided, log messages will be print to a console output and only for levels equal or higher than `Warning` [more info](https://docs.python.org/3/howto/logging.html).
 As of current version all messages logged by webdriver manager are of level `Info` so nothing will be printed out.

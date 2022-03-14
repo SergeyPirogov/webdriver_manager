@@ -14,5 +14,3 @@ bump2version = "*"
 
 [packages]
 requests = "*"
-configparser = "*"
-crayons = "*"
