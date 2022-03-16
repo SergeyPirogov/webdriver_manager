@@ -7,6 +7,7 @@
 - Fix: no unwanted logging messages will be print to console [#287](https://github.com/SergeyPirogov/webdriver_manager/issues/287), [#277](https://github.com/SergeyPirogov/webdriver_manager/issues/277)
 ### Other
 - Removed log_level paramter for __init__ method of Driver object, same for child objects
+- Removed the variable WDM_LOG to avoid duplication, it's behaviour can be replicated by setting `os.environ['WDM_LOG_LEVEL'] = '0'`
 ---
 ## 3.5.4 
 ### Features
