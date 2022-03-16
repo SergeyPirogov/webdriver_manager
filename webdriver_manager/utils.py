@@ -141,23 +141,15 @@ def linux_browser_apps_to_cmd(*apps: str) -> str:
 
 
 def windows_browser_apps_to_cmd(*apps: str) -> str:
-    """Create analogue of browser --version command for windows.
-
-    From browser paths and registry keys.
-
-    Result command example:
-       cmd1; if (-not $? -or $? -match $error) { cmd2 }
-    """
-    ignore_errors_cmd_part = ' 2>$null' if os.getenv('WDM_LOG_LEVEL') == '0' else ''
+    """Create analogue of browser --version command for windows."""
     powershell = determine_powershell()
 
-    script = (
-        "$ErrorActionPreference='silentlycontinue' ; "
-        + f'{apps[0]}{ignore_errors_cmd_part} ;'
-        + ''.join(f" if (-not $? -or $? -match $error) {{ {i}{ignore_errors_cmd_part} }}" for i in apps[1:])
+    first_hit_template = """$tmp = {expression}; if ($tmp) {{echo $tmp; Exit;}};"""
+    script = "$ErrorActionPreference='silentlycontinue'; " + " ".join(
+        first_hit_template.format(expression=e) for e in apps
     )
 
-    return script if powershell else f'powershell "{script}"'
+    return f'{powershell} -NoProfile "{script}"'
             
 
 def get_browser_version_from_os(browser_type=None):
@@ -238,13 +230,15 @@ def get_browser_version_from_os(browser_type=None):
                 r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Mozilla\Mozilla Firefox").CurrentVersion'
             ),
         },
-    }
+    }[browser_type][os_name()]
 
-    cmd = cmd_mapping[browser_type][os_name()]
-    version = read_version_from_cmd(cmd, pattern)
+    version = read_version_from_cmd(cmd_mapping, pattern)
 
     if not version:
-        log(f'Could not get version for {browser_type} with the command: {cmd}')
+        log(
+            f'Could not get version for {browser_type}.'
+            f'Is {browser_type} installed?'
+        )
 
     current_version = version.group(0) if version else 'UNKNOWN'
 
@@ -277,4 +271,4 @@ def determine_powershell():
             shell=True,
     ) as stream:
         stdout = stream.communicate()[0].decode()
-    return True if stdout == 'powershell' else False
+    return "" if stdout == 'powershell' else "powershell"
