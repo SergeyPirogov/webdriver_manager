@@ -2,10 +2,11 @@ import os
 
 import pytest
 from selenium import webdriver
+import logging
 
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.logger import log
 from webdriver_manager.utils import ChromeType, os_name, OSType
+from webdriver_manager.logger import logger
 
 
 def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
@@ -34,7 +35,7 @@ def test_brave_manager_with_selenium():
         OSType.MAC: "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
         OSType.WIN: f"{os.getenv('LOCALAPPDATA')}\\BraveSoftware\\Brave-Browser\\Application\\brave.exe",
     }[os_name()]
-    log(binary_location)
+    logger.info(binary_location)
     option = webdriver.ChromeOptions()
     option.binary_location = binary_location
     driver_path = ChromeDriverManager(chrome_type=ChromeType.BRAVE).install()
