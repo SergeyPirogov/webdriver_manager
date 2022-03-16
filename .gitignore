@@ -46,6 +46,11 @@ nosetests.xml
 coverage.xml
 *,cover
 .hypothesis/
+/custom
+/drivers
+/TestResults
+/drivers.json
+/ssl_disabled
 
 # Translations
 *.mo
@@ -95,3 +100,4 @@ ENV/
 
 # VS code config
 .vscode
+/.vs
