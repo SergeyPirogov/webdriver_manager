@@ -236,7 +236,7 @@ def get_browser_version_from_os(browser_type=None):
 
     if not version:
         log(
-            f'Could not get version for {browser_type}.'
+            f'Could not get version for {browser_type}. '
             f'Is {browser_type} installed?'
         )
     else:
