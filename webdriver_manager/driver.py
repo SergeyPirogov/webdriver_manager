@@ -66,7 +66,7 @@ class ChromeDriver(Driver):
         logger.info("Get LATEST %s version for %s %s", self._name, self.browser_version, self.chrome_type)
         latest_release_url = (
             f"{self._latest_release_url}_{self.browser_version}"
-            if self.browser_version != "UNKNOWN"
+            if self.browser_version
             else self._latest_release_url
         )
         resp = requests.get(
@@ -314,7 +314,7 @@ class EdgeChromiumDriver(Driver):
         browser_version = get_browser_version_from_os(ChromeType.MSEDGE)
         self.browser_version = (
             browser_version
-            if browser_version != 'UNKNOWN'
+            if browser_version
             else self.get_stable_release_version()
         )
         logger.info("Get LATEST %s version for %s Edge",self._name,self.browser_version)

@@ -55,6 +55,15 @@ class ChromeType(object):
     MSEDGE = 'edge'
 
 
+PATTERN = {
+    ChromeType.CHROMIUM: r'\d+\.\d+\.\d+',
+    ChromeType.GOOGLE: r'\d+\.\d+\.\d+',
+    ChromeType.MSEDGE: r'\d+\.\d+\.\d+',
+    'brave-browser': r'(\d+)',
+    'firefox': r'(\d+.\d+)',
+}
+
+
 def os_name():
     pl = sys.platform
     if pl == "linux" or pl == "linux2":
@@ -87,12 +96,6 @@ def validate_response(resp: requests.Response):
         )
 
 
-def write_file(content, path):
-    with open(path, "wb") as code:
-        code.write(content)
-    return path
-
-
 def download_file(url: str, ssl_verify=True) -> File:
     logger.info("Trying to download new driver from %s", url)
     response = requests.get(url, stream=True, verify=ssl_verify)
@@ -105,20 +108,6 @@ def get_date_diff(date1, date2, date_format):
     b = datetime.datetime.strptime(str(date2.strftime(date_format)), date_format)
 
     return (b - a).days
-
-
-def get_filename_from_response(response, name):
-    try:
-        filename = re.findall("filename=(.+)", response.headers["content-disposition"])[0]
-    except KeyError:
-        filename = "{}.zip".format(name)
-    except IndexError:
-        filename = name + ".exe"
-
-    if '"' in filename:
-        filename = filename.replace('"', "")
-
-    return filename
 
 
 def linux_browser_apps_to_cmd(*apps: str) -> str:
@@ -146,13 +135,7 @@ def windows_browser_apps_to_cmd(*apps: str) -> str:
 def get_browser_version_from_os(browser_type=None):
     """Return installed browser version."""
 
-    pattern = {
-        ChromeType.CHROMIUM: r'\d+\.\d+\.\d+',
-        ChromeType.GOOGLE: r'\d+\.\d+\.\d+',
-        ChromeType.MSEDGE: r'\d+\.\d+\.\d+',
-        'brave-browser': r'(\d+)',
-        'firefox': r'(\d+.\d+)',
-    }[browser_type]
+    pattern = PATTERN[browser_type]
 
     cmd_mapping = {
         ChromeType.GOOGLE: {
@@ -233,12 +216,10 @@ def get_browser_version_from_os(browser_type=None):
 
     if not version:
         logger.info("Could not get version for %s. Is %s installed?",browser_type,browser_type)
+    else:
+        logger.info("Current %s version is %s",browser_type,current_version)
 
-    current_version = version.group(0) if version else 'UNKNOWN'
-
-    logger.info("Current %s version is %s",browser_type,current_version)
-    
-    return current_version
+    return version
 
 
 def read_version_from_cmd(cmd, pattern):
@@ -251,6 +232,7 @@ def read_version_from_cmd(cmd, pattern):
     ) as stream:
         stdout = stream.communicate()[0].decode()
         version = re.search(pattern, stdout)
+        version = version.group(0) if version else None
     return version
 
 
