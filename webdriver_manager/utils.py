@@ -55,6 +55,15 @@ class ChromeType(object):
     MSEDGE = 'edge'
 
 
+PATTERN = {
+    ChromeType.CHROMIUM: r'\d+\.\d+\.\d+',
+    ChromeType.GOOGLE: r'\d+\.\d+\.\d+',
+    ChromeType.MSEDGE: r'\d+\.\d+\.\d+',
+    'brave-browser': r'(\d+)',
+    'firefox': r'(\d+.\d+)',
+}
+
+
 def os_name():
     pl = sys.platform
     if pl == "linux" or pl == "linux2":
@@ -146,13 +155,7 @@ def windows_browser_apps_to_cmd(*apps: str) -> str:
 def get_browser_version_from_os(browser_type=None):
     """Return installed browser version."""
 
-    pattern = {
-        ChromeType.CHROMIUM: r'\d+\.\d+\.\d+',
-        ChromeType.GOOGLE: r'\d+\.\d+\.\d+',
-        ChromeType.MSEDGE: r'\d+\.\d+\.\d+',
-        'brave-browser': r'(\d+)',
-        'firefox': r'(\d+.\d+)',
-    }[browser_type]
+    pattern = PATTERN[browser_type]
 
     cmd_mapping = {
         ChromeType.GOOGLE: {
@@ -236,12 +239,10 @@ def get_browser_version_from_os(browser_type=None):
             f'Could not get version for {browser_type}.'
             f'Is {browser_type} installed?'
         )
+    else:
+        log(f"Current {browser_type} version is {version}")
 
-    current_version = version.group(0) if version else 'UNKNOWN'
-
-    log(f"Current {browser_type} version is {current_version}")
-
-    return current_version
+    return version
 
 
 def read_version_from_cmd(cmd, pattern):
@@ -254,6 +255,7 @@ def read_version_from_cmd(cmd, pattern):
     ) as stream:
         stdout = stream.communicate()[0].decode()
         version = re.search(pattern, stdout)
+        version = version.group(0) if version else None
     return version
 
 
