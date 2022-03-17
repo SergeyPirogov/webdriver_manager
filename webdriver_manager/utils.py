@@ -239,12 +239,10 @@ def get_browser_version_from_os(browser_type=None):
             f'Could not get version for {browser_type}.'
             f'Is {browser_type} installed?'
         )
+    else:
+        log(f"Current {browser_type} version is {version}")
 
-    current_version = version.group(0) if version else 'UNKNOWN'
-
-    log(f"Current {browser_type} version is {current_version}")
-
-    return current_version
+    return version
 
 
 def read_version_from_cmd(cmd, pattern):
@@ -257,6 +255,7 @@ def read_version_from_cmd(cmd, pattern):
     ) as stream:
         stdout = stream.communicate()[0].decode()
         version = re.search(pattern, stdout)
+        version = version.group(0) if version else None
     return version
 
 
