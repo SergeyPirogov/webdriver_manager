@@ -217,7 +217,7 @@ def get_browser_version_from_os(browser_type=None):
     if not version:
         logger.info("Could not get version for %s. Is %s installed?",browser_type,browser_type)
     else:
-        logger.info("Current %s version is %s",browser_type,current_version)
+        logger.info("Current %s version is %s",browser_type,version)
 
     return version
 
