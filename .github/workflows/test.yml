@@ -12,6 +12,10 @@ on:
       - .github/workflows/deploy.yml
       - .github/workflows/codeql-analysis.yml
       - .github/workflows/FUNDING.yml
+      - setup.cfg
+      - setup.py
+      - webdriver_manager/__init__.py
+
   pull_request:
     branches:
       - master
@@ -26,6 +30,9 @@ on:
       - .github/workflows/deploy.yml
       - .github/workflows/codeql-analysis.yml
       - .github/workflows/FUNDING.yml
+      - setup.cfg
+      - setup.py
+      - webdriver_manager/__init__.py
 
 jobs:
   test:
