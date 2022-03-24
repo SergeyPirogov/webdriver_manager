@@ -3,9 +3,12 @@ import shutil
 
 import pytest
 
-from tests.utils import driver_directory
 from webdriver_manager.driver import ChromeDriver
 from webdriver_manager.utils import download_file, save_file, ChromeType
+
+project_root = os.path.dirname(os.path.dirname(__file__))
+
+driver_directory = f"{project_root}{os.sep}.drivers"
 
 
 @pytest.fixture()
@@ -42,4 +45,3 @@ def test_can_download_chrome_driver(delete_drivers_dir, version):
     assert file.filename == "driver.zip"
     archive = save_file(file, driver_directory)
     assert archive.unpack(driver_directory) == ["chromedriver.exe"]
-
