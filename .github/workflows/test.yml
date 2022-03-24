@@ -135,7 +135,7 @@ jobs:
           file: ./coverage.xml
           name: ${{ matrix.os }}-py${{ matrix.python-version }}
 
-  negative-test:
+  test-negative:
     runs-on: ${{ matrix.os }}
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -172,7 +172,7 @@ jobs:
         uses: GabrielBB/xvfb-action@v1.0
         with:
           run: |
-            pipenv run py.test -sv --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short negative_tests/
+            pipenv run py.test -sv --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests_negative/
 
       - name: Codecov Upload
         uses: codecov/codecov-action@v1
