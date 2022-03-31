@@ -230,7 +230,7 @@ class IEDriver(Driver):
         else:
             raise ValueError(
                 "Version must consist of major, minor and/or patch, "
-                "but given was: {version}".format(version=self.get_version())
+                "but given was: '{version}'".format(version=version)
             )
 
 

@@ -6,10 +6,7 @@ from webdriver_manager.microsoft import IEDriverManager
 
 
 @pytest.mark.parametrize("version", [
-    "2.53.1",
     "3.0",
-    "3.13.0",
-    "3.141.59",
     "3.150.0",
     # "3.150.1",
     # "3.150.2",
@@ -52,3 +49,17 @@ def test_can_get_ie_driver_from_cache(os_type):
     IEDriverManager(os_type=os_type).install()
     driver_path = IEDriverManager(os_type=os_type).install()
     assert os.path.exists(driver_path)
+
+
+@pytest.mark.parametrize('version', ['', '3', '3.4.5.6'])
+def test__get_divided_version_raises_exception(version):
+    iedriver = IEDriverManager().driver
+
+    with pytest.raises(ValueError) as exception:
+        iedriver._IEDriver__get_divided_version(version=version)
+
+    expected_msg = (
+        "Version must consist of major, minor and/or patch, "
+        "but given was: '{}'".format(version)
+    )
+    assert str(exception.value) == expected_msg

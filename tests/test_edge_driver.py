@@ -1,9 +1,12 @@
 import os
+import re
 
 import pytest
 from selenium import webdriver
 
+from webdriver_manager.driver import EdgeChromiumDriver
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
+from webdriver_manager.utils import PATTERN, ChromeType
 
 
 def test_edge_manager_with_selenium():
@@ -61,3 +64,16 @@ def test_can_get_edge_driver_from_cache(os_type, specific_version):
         os_type=os_type
     ).install()
     assert os.path.exists(driver_path)
+
+
+def test_get_stable_release_version():
+    pattern = PATTERN[ChromeType.MSEDGE]
+    edge_driver = EdgeChromiumDriverManager(
+    ).driver
+
+    version = edge_driver.get_stable_release_version()
+    version = re.search(pattern, version).group(0)
+
+    assert len(version.split('.')) == 3, (
+        f"version '{version}' doesn't match version's count parts"
+    )
