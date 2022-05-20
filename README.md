@@ -256,6 +256,11 @@ import os
 
 os.environ['WDM_SSL_VERIFY'] = '0'
 ```
+### `path`
+Set the directory where you want to download and save the webdriver. You can use relative and absolute paths.
+```python
+ChromeDriverManager(path = r".\\Drivers").install()
+```
 
 ### `version`
 Specify the version of webdriver you need. And webdriver-manager will download it from sources for your os.
