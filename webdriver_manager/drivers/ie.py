@@ -1,4 +1,3 @@
-from webdriver_manager.core.constants import GH_TOKEN
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
 
@@ -27,10 +26,6 @@ class IEDriver(Driver):
         # todo: for 'browser_version' implement installed IE version detection
         #       like chrome or firefox
         self.browser_version = ""
-        self._os_token = GH_TOKEN
-        if self._os_token:
-            log("GH_TOKEN will be used to perform requests")
-            self.auth_header = {"Authorization": f"token {self._os_token}"}
 
     def get_latest_release_version(self) -> str:
         log(f"Get LATEST driver version for {self.browser_version}")
