@@ -27,10 +27,6 @@ class GeckoDriver(Driver):
         )
         self._mozila_release_tag = mozila_release_tag
         self.browser_version = ""
-        self._os_token = GH_TOKEN
-        if self._os_token:
-            log("GH_TOKEN will be used to perform requests")
-            self.auth_header = {"Authorization": f"token {self._os_token}"}
 
     def get_latest_release_version(self) -> str:
         self.browser_version = get_browser_version_from_os("firefox")

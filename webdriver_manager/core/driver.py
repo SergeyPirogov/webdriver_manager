@@ -1,3 +1,7 @@
+from webdriver_manager.core.constants import GH_TOKEN
+from webdriver_manager.core.logger import log
+
+
 class Driver(object):
     def __init__(self, name, version, os_type, url, latest_release_url, http_client):
         self._name = name
@@ -6,6 +10,13 @@ class Driver(object):
         self._os_type = os_type
         self._latest_release_url = latest_release_url
         self._http_client = http_client
+
+    @property
+    def auth_header(self):
+        gh_token = GH_TOKEN
+        if gh_token:
+            log("GH_TOKEN will be used to perform requests")
+            return {"Authorization": f"token {gh_token}"}
 
     def get_name(self):
         return self._name

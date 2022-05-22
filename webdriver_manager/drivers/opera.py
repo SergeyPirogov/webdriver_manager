@@ -1,4 +1,3 @@
-from webdriver_manager.core.constants import GH_TOKEN
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
 
@@ -11,12 +10,7 @@ class OperaDriver(Driver):
             name, version, os_type, url, latest_release_url, http_client
         )
         self.opera_release_tag = opera_release_tag
-        self._os_token = GH_TOKEN
-        self.auth_header = None
         self.browser_version = ""
-        if self._os_token:
-            log("GH_TOKEN will be used to perform requests")
-            self.auth_header = {"Authorization": f"token {self._os_token}"}
 
     def get_latest_release_version(self) -> str:
         resp = self._http_client.get(
