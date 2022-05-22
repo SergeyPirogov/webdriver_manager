@@ -10,6 +10,7 @@ from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from webdriver_manager.utils import OSType, os_name, ChromeType
 
 
+@pytest.mark.skip(reason="it is not stable on CI")
 def test_brave_not_installed():
     binary_location = {
         OSType.LINUX: "/usr/bin/brave-browser",
@@ -24,18 +25,19 @@ def test_brave_not_installed():
         webdriver.Chrome(driver_path, options=option)
 
 
+@pytest.mark.skip(reason="it is not stable on CI")
 def test_chrome_not_installed():
     driver_path = ChromeDriverManager().install()
     with pytest.raises(WebDriverException):
         webdriver.Chrome(driver_path)
 
-
+@pytest.mark.skip(reason="it is not stable on CI")
 def test_firefox_not_installed():
     driver_path = GeckoDriverManager().install()
     with pytest.raises(WebDriverException):
         webdriver.Firefox(executable_path=driver_path)
 
-
+@pytest.mark.skip(reason="it is not stable on CI")
 def test_msedge_not_installed():
     driver_path = EdgeChromiumDriverManager().install()
     with pytest.raises(WebDriverException):
