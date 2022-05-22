@@ -3,6 +3,7 @@ ssl_disabled/
 custom/
 .venv*/
 venv*/
+.wdm/
 drivers.json
 
 # Created by .ignore support plugin (hsz.mobi)
