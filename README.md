@@ -202,41 +202,11 @@ os.environ['GH_TOKEN'] = "asdasdasdasd"
 ```
 
 ### `WDM_LOG`
-Turn off webdriver-manager logs with `os.environ['WDM_LOG'] == '0'`
+Turn off webdriver-manager logs use:
 ```python
-import os
+import logging
 
-os.environ['WDM_LOG'] = '0'
-```
-
-### `WDM_LOG_LEVEL`
-To silent `webdriver_manager` logs and remove them from console, initialize env variable `WDM_LOG_LEVEL` with `'0'` value before your selenium tests:
-
-```python
-import os
-
-os.environ['WDM_LOG_LEVEL'] = '0'
-``` 
-
-or via constructor:
-
-```python
-ChromeDriverManager("2.26", log_level=0).install()
-```
-
-### `WDM_PRINT_FIRST_LINE`
-By default webdriver manager prints a blank space before its log output if logging is enabled. If you want to disable this, initialize `WDM_PRINT_FIRST_LINE` with `'False'` before your tests:
-
-```python
-import os
-
-os.environ['WDM_PRINT_FIRST_LINE'] = 'False'
-``` 
-
-or via constructor:
-
-```python
-ChromeDriverManager("2.26", print_first_line=False).install()
+logging.getLogger('WDM').setLevel(logging.NOTSET)
 ```
 
 ### `WDM_LOCAL`
