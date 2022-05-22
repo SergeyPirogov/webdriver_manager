@@ -8,6 +8,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 @pytest.fixture
 def log():
+    logging.getLogger('WDM').setLevel(logging.NOTSET)
+    yield
     logging.getLogger('WDM').setLevel(logging.INFO)
 
 
