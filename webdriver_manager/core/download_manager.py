@@ -31,7 +31,6 @@ class DownloadManager(ABC):
 
 
 class WDMDownloadManager(DownloadManager):
-
     def __init__(self, http_client=None):
         if http_client is None:
             http_client = WDMHttpClient()

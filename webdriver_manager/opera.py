@@ -29,7 +29,7 @@ class OperaDriverManager(DriverManager):
             url=url,
             latest_release_url=latest_release_url,
             opera_release_tag=opera_release_tag,
-            http_client=self.http_client
+            http_client=self.http_client,
         )
 
     def install(self):

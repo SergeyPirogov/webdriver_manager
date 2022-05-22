@@ -220,11 +220,11 @@ def get_browser_version_from_os(browser_type=None):
 
 def read_version_from_cmd(cmd, pattern):
     with subprocess.Popen(
-            cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            stdin=subprocess.DEVNULL,
-            shell=True,
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        stdin=subprocess.DEVNULL,
+        shell=True,
     ) as stream:
         stdout = stream.communicate()[0].decode()
         version = re.search(pattern, stdout)
@@ -236,11 +236,11 @@ def determine_powershell():
     """Returns "True" if runs in Powershell and "False" if another console."""
     cmd = "(dir 2>&1 *`|echo CMD);&<# rem #>echo powershell"
     with subprocess.Popen(
-            cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            stdin=subprocess.DEVNULL,
-            shell=True,
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        stdin=subprocess.DEVNULL,
+        shell=True,
     ) as stream:
         stdout = stream.communicate()[0].decode()
     return "" if stdout == "powershell" else "powershell"
