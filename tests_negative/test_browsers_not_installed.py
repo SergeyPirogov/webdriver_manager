@@ -10,6 +10,7 @@ from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from webdriver_manager.utils import OSType, os_name, ChromeType
 
 
+@pytest.mark.skip(reason="it is not stable on CI")
 def test_brave_not_installed():
     binary_location = {
         OSType.LINUX: "/usr/bin/brave-browser",
