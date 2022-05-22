@@ -5,7 +5,7 @@ from requests import Response
 
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.download_manager import WDMDownloadManager
-from webdriver_manager.core.http import WDMHttpClient, HttpClient
+from webdriver_manager.core.http import HttpClient
 from webdriver_manager.core.logger import log
 
 

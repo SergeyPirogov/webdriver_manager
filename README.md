@@ -189,7 +189,6 @@ In case not to face an error related to github credentials, you need to [create]
 Example:
 
 ```bash
-# bash
 export GH_TOKEN = "asdasdasdasd"
 ```
 
@@ -198,8 +197,8 @@ export GH_TOKEN = "asdasdasdasd"
 There is also possibility to set same variable via ENV VARIABLES, example:
 
 ```python
-# python
 import os
+
 os.environ['GH_TOKEN'] = "asdasdasdasd"
 ```
 
@@ -214,7 +213,7 @@ logging.getLogger('WDM').setLevel(logging.NOTSET)
 ### `WDM_LOCAL`
 By default all driver binaries are saved to user.home/.wdm folder. You can override this setting and save binaries to project.root/.wdm.
 
-```
+```python
 import os
 
 os.environ['WDM_LOCAL'] = '1'
@@ -223,7 +222,7 @@ os.environ['WDM_LOCAL'] = '1'
 ### `WDM_SSL_VERIFY`
 SSL verification can be disabled for downloading webdriver binaries in case when you have troubles with SSL Certificates or SSL Certificate Chain. Just set the environment variable `WDM_SSL_VERIFY` to `"0"`.
 
-```
+```python
 import os
 
 os.environ['WDM_SSL_VERIFY'] = '0'
@@ -251,6 +250,33 @@ Driver cache by default is valid for 1 day. You are able to change this value us
 from webdriver_manager.chrome import ChromeDriverManager
 
 ChromeDriverManager("2.26", cache_valid_range=1).install()
+```
+
+### Custom HTTP Client
+
+```python
+import os
+
+import requests
+from requests import Response
+
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.download_manager import WDMDownloadManager
+from webdriver_manager.core.http import HttpClient
+from webdriver_manager.core.logger import log
+
+class CustomHttpClient(HttpClient):
+
+    def get(self, url, params=None, **kwargs) -> Response:
+        log("The call will be done with custom HTTP client")
+        return requests.get(url, params, **kwargs)
+
+
+def test_can_get_chrome_driver_with_custom_http_client():
+    http_client = CustomHttpClient()
+    download_manager = WDMDownloadManager(http_client)
+    path = ChromeDriverManager(download_manager=download_manager).install()
+    assert os.path.exists(path)
 ```
 
 This will make your test automation more elegant and robust!
