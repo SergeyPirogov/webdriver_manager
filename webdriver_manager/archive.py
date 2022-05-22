@@ -6,6 +6,7 @@ import typing
 
 class LinuxZipFileWithPermissions(zipfile.ZipFile):
     """Class for extract files in linux with right permissions"""
+
     def extract(self, member, path=None, pwd=None):
         if not isinstance(member, zipfile.ZipInfo):
             member = self.getinfo(member)
@@ -20,7 +21,6 @@ class LinuxZipFileWithPermissions(zipfile.ZipFile):
 
 
 class Archive(object):
-
     def __init__(self, path: str, os_type: typing.Optional[str] = None):
         self.file_path = path
         self.os_type: typing.Optional[str] = os_type
@@ -32,12 +32,17 @@ class Archive(object):
             return self.__extract_tar_file(directory)
 
     def __extract_zip(self, to_directory):
-        zip_class = LinuxZipFileWithPermissions if self.os_type == "linux" else zipfile.ZipFile
+        zip_class = (
+            LinuxZipFileWithPermissions if self.os_type == "linux" else zipfile.ZipFile
+        )
         archive = zip_class(self.file_path)
         try:
             archive.extractall(to_directory)
         except Exception as e:
-            if e.args[0] not in [26, 13] and e.args[1] not in ['Text file busy', 'Permission denied']:
+            if e.args[0] not in [26, 13] and e.args[1] not in [
+                "Text file busy",
+                "Permission denied",
+            ]:
                 raise e
         return archive.namelist()
 

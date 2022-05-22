@@ -1,11 +1,11 @@
 import logging
 
 loggers = {}
-__logger = logging.getLogger('WDM')
+__logger = logging.getLogger("WDM")
 
 __logger.setLevel(logging.INFO)
 handler = logging.StreamHandler()
-formatter = logging.Formatter('[%(name)s] - %(message)s')
+formatter = logging.Formatter("[%(name)s] - %(message)s")
 handler.setFormatter(formatter)
 __logger.addHandler(handler)
 
