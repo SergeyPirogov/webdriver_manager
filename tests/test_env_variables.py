@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from webdriver_manager.driver import Driver
+from webdriver_manager.core.driver import Driver
 
 
 @pytest.mark.parametrize(

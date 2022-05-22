@@ -1,11 +1,12 @@
 import json
-import logging
 import os
 
 import pytest
 from selenium import webdriver
 
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.download_manager import WDMDownloadManager
+from webdriver_manager.core.http import WDMHttpClient
 
 
 def test_chrome_manager_with_specific_version():

@@ -1,7 +1,7 @@
 import pytest
 from requests import Response, Request
 
-from webdriver_manager import utils
+from webdriver_manager.core.download_manager import DownloadManager
 
 
 def test_validate_response_value_error_not_200_and_not_404():
@@ -13,7 +13,7 @@ def test_validate_response_value_error_not_200_and_not_404():
     resp._content = b"abc"
 
     with pytest.raises(ValueError) as excinfo:
-        utils.validate_response(resp)
+        DownloadManager.validate_response(resp)
 
     assert str(excinfo.value) == "\n".join(
         [
@@ -35,7 +35,7 @@ def test_validate_response_value_error_404():
     resp.status_code = 404
 
     with pytest.raises(ValueError) as excinfo:
-        utils.validate_response(resp)
+        DownloadManager.validate_response(resp)
 
     expected_message = "There is no such driver by url https://example.com"
     assert str(excinfo.value) == expected_message

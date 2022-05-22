@@ -4,8 +4,8 @@ import pytest
 from selenium import webdriver
 
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.logger import log
-from webdriver_manager.utils import ChromeType, os_name, OSType
+from webdriver_manager.core.logger import log
+from webdriver_manager.core.utils import ChromeType, os_name, OSType
 
 
 def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):

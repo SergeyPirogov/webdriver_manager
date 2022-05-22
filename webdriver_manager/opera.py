@@ -1,8 +1,8 @@
 import os
 
-from webdriver_manager import utils
-from webdriver_manager.driver import OperaDriver
-from webdriver_manager.manager import DriverManager
+from webdriver_manager.core import utils
+from webdriver_manager.drivers.opera import OperaDriver
+from webdriver_manager.core.manager import DriverManager
 
 
 class OperaDriverManager(DriverManager):
@@ -29,6 +29,7 @@ class OperaDriverManager(DriverManager):
             url=url,
             latest_release_url=latest_release_url,
             opera_release_tag=opera_release_tag,
+            http_client=download_manager.http_client
         )
 
     def install(self):

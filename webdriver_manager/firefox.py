@@ -1,8 +1,8 @@
 import os
 
-from webdriver_manager import utils
-from webdriver_manager.driver import GeckoDriver
-from webdriver_manager.manager import DriverManager
+from webdriver_manager.core import utils
+from webdriver_manager.drivers.firefox import GeckoDriver
+from webdriver_manager.core.manager import DriverManager
 
 
 class GeckoDriverManager(DriverManager):
@@ -29,10 +29,10 @@ class GeckoDriverManager(DriverManager):
             url=url,
             latest_release_url=latest_release_url,
             mozila_release_tag=mozila_release_tag,
+            http_client=download_manager.http_client
         )
 
     def install(self):
         driver_path = self._get_driver_path(self.driver)
-
         os.chmod(driver_path, 0o755)
         return driver_path

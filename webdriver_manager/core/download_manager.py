@@ -1,15 +1,22 @@
+from abc import ABC
+
 import requests
+from requests import Response
 
-from webdriver_manager.logger import log
-from webdriver_manager.utils import File
+from webdriver_manager.core.http import WDMHttpClient
+from webdriver_manager.core.logger import log
+from webdriver_manager.core.utils import File
 
 
-class DownloadManager:
-    def __init__(self):
-        pass
+class DownloadManager(ABC):
+    def __init__(self, http_client):
+        self._http_client = http_client
 
     def download_file(self, url: str, ssl_verify=True) -> File:
         raise NotImplementedError
+
+    def get(self, url, **kwargs) -> Response:
+        return self._http_client.get(url, **kwargs)
 
     @staticmethod
     def validate_response(resp: requests.Response):
@@ -23,9 +30,19 @@ class DownloadManager:
             )
 
 
-class DefaultDownloadManager(DownloadManager):
+class WDMDownloadManager(DownloadManager):
+
+    def __init__(self, http_client=None):
+        if http_client is None:
+            http_client = WDMHttpClient()
+        super().__init__(http_client)
+
+    @property
+    def http_client(self):
+        return self._http_client
+
     def download_file(self, url: str, ssl_verify=True) -> File:
         log(f"Trying to download new driver from {url}")
-        response = requests.get(url, stream=True, verify=ssl_verify)
+        response = self.get(url, verify=ssl_verify)
         self.validate_response(response)
         return File(response)

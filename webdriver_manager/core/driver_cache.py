@@ -3,8 +3,8 @@ import json
 import os
 import sys
 
-from webdriver_manager.logger import log
-from webdriver_manager.utils import get_date_diff, File, save_file
+from webdriver_manager.core.logger import log
+from webdriver_manager.core.utils import get_date_diff, File, save_file
 
 
 class DriverCache(object):

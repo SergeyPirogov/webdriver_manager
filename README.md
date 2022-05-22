@@ -65,16 +65,17 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 # selenium 3
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.utils import ChromeType
+from webdriver_manager.core.utils import ChromeType
 
 driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
 ```
+
 ```python
 # selenium 4
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.utils import ChromeType
+from webdriver_manager.core.utils import ChromeType
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()))
 ```
@@ -85,16 +86,17 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=Chrome
 # selenium 3
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.utils import ChromeType
+from webdriver_manager.core.utils import ChromeType
 
 driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install())
 ```
+
 ```python
 # selenium 4
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.utils import ChromeType
+from webdriver_manager.core.utils import ChromeType
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install()))
 ```
@@ -229,12 +231,16 @@ os.environ['WDM_SSL_VERIFY'] = '0'
 ### `path`
 Set the directory where you want to download and save the webdriver. You can use relative and absolute paths.
 ```python
+from webdriver_manager.chrome import ChromeDriverManager
+
 ChromeDriverManager(path = r".\\Drivers").install()
 ```
 
 ### `version`
 Specify the version of webdriver you need. And webdriver-manager will download it from sources for your os.
 ```python
+from webdriver_manager.chrome import ChromeDriverManager
+
 ChromeDriverManager(version="2.26").install()
 ```
 
@@ -242,6 +248,8 @@ ChromeDriverManager(version="2.26").install()
 Driver cache by default is valid for 1 day. You are able to change this value using constructor parameter:
 
 ```python
+from webdriver_manager.chrome import ChromeDriverManager
+
 ChromeDriverManager("2.26", cache_valid_range=1).install()
 ```
 
