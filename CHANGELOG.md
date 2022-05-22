@@ -1,6 +1,11 @@
 # Changelog
 
 ---
+## 3.6
+### Features
+- Add download manager 
+- Fix logger disable issue
+
 ## 3.5.4 
 ### Features
 - Add Brave support, look "Use with Brave" chapter in README.md ([#331](https://github.com/SergeyPirogov/webdriver_manager/issues/331))
