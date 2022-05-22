@@ -32,9 +32,8 @@ class Archive(object):
             return self.__extract_tar_file(directory)
 
     def __extract_zip(self, to_directory):
-        zip_class = (
-            LinuxZipFileWithPermissions if self.os_type == "linux" else zipfile.ZipFile
-        )
+        zip_class = (LinuxZipFileWithPermissions if self.os_type ==
+                     "linux" else zipfile.ZipFile)
         archive = zip_class(self.file_path)
         try:
             archive.extractall(to_directory)

@@ -86,7 +86,8 @@ def os_type():
 
 def get_date_diff(date1, date2, date_format):
     a = datetime.datetime.strptime(date1, date_format)
-    b = datetime.datetime.strptime(str(date2.strftime(date_format)), date_format)
+    b = datetime.datetime.strptime(
+        str(date2.strftime(date_format)), date_format)
 
     return (b - a).days
 
@@ -97,7 +98,8 @@ def linux_browser_apps_to_cmd(*apps: str) -> str:
     Result command example:
         chromium --version || chromium-browser --version
     """
-    ignore_errors_cmd_part = " 2>/dev/null" if os.getenv("WDM_LOG_LEVEL") == "0" else ""
+    ignore_errors_cmd_part = " 2>/dev/null" if os.getenv(
+        "WDM_LOG_LEVEL") == "0" else ""
     return " || ".join(f"{i} --version{ignore_errors_cmd_part}" for i in apps)
 
 

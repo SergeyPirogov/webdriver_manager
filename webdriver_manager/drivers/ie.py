@@ -60,7 +60,8 @@ class IEDriver(Driver):
         assets = resp.json()["assets"]
 
         name = f"{self.get_name()}_{self.os_type}_{self.get_version()}" + "."
-        output_dict = [asset for asset in assets if asset["name"].startswith(name)]
+        output_dict = [
+            asset for asset in assets if asset["name"].startswith(name)]
         return output_dict[0]["browser_download_url"]
 
     @property

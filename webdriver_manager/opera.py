@@ -12,7 +12,8 @@ class OperaDriverManager(DriverManager):
         os_type=utils.os_type(),
         path=None,
         name="operadriver",
-        url="https://github.com/operasoftware/operachromiumdriver/" "releases/",
+        url="https://github.com/operasoftware/operachromiumdriver/"
+        "releases/",
         latest_release_url="https://api.github.com/repos/"
         "operasoftware/operachromiumdriver/releases/latest",
         opera_release_tag="https://api.github.com/repos/"

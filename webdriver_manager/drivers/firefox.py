@@ -1,6 +1,5 @@
 import platform
 
-from webdriver_manager.core.constants import GH_TOKEN
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
 from webdriver_manager.core.utils import get_browser_version_from_os
@@ -47,7 +46,8 @@ class GeckoDriver(Driver):
         )
         assets = resp.json()["assets"]
         name = f"{self.get_name()}-{self.get_version()}-{self.get_os_type()}."
-        output_dict = [asset for asset in assets if asset["name"].startswith(name)]
+        output_dict = [
+            asset for asset in assets if asset["name"].startswith(name)]
         return output_dict[0]["browser_download_url"]
 
     def get_os_type(self):

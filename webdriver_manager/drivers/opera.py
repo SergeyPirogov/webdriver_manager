@@ -4,8 +4,14 @@ from webdriver_manager.core.logger import log
 
 class OperaDriver(Driver):
     def __init__(
-            self, name, version, os_type, url, latest_release_url, opera_release_tag, http_client
-    ):
+            self,
+            name,
+            version,
+            os_type,
+            url,
+            latest_release_url,
+            opera_release_tag,
+            http_client):
         super(OperaDriver, self).__init__(
             name, version, os_type, url, latest_release_url, http_client
         )
@@ -30,7 +36,8 @@ class OperaDriver(Driver):
         )
         assets = resp.json()["assets"]
         name = "{0}_{1}".format(self.get_name(), self.get_os_type())
-        output_dict = [asset for asset in assets if asset["name"].startswith(name)]
+        output_dict = [
+            asset for asset in assets if asset["name"].startswith(name)]
         return output_dict[0]["browser_download_url"]
 
     @property

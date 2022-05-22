@@ -20,8 +20,9 @@ class ChromeDriverManager(DriverManager):
         download_manager=None,
     ):
         super().__init__(
-            path, cache_valid_range=cache_valid_range, download_manager=download_manager
-        )
+            path,
+            cache_valid_range=cache_valid_range,
+            download_manager=download_manager)
 
         self.driver = ChromeDriver(
             name=name,

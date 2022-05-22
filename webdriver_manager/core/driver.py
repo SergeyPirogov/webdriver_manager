@@ -3,7 +3,14 @@ from webdriver_manager.core.logger import log
 
 
 class Driver(object):
-    def __init__(self, name, version, os_type, url, latest_release_url, http_client):
+    def __init__(
+            self,
+            name,
+            version,
+            os_type,
+            url,
+            latest_release_url,
+            http_client):
         self._name = name
         self._url = url
         self._version = version

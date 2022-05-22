@@ -21,7 +21,8 @@ class DownloadManager(ABC):
     @staticmethod
     def validate_response(resp: requests.Response):
         if resp.status_code == 404:
-            raise ValueError("There is no such driver by url {}".format(resp.url))
+            raise ValueError(
+                "There is no such driver by url {}".format(resp.url))
         elif resp.status_code != 200:
             raise ValueError(
                 f"response body:\n{resp.text}\n"

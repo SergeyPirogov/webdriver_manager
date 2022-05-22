@@ -4,7 +4,11 @@ from webdriver_manager.core.logger import log
 
 
 class DriverManager(object):
-    def __init__(self, root_dir=None, cache_valid_range=1, download_manager=None):
+    def __init__(
+            self,
+            root_dir=None,
+            cache_valid_range=1,
+            download_manager=None):
         self.driver_cache = DriverCache(root_dir, cache_valid_range)
         self._download_manager = download_manager
         if download_manager is None:

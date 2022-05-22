@@ -25,15 +25,15 @@ class EdgeChromiumDriver(Driver):
 
     def get_stable_release_version(self):
         """Stable driver version when browser version was not determined."""
-        stable_url = self._latest_release_url.replace("LATEST_RELEASE", "LATEST_STABLE")
+        stable_url = self._latest_release_url.replace(
+            "LATEST_RELEASE", "LATEST_STABLE")
         resp = self._http_client.get(url=stable_url)
         return resp.text.rstrip()
 
     def get_latest_release_version(self) -> str:
         browser_version = get_browser_version_from_os(ChromeType.MSEDGE)
         self.browser_version = (
-            browser_version if browser_version else self.get_stable_release_version()
-        )
+            browser_version if browser_version else self.get_stable_release_version())
         log(f"Get LATEST {self._name} version for {self.browser_version} Edge")
         major_edge_version = self.browser_version.split(".")[0]
         latest_release_url = {
