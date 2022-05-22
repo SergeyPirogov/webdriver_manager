@@ -5,7 +5,7 @@ import pytest
 from selenium import webdriver
 
 from webdriver_manager.opera import OperaDriverManager
-from webdriver_manager.utils import os_type as get_os_type
+from webdriver_manager.core.utils import os_type as get_os_type
 
 
 def test_opera_driver_manager_with_correct_version():

@@ -7,7 +7,7 @@ from selenium.common.exceptions import WebDriverException
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
-from webdriver_manager.utils import OSType, os_name, ChromeType
+from webdriver_manager.core.utils import OSType, os_name, ChromeType
 
 
 @pytest.mark.skip(reason="it is not stable on CI")

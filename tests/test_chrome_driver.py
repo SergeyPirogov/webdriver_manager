@@ -1,5 +1,4 @@
 import json
-import logging
 import os
 
 import pytest
@@ -8,7 +7,7 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-def test_chrome_manager_with_specific_version():
+def test_chrome_manager_with_specific_version(delete_drivers_dir):
     bin = ChromeDriverManager("2.26").install()
     assert os.path.exists(bin)
 
