@@ -1,7 +1,11 @@
 # Changelog
 
+
 ---
-## 3.6
+## 3.6.1
+- Small fixes
+
+## 3.6.0
 ### Features
 - Add download manager 
 - Fix logger disable issue
