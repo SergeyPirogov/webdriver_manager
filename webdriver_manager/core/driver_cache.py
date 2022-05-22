@@ -3,7 +3,6 @@ import json
 import os
 
 from webdriver_manager.core.constants import (
-    WDM_LOCAL,
     DEFAULT_PROJECT_ROOT_CACHE_PATH,
     DEFAULT_USER_HOME_CACHE_PATH,
 )
@@ -14,8 +13,8 @@ from webdriver_manager.core.utils import get_date_diff, File, save_file
 class DriverCache(object):
     def __init__(self, root_dir=None, valid_range=1):
         self._root_dir = root_dir
-
-        if self._root_dir is None and WDM_LOCAL == "1":
+        is_wdm_local = os.getenv("WDM_LOCAL", "0")
+        if self._root_dir is None and is_wdm_local == "1":
             self._root_dir = DEFAULT_PROJECT_ROOT_CACHE_PATH
         if self._root_dir is None:
             self._root_dir = DEFAULT_USER_HOME_CACHE_PATH
@@ -55,13 +54,13 @@ class DriverCache(object):
         raise Exception(f"Can't find binary for {driver_name} among {files}")
 
     def __save_metadata(
-        self,
-        browser_version,
-        driver_name,
-        os_type,
-        driver_version,
-        binary_path,
-        date=None,
+            self,
+            browser_version,
+            driver_name,
+            os_type,
+            driver_version,
+            binary_path,
+            date=None,
     ):
         if date is None:
             date = datetime.date.today()

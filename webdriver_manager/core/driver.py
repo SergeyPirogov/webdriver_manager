@@ -1,4 +1,5 @@
-from webdriver_manager.core.constants import GH_TOKEN
+import os
+
 from webdriver_manager.core.logger import log
 
 
@@ -20,7 +21,7 @@ class Driver(object):
 
     @property
     def auth_header(self):
-        gh_token = GH_TOKEN
+        gh_token = os.getenv("GH_TOKEN", None)
         if gh_token:
             log("GH_TOKEN will be used to perform requests")
             return {"Authorization": f"token {gh_token}"}

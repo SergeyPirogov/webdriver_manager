@@ -1,7 +1,7 @@
+import os
+
 import requests
 from requests import Response
-
-from webdriver_manager.core.constants import WDM_SSL_VERIFY
 
 
 class HttpClient:
@@ -23,8 +23,9 @@ class HttpClient:
 
 class WDMHttpClient(HttpClient):
     def __init__(self):
-        self._ssl_verify = WDM_SSL_VERIFY
-        if WDM_SSL_VERIFY == "0":
+        wdm_ssl_verify = os.getenv("WDM_SSL_VERIFY", "1")
+        self._ssl_verify = True
+        if wdm_ssl_verify == "0":
             self._ssl_verify = False
 
     def get(self, url, **kwargs) -> Response:

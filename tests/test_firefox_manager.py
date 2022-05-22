@@ -33,12 +33,12 @@ def test_gecko_manager_with_wrong_version():
         in ex.value.args[0]
 
 
-def test_gecko_manager_with_correct_version_and_token():
+def test_gecko_manager_with_correct_version_and_token(delete_drivers_dir):
     driver_path = GeckoDriverManager(version="v0.11.0").install()
     assert os.path.exists(driver_path)
 
 
-def test_can_download_ff_x64():
+def test_can_download_ff_x64(delete_drivers_dir):
     driver_path = GeckoDriverManager(os_type="win64").install()
     assert os.path.exists(driver_path)
 
