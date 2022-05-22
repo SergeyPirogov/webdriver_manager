@@ -15,11 +15,8 @@ class ChromeDriverManager(DriverManager):
                  url="https://chromedriver.storage.googleapis.com",
                  latest_release_url="https://chromedriver.storage.googleapis.com/LATEST_RELEASE",
                  chrome_type=ChromeType.GOOGLE,
-                 log_level=logging.INFO,
-                 print_first_line=True,
                  cache_valid_range=1):
-        super().__init__(path, log_level=log_level, print_first_line=print_first_line,
-                         cache_valid_range=cache_valid_range)
+        super().__init__(path, cache_valid_range=cache_valid_range)
 
         self.driver = ChromeDriver(name=name,
                                    version=version,

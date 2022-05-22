@@ -104,7 +104,7 @@ class GeckoDriver(Driver):
             else None
         )
         if self._os_token:
-            log("GH_TOKEN will be used to perform requests", first_line=True)
+            log("GH_TOKEN will be used to perform requests")
 
     def get_latest_release_version(self) -> str:
         self.browser_version = get_browser_version_from_os("firefox")
@@ -176,7 +176,7 @@ class IEDriver(Driver):
             else None
         )
         if self._os_token:
-            log("GH_TOKEN will be used to perform requests", first_line=True)
+            log("GH_TOKEN will be used to perform requests")
 
     def get_latest_release_version(self) -> str:
         log(f"Get LATEST driver version for {self.browser_version}")
