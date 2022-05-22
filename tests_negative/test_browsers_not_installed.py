@@ -25,6 +25,7 @@ def test_brave_not_installed():
         webdriver.Chrome(driver_path, options=option)
 
 
+@pytest.mark.skip(reason="it is not stable on CI")
 def test_chrome_not_installed():
     driver_path = ChromeDriverManager().install()
     with pytest.raises(WebDriverException):
