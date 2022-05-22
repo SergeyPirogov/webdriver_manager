@@ -253,6 +253,7 @@ ChromeDriverManager("2.26", cache_valid_range=1).install()
 ```
 
 ### Custom HTTP Client
+If you need to add custom HTTP logic like session or proxy you can define your custom HttpClient implementation.
 
 ```python
 import os
@@ -268,6 +269,9 @@ from webdriver_manager.core.logger import log
 class CustomHttpClient(HttpClient):
 
     def get(self, url, params=None, **kwargs) -> Response:
+        """
+        Add you own logic here like session or proxy etc.
+        """
         log("The call will be done with custom HTTP client")
         return requests.get(url, params, **kwargs)
 
