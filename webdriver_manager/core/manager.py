@@ -12,6 +12,10 @@ class DriverManager(object):
         print()  # this is just to make log output a better
         log("====== WebDriver manager ======")
 
+    @property
+    def http_client(self):
+        return self._download_manager.http_client
+
     def install(self):
         raise NotImplementedError("Please Implement this method")
 
@@ -20,6 +24,6 @@ class DriverManager(object):
         if binary_path:
             return binary_path
 
-        file = self._download_manager.download_file(driver.get_url(), driver.ssl_verify)
+        file = self._download_manager.download_file(driver.get_url())
         binary_path = self.driver_cache.save_file_to_cache(driver, file)
         return binary_path

@@ -3,14 +3,18 @@ import shutil
 
 import pytest
 
-project_root = os.path.dirname(os.path.dirname(__file__))
-DEFAULT_DRIVER_DIR = f"{project_root}{os.sep}.drivers"
+from webdriver_manager.core.constants import DEFAULT_PROJECT_ROOT_CACHE_PATH, DEFAULT_USER_HOME_CACHE_PATH
+from webdriver_manager.core.logger import log
 
 
 @pytest.fixture()
 def delete_drivers_dir():
-    if os.path.exists(DEFAULT_DRIVER_DIR):
-        shutil.rmtree(DEFAULT_DRIVER_DIR)
+    if os.path.exists(DEFAULT_USER_HOME_CACHE_PATH):
+        log(f"Delete {DEFAULT_USER_HOME_CACHE_PATH} folder")
+        shutil.rmtree(DEFAULT_USER_HOME_CACHE_PATH)
+    if os.path.exists(DEFAULT_PROJECT_ROOT_CACHE_PATH):
+        log(f"Delete {DEFAULT_PROJECT_ROOT_CACHE_PATH} folder")
+        shutil.rmtree(DEFAULT_PROJECT_ROOT_CACHE_PATH)
 
 
 @pytest.fixture(scope='function')

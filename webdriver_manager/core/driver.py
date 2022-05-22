@@ -1,6 +1,3 @@
-import os
-
-
 class Driver(object):
     def __init__(self, name, version, os_type, url, latest_release_url, http_client):
         self._name = name
@@ -8,12 +5,7 @@ class Driver(object):
         self._version = version
         self._os_type = os_type
         self._latest_release_url = latest_release_url
-        self._ssl_verify = False if os.getenv("WDM_SSL_VERIFY") == "0" else True
         self._http_client = http_client
-
-    @property
-    def ssl_verify(self):
-        return self._ssl_verify
 
     def get_name(self):
         return self._name

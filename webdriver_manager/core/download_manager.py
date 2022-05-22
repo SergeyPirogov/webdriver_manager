@@ -1,7 +1,6 @@
 from abc import ABC
 
 import requests
-from requests import Response
 
 from webdriver_manager.core.http import WDMHttpClient
 from webdriver_manager.core.logger import log
@@ -12,11 +11,12 @@ class DownloadManager(ABC):
     def __init__(self, http_client):
         self._http_client = http_client
 
-    def download_file(self, url: str, ssl_verify=True) -> File:
+    def download_file(self, url: str) -> File:
         raise NotImplementedError
 
-    def get(self, url, **kwargs) -> Response:
-        return self._http_client.get(url, **kwargs)
+    @property
+    def http_client(self):
+        return self._http_client
 
     @staticmethod
     def validate_response(resp: requests.Response):
@@ -37,12 +37,8 @@ class WDMDownloadManager(DownloadManager):
             http_client = WDMHttpClient()
         super().__init__(http_client)
 
-    @property
-    def http_client(self):
-        return self._http_client
-
-    def download_file(self, url: str, ssl_verify=True) -> File:
-        log(f"Trying to download new driver from {url}")
-        response = self.get(url, verify=ssl_verify)
+    def download_file(self, url: str) -> File:
+        log(f"About to download new driver from {url}")
+        response = self._http_client.get(url)
         self.validate_response(response)
         return File(response)

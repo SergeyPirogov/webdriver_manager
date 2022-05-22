@@ -29,7 +29,7 @@ class GeckoDriverManager(DriverManager):
             url=url,
             latest_release_url=latest_release_url,
             mozila_release_tag=mozila_release_tag,
-            http_client=download_manager.http_client
+            http_client=self.http_client
         )
 
     def install(self):
