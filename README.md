@@ -181,6 +181,7 @@ driver = webdriver.Opera(executable_path=OperaDriverManager().install(), options
 ## Configuration
 
 **webdriver_manager** has several configuration variables you can be interested in.
+Any variable can be set using either .env file or via python directly
 
 ### `GH_TOKEN`
 **webdriver_manager** downloading some webdrivers from their official GitHub repositories but GitHub has [limitations](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting) like 60 requests per hour for unauthenticated users.
@@ -208,6 +209,12 @@ Turn off webdriver-manager logs use:
 import logging
 
 logging.getLogger('WDM').setLevel(logging.NOTSET)
+```
+
+```python
+import os
+
+os.environ['WDM_LOG'] = "false"
 ```
 
 ### `WDM_LOCAL`
