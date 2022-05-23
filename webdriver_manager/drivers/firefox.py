@@ -1,8 +1,6 @@
-import platform
-
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.utils import get_browser_version_from_os, OSType, is_arch
+from webdriver_manager.core.utils import get_browser_version_from_os, is_arch, is_mac_os
 
 
 class GeckoDriver(Driver):
@@ -52,13 +50,13 @@ class GeckoDriver(Driver):
 
     def get_os_type(self):
         os_type = super().get_os_type()
-        if OSType.MAC != os_type:
+        if not is_mac_os(os_type):
             return os_type
 
-        os_type = 'macos'
-        if is_arch():
-            return f"{os_type}-aarch64"
-        return os_type
+        macos = 'macos'
+        if is_arch(os_type):
+            return f"{macos}-aarch64"
+        return macos
 
     @property
     def latest_release_url(self):

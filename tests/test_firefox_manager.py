@@ -47,7 +47,8 @@ def test_can_download_ff_x64(delete_drivers_dir):
                                      'win64',
                                      'linux32',
                                      'linux64',
-                                     'mac64'])
+                                     'mac64',
+                                     'mac64_m1'])
 def test_can_get_driver_from_cache(os_type):
     GeckoDriverManager(os_type=os_type).install()
     driver_path = GeckoDriverManager(os_type=os_type).install()

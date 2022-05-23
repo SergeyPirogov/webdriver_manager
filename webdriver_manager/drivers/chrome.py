@@ -1,6 +1,6 @@
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.utils import ChromeType, get_browser_version_from_os, is_arch, OSType
+from webdriver_manager.core.utils import ChromeType, get_browser_version_from_os, is_arch, OSType, is_mac_os
 
 
 class ChromeDriver(Driver):
@@ -25,11 +25,11 @@ class ChromeDriver(Driver):
         if "win" in os_type:
             return "win32"
 
-        if OSType.MAC != os_type:
+        if not is_mac_os(os_type):
             return os_type
 
-        if is_arch():
-            return f"{os_type}_m1"
+        if is_arch(os_type):
+            return f"{os_type.replace('_m1', '')}_m1"
 
         return os_type
 

@@ -84,8 +84,14 @@ def os_type():
     return f"{os_name()}{os_architecture()}"
 
 
-def is_arch():
+def is_arch(os_sys_type):
+    if '_m1' in os_sys_type:
+        return True
     return platform.processor() != 'i386'
+
+
+def is_mac_os(os_sys_type):
+    return OSType.MAC in os_sys_type
 
 
 def get_date_diff(date1, date2, date_format):
