@@ -9,12 +9,15 @@ from webdriver_manager.core.logger import log
 
 @pytest.fixture()
 def delete_drivers_dir():
-    if os.path.exists(DEFAULT_USER_HOME_CACHE_PATH):
-        log(f"Delete {DEFAULT_USER_HOME_CACHE_PATH} folder")
-        shutil.rmtree(DEFAULT_USER_HOME_CACHE_PATH)
-    if os.path.exists(DEFAULT_PROJECT_ROOT_CACHE_PATH):
-        log(f"Delete {DEFAULT_PROJECT_ROOT_CACHE_PATH} folder")
-        shutil.rmtree(DEFAULT_PROJECT_ROOT_CACHE_PATH)
+    try:
+        if os.path.exists(DEFAULT_USER_HOME_CACHE_PATH):
+            log(f"Delete {DEFAULT_USER_HOME_CACHE_PATH} folder")
+            shutil.rmtree(DEFAULT_USER_HOME_CACHE_PATH)
+        if os.path.exists(DEFAULT_PROJECT_ROOT_CACHE_PATH):
+            log(f"Delete {DEFAULT_PROJECT_ROOT_CACHE_PATH} folder")
+            shutil.rmtree(DEFAULT_PROJECT_ROOT_CACHE_PATH)
+    except PermissionError as e:
+        print(f"Can not delete folder {e}")
 
 
 @pytest.fixture(scope='function')
