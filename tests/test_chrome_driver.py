@@ -15,6 +15,7 @@ def test_chrome_manager_with_specific_version(delete_drivers_dir):
 def test_chrome_manager_with_project_root_local_folder(delete_drivers_dir):
     os.environ['WDM_LOCAL'] = "1"
     bin = ChromeDriverManager("2.26").install()
+    os.environ['WDM_LOCAL'] = "0"
     assert os.path.exists(bin)
 
 
