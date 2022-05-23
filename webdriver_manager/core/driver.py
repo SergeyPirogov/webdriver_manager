@@ -1,7 +1,6 @@
-import os
-
 from webdriver_manager.core import utils
 from webdriver_manager.core.logger import log
+from webdriver_manager.core.config import gh_token
 
 
 class Driver(object):
@@ -24,10 +23,10 @@ class Driver(object):
 
     @property
     def auth_header(self):
-        gh_token = os.getenv("GH_TOKEN", None)
+        token = gh_token()
         if gh_token:
             log("GH_TOKEN will be used to perform requests")
-            return {"Authorization": f"token {gh_token}"}
+            return {"Authorization": f"token {token}"}
 
     def get_name(self):
         return self._name

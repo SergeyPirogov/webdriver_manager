@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 
+from webdriver_manager.core.config import wdm_local
 from webdriver_manager.core.constants import (
     DEFAULT_PROJECT_ROOT_CACHE_PATH,
     DEFAULT_USER_HOME_CACHE_PATH,
@@ -13,8 +14,8 @@ from webdriver_manager.core.utils import get_date_diff, File, save_file
 class DriverCache(object):
     def __init__(self, root_dir=None, valid_range=1):
         self._root_dir = root_dir
-        is_wdm_local = os.getenv("WDM_LOCAL", "0")
-        if self._root_dir is None and is_wdm_local == "1":
+        is_wdm_local = wdm_local()
+        if self._root_dir is None and is_wdm_local:
             self._root_dir = DEFAULT_PROJECT_ROOT_CACHE_PATH
         if self._root_dir is None:
             self._root_dir = DEFAULT_USER_HOME_CACHE_PATH
