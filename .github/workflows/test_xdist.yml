@@ -80,3 +80,6 @@ jobs:
         with:
           run: |
             pipenv run pytest -sv --tb=short tests/xdist/ -n 2
+
+      - name: List folders
+        run: ls -la ~/.wdm
