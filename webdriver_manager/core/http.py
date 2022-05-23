@@ -10,15 +10,18 @@ class HttpClient:
 
     @staticmethod
     def validate_response(resp: requests.Response):
-        if resp.status_code == 404:
-            raise ValueError(
-                "There is no such driver by url {}".format(resp.url))
+        status_code = resp.status_code
+        if status_code == 404:
+            raise ValueError(f"There is no such driver by url {resp.url}")
+        elif status_code == 401:
+            raise ValueError(f"API Rate limit exceeded. You have to add GH_TOKEN!!!")
         elif resp.status_code != 200:
             raise ValueError(
                 f"response body:\n{resp.text}\n"
                 f"request url:\n{resp.request.url}\n"
                 f"response headers:\n{dict(resp.headers)}\n"
             )
+
 
 
 class WDMHttpClient(HttpClient):

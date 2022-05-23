@@ -11,6 +11,7 @@ pytest = "*"
 "pytest-cov" = "*"
 codecov = "*"
 bump2version = "*"
+pytest-xdist = "*"
 
 [packages]
 requests = "*"

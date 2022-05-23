@@ -27,3 +27,7 @@ def wdm_log_level():
         return int(os.getenv("WDM_LOG", default_level))
     except Exception:
         return default_level
+
+
+def get_xdist_worker_id():
+    return os.getenv("PYTEST_XDIST_WORKER", '')

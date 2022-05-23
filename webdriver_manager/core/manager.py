@@ -1,3 +1,5 @@
+import os
+
 from webdriver_manager.core.download_manager import WDMDownloadManager
 from webdriver_manager.core.driver_cache import DriverCache
 from webdriver_manager.core.logger import log
@@ -13,7 +15,7 @@ class DriverManager(object):
         self._download_manager = download_manager
         if download_manager is None:
             self._download_manager = WDMDownloadManager()
-        print()  # this is just to make log output a better
+        print('', flush=True)  # this is just to make log output a better
         log("====== WebDriver manager ======")
 
     @property
