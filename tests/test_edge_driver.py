@@ -10,9 +10,7 @@ from webdriver_manager.core.utils import PATTERN, ChromeType
 
 def test_edge_manager_with_selenium():
     driver_path = EdgeChromiumDriverManager().install()
-
     driver = webdriver.Edge(executable_path=driver_path, capabilities={})
-
     driver.get("http://automation-remarks.com")
     driver.quit()
 
@@ -24,7 +22,7 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
         "ssl_disabled",
     )
     driver_path = EdgeChromiumDriverManager(path=custom_path).install()
-
+    os.environ['WDM_SSL_VERIFY'] = '1'
     assert os.path.exists(driver_path)
 
 

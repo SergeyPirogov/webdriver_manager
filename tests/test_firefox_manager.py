@@ -20,7 +20,7 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
         "ssl_disabled",
     )
     driver_path = GeckoDriverManager(path=custom_path).install()
-
+    os.environ['WDM_SSL_VERIFY'] = '1'
     assert os.path.exists(driver_path)
 
 
