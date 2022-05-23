@@ -19,6 +19,7 @@ class DriverCache(object):
         if xdist_worker_id:
             print('', flush=True)
             log(f"xdist worker is: {xdist_worker_id}")
+            self._root_dir = os.path.join(self._root_dir, xdist_worker_id)
 
         if root_dir is not None:
             self._root_dir = os.path.join(root_dir, ROOT_FOLDER_NAME, xdist_worker_id)
