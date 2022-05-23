@@ -46,8 +46,7 @@ jobs:
       matrix:
         python-version: ['3.10']
         selenium-version: ['3.141.0']
-        os: [ windows-latest ]
-        wdm-log: ['']
+        os: [ ubuntu-latest ]
 
     steps:
       - uses: actions/checkout@v2
