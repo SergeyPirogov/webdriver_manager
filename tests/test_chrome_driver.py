@@ -5,6 +5,7 @@ import pytest
 from selenium import webdriver
 
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.constants import ROOT_FOLDER_NAME
 
 
 def test_chrome_manager_with_specific_version(delete_drivers_dir):
@@ -56,7 +57,7 @@ def test_chrome_manager_cached_driver_with_selenium():
     driver = webdriver.Chrome(manager.install())
     driver.get("http://automation-remarks.com")
 
-    metadata_file = os.path.join(custom_path, 'drivers.json')
+    metadata_file = os.path.join(custom_path, ROOT_FOLDER_NAME, 'drivers.json')
 
     with open(metadata_file) as json_file:
         data = json.load(json_file)
