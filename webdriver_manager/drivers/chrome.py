@@ -1,7 +1,6 @@
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.utils import ChromeType, get_browser_version_from_os
-import platform
+from webdriver_manager.core.utils import ChromeType, get_browser_version_from_os, is_arch
 
 
 class ChromeDriver(Driver):
@@ -22,11 +21,14 @@ class ChromeDriver(Driver):
         self.browser_version = ""
 
     def get_os_type(self):
-        if "win" in super().get_os_type():
+        os_type = super().get_os_type()
+        if "win" in os_type:
             return "win32"
-        mac = f'{super().get_os_type()}' \
-              f'{"_m1" if "mac" in super().get_os_type() and not platform.processor() == "i386" else ""}'
-        return mac if "mac" in super().get_os_type() else super().get_os_type()
+
+        if is_arch():
+            return f"{os_type}_m1"
+
+        return os_type
 
     def get_latest_release_version(self):
         self.browser_version = get_browser_version_from_os(self.chrome_type)
