@@ -1,7 +1,10 @@
 # Changelog
 
-
 ---
+## 3.6.2
+- Fix support of Apple M1
+- Add support of dotenv for config
+
 ## 3.6.1
 - Small fixes
 
