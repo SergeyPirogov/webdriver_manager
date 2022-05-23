@@ -1,6 +1,9 @@
 # Changelog
 
 ---
+##3.7.0
+- pytest-xdist support
+
 ## 3.6.2
 - Fix support of Apple M1
 - Add support of dotenv for config
