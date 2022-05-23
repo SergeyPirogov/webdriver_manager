@@ -37,7 +37,7 @@ on:
       - webdriver_manager/__init__.py
 
 jobs:
-  test:
+  test-xdist:
     runs-on: ${{ matrix.os }}
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
