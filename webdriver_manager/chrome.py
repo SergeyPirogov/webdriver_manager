@@ -1,23 +1,22 @@
 import os
 
-from webdriver_manager.core import utils
-from webdriver_manager.drivers.chrome import ChromeDriver
 from webdriver_manager.core.manager import DriverManager
 from webdriver_manager.core.utils import ChromeType
+from webdriver_manager.drivers.chrome import ChromeDriver
 
 
 class ChromeDriverManager(DriverManager):
     def __init__(
-        self,
-        version="latest",
-        os_type=utils.os_type(),
-        path=None,
-        name="chromedriver",
-        url="https://chromedriver.storage.googleapis.com",
-        latest_release_url="https://chromedriver.storage.googleapis.com/LATEST_RELEASE",
-        chrome_type=ChromeType.GOOGLE,
-        cache_valid_range=1,
-        download_manager=None,
+            self,
+            version="latest",
+            os_type=None,
+            path=None,
+            name="chromedriver",
+            url="https://chromedriver.storage.googleapis.com",
+            latest_release_url="https://chromedriver.storage.googleapis.com/LATEST_RELEASE",
+            chrome_type=ChromeType.GOOGLE,
+            cache_valid_range=1,
+            download_manager=None,
     ):
         super().__init__(
             path,

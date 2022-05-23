@@ -1,5 +1,6 @@
 import os
 
+from webdriver_manager.core import utils
 from webdriver_manager.core.logger import log
 
 
@@ -16,6 +17,8 @@ class Driver(object):
         self._url = url
         self._version = version
         self._os_type = os_type
+        if os_type is None:
+            self._os_type = utils.os_type()
         self._latest_release_url = latest_release_url
         self._http_client = http_client
 

@@ -10,7 +10,7 @@ class IEDriverManager(DriverManager):
     def __init__(
         self,
         version="latest",
-        os_type=utils.os_type(),
+        os_type=None,
         path=None,
         name="IEDriverServer",
         url="https://github.com/seleniumhq/selenium/releases/download",
@@ -19,7 +19,7 @@ class IEDriverManager(DriverManager):
         cache_valid_range=1,
         download_manager=None,
     ):
-        super().__init__(path, cache_valid_range)
+        super().__init__(path, cache_valid_range, download_manager=download_manager)
         self.driver = IEDriver(
             version=version,
             os_type=os_type,

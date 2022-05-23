@@ -1,15 +1,14 @@
 import os
 
-from webdriver_manager.core import utils
-from webdriver_manager.drivers.opera import OperaDriver
 from webdriver_manager.core.manager import DriverManager
+from webdriver_manager.drivers.opera import OperaDriver
 
 
 class OperaDriverManager(DriverManager):
     def __init__(
         self,
         version="latest",
-        os_type=utils.os_type(),
+        os_type=None,
         path=None,
         name="operadriver",
         url="https://github.com/operasoftware/operachromiumdriver/"
