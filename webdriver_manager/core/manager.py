@@ -17,7 +17,6 @@ class DriverManager(object):
             self._download_manager = WDMDownloadManager()
         print('', flush=True)  # this is just to make log output a better
         log("====== WebDriver manager ======")
-        log(f"xdist worker ${os.getenv('PYTEST_XDIST_WORKER')}")
 
     @property
     def http_client(self):

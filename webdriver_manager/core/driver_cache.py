@@ -2,10 +2,10 @@ import datetime
 import json
 import os
 
-from webdriver_manager.core.config import wdm_local
+from webdriver_manager.core.config import wdm_local, get_xdist_worker_id
 from webdriver_manager.core.constants import (
     DEFAULT_PROJECT_ROOT_CACHE_PATH,
-    DEFAULT_USER_HOME_CACHE_PATH,
+    DEFAULT_USER_HOME_CACHE_PATH, ROOT_FOLDER_NAME,
 )
 from webdriver_manager.core.logger import log
 from webdriver_manager.core.utils import get_date_diff, File, save_file
@@ -13,16 +13,21 @@ from webdriver_manager.core.utils import get_date_diff, File, save_file
 
 class DriverCache(object):
     def __init__(self, root_dir=None, valid_range=1):
-        self._root_dir = root_dir
+        self._root_dir = DEFAULT_USER_HOME_CACHE_PATH
         is_wdm_local = wdm_local()
-        if self._root_dir is None and is_wdm_local:
-            self._root_dir = DEFAULT_PROJECT_ROOT_CACHE_PATH
-        if self._root_dir is None:
-            self._root_dir = DEFAULT_USER_HOME_CACHE_PATH
+        xdist_worker_id = get_xdist_worker_id()
+        if xdist_worker_id:
+            log(f"xdist worker is: ${xdist_worker_id}")
+
+        if root_dir:
+            self._root_dir = os.path.join(root_dir, ROOT_FOLDER_NAME, xdist_worker_id)
+        if is_wdm_local:
+            self._root_dir = os.path.join(DEFAULT_PROJECT_ROOT_CACHE_PATH, xdist_worker_id)
+
         self._drivers_root = "drivers"
         self._drivers_json_path = os.path.join(self._root_dir, "drivers.json")
         self._date_format = "%d/%m/%Y"
-        self._drivers_directory = f"{self._root_dir}{os.sep}{self._drivers_root}"
+        self._drivers_directory = os.path.join(self._root_dir, self._drivers_root)
         self.valid_range = valid_range
 
     def save_file_to_cache(self, driver, file: File):
