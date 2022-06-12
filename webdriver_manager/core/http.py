@@ -37,10 +37,10 @@ class WDMHttpClient(HttpClient):
         total = int(resp.headers.get("Content-Length", 0))
         if total > 100:
             content = bytearray()
-            pbar = tqdm(total=total)
+            progress_bar = tqdm(total=total, unit_scale=True, unit_divisor=1024, unit="B")
             for chunk in resp.iter_content(chunk_size=8192):
                 if chunk:  # filter out keep-alive new chunks
-                    pbar.update(len(chunk))
+                    progress_bar.update(len(chunk))
                     content.extend(chunk)
             resp._content = content  # To allow content to be "consumed" again
 
