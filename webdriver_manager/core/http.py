@@ -1,6 +1,8 @@
 import requests
 from requests import Response
 
+from tqdm import tqdm
+
 from webdriver_manager.core.config import ssl_verify
 
 
@@ -29,6 +31,17 @@ class WDMHttpClient(HttpClient):
         self._ssl_verify = ssl_verify()
 
     def get(self, url, **kwargs) -> Response:
-        resp = requests.get(url=url, verify=self._ssl_verify, **kwargs)
+        resp = requests.get(url=url, verify=self._ssl_verify, stream=True, **kwargs)
         self.validate_response(resp)
+
+        total = int(resp.headers['Content-Length'])
+        if total > 100:
+            content = bytearray()
+            pbar = tqdm(total=total)
+            for chunk in resp.iter_content(chunk_size=8192):
+                if chunk:  # filter out keep-alive new chunks
+                    pbar.update(len(chunk))
+                    content.extend(chunk)
+            resp._content = content  # To allow content to be "consumed" again
+
         return resp
