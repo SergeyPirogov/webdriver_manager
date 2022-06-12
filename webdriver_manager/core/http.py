@@ -45,3 +45,4 @@ class WDMHttpClient(HttpClient):
             resp._content = content  # To allow content to be "consumed" again
 
         return resp
+
