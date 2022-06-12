@@ -34,7 +34,7 @@ class WDMHttpClient(HttpClient):
         resp = requests.get(url=url, verify=self._ssl_verify, stream=True, **kwargs)
         self.validate_response(resp)
 
-        total = int(resp.headers['Content-Length'])
+        total = int(resp.headers.get("Content-Length", 0))
         if total > 100:
             content = bytearray()
             pbar = tqdm(total=total)
