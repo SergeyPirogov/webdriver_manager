@@ -53,10 +53,10 @@ driver = webdriver.Chrome(ChromeDriverManager().install())
 ```python
 # selenium 4
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 ```
 
 #### Use with Chromium
@@ -73,11 +73,11 @@ driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).i
 ```python
 # selenium 4
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.service import Service as ChromiumService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.utils import ChromeType
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()))
+driver = webdriver.Chrome(service=ChromiumService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()))
 ```
 
 #### Use with Brave
@@ -94,11 +94,11 @@ driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.BRAVE).inst
 ```python
 # selenium 4
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.service import Service as BraveService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.utils import ChromeType
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install()))
+driver = webdriver.Chrome(service=BraveService(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install()))
 ```
 
 #### Use with Firefox
@@ -113,10 +113,10 @@ driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 ```python
 # selenium 4
 from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.firefox import GeckoDriverManager
 
-driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()))
+driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
 ```
 
 #### Use with IE
@@ -131,10 +131,10 @@ driver = webdriver.Ie(IEDriverManager().install())
 ```python
 # selenium 4
 from selenium import webdriver
-from selenium.webdriver.ie.service import Service
+from selenium.webdriver.ie.service import Service as IEService
 from webdriver_manager.microsoft import IEDriverManager
 
-driver = webdriver.Ie(service=Service(IEDriverManager().install()))
+driver = webdriver.Ie(service=IEService(IEDriverManager().install()))
 ```
 
 #### Use with Edge
@@ -149,10 +149,10 @@ driver = webdriver.Edge(EdgeChromiumDriverManager().install())
 ```python
 # selenium 4
 from selenium import webdriver
-from selenium.webdriver.edge.service import Service
+from selenium.webdriver.edge.service import Service as EdgeService
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
-driver = webdriver.Edge(service=Service(EdgeChromiumDriverManager().install()))
+driver = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()))
 ```
 
 #### Use with Opera
