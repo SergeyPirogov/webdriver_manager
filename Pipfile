@@ -16,3 +16,4 @@ pytest-xdist = "*"
 [packages]
 requests = "*"
 python-dotenv = "*"
+pybrowsers = "*"
