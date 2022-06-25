@@ -4,6 +4,7 @@ import platform
 import re
 import subprocess
 import sys
+import browsers
 
 from webdriver_manager.core.archive import Archive
 from webdriver_manager.core.logger import log
@@ -129,6 +130,13 @@ def get_browser_version_from_os(browser_type=None):
     """Return installed browser version."""
 
     pattern = PATTERN[browser_type]
+
+    if browser_type == ChromeType.GOOGLE:
+        chrome_metadata = browsers.get("chrome")
+        version_from_os = chrome_metadata['version']
+        result = re.search(pattern, version_from_os)
+        version = result.group(0) if version_from_os else None
+        return version
 
     cmd_mapping = {
         ChromeType.GOOGLE: {
