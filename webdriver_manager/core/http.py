@@ -23,7 +23,6 @@ class HttpClient:
             )
 
 
-
 class WDMHttpClient(HttpClient):
     def __init__(self):
         self._ssl_verify = ssl_verify()

@@ -24,9 +24,10 @@ class Driver(object):
     @property
     def auth_header(self):
         token = gh_token()
-        if gh_token:
+        if token:
             log("GH_TOKEN will be used to perform requests")
             return {"Authorization": f"token {token}"}
+        return None
 
     def get_name(self):
         return self._name
