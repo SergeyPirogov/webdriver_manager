@@ -111,7 +111,7 @@ class DriverCache(object):
             "msedgedriver" if driver_name == "edgedriver" else driver_name
         )
         driver_binary_name = (
-            f"{driver_binary_name}.exe" if "win" in os_type else driver_name
+            f"{driver_binary_name}.exe" if "win" in os_type else driver_binary_name
         )
         binary_path = os.path.join(path, driver_binary_name)
         if not os.path.exists(binary_path):
