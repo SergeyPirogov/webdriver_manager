@@ -1,9 +1,8 @@
 import requests
 from requests import Response
 
-from tqdm import tqdm
-
 from webdriver_manager.core.config import ssl_verify
+from webdriver_manager.core.utils import show_download_progress
 
 
 class HttpClient:
@@ -33,16 +32,6 @@ class WDMHttpClient(HttpClient):
     def get(self, url, **kwargs) -> Response:
         resp = requests.get(url=url, verify=self._ssl_verify, stream=True, **kwargs)
         self.validate_response(resp)
-
-        total = int(resp.headers.get("Content-Length", 0))
-        if total > 100:
-            content = bytearray()
-            progress_bar = tqdm(total=total, unit_scale=True, unit_divisor=1024, unit="B")
-            for chunk in resp.iter_content(chunk_size=8192):
-                if chunk:  # filter out keep-alive new chunks
-                    progress_bar.update(len(chunk))
-                    content.extend(chunk)
-            resp._content = content  # To allow content to be "consumed" again
-
+        show_download_progress(resp)
         return resp
 
