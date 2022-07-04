@@ -1,10 +1,16 @@
 import os
 import shutil
+from pprint import pprint
 
 import pytest
-
+import browsers
 from webdriver_manager.core.constants import DEFAULT_PROJECT_ROOT_CACHE_PATH, DEFAULT_USER_HOME_CACHE_PATH
 from webdriver_manager.core.logger import log
+
+
+@pytest.fixture(scope="session", autouse=True)
+def list_browsers():
+    pprint(list(browsers.browsers()))
 
 
 @pytest.fixture()
