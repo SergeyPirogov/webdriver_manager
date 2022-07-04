@@ -4,6 +4,7 @@ import platform
 import re
 import subprocess
 import sys
+import browsers
 
 from webdriver_manager.core.archive import Archive
 from webdriver_manager.core.logger import log
@@ -128,36 +129,27 @@ def windows_browser_apps_to_cmd(*apps: str) -> str:
 def get_browser_version_from_os(browser_type=None):
     """Return installed browser version."""
 
-    pattern = PATTERN[browser_type]
+    metadata = None
+
+    if browser_type == ChromeType.GOOGLE:
+        metadata = browsers.get("chrome")
+
+    if browser_type == ChromeType.CHROMIUM:
+        metadata = browsers.get("chromium")
+
+    if browser_type == ChromeType.MSEDGE:
+        metadata = browsers.get("msedge")
+
+    if browser_type == ChromeType.BRAVE:
+        metadata = browsers.get("brave")
+
+    if browser_type == 'firefox':
+        metadata = browsers.get("firefox")
+
+    if metadata:
+        return get_browser_version(browser_type, metadata)
 
     cmd_mapping = {
-        ChromeType.GOOGLE: {
-            OSType.LINUX: linux_browser_apps_to_cmd(
-                "google-chrome",
-                "google-chrome-stable",
-                "google-chrome-beta",
-                "google-chrome-dev",
-            ),
-            OSType.MAC: r"/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version",
-            OSType.WIN: windows_browser_apps_to_cmd(
-                r'(Get-Item -Path "$env:PROGRAMFILES\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
-                r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
-                r'(Get-Item -Path "$env:LOCALAPPDATA\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
-                r'(Get-ItemProperty -Path Registry::"HKCU\SOFTWARE\Google\Chrome\BLBeacon").version',
-                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome").version',
-            ),
-        },
-        ChromeType.CHROMIUM: {
-            OSType.LINUX: linux_browser_apps_to_cmd("chromium", "chromium-browser"),
-            OSType.MAC: r"/Applications/Chromium.app/Contents/MacOS/Chromium --version",
-            OSType.WIN: windows_browser_apps_to_cmd(
-                r'(Get-Item -Path "$env:PROGRAMFILES\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
-                r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
-                r'(Get-Item -Path "$env:LOCALAPPDATA\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
-                r'(Get-ItemProperty -Path Registry::"HKCU\SOFTWARE\Chromium\BLBeacon").version',
-                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Chromium").version',
-            ),
-        },
         ChromeType.BRAVE: {
             OSType.LINUX: linux_browser_apps_to_cmd(
                 "brave-browser", "brave-browser-beta", "brave-browser-nightly"
@@ -204,21 +196,18 @@ def get_browser_version_from_os(browser_type=None):
                 r"Get-AppxPackage -Name *MicrosoftEdge.* | Foreach Version",
                 r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge").version',
             ),
-        },
-        "firefox": {
-            OSType.LINUX: linux_browser_apps_to_cmd("firefox"),
-            OSType.MAC: r"/Applications/Firefox.app/Contents/MacOS/firefox --version",
-            OSType.WIN: windows_browser_apps_to_cmd(
-                r'(Get-Item -Path "$env:PROGRAMFILES\Mozilla Firefox\firefox.exe").VersionInfo.FileVersion',
-                r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Mozilla Firefox\firefox.exe").VersionInfo.FileVersion',
-                r"(Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\firefox.exe').'(Default)').VersionInfo.ProductVersion",
-                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Mozilla\Mozilla Firefox").CurrentVersion',
-            ),
-        },
+        }
     }[browser_type][os_name()]
-
+    pattern = PATTERN[browser_type]
     version = read_version_from_cmd(cmd_mapping, pattern)
+    return version
 
+
+def get_browser_version(browser_type, metadata):
+    pattern = PATTERN[browser_type]
+    version_from_os = metadata['version']
+    result = re.search(pattern, version_from_os)
+    version = result.group(0) if version_from_os else None
     if not version:
         log(
             f"Could not get version for {browser_type}. "
