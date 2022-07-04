@@ -44,8 +44,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.6']
-        selenium-version: ['3.141.0']
+        python-version: ['3.7']
+        selenium-version: ['4.1.0']
         os: [ windows-latest ]
         wdm-log: ['']
         include:
@@ -144,7 +144,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ '3.6' ]
+        python-version: [ '3.7' ]
         selenium-version: [ '3.141.0' ]
         os: [ ubuntu-latest ]
 
