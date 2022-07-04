@@ -147,7 +147,7 @@ def get_browser_version_from_os(browser_type=None):
         metadata = browsers.get("firefox")
 
     if not metadata:
-        raise Exception(f"Unsupported broser type {browser_type}")
+        raise Exception(f"Unsupported browser type {browser_type}")
 
     return get_browser_version(browser_type, metadata)
 
