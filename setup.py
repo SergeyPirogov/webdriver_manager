@@ -18,7 +18,7 @@ with open("README.md", encoding="utf-8") as readme_file:
 
 setuptools.setup(
     name='webdriver_manager',
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     long_description=readme,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(exclude=['tests']),
