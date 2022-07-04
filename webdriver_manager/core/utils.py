@@ -138,34 +138,41 @@ def get_browser_version_from_os(browser_type=None):
         version = result.group(0) if version_from_os else None
         return version
 
+    if browser_type == ChromeType.CHROMIUM:
+        chrome_metadata = browsers.get("chromium")
+        version_from_os = chrome_metadata['version']
+        result = re.search(pattern, version_from_os)
+        version = result.group(0) if version_from_os else None
+        return version
+
     cmd_mapping = {
-        ChromeType.GOOGLE: {
-            OSType.LINUX: linux_browser_apps_to_cmd(
-                "google-chrome",
-                "google-chrome-stable",
-                "google-chrome-beta",
-                "google-chrome-dev",
-            ),
-            OSType.MAC: r"/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version",
-            OSType.WIN: windows_browser_apps_to_cmd(
-                r'(Get-Item -Path "$env:PROGRAMFILES\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
-                r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
-                r'(Get-Item -Path "$env:LOCALAPPDATA\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
-                r'(Get-ItemProperty -Path Registry::"HKCU\SOFTWARE\Google\Chrome\BLBeacon").version',
-                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome").version',
-            ),
-        },
-        ChromeType.CHROMIUM: {
-            OSType.LINUX: linux_browser_apps_to_cmd("chromium", "chromium-browser"),
-            OSType.MAC: r"/Applications/Chromium.app/Contents/MacOS/Chromium --version",
-            OSType.WIN: windows_browser_apps_to_cmd(
-                r'(Get-Item -Path "$env:PROGRAMFILES\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
-                r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
-                r'(Get-Item -Path "$env:LOCALAPPDATA\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
-                r'(Get-ItemProperty -Path Registry::"HKCU\SOFTWARE\Chromium\BLBeacon").version',
-                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Chromium").version',
-            ),
-        },
+        # ChromeType.GOOGLE: {
+        #     OSType.LINUX: linux_browser_apps_to_cmd(
+        #         "google-chrome",
+        #         "google-chrome-stable",
+        #         "google-chrome-beta",
+        #         "google-chrome-dev",
+        #     ),
+        #     OSType.MAC: r"/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version",
+        #     OSType.WIN: windows_browser_apps_to_cmd(
+        #         r'(Get-Item -Path "$env:PROGRAMFILES\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
+        #         r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
+        #         r'(Get-Item -Path "$env:LOCALAPPDATA\Google\Chrome\Application\chrome.exe").VersionInfo.FileVersion',
+        #         r'(Get-ItemProperty -Path Registry::"HKCU\SOFTWARE\Google\Chrome\BLBeacon").version',
+        #         r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome").version',
+        #     ),
+        # },
+        # ChromeType.CHROMIUM: {
+        #     OSType.LINUX: linux_browser_apps_to_cmd("chromium", "chromium-browser"),
+        #     OSType.MAC: r"/Applications/Chromium.app/Contents/MacOS/Chromium --version",
+        #     OSType.WIN: windows_browser_apps_to_cmd(
+        #         r'(Get-Item -Path "$env:PROGRAMFILES\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
+        #         r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
+        #         r'(Get-Item -Path "$env:LOCALAPPDATA\Chromium\Application\chrome.exe").VersionInfo.FileVersion',
+        #         r'(Get-ItemProperty -Path Registry::"HKCU\SOFTWARE\Chromium\BLBeacon").version',
+        #         r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Chromium").version',
+        #     ),
+        # },
         ChromeType.BRAVE: {
             OSType.LINUX: linux_browser_apps_to_cmd(
                 "brave-browser", "brave-browser-beta", "brave-browser-nightly"
