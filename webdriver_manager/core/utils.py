@@ -145,6 +145,13 @@ def get_browser_version_from_os(browser_type=None):
         version = result.group(0) if version_from_os else None
         return version
 
+    if browser_type == 'firefox':
+        chrome_metadata = browsers.get("firefox")
+        version_from_os = chrome_metadata['version']
+        result = re.search(pattern, version_from_os)
+        version = result.group(0) if version_from_os else None
+        return version
+
     cmd_mapping = {
         # ChromeType.GOOGLE: {
         #     OSType.LINUX: linux_browser_apps_to_cmd(
@@ -220,16 +227,16 @@ def get_browser_version_from_os(browser_type=None):
                 r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge").version',
             ),
         },
-        "firefox": {
-            OSType.LINUX: linux_browser_apps_to_cmd("firefox"),
-            OSType.MAC: r"/Applications/Firefox.app/Contents/MacOS/firefox --version",
-            OSType.WIN: windows_browser_apps_to_cmd(
-                r'(Get-Item -Path "$env:PROGRAMFILES\Mozilla Firefox\firefox.exe").VersionInfo.FileVersion',
-                r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Mozilla Firefox\firefox.exe").VersionInfo.FileVersion',
-                r"(Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\firefox.exe').'(Default)').VersionInfo.ProductVersion",
-                r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Mozilla\Mozilla Firefox").CurrentVersion',
-            ),
-        },
+        # "firefox": {
+        #     OSType.LINUX: linux_browser_apps_to_cmd("firefox"),
+        #     OSType.MAC: r"/Applications/Firefox.app/Contents/MacOS/firefox --version",
+        #     OSType.WIN: windows_browser_apps_to_cmd(
+        #         r'(Get-Item -Path "$env:PROGRAMFILES\Mozilla Firefox\firefox.exe").VersionInfo.FileVersion',
+        #         r'(Get-Item -Path "$env:PROGRAMFILES (x86)\Mozilla Firefox\firefox.exe").VersionInfo.FileVersion',
+        #         r"(Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\firefox.exe').'(Default)').VersionInfo.ProductVersion",
+        #         r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Mozilla\Mozilla Firefox").CurrentVersion',
+        #     ),
+        # },
     }[browser_type][os_name()]
 
     version = read_version_from_cmd(cmd_mapping, pattern)
