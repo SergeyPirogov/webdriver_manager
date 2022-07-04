@@ -22,7 +22,7 @@ class DriverManager(object):
     def http_client(self):
         return self._download_manager.http_client
 
-    def install(self):
+    def install(self) -> str:
         raise NotImplementedError("Please Implement this method")
 
     def _get_driver_path(self, driver):
