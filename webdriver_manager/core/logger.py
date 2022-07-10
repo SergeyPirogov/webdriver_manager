@@ -12,4 +12,4 @@ __logger.addHandler(handler)
 
 def log(text):
     """Emitting the log message."""
-    __logger.log(wdm_log_level, text)
+    __logger.log(wdm_log_level(), text)
