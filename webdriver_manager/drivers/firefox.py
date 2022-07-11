@@ -23,11 +23,10 @@ class GeckoDriver(Driver):
             http_client
         )
         self._mozila_release_tag = mozila_release_tag
-        self.browser_version = ""
 
     def get_latest_release_version(self) -> str:
-        self.browser_version = get_browser_version_from_os("firefox")
-        log(f"Get LATEST {self._name} version for {self.browser_version} firefox")
+        browser_version = self.get_browser_version()
+        log(f"Get LATEST {self._name} version for {browser_version} firefox")
         resp = self._http_client.get(
             url=self.latest_release_url,
             headers=self.auth_header
@@ -64,3 +63,6 @@ class GeckoDriver(Driver):
 
     def tagged_release_url(self, version):
         return self._mozila_release_tag.format(version)
+
+    def get_browser_type(self):
+        return "firefox"

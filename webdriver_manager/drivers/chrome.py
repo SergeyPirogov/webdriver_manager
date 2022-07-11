@@ -33,9 +33,6 @@ class ChromeDriver(Driver):
 
         return os_type
 
-    def get_browser_version(self):
-        return get_browser_version_from_os(self.get_browser_type())
-
     def get_browser_type(self):
         return self._browser_type
 

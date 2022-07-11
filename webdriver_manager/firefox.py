@@ -8,7 +8,7 @@ from webdriver_manager.drivers.firefox import GeckoDriver
 class GeckoDriverManager(DriverManager):
     def __init__(
             self,
-            version: str = "latest",
+            version: str = None,
             os_type: str = None,
             path: str = None,
             name: str = "geckodriver",

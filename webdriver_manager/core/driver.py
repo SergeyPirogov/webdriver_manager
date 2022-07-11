@@ -1,6 +1,7 @@
 from webdriver_manager.core import utils
 from webdriver_manager.core.logger import log
 from webdriver_manager.core.config import gh_token
+from webdriver_manager.core.utils import get_browser_version_from_os
 
 
 class Driver(object):
@@ -51,8 +52,7 @@ class Driver(object):
         raise NotImplementedError("Please implement this method")
 
     def get_browser_version(self):
-        # type: () -> str
-        raise NotImplementedError("Please implement this method")
+        return get_browser_version_from_os(self.get_browser_type())
 
     def get_browser_type(self):
         raise NotImplementedError("Please implement this method")
