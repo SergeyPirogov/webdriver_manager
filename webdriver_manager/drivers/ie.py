@@ -4,7 +4,6 @@ from webdriver_manager.core.logger import log
 
 class IEDriver(Driver):
 
-
     def __init__(
             self,
             name,
@@ -82,3 +81,9 @@ class IEDriver(Driver):
 
     def get_browser_type(self):
         return "msie"
+
+    def get_browser_version(self):
+        try:
+            return super().get_browser_version()
+        except:
+            return "latest"
