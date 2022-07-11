@@ -205,16 +205,12 @@ os.environ['GH_TOKEN'] = "asdasdasdasd"
 
 ### `WDM_LOG`
 Turn off webdriver-manager logs use:
+
 ```python
 import logging
-
-logging.getLogger('WDM').setLevel(logging.NOTSET)
-```
-
-```python
 import os
 
-os.environ['WDM_LOG'] = "false"
+os.environ['WDM_LOG'] = str(logging.NOTSET)
 ```
 
 ### `WDM_LOCAL`
@@ -234,8 +230,10 @@ import os
 
 os.environ['WDM_SSL_VERIFY'] = '0'
 ```
+
 ### `path`
 Set the directory where you want to download and save the webdriver. You can use relative and absolute paths.
+
 ```python
 from webdriver_manager.chrome import ChromeDriverManager
 

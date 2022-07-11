@@ -8,9 +8,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 @pytest.fixture
 def log():
-    logging.getLogger('WDM').setLevel(logging.NOTSET)
+    os.environ['WDM_LOG'] = str(logging.NOTSET)
     yield
-    logging.getLogger('WDM').setLevel(logging.INFO)
+    os.environ['WDM_LOG'] = str(logging.INFO)
 
 
 def test_chrome_manager_with_specific_version(log):
