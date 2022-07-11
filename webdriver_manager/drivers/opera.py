@@ -48,3 +48,9 @@ class OperaDriver(Driver):
 
     def get_browser_type(self):
         return "opera"
+
+    def get_browser_version(self):
+        try:
+            return super().get_browser_version()
+        except:
+            return "latest"
