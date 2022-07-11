@@ -81,4 +81,4 @@ class IEDriver(Driver):
             )
 
     def get_browser_type(self):
-        return "ie"
+        return "msie"
