@@ -146,6 +146,9 @@ def get_browser_version_from_os(browser_type=None):
     if browser_type == 'firefox':
         metadata = browsers.get("firefox")
 
+    if browser_type == 'opera':
+        metadata = browsers.get("opera")
+
     if metadata:
         return get_browser_version(browser_type, metadata)
 
