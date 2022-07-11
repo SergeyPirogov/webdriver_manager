@@ -214,7 +214,7 @@ os.environ['WDM_LOG'] = str(logging.NOTSET)
 ```
 
 ### `WDM_LOCAL`
-By default all driver binaries are saved to user.home/.wdm folder. You can override this setting and save binaries to project.root/.wdm.
+By default, all driver binaries are saved to user.home/.wdm folder. You can override this setting and save binaries to project.root/.wdm.
 
 ```python
 import os
