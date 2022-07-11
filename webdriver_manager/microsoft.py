@@ -10,7 +10,7 @@ from webdriver_manager.core.manager import DriverManager
 class IEDriverManager(DriverManager):
     def __init__(
             self,
-            version: str = "latest",
+            version: str = None,
             os_type: str = None,
             path: str = None,
             name: str = "IEDriverServer",
@@ -38,7 +38,7 @@ class IEDriverManager(DriverManager):
 class EdgeChromiumDriverManager(DriverManager):
     def __init__(
             self,
-            version: str = "latest",
+            version: str = None,
             os_type: str = utils.os_type(),
             path: str = None,
             name: str = "edgedriver",
