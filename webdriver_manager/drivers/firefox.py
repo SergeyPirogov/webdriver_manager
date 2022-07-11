@@ -1,6 +1,6 @@
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.utils import get_browser_version_from_os, is_arch, is_mac_os
+from webdriver_manager.core.utils import is_arch, is_mac_os
 
 
 class GeckoDriver(Driver):

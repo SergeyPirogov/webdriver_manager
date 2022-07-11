@@ -1,6 +1,6 @@
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.utils import ChromeType, get_browser_version_from_os, is_arch, OSType, is_mac_os
+from webdriver_manager.core.utils import ChromeType, is_arch, is_mac_os
 
 
 class ChromeDriver(Driver):

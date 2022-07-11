@@ -3,6 +3,8 @@ from webdriver_manager.core.logger import log
 
 
 class IEDriver(Driver):
+
+
     def __init__(
             self,
             name,
@@ -25,10 +27,9 @@ class IEDriver(Driver):
         self._ie_release_tag = ie_release_tag
         # todo: for 'browser_version' implement installed IE version detection
         #       like chrome or firefox
-        self.browser_version = ""
 
     def get_latest_release_version(self) -> str:
-        log(f"Get LATEST driver version for {self.browser_version}")
+        log(f"Get LATEST driver version for {self.get_browser_version()}")
         resp = self._http_client.get(
             url=self.latest_release_url,
             headers=self.auth_header
@@ -78,3 +79,6 @@ class IEDriver(Driver):
                 "Version must consist of major, minor and/or patch, "
                 "but given was: '{version}'".format(version=version)
             )
+
+    def get_browser_type(self):
+        return "ie"
