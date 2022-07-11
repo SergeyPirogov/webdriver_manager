@@ -200,10 +200,15 @@ def get_browser_version_from_os(browser_type=None):
                 r'(Get-ItemProperty -Path Registry::"HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge").version',
             ),
         }
-    }[browser_type][os_name()]
-    pattern = PATTERN[browser_type]
-    version = read_version_from_cmd(cmd_mapping, pattern)
-    return version
+    }
+
+    try:
+        cmd_mapping = cmd_mapping[browser_type][os_name()]
+        pattern = PATTERN[browser_type]
+        version = read_version_from_cmd(cmd_mapping, pattern)
+        return version
+    except Exception:
+        raise Exception(f"Can not find browser {browser_type} installed in your system!!!")
 
 
 def format_version(browser_type, version):
