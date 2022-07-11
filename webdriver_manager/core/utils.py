@@ -149,6 +149,9 @@ def get_browser_version_from_os(browser_type=None):
     if browser_type == 'opera':
         metadata = browsers.get("opera")
 
+    if browser_type == 'msie':
+        metadata = browsers.get("msie")
+
     if metadata:
         return get_browser_version(browser_type, metadata)
 
