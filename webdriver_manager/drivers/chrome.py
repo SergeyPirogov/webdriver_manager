@@ -4,6 +4,7 @@ from webdriver_manager.core.utils import ChromeType, get_browser_version_from_os
 
 
 class ChromeDriver(Driver):
+
     def __init__(
             self,
             name,
@@ -17,8 +18,7 @@ class ChromeDriver(Driver):
         super(ChromeDriver, self).__init__(
             name, version, os_type, url, latest_release_url, http_client
         )
-        self.chrome_type = chrome_type
-        self.browser_version = ""
+        self._browser_type = chrome_type
 
     def get_os_type(self):
         os_type = super().get_os_type()
@@ -33,12 +33,18 @@ class ChromeDriver(Driver):
 
         return os_type
 
+    def get_browser_version(self):
+        return get_browser_version_from_os(self.get_browser_type())
+
+    def get_browser_type(self):
+        return self._browser_type
+
     def get_latest_release_version(self):
-        self.browser_version = get_browser_version_from_os(self.chrome_type)
-        log(f"Get LATEST {self._name} version for {self.browser_version} {self.chrome_type}")
+        browser_version = self.get_browser_version()
+        log(f"Get LATEST {self._name} version for {self.get_browser_type()} {browser_version}")
         latest_release_url = (
-            f"{self._latest_release_url}_{self.browser_version}"
-            if self.browser_version
+            f"{self._latest_release_url}_{browser_version}"
+            if browser_version
             else self._latest_release_url
         )
         resp = self._http_client.get(url=latest_release_url)

@@ -203,6 +203,12 @@ def get_browser_version_from_os(browser_type=None):
     return version
 
 
+def format_version(browser_type, version):
+    pattern = PATTERN[browser_type]
+    result = re.search(pattern, version)
+    return result.group(0) if result else version
+
+
 def get_browser_version(browser_type, metadata):
     pattern = PATTERN[browser_type]
     version_from_os = metadata['version']
