@@ -215,6 +215,9 @@ def get_browser_version_from_os(browser_type=None):
 
 
 def format_version(browser_type, version):
+    if not version or version == 'latest':
+        return 'latest'
+
     pattern = PATTERN[browser_type]
     result = re.search(pattern, version)
     return result.group(0) if result else version
