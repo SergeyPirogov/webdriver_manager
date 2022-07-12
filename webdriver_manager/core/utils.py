@@ -4,7 +4,6 @@ import platform
 import re
 import subprocess
 import sys
-import browsers
 
 from webdriver_manager.core.archive import Archive
 from webdriver_manager.core.logger import log
