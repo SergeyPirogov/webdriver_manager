@@ -127,33 +127,6 @@ def windows_browser_apps_to_cmd(*apps: str) -> str:
 
 def get_browser_version_from_os(browser_type=None):
     """Return installed browser version."""
-
-    # metadata = None
-    #
-    # if browser_type == ChromeType.GOOGLE:
-    #     metadata = browsers.get("chrome")
-    #
-    # if browser_type == ChromeType.CHROMIUM:
-    #     metadata = browsers.get("chromium")
-    #
-    # if browser_type == ChromeType.MSEDGE:
-    #     metadata = browsers.get("msedge")
-    #
-    # if browser_type == ChromeType.BRAVE:
-    #     metadata = browsers.get("brave")
-    #
-    # if browser_type == 'firefox':
-    #     metadata = browsers.get("firefox")
-    #
-    # if browser_type == 'opera':
-    #     metadata = browsers.get("opera")
-    #
-    # if browser_type == 'msie':
-    #     metadata = browsers.get("msie")
-    #
-    # if metadata:
-    #     return get_browser_version(browser_type, metadata)
-
     cmd_mapping = {
         ChromeType.GOOGLE: {
             OSType.LINUX: linux_browser_apps_to_cmd(
