@@ -47,6 +47,5 @@ setuptools.setup(
     install_requires=[
         'requests',
         'python-dotenv',
-        'pybrowsers'
     ],
 )
