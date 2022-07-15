@@ -43,7 +43,8 @@ class Driver(object):
         if not self._version:
             try:
                 return self.get_latest_release_version()
-            except Exception:
+            except Exception as e:
+                log(e)
                 return self.get_browser_version()
         return self._version
 

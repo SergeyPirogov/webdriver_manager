@@ -33,7 +33,7 @@ def test_chrome_manager_with_wrong_version():
     assert "There is no such driver by url" in ex.value.args[0]
 
 
-def test_chrome_manager_with_selenium():
+def test_chrome_manager_with_selenium(delete_drivers_dir):
     driver_path = ChromeDriverManager().install()
     driver = webdriver.Chrome(driver_path)
     driver.get("http://automation-remarks.com")
