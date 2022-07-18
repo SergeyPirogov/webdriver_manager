@@ -6,6 +6,12 @@ from selenium import webdriver
 from webdriver_manager.firefox import GeckoDriverManager
 
 
+def test_firefox_manager_with_cache(delete_drivers_dir):
+    GeckoDriverManager().install()
+    binary = GeckoDriverManager().install()
+    assert os.path.exists(binary)
+
+
 def test_gecko_manager_with_selenium():
     driver_path = GeckoDriverManager().install()
     ff = webdriver.Firefox(executable_path=driver_path)
@@ -28,9 +34,9 @@ def test_gecko_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
         GeckoDriverManager("0.2").install()
 
-    assert "There is no such driver by url "\
-        "https://api.github.com/repos/mozilla/geckodriver/releases/tags/0.2" \
-        in ex.value.args[0]
+    assert "There is no such driver by url " \
+           "https://api.github.com/repos/mozilla/geckodriver/releases/tags/0.2" \
+           in ex.value.args[0]
 
 
 def test_gecko_manager_with_correct_version_and_token(delete_drivers_dir):

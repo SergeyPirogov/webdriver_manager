@@ -108,7 +108,7 @@ class DriverCache(object):
             )
             return None
 
-        path = os.path.join(self._drivers_directory, driver_name, os_type, driver_version)
+        path = os.path.join(self._drivers_directory, driver_name, os_type, unified_version)
 
         driver_binary_name = driver.get_binary_name()
         binary_path = os.path.join(path, driver_binary_name)

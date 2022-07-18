@@ -1,5 +1,3 @@
-import os
-
 from webdriver_manager.core.download_manager import WDMDownloadManager
 from webdriver_manager.core.driver_cache import DriverCache
 from webdriver_manager.core.logger import log
