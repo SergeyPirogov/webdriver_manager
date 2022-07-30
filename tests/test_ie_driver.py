@@ -7,24 +7,11 @@ from webdriver_manager.microsoft import IEDriverManager
 
 @pytest.mark.parametrize("version", [
     "3.0",
-    "3.150.0",
-    # "3.150.1",
-    # "3.150.2",
-    "latest",
+    "3.150.0"
 ])
 def test_ie_manager_with_different_versions(version):
     path = IEDriverManager(version).install()
     assert os.path.exists(path)
-
-
-# def test_ie_manager_with_selenium():
-#     driver_path = IEDriverManager().install()
-#     if os.name == 'nt':
-#         driver = webdriver.Ie(executable_path=driver_path)
-#         driver.get("http://automation-remarks.com")
-#         driver.quit()
-#     else:
-#         assert os.path.exists(driver_path)
 
 
 def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):

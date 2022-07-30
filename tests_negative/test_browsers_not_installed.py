@@ -31,11 +31,13 @@ def test_chrome_not_installed():
     with pytest.raises(WebDriverException):
         webdriver.Chrome(driver_path)
 
+
 @pytest.mark.skip(reason="it is not stable on CI")
 def test_firefox_not_installed():
     driver_path = GeckoDriverManager().install()
     with pytest.raises(WebDriverException):
         webdriver.Firefox(executable_path=driver_path)
+
 
 @pytest.mark.skip(reason="it is not stable on CI")
 def test_msedge_not_installed():

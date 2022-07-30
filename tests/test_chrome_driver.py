@@ -8,6 +8,12 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.constants import ROOT_FOLDER_NAME
 
 
+def test_chrome_manager_with_cache(delete_drivers_dir):
+    ChromeDriverManager().install()
+    bin = ChromeDriverManager().install()
+    assert os.path.exists(bin)
+
+
 def test_chrome_manager_with_specific_version(delete_drivers_dir):
     bin = ChromeDriverManager("2.26").install()
     assert os.path.exists(bin)

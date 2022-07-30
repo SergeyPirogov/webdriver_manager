@@ -1,5 +1,3 @@
-import os
-
 from webdriver_manager.core.download_manager import WDMDownloadManager
 from webdriver_manager.core.driver_cache import DriverCache
 from webdriver_manager.core.logger import log
@@ -22,7 +20,7 @@ class DriverManager(object):
     def http_client(self):
         return self._download_manager.http_client
 
-    def install(self):
+    def install(self) -> str:
         raise NotImplementedError("Please Implement this method")
 
     def _get_driver_path(self, driver):

@@ -16,7 +16,6 @@ class OperaDriver(Driver):
             name, version, os_type, url, latest_release_url, http_client
         )
         self.opera_release_tag = opera_release_tag
-        self.browser_version = ""
 
     def get_latest_release_version(self) -> str:
         resp = self._http_client.get(
@@ -46,3 +45,12 @@ class OperaDriver(Driver):
 
     def tagged_release_url(self, version):
         return self.opera_release_tag.format(version)
+
+    def get_browser_type(self):
+        return "opera"
+
+    def get_browser_version(self):
+        try:
+            return super().get_browser_version()
+        except:
+            return "latest"

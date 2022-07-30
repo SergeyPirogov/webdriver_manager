@@ -1,5 +1,7 @@
 import os
+from typing import Optional
 
+from webdriver_manager.core.download_manager import DownloadManager
 from webdriver_manager.core.manager import DriverManager
 from webdriver_manager.drivers.firefox import GeckoDriver
 
@@ -7,15 +9,15 @@ from webdriver_manager.drivers.firefox import GeckoDriver
 class GeckoDriverManager(DriverManager):
     def __init__(
         self,
-        version="latest",
-        os_type=None,
-        path=None,
-        name="geckodriver",
-        url="https://github.com/mozilla/geckodriver/releases/download",
-        latest_release_url="https://api.github.com/repos/mozilla/geckodriver/releases/latest",
-        mozila_release_tag="https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}",
-        cache_valid_range=1,
-        download_manager=None,
+        version: Optional[str] = None,
+        os_type: Optional[str] = None,
+        path: Optional[str] = None,
+        name: str = "geckodriver",
+        url: str = "https://github.com/mozilla/geckodriver/releases/download",
+        latest_release_url: str = "https://api.github.com/repos/mozilla/geckodriver/releases/latest",
+        mozila_release_tag: str = "https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}",
+        cache_valid_range: int = 1,
+        download_manager: Optional[DownloadManager] = None,
     ):
         super(GeckoDriverManager, self).__init__(
             path, cache_valid_range, download_manager=download_manager
@@ -31,7 +33,7 @@ class GeckoDriverManager(DriverManager):
             http_client=self.http_client,
         )
 
-    def install(self):
+    def install(self) -> str:
         driver_path = self._get_driver_path(self.driver)
         os.chmod(driver_path, 0o755)
         return driver_path
