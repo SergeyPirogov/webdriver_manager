@@ -12,6 +12,7 @@ pytest = "*"
 codecov = "*"
 bump2version = "*"
 pytest-xdist = "*"
+pybrowsers = "*"
 
 [packages]
 requests = "*"
