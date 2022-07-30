@@ -3,7 +3,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [requires]
-python = "3.6"
+python = "3.7"
 
 [dev-packages]
 selenium = "*"
@@ -12,6 +12,7 @@ pytest = "*"
 codecov = "*"
 bump2version = "*"
 pytest-xdist = "*"
+pybrowsers = "*"
 
 [packages]
 requests = "*"
