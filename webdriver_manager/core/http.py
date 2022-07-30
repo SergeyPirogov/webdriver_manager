@@ -2,6 +2,7 @@ import requests
 from requests import Response
 
 from webdriver_manager.core.config import ssl_verify
+from webdriver_manager.core.utils import show_download_progress
 
 
 class HttpClient:
@@ -28,6 +29,8 @@ class WDMHttpClient(HttpClient):
         self._ssl_verify = ssl_verify()
 
     def get(self, url, **kwargs) -> Response:
-        resp = requests.get(url=url, verify=self._ssl_verify, **kwargs)
+        resp = requests.get(url=url, verify=self._ssl_verify, stream=True, **kwargs)
         self.validate_response(resp)
+        show_download_progress(resp)
         return resp
+

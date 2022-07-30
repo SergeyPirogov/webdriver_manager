@@ -17,3 +17,4 @@ pybrowsers = "*"
 [packages]
 requests = "*"
 python-dotenv = "*"
+tqdm = "*"

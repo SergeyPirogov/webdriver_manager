@@ -5,6 +5,8 @@ import re
 import subprocess
 import sys
 
+from tqdm import tqdm
+
 from webdriver_manager.core.archive import Archive
 from webdriver_manager.core.logger import log
 
@@ -276,3 +278,17 @@ def determine_powershell():
     ) as stream:
         stdout = stream.communicate()[0].decode()
     return "" if stdout == "powershell" else "powershell"
+
+
+def show_download_progress(response, _bytes_threshold=100):
+    """ Opens up a response's content in chunks to show a progress bar with tqdm.
+        Resets response._content when done so that response can be consumed again as normal. """
+    total = int(response.headers.get("Content-Length", 0))
+    if total > _bytes_threshold:
+        content = bytearray()
+        progress_bar = tqdm(desc="[WDM] - Downloading", total=total, unit_scale=True, unit_divisor=1024, unit="B")
+        for chunk in response.iter_content(chunk_size=8192):
+            if chunk:  # Filter out keep-alive new chunks
+                progress_bar.update(len(chunk))
+                content.extend(chunk)
+        response._content = content  # To allow content to be "consumed" again
