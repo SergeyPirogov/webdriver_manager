@@ -13,7 +13,6 @@ class DriverManager(object):
         self._download_manager = download_manager
         if download_manager is None:
             self._download_manager = WDMDownloadManager()
-        print('', flush=True)  # this is just to make log output a better
         log("====== WebDriver manager ======")
 
     @property

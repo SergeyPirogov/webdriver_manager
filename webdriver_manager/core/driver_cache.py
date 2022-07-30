@@ -17,7 +17,6 @@ class DriverCache(object):
         is_wdm_local = wdm_local()
         xdist_worker_id = get_xdist_worker_id()
         if xdist_worker_id:
-            print('', flush=True)
             log(f"xdist worker is: {xdist_worker_id}")
             self._root_dir = os.path.join(self._root_dir, xdist_worker_id)
 
