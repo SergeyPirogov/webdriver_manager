@@ -178,6 +178,16 @@ options.binary_location = "C:\\Users\\USERNAME\\FOLDERLOCATION\\Opera\\VERSION\\
 driver = webdriver.Opera(executable_path=OperaDriverManager().install(), options=options)
 ```
 
+#### Get browser version from path
+
+To get the version of the browser from the executable of the browser itself:
+
+```python
+from webdriver_manager.core.utils import read_version_from_cmd, PATTERN
+version = read_version_from_cmd("/usr/bin/firefox-bin --version", PATTERN["firefox"])
+driver_binary = FirefoxDriverManager(version=version).install()
+```
+
 ## Configuration
 
 **webdriver_manager** has several configuration variables you can be interested in.
