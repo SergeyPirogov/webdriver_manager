@@ -10,8 +10,11 @@ from webdriver_manager.core.logger import log, set_logger, __logger
 
 # Log file path
 log_file = Path(__file__).resolve().parents[1].joinpath(".wdm/logs/WDM_DEBUG.log")
-# Create .wdm/logs directory
-log_file.parent.mkdir(parents=True, exist_ok=True)
+
+# Create the log file if it doesn't exist
+if not log_file.exists():
+    log_file.parent.mkdir(parents=True, exist_ok=True)
+    log_file.touch()
 
 # Cache the old logger to restore it later
 __old_logger = __logger
