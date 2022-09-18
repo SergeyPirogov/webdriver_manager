@@ -267,6 +267,26 @@ from webdriver_manager.chrome import ChromeDriverManager
 ChromeDriverManager("2.26", cache_valid_range=1).install()
 ```
 
+---
+
+### Custom Logger
+
+If you need to use a custom logger, you can create a logger and set it with `set_logger()`.
+
+```python
+import logging
+from webdriver_manager.core.logger import set_logger
+
+logger = logging.getLogger("custom_logger")
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler())
+logger.addHandler(logging.FileHandler("custom.log"))
+
+set_logger(logger)
+```
+
+---
+
 ### Custom HTTP Client
 If you need to add custom HTTP logic like session or proxy you can define your custom HttpClient implementation.
 
@@ -297,6 +317,8 @@ def test_can_get_chrome_driver_with_custom_http_client():
     path = ChromeDriverManager(download_manager=download_manager).install()
     assert os.path.exists(path)
 ```
+
+---
 
 This will make your test automation more elegant and robust!
 
