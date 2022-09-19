@@ -30,3 +30,8 @@ class DriverManager(object):
         file = self._download_manager.download_file(driver.get_url())
         binary_path = self.driver_cache.save_file_to_cache(driver, file)
         return binary_path
+
+    @property
+    def driver_path(self) -> str:
+        """Returns the path to the driver binary"""
+        raise NotImplementedError("Please Implement this method")

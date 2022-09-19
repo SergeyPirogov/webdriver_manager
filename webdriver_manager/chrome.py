@@ -39,3 +39,7 @@ class ChromeDriverManager(DriverManager):
         driver_path = self._get_driver_path(self.driver)
         os.chmod(driver_path, 0o755)
         return driver_path
+
+    @property
+    def driver_path(self) -> str:
+        return self._get_driver_path(self.driver)

@@ -44,3 +44,7 @@ class OperaDriverManager(DriverManager):
         driver_path = os.path.join(driver_path, os.listdir(driver_path)[0])
         os.chmod(driver_path, 0o755)
         return driver_path
+
+    @property
+    def driver_path(self) -> str:
+        return self._get_driver_path(self.driver)
