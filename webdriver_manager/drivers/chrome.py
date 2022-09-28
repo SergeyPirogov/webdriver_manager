@@ -28,9 +28,9 @@ class ChromeDriver(Driver):
         if not is_mac_os(os_type):
             return os_type
 
-        browser_version = self.get_browser_version()
-
         if is_arch(os_type):
+            browser_version = self.get_latest_release_version()
+
             # after version 106.0.5249.61 the format of url changed.
             if browser_version and browser_version.split() < [106, 0, 5249, 61]:
                 return f"{os_type.replace('_m1', '')}_m1"
