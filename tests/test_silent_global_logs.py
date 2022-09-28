@@ -14,5 +14,5 @@ def log():
 
 
 def test_chrome_manager_with_specific_version(log):
-    bin = ChromeDriverManager("2.26").install()
+    bin = ChromeDriverManager("87.0.4280.88").install()
     assert os.path.exists(bin)
