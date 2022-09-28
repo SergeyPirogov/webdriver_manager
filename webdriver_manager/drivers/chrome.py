@@ -29,13 +29,14 @@ class ChromeDriver(Driver):
             return os_type
 
         if is_arch(os_type):
-            browser_version = self.get_latest_release_version()
+            browser_version = self.get_version()
+            effective_os_type =  f"{os_type.replace('_m1', '')}"
 
             # after version 106.0.5249.61 the format of url changed.
-            if browser_version and browser_version.split() < [106, 0, 5249, 61]:
-                return f"{os_type.replace('_m1', '')}_m1"
+            if list(map(int, browser_version.split('.'))) < [106, 0, 5249, 61]:
+                return f'{effective_os_type}_m1'
 
-            return os_type.replace('64', '_arm64')
+            return effective_os_type.replace('64', '_arm64')
 
         return os_type
 

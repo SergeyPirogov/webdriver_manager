@@ -16,7 +16,7 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
         "ssl_disabled",
     )
     driver_path = ChromeDriverManager(
-        version="83.0.4103.39",
+        version="100.0.4896.20",
         path=custom_path,
         chrome_type=ChromeType.BRAVE,
     ).install()
