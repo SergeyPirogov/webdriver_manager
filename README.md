@@ -24,14 +24,14 @@ For now support:
 Compatible with Selenium 4.x and below.
 
 Before:
-You should download binary chromedriver, unzip it somewhere in you PC and set path to this driver like this:
+You need to download the chromedriver binary, unzip it somewhere on your PC and set the path to this driver like this:
 
 ```python
 from selenium import webdriver
 driver = webdriver.Chrome('/home/user/drivers/chromedriver')
 ```
 
-It’s boring!!! Moreover every time the new version of driver released, you should go and repeat all steps again and again.
+It’s boring!!! Moreover, every time a new version of the driver is released, you need to repeat all these steps again and again.
 
 With webdriver manager, you just need to do two simple steps:
 
