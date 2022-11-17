@@ -131,6 +131,9 @@ class DriverCache(object):
 
     def get_metadata(self):
         if os.path.exists(self._drivers_json_path):
-            with open(self._drivers_json_path, "r") as outfile:
-                return json.load(outfile)
+            try:
+                with open(self._drivers_json_path, "r") as outfile:
+                    return json.load(outfile)
+            except Exception as e:
+                log(f"Driver json error {e}")
         return {}
