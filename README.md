@@ -223,6 +223,15 @@ import os
 os.environ['WDM_LOG'] = str(logging.NOTSET)
 ```
 
+### `WDM_PROGRESS_BAR`
+Turn off the progress bar which is displayed on downloads:
+
+```python
+import os
+
+os.environ['WDM_PROGRESS_BAR'] = str(0)
+```
+
 ### `WDM_LOCAL`
 By default, all driver binaries are saved to user.home/.wdm folder. You can override this setting and save binaries to project.root/.wdm.
 
