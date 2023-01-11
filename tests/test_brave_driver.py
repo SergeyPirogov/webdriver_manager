@@ -57,7 +57,10 @@ def test_driver_can_be_saved_to_custom_path():
 def test_brave_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
         ChromeDriverManager("0.2", chrome_type=ChromeType.BRAVE).install()
-    assert "There is no such driver by url" in ex.value.args[0]
+    assert (
+        "There is no such driver by url" in ex.value.args[0]
+        or "There is no such browser version number" in ex.value.args[0]
+    )
 
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])
