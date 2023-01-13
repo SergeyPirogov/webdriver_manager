@@ -188,6 +188,14 @@ version = read_version_from_cmd("/usr/bin/firefox-bin --version", PATTERN["firef
 driver_binary = FirefoxDriverManager(version=version).install()
 ```
 
+For a browser such as Chrome, Chromium or Brave that uses ChromeDriver, you can set the parameter `get_version` to `True`, in order to convert to the ChromeDriver version number.
+
+```python
+from webdriver_manager.core.utils import read_version_from_cmd, PATTERN
+version = read_version_from_cmd("/usr/bin/google-chrome --version", PATTERN["ChromeType.GOOGLE"])
+driver_binary = ChromeDriverManager(version=version, get_version=True).install()
+```
+
 ## Configuration
 
 **webdriver_manager** has several configuration variables you can be interested in.
