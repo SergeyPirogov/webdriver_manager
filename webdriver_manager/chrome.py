@@ -20,6 +20,7 @@ class ChromeDriverManager(DriverManager):
             url: str = "https://chromedriver.storage.googleapis.com",
             latest_release_url: str = "https://chromedriver.storage.googleapis.com/LATEST_RELEASE",
             chrome_type: str = ChromeType.GOOGLE,
+            get_version: bool = False,
             cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,
     ):
@@ -30,7 +31,7 @@ class ChromeDriverManager(DriverManager):
 
         self.driver = ChromeDriver(
             name=name,
-            version=get_chromedriver_version(version),
+            version=get_chromedriver_version(version, get_version),
             os_type=os_type,
             url=url,
             latest_release_url=latest_release_url,
@@ -43,24 +44,22 @@ class ChromeDriverManager(DriverManager):
         os.chmod(driver_path, 0o755)
         return driver_path
 
-def get_chromedriver_version(chrome_version):
-    if chrome_version is None:
-        return None
-    elif fullmatch(r"[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*", chrome_version) or fullmatch(
-        r"2\.[0-9]{1,2}", chrome_version
-    ):
-        return chrome_version
-    elif fullmatch(r"[0-9]*\.[0-9]*\.[0-9]*", chrome_version) or fullmatch(
-        r"[0-9]*", chrome_version
+def get_chromedriver_version(browser_version, get_version):
+    if (not get_version) or (browser_version is None):
+        return browser_version
+    elif fullmatch(r"\d+\.\d+\.\d+\.\d+", browser_version):
+        browser_version = browser_version[:browser_version.rfind(".")]
+    if fullmatch(r"\d+\.\d+\.\d+", browser_version) or fullmatch(
+        r"\d+", browser_version
     ):
         version_response = requests.get(
-            f"https://chromedriver.storage.googleapis.com/LATEST_RELEASE_{chrome_version}"
+            f"https://chromedriver.storage.googleapis.com/LATEST_RELEASE_{browser_version}"
         )
         if version_response.status_code == 200:
             return version_response.text
         elif version_response.status_code == 404:
             raise ValueError(
-                f"There is no such browser version number {chrome_version}"
+                f"There is no such browser version number {browser_version}"
             )
         else:
             raise ValueError(
@@ -69,4 +68,4 @@ def get_chromedriver_version(chrome_version):
                 f"response headers:\n{dict(version_response.headers)}\n"
             )
     else:
-        raise ValueError(f"There is no such browser version number {chrome_version}")
+        raise ValueError(f"There is no such browser version number {browser_version}")
