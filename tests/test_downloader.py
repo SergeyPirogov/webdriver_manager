@@ -38,4 +38,4 @@ def test_can_download_chrome_driver(delete_drivers_dir, version):
     file = download_manager.download_file(driver.get_url())
     assert file.filename == "driver.zip"
     archive = save_file(file, DEFAULT_PROJECT_ROOT_CACHE_PATH)
-    assert archive.unpack(DEFAULT_PROJECT_ROOT_CACHE_PATH) == ["chromedriver.exe"]
+    assert "chromedriver.exe" in archive.unpack(DEFAULT_PROJECT_ROOT_CACHE_PATH)

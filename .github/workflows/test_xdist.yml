@@ -79,7 +79,7 @@ jobs:
           WDM_LOG: ${{ matrix.wdm-log }}
         with:
           run: |
-            pipenv run pytest -sv tests/xdist/ -n 2
+            pipenv run pytest -sv tests/xdist_/ -n 2
 
       - name: List folders
         run: ls -la ~/.wdm
