@@ -1,7 +1,15 @@
 # Changelog
 
 ---
-##3.7.0
+
+## 3.8.6
+- Officially support python 3.11 (3.11.1+)
+
+---
+### 3.7.1-3.8.5 changelog TBD
+
+---
+## 3.7.0
 - pytest-xdist support
 
 ## 3.6.2
