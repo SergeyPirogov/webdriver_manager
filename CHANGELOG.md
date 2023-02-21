@@ -4,6 +4,7 @@
 
 ## 3.8.6
 - Officially support python 3.11 (3.11.1+)
+- Add MyPy stubs
 
 ---
 ### 3.7.1-3.8.5 changelog TBD

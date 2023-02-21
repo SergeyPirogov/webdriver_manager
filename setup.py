@@ -51,4 +51,7 @@ setuptools.setup(
         'tqdm',
         'packaging'
     ],
+    package_data={
+        "webdriver_manager": ["py.typed"]
+    },
 )
