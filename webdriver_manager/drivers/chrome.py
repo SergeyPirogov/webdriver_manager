@@ -35,7 +35,7 @@ class ChromeDriver(Driver):
         return os_type
 
     def get_url(self):
-        browser_version = self.get_version()
+        browser_version = self.get_driver_version_to_download()
         os_type = self.get_os_type()
 
         # For Mac ARM CPUs after version 106.0.5249.61 the format of OS type changed

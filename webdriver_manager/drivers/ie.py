@@ -46,15 +46,15 @@ class IEDriver(Driver):
 
     def get_url(self):
         """Like https://github.com/seleniumhq/selenium/releases/download/3.141.59/IEDriverServer_Win32_3.141.59.zip"""
-        log(f"Getting latest ie release info for {self.get_version()}")
+        log(f"Getting latest ie release info for {self.get_driver_version_to_download()}")
         resp = self._http_client.get(
-            url=self.tagged_release_url(self.get_version()),
+            url=self.tagged_release_url(self.get_driver_version_to_download()),
             headers=self.auth_header
         )
 
         assets = resp.json()["assets"]
 
-        name = f"{self.get_name()}_{self.os_type}_{self.get_version()}" + "."
+        name = f"{self.get_name()}_{self.os_type}_{self.get_driver_version_to_download()}" + "."
         output_dict = [
             asset for asset in assets if asset["name"].startswith(name)]
         return output_dict[0]["browser_download_url"]

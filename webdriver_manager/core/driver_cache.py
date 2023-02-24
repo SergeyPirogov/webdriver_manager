@@ -34,7 +34,7 @@ class DriverCache(object):
     def save_file_to_cache(self, driver, file: File):
         driver_name = driver.get_name()
         os_type = driver.get_os_type()
-        driver_version = driver.get_version()
+        driver_version = driver.get_driver_version_to_download()
         browser_version = driver.get_browser_version_from_os()
         browser_type = driver.get_browser_type()
         unified_version = format_version(browser_type, driver_version)
@@ -93,7 +93,7 @@ class DriverCache(object):
         """Find driver by '{os_type}_{driver_name}_{driver_version}_{browser_version}'."""
         os_type = driver.get_os_type()
         driver_name = driver.get_name()
-        driver_version = driver.get_version()
+        driver_version = driver.get_driver_version_to_download()
         browser_version = driver.get_browser_version_from_os()
         browser_type = driver.get_browser_type()
         unified_version = format_version(browser_type, driver_version)

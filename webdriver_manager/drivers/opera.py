@@ -27,7 +27,7 @@ class OperaDriver(Driver):
 
     def get_url(self) -> str:
         # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
-        version = self.get_version()
+        version = self.get_driver_version_to_download()
         log(f"Getting latest opera release info for {version}")
         resp = self._http_client.get(
             url=self.tagged_release_url(version),

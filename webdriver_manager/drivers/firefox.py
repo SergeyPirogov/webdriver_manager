@@ -36,13 +36,13 @@ class GeckoDriver(Driver):
 
     def get_url(self):
         """Like https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz"""
-        log(f"Getting latest mozilla release info for {self.get_version()}")
+        log(f"Getting latest mozilla release info for {self.get_driver_version_to_download()}")
         resp = self._http_client.get(
-            url=self.tagged_release_url(self.get_version()),
+            url=self.tagged_release_url(self.get_driver_version_to_download()),
             headers=self.auth_header
         )
         assets = resp.json()["assets"]
-        name = f"{self.get_name()}-{self.get_version()}-{self.get_os_type()}."
+        name = f"{self.get_name()}-{self.get_driver_version_to_download()}-{self.get_os_type()}."
         output_dict = [
             asset for asset in assets if asset["name"].startswith(name)]
         return output_dict[0]["browser_download_url"]

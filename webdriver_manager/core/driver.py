@@ -22,6 +22,7 @@ class Driver(object):
         self._latest_release_url = latest_release_url
         self._http_client = http_client
         self._browser_version = None
+        self._driver_to_download_version = None
 
     @property
     def auth_header(self):
@@ -38,15 +39,17 @@ class Driver(object):
         return self._os_type
 
     def get_url(self):
-        return f"{self._url}/{self.get_version()}/{self.get_name()}_{self.get_os_type()}.zip"
+        return f"{self._url}/{self.get_driver_version_to_download()}/{self.get_name()}_{self.get_os_type()}.zip"
 
-    def get_version(self):
-        if not self._version:
-            try:
-                return self.get_latest_release_version()
-            except Exception:
-                return self.get_browser_version_from_os()
-        return self._version
+    def get_driver_version_to_download(self):
+        """
+        Downloads version from parameter if version not None or "latest".
+        Downloads latest, if version is "latest" or browser could not been determined.
+        Downloads determined browser version driver in all other ways as a bonus fallback for lazy users.
+        """
+        if not self._driver_to_download_version:
+            self._driver_to_download_version = self._version if self._version not in (None, "latest") else self.get_latest_release_version()
+        return self._driver_to_download_version
 
     def get_latest_release_version(self):
         # type: () -> str
