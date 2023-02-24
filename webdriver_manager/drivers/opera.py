@@ -25,8 +25,8 @@ class OperaDriver(Driver):
         self._version = resp.json()["tag_name"]
         return self._version
 
-    def get_url(self) -> str:
-        # https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip
+    def get_driver_download_url(self) -> str:
+        """Like https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.45/operadriver_linux64.zip"""
         version = self.get_driver_version_to_download()
         log(f"Getting latest opera release info for {version}")
         resp = self._http_client.get(

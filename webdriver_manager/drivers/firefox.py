@@ -34,7 +34,7 @@ class GeckoDriver(Driver):
         self._version = resp.json()["tag_name"]
         return self._version
 
-    def get_url(self):
+    def get_driver_download_url(self):
         """Like https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz"""
         log(f"Getting latest mozilla release info for {self.get_driver_version_to_download()}")
         resp = self._http_client.get(

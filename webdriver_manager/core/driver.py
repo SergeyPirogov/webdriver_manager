@@ -38,7 +38,7 @@ class Driver(object):
     def get_os_type(self):
         return self._os_type
 
-    def get_url(self):
+    def get_driver_download_url(self):
         return f"{self._url}/{self.get_driver_version_to_download()}/{self.get_name()}_{self.get_os_type()}.zip"
 
     def get_driver_version_to_download(self):

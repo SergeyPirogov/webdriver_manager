@@ -44,7 +44,7 @@ class IEDriver(Driver):
         self._version = release["tag_name"].replace("selenium-", "")
         return self._version
 
-    def get_url(self):
+    def get_driver_download_url(self):
         """Like https://github.com/seleniumhq/selenium/releases/download/3.141.59/IEDriverServer_Win32_3.141.59.zip"""
         log(f"Getting latest ie release info for {self.get_driver_version_to_download()}")
         resp = self._http_client.get(

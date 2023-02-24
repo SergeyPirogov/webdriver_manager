@@ -35,7 +35,7 @@ def test_can_download_chrome_driver(delete_drivers_dir, version):
                           latest_release_url="http://chromedriver.storage.googleapis.com/LATEST_RELEASE",
                           chrome_type=ChromeType.GOOGLE, http_client=WDMHttpClient())
 
-    file = download_manager.download_file(driver.get_url())
+    file = download_manager.download_file(driver.get_driver_download_url())
     assert file.filename == "driver.zip"
     archive = save_file(file, DEFAULT_PROJECT_ROOT_CACHE_PATH)
     assert "chromedriver.exe" in archive.unpack(DEFAULT_PROJECT_ROOT_CACHE_PATH)

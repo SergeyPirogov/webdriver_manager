@@ -34,7 +34,7 @@ class ChromeDriver(Driver):
 
         return os_type
 
-    def get_url(self):
+    def get_driver_download_url(self):
         browser_version = self.get_driver_version_to_download()
         os_type = self.get_os_type()
 
