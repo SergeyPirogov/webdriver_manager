@@ -21,6 +21,7 @@ class Driver(object):
             self._os_type = utils.os_type()
         self._latest_release_url = latest_release_url
         self._http_client = http_client
+        self._browser_version = None
 
     @property
     def auth_header(self):
@@ -44,15 +45,17 @@ class Driver(object):
             try:
                 return self.get_latest_release_version()
             except Exception:
-                return self.get_browser_version()
+                return self.get_browser_version_from_os()
         return self._version
 
     def get_latest_release_version(self):
         # type: () -> str
         raise NotImplementedError("Please implement this method")
 
-    def get_browser_version(self):
-        return get_browser_version_from_os(self.get_browser_type())
+    def get_browser_version_from_os(self):
+        if self._browser_version is None:
+            self._browser_version = get_browser_version_from_os(self.get_browser_type())
+        return self._browser_version
 
     def get_browser_type(self):
         raise NotImplementedError("Please implement this method")

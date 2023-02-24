@@ -35,7 +35,7 @@ class DriverCache(object):
         driver_name = driver.get_name()
         os_type = driver.get_os_type()
         driver_version = driver.get_version()
-        browser_version = driver.get_browser_version()
+        browser_version = driver.get_browser_version_from_os()
         browser_type = driver.get_browser_type()
         unified_version = format_version(browser_type, driver_version)
 
@@ -94,7 +94,7 @@ class DriverCache(object):
         os_type = driver.get_os_type()
         driver_name = driver.get_name()
         driver_version = driver.get_version()
-        browser_version = driver.get_browser_version()
+        browser_version = driver.get_browser_version_from_os()
         browser_type = driver.get_browser_type()
         unified_version = format_version(browser_type, driver_version)
 

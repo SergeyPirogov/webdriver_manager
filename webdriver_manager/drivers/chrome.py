@@ -50,7 +50,7 @@ class ChromeDriver(Driver):
         return self._browser_type
 
     def get_latest_release_version(self):
-        browser_version = self.get_browser_version()
+        browser_version = self.get_browser_version_from_os()
         log(f"Get LATEST {self._name} version for {self.get_browser_type()} {browser_version}")
         latest_release_url = (
             f"{self._latest_release_url}_{browser_version}"

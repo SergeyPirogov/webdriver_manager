@@ -31,7 +31,7 @@ class EdgeChromiumDriver(Driver):
         return resp.text.rstrip()
 
     def get_latest_release_version(self) -> str:
-        browser_version = self.get_browser_version()
+        browser_version = self.get_browser_version_from_os()
         browser_version = (
             browser_version if browser_version else self.get_stable_release_version())
         log(f"Get LATEST {self._name} version for {browser_version} Edge")

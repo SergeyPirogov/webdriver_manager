@@ -28,7 +28,7 @@ class IEDriver(Driver):
         #       like chrome or firefox
 
     def get_latest_release_version(self) -> str:
-        log(f"Get LATEST driver version for {self.get_browser_version()}")
+        log(f"Get LATEST driver version for {self.get_browser_version_from_os()}")
         resp = self._http_client.get(
             url=self.latest_release_url,
             headers=self.auth_header
@@ -82,8 +82,8 @@ class IEDriver(Driver):
     def get_browser_type(self):
         return "msie"
 
-    def get_browser_version(self):
+    def get_browser_version_from_os(self):
         try:
-            return super().get_browser_version()
+            return super().get_browser_version_from_os()
         except:
             return "latest"

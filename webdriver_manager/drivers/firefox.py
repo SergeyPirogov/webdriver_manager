@@ -25,7 +25,7 @@ class GeckoDriver(Driver):
         self._mozila_release_tag = mozila_release_tag
 
     def get_latest_release_version(self) -> str:
-        browser_version = self.get_browser_version()
+        browser_version = self.get_browser_version_from_os()
         log(f"Get LATEST {self._name} version for {browser_version} firefox")
         resp = self._http_client.get(
             url=self.latest_release_url,
