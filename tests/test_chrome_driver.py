@@ -63,7 +63,7 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
 
 
 def test_chrome_manager_cached_driver_with_selenium():
-    custom_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "custom")
+    custom_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "custom-cache")
     manager = ChromeDriverManager(path=custom_path)
     driver = webdriver.Chrome(manager.install())
     driver.get("http://automation-remarks.com")
