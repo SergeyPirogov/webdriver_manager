@@ -222,18 +222,7 @@ def get_browser_version_from_os(browser_type=None):
         version = read_version_from_cmd(cmd_mapping, pattern)
         return version
     except Exception:
-        raise Exception(f"Can not find browser {browser_type} installed in your system!!!")
-
-
-def format_version(browser_type, version):
-    if not version or version == 'latest':
-        return 'latest'
-    try:
-        pattern = PATTERN[browser_type]
-        result = re.search(pattern, version)
-        return result.group(0) if result else version
-    except:
-        return "latest"
+        return None
 
 
 def get_browser_version(browser_type, metadata):

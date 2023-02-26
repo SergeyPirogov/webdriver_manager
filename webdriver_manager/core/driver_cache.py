@@ -8,7 +8,7 @@ from webdriver_manager.core.constants import (
     DEFAULT_USER_HOME_CACHE_PATH, ROOT_FOLDER_NAME,
 )
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.utils import get_date_diff, File, save_file, format_version
+from webdriver_manager.core.utils import get_date_diff, File, save_file
 
 
 class DriverCache(object):
@@ -36,18 +36,16 @@ class DriverCache(object):
         os_type = driver.get_os_type()
         driver_version = driver.get_driver_version_to_download()
         browser_version = driver.get_browser_version_from_os()
-        browser_type = driver.get_browser_type()
-        unified_version = format_version(browser_type, driver_version)
 
         path = os.path.join(
-            self._drivers_directory, driver_name, os_type, unified_version
+            self._drivers_directory, driver_name, os_type, driver_version
         )
         archive = save_file(file, path)
         files = archive.unpack(path)
         binary = self.__get_binary(files, driver_name)
         binary_path = os.path.join(path, binary)
         self.__save_metadata(
-            browser_version, driver_name, os_type, unified_version, binary_path
+            browser_version, driver_name, os_type, driver_version, binary_path
         )
         log(f"Driver has been saved in cache [{path}]")
         return binary_path
@@ -95,19 +93,16 @@ class DriverCache(object):
         driver_name = driver.get_name()
         driver_version = driver.get_driver_version_to_download()
         browser_version = driver.get_browser_version_from_os()
-        browser_type = driver.get_browser_type()
-        unified_version = format_version(browser_type, driver_version)
-
         metadata = self.get_metadata()
 
-        key = f"{os_type}_{driver_name}_{unified_version}_for_{browser_version}"
+        key = f"{os_type}_{driver_name}_{driver_version}_for_{browser_version}"
         if key not in metadata:
             log(
                 f"There is no [{os_type}] {driver_name} for browser {browser_version} in cache"
             )
             return None
 
-        path = os.path.join(self._drivers_directory, driver_name, os_type, unified_version)
+        path = os.path.join(self._drivers_directory, driver_name, os_type, driver_version)
 
         driver_binary_name = driver.get_binary_name()
         binary_path = os.path.join(path, driver_binary_name)

@@ -39,7 +39,7 @@ class Driver(object):
         return self._os_type
 
     def get_driver_download_url(self):
-        return f"{self._url}/{self.get_driver_version_to_download()}/{self.get_name()}_{self.get_os_type()}.zip"
+        return f"{self._url}/{self.get_driver_version_to_download()}/{self._name}_{self._os_type}.zip"
 
     def get_driver_version_to_download(self):
         """
@@ -56,6 +56,13 @@ class Driver(object):
         raise NotImplementedError("Please implement this method")
 
     def get_browser_version_from_os(self):
+        """
+        Use-cases:
+        - for key in metadata;
+        - for printing nice logs;
+        - for fallback if version was not set at all.
+        Note: the fallback may have collisions in user cases when previous browser was not uninstalled properly.
+        """
         if self._browser_version is None:
             self._browser_version = get_browser_version_from_os(self.get_browser_type())
         return self._browser_version
