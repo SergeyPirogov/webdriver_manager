@@ -7,6 +7,7 @@ from webdriver_manager.core.constants import (
     DEFAULT_PROJECT_ROOT_CACHE_PATH,
     DEFAULT_USER_HOME_CACHE_PATH, ROOT_FOLDER_NAME,
 )
+from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
 from webdriver_manager.core.utils import get_date_diff, File, save_file
 
@@ -30,11 +31,12 @@ class DriverCache(object):
         self._date_format = "%d/%m/%Y"
         self._drivers_directory = os.path.join(self._root_dir, self._drivers_root)
         self.valid_range = valid_range
+        self._cache_key_driver_version = None
 
     def save_file_to_cache(self, driver, file: File):
         driver_name = driver.get_name()
         os_type = driver.get_os_type()
-        driver_version = driver.get_driver_version_to_download()
+        driver_version = self.get_cache_key_driver_version(driver)
         browser_version = driver.get_browser_version_from_os()
 
         path = os.path.join(
@@ -87,12 +89,13 @@ class DriverCache(object):
         with open(self._drivers_json_path, "w+") as outfile:
             json.dump(metadata, outfile, indent=4)
 
-    def find_driver(self, driver):
+    def find_driver(self, driver: Driver):
         """Find driver by '{os_type}_{driver_name}_{driver_version}_{browser_version}'."""
         os_type = driver.get_os_type()
         driver_name = driver.get_name()
-        driver_version = driver.get_driver_version_to_download()
         browser_version = driver.get_browser_version_from_os()
+        driver_version = self.get_cache_key_driver_version(driver)
+
         metadata = self.get_metadata()
 
         key = f"{os_type}_{driver_name}_{driver_version}_for_{browser_version}"
@@ -129,3 +132,8 @@ class DriverCache(object):
             with open(self._drivers_json_path, "r") as outfile:
                 return json.load(outfile)
         return {}
+
+    def get_cache_key_driver_version(self, driver: Driver):
+        if self._cache_key_driver_version is None:
+            self._cache_key_driver_version = "latest" if driver._version in (None, "latest") else driver._version
+        return self._cache_key_driver_version
