@@ -32,16 +32,14 @@ class DriverCache(object):
         self._drivers_directory = os.path.join(self._root_dir, self._drivers_root)
         self.valid_range = valid_range
         self._cache_key_driver_version = None
+        self._driver_binary_path = None
 
-    def save_file_to_cache(self, driver, file: File):
+    def save_file_to_cache(self, driver: Driver, file: File):
         driver_name = driver.get_name()
         os_type = driver.get_os_type()
         driver_version = self.get_cache_key_driver_version(driver)
         browser_version = driver.get_browser_version_from_os()
-
-        path = os.path.join(
-            self._drivers_directory, driver_name, os_type, driver_version
-        )
+        path = self.__get_path(driver)
         archive = save_file(file, path)
         files = archive.unpack(path)
         binary = self.__get_binary(files, driver_name)
@@ -137,3 +135,13 @@ class DriverCache(object):
         if self._cache_key_driver_version is None:
             self._cache_key_driver_version = "latest" if driver._version in (None, "latest") else driver._version
         return self._cache_key_driver_version
+
+    def __get_path(self, driver: Driver):
+        if self._driver_binary_path is None:
+            self._driver_binary_path = os.path.join(
+                self._drivers_directory,
+                driver.get_name(),
+                driver.get_os_type(),
+                driver.get_driver_version_to_download(),
+            )
+        return self._driver_binary_path
