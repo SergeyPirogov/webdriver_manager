@@ -28,7 +28,7 @@ class IEDriver(Driver):
         #       like chrome or firefox
 
     def get_latest_release_version(self) -> str:
-        log(f"Get LATEST driver version for {self.get_browser_version()}")
+        log(f"Get LATEST driver version for Internet Explorer")
         resp = self._http_client.get(
             url=self.latest_release_url,
             headers=self.auth_header
@@ -41,20 +41,20 @@ class IEDriver(Driver):
             for asset in release["assets"]
             if asset["name"].startswith(self.get_name())
         )
-        self._version = release["tag_name"].replace("selenium-", "")
-        return self._version
+        return release["tag_name"].replace("selenium-", "")
 
-    def get_url(self):
+    def get_driver_download_url(self):
         """Like https://github.com/seleniumhq/selenium/releases/download/3.141.59/IEDriverServer_Win32_3.141.59.zip"""
-        log(f"Getting latest ie release info for {self.get_version()}")
+        driver_version_to_download = self.get_driver_version_to_download()
+        log(f"Getting latest ie release info for {driver_version_to_download}")
         resp = self._http_client.get(
-            url=self.tagged_release_url(self.get_version()),
+            url=self.tagged_release_url(driver_version_to_download),
             headers=self.auth_header
         )
 
         assets = resp.json()["assets"]
 
-        name = f"{self.get_name()}_{self.os_type}_{self.get_version()}" + "."
+        name = f"{self._name}_{self.os_type}_{driver_version_to_download}" + "."
         output_dict = [
             asset for asset in assets if asset["name"].startswith(name)]
         return output_dict[0]["browser_download_url"]
@@ -81,9 +81,3 @@ class IEDriver(Driver):
 
     def get_browser_type(self):
         return "msie"
-
-    def get_browser_version(self):
-        try:
-            return super().get_browser_version()
-        except:
-            return "latest"

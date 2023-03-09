@@ -27,6 +27,6 @@ class DriverManager(object):
         if binary_path:
             return binary_path
 
-        file = self._download_manager.download_file(driver.get_url())
+        file = self._download_manager.download_file(driver.get_driver_download_url())
         binary_path = self.driver_cache.save_file_to_cache(driver, file)
         return binary_path

@@ -22,31 +22,34 @@ class EdgeChromiumDriver(Driver):
             latest_release_url,
             http_client
         )
+        self._os_type = self.get_os_type()
 
     def get_stable_release_version(self):
         """Stable driver version when browser version was not determined."""
-        stable_url = self._latest_release_url.replace(
-            "LATEST_RELEASE", "LATEST_STABLE")
+        stable_url = self._latest_release_url.replace("LATEST_RELEASE", "LATEST_STABLE")
         resp = self._http_client.get(url=stable_url)
         return resp.text.rstrip()
 
     def get_latest_release_version(self) -> str:
-        browser_version = self.get_browser_version()
-        browser_version = (
-            browser_version if browser_version else self.get_stable_release_version())
-        log(f"Get LATEST {self._name} version for {browser_version} Edge")
-        major_edge_version = browser_version.split(".")[0]
+        determined_browser_version = self.get_browser_version_from_os()
+        log(f"Get LATEST {self._name} version for Edge {determined_browser_version}")
+
+        edge_driver_version_to_download = (
+            self.get_stable_release_version()
+            if (self._version == "latest" or determined_browser_version is None)
+            else determined_browser_version
+        )
+        major_edge_version = edge_driver_version_to_download.split(".")[0]
         latest_release_url = {
             OSType.WIN
-            in self.get_os_type(): f"{self._latest_release_url}_{major_edge_version}_WINDOWS",
+            in self._os_type: f"{self._latest_release_url}_{major_edge_version}_WINDOWS",
             OSType.MAC
-            in self.get_os_type(): f"{self._latest_release_url}_{major_edge_version}_MACOS",
+            in self._os_type: f"{self._latest_release_url}_{major_edge_version}_MACOS",
             OSType.LINUX
-            in self.get_os_type(): f"{self._latest_release_url}_{major_edge_version}_LINUX",
+            in self._os_type: f"{self._latest_release_url}_{major_edge_version}_LINUX",
         }[True]
         resp = self._http_client.get(url=latest_release_url)
-        self._version = resp.text.rstrip()
-        return self._version
+        return resp.text.rstrip()
 
     def get_browser_type(self):
         return ChromeType.MSEDGE

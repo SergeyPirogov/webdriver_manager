@@ -21,6 +21,8 @@ class Driver(object):
             self._os_type = utils.os_type()
         self._latest_release_url = latest_release_url
         self._http_client = http_client
+        self._browser_version = None
+        self._driver_to_download_version = None
 
     @property
     def auth_header(self):
@@ -36,23 +38,34 @@ class Driver(object):
     def get_os_type(self):
         return self._os_type
 
-    def get_url(self):
-        return f"{self._url}/{self.get_version()}/{self.get_name()}_{self.get_os_type()}.zip"
+    def get_driver_download_url(self):
+        return f"{self._url}/{self.get_driver_version_to_download()}/{self._name}_{self._os_type}.zip"
 
-    def get_version(self):
-        if not self._version:
-            try:
-                return self.get_latest_release_version()
-            except Exception:
-                return self.get_browser_version()
-        return self._version
+    def get_driver_version_to_download(self):
+        """
+        Downloads version from parameter if version not None or "latest".
+        Downloads latest, if version is "latest" or browser could not been determined.
+        Downloads determined browser version driver in all other ways as a bonus fallback for lazy users.
+        """
+        if not self._driver_to_download_version:
+            self._driver_to_download_version = self._version if self._version not in (None, "latest") else self.get_latest_release_version()
+        return self._driver_to_download_version
 
     def get_latest_release_version(self):
         # type: () -> str
         raise NotImplementedError("Please implement this method")
 
-    def get_browser_version(self):
-        return get_browser_version_from_os(self.get_browser_type())
+    def get_browser_version_from_os(self):
+        """
+        Use-cases:
+        - for key in metadata;
+        - for printing nice logs;
+        - for fallback if version was not set at all.
+        Note: the fallback may have collisions in user cases when previous browser was not uninstalled properly.
+        """
+        if self._browser_version is None:
+            self._browser_version = get_browser_version_from_os(self.get_browser_type())
+        return self._browser_version
 
     def get_browser_type(self):
         raise NotImplementedError("Please implement this method")
