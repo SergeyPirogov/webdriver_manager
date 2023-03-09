@@ -227,22 +227,6 @@ def get_browser_version_from_os(browser_type=None):
         return None
 
 
-def get_browser_version(browser_type, metadata):
-    pattern = PATTERN[browser_type]
-    version_from_os = metadata['version']
-    result = re.search(pattern, version_from_os)
-    version = result.group(0) if version_from_os else None
-    if not version:
-        log(
-            f"Could not get version for {browser_type}. "
-            f"Is {browser_type} installed?"
-        )
-    else:
-        log(f"Current {browser_type} version is {version}")
-
-    return version
-
-
 def read_version_from_cmd(cmd, pattern):
     with subprocess.Popen(
             cmd,
