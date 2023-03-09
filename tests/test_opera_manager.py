@@ -3,9 +3,10 @@ import os
 
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 
-from webdriver_manager.opera import OperaDriverManager
 from webdriver_manager.core.utils import os_type as get_os_type
+from webdriver_manager.opera import OperaDriverManager
 
 
 def test_opera_driver_manager_with_correct_version():
@@ -24,28 +25,32 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
     assert os.path.exists(driver_path)
 
 
-@pytest.mark.skip(reason="it is not stable on CI")
 def test_operadriver_manager_with_selenium():
     driver_path = OperaDriverManager().install()
     options = webdriver.ChromeOptions()
-    options.add_argument('allow-elevated-browser')
+    options.add_experimental_option('w3c', True)
 
     if get_os_type() in ["win64", "win32"]:
-        paths = [f for f in glob.glob(f"C:/Users/{os.getlogin()}/AppData/" \
-                                      "Local/Programs/Opera/**",
-                                      recursive=True)]
+        paths = [f for f in glob.glob(
+            f"C:/Users/{os.getlogin()}/AppData/Local/Programs/Opera/**",
+            recursive=True
+        )]
         for path in paths:
             if os.path.isfile(path) and path.endswith("opera.exe"):
                 options.binary_location = path
-    elif ((get_os_type() in ["linux64", "linux32"]) and not
-          os.path.exists('/usr/bin/opera')):
+    elif (
+            (get_os_type() in ["linux64", "linux32"])
+            and not os.path.exists('/usr/bin/opera')
+    ):
         options.binary_location = "/usr/bin/opera"
     elif get_os_type() in "mac64":
         options.binary_location = "/Applications/Opera.app/Contents/MacOS/Opera"
+    web_service = Service(driver_path)
+    web_service.start()
 
-    ff = webdriver.Opera(executable_path=driver_path, options=options)
-    ff.get("http://automation-remarks.com")
-    ff.quit()
+    opera_driver = webdriver.Remote(web_service.service_url, options=options)
+    opera_driver.get("http://automation-remarks.com")
+    opera_driver.quit()
 
 
 def test_opera_driver_manager_with_wrong_version():
