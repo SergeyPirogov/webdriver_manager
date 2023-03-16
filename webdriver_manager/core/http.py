@@ -33,7 +33,7 @@ class WDMHttpClient(HttpClient):
             resp = requests.get(
                 url=url, verify=self._ssl_verify, stream=True, **kwargs)
         except exceptions.ConnectionError:
-            raise ConnectionError(f"Connection error. Are you offline?")
+            raise ConnectionError(f"Could not reach host. Are you offline?")
         self.validate_response(resp)
         if wdm_progress_bar():
             show_download_progress(resp)
