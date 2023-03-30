@@ -23,7 +23,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(exclude=['tests']),
     include_package_data=True,
-    version='3.8.6',
+    version='0.0.1',
     description='Library provides the way to automatically manage drivers for different browsers',
     author='HansBug, Sergey Pirogov',
     author_email='hansbug@buaa.edu.cn, automationremarks@gmail.com',
