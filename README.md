@@ -1,8 +1,9 @@
 # Webdriver Manager for Python
 
 This is a fork project based on [SergeyPirogov/webdriver_manager](https://github.com/SergeyPirogov/webdriver_manager),
-which is using a daily refreshed mirror of all the driver sites
-- [HansBug/browser_drivers_mirror](https://huggingface.co/HansBug/browser_drivers_mirror). This means this package can
+which is using a daily refreshed mirror of all the driver
+sites [HansBug/browser_drivers_mirror](https://huggingface.co/HansBug/browser_drivers_mirror). This means this package
+can
 be directly used in China mainland.
 
 [![Tests](https://github.com/HansBug/hf_webdriver_manager/actions/workflows/test.yml/badge.svg)](https://github.com/HansBug/hf_webdriver_manager/actions/workflows/test.yml)
