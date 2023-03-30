@@ -1,1 +1,1 @@
-__version__ = "3.8.6"
+from .config.meta import __VERSION__ as __version__

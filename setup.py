@@ -1,38 +1,62 @@
-#
-#    Licensed under the Apache License, Version 2.0 (the "License"); you may
-#    not use this file except in compliance with the License. You may obtain
-#    a copy of the License at
-#
-#         http://www.apache.org/licenses/LICENSE-2.0
-#
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-#    License for the specific language governing permissions and limitations
-#    under the License.
+import os
+import re
+from codecs import open
+from distutils.core import setup
 
-import setuptools
+from setuptools import find_packages
 
-with open("README.md", encoding="utf-8") as readme_file:
-    readme = readme_file.read()
+_package_name = "webdriver_manager"
 
-setuptools.setup(
-    name='hf_webdriver_manager',
-    python_requires=">=3.7",
+here = os.path.abspath(os.path.dirname(__file__))
+meta = {}
+with open(os.path.join(here, _package_name, 'config', 'meta.py'), 'r', 'utf-8') as f:
+    exec(f.read(), meta)
+
+
+def _load_req(file: str):
+    with open(file, 'r', 'utf-8') as f:
+        return [line.strip() for line in f.readlines() if line.strip()]
+
+
+requirements = _load_req('requirements.txt')
+
+_REQ_PATTERN = re.compile('^requirements-([a-zA-Z0-9_]+)\\.txt$')
+group_requirements = {
+    item.group(1): _load_req(item.group(0))
+    for item in [_REQ_PATTERN.fullmatch(reqpath) for reqpath in os.listdir()] if item
+}
+
+with open('README.md', 'r', 'utf-8') as f:
+    readme = f.read()
+
+setup(
+    # information
+    name=meta['__TITLE__'],
+    version=meta['__VERSION__'],
+    packages=find_packages(
+        include=(_package_name, "%s.*" % _package_name)
+    ),
+    description=meta['__DESCRIPTION__'],
     long_description=readme,
-    long_description_content_type="text/markdown",
-    packages=setuptools.find_packages(exclude=['tests']),
-    include_package_data=True,
-    version='0.0.1',
-    description='Library provides the way to automatically manage drivers for different browsers',
-    author='HansBug, Sergey Pirogov',
-    author_email='hansbug@buaa.edu.cn, automationremarks@gmail.com',
+    long_description_content_type='text/markdown',
+    author=meta['__AUTHOR__'],
+    author_email=meta['__AUTHOR_EMAIL__'],
+    license='Apache License, Version 2.0',
     url='https://github.com/HansBug/hf_webdriver_manager',
     keywords=['testing', 'selenium', 'driver', 'test automation'],
+
+    # environment
+    python_requires=">=3.7",
+    install_requires=requirements,
+    tests_require=group_requirements['test'],
+    extras_require=group_requirements,
     classifiers=[
         'License :: OSI Approved :: Apache Software License',
         'Intended Audience :: Information Technology',
         'Intended Audience :: Developers',
+        'License :: OSI Approved :: Apache Software License',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
@@ -45,13 +69,4 @@ setuptools.setup(
         'Operating System :: Unix',
         'Operating System :: MacOS',
     ],
-    install_requires=[
-        'requests',
-        'python-dotenv',
-        'tqdm',
-        'packaging'
-    ],
-    package_data={
-        "webdriver_manager": ["py.typed"]
-    },
 )
