@@ -112,8 +112,6 @@ jobs:
           pip --version
           pip list
           tree .
-          cloc webdriver_manager
-          cloc test
       - name: Run tests on Linux (with xvfb)
         if: runner.os == 'Linux'
         uses: GabrielBB/xvfb-action@v1
