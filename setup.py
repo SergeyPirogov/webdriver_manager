@@ -17,7 +17,7 @@ with open("README.md", encoding="utf-8") as readme_file:
     readme = readme_file.read()
 
 setuptools.setup(
-    name='hf-webdriver-manager',
+    name='hf_webdriver_manager',
     python_requires=">=3.7",
     long_description=readme,
     long_description_content_type="text/markdown",
