@@ -36,7 +36,7 @@ def test_gecko_manager_with_wrong_version():
 
     assert "There is no such driver by url " \
            "https://huggingface.co/HansBug/browser_drivers_mirror/" \
-           "resolve/main/firefox/0.2/geckodriver-0.2-linux64.gz" \
+           "resolve/main/firefox/0.2/geckodriver-0.2" \
            in ex.value.args[0]
 
 

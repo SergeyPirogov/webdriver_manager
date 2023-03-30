@@ -59,7 +59,7 @@ def test_opera_driver_manager_with_wrong_version():
 
     assert "There is no such driver by url " \
            "https://huggingface.co/HansBug/browser_drivers_mirror/" \
-           "resolve/main/opera/0.2/operadriver_linux64.zip" \
+           "resolve/main/opera/0.2/operadriver" \
            in ex.value.args[0]
 
 

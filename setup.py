@@ -17,7 +17,7 @@ with open("README.md", encoding="utf-8") as readme_file:
     readme = readme_file.read()
 
 setuptools.setup(
-    name='webdriver_manager',
+    name='hf-webdriver-manager',
     python_requires=">=3.7",
     long_description=readme,
     long_description_content_type="text/markdown",
@@ -25,9 +25,9 @@ setuptools.setup(
     include_package_data=True,
     version='3.8.6',
     description='Library provides the way to automatically manage drivers for different browsers',
-    author='Sergey Pirogov',
-    author_email='automationremarks@gmail.com',
-    url='https://github.com/SergeyPirogov/webdriver_manager',
+    author='HansBug, Sergey Pirogov',
+    author_email='hansbug@buaa.edu.cn, automationremarks@gmail.com',
+    url='https://github.com/HansBug/hf_webdriver_manager',
     keywords=['testing', 'selenium', 'driver', 'test automation'],
     classifiers=[
         'License :: OSI Approved :: Apache Software License',
@@ -55,4 +55,3 @@ setuptools.setup(
         "webdriver_manager": ["py.typed"]
     },
 )
-

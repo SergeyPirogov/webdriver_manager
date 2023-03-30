@@ -1,9 +1,14 @@
 # Webdriver Manager for Python
 
-[![Tests](https://github.com/SergeyPirogov/webdriver_manager/actions/workflows/test.yml/badge.svg)](https://github.com/SergeyPirogov/webdriver_manager/actions/workflows/test.yml)
-[![PyPI](https://img.shields.io/pypi/v/webdriver_manager.svg)](https://pypi.org/project/webdriver-manager)
-[![Supported Python Versions](https://img.shields.io/pypi/pyversions/webdriver_manager.svg)](https://pypi.org/project/webdriver-manager/)
-[![codecov](https://codecov.io/gh/SergeyPirogov/webdriver_manager/branch/master/graph/badge.svg)](https://codecov.io/gh/SergeyPirogov/webdriver_manager)
+This is a fork project based on [SergeyPirogov/webdriver_manager](https://github.com/SergeyPirogov/webdriver_manager), \
+which is using a daily refreshed mirror of all the driver sites - \
+[HansBug/browser_drivers_mirror](https://huggingface.co/HansBug/browser_drivers_mirror). This means this package \
+can be directly used in China mainland.
+
+[![Tests](https://github.com/HansBug/hf_webdriver_manager/actions/workflows/test.yml/badge.svg)](https://github.com/HansBug/hf_webdriver_manager/actions/workflows/test.yml)
+[![PyPI](https://img.shields.io/pypi/v/hf-webdriver-manager.svg)](https://pypi.org/project/hf-webdriver-manager)
+[![Supported Python Versions](https://img.shields.io/pypi/pyversions/hf-webdriver-manager.svg)](https://pypi.org/project/hf-webdriver-manager/)
+[![codecov](https://codecov.io/gh/HansBug/hf_webdriver_manager/branch/master/graph/badge.svg)](https://codecov.io/gh/HansBug/hf_webdriver_manager)
 
 ## Support the library on [Patreon](https://www.patreon.com/automation_remarks)
 
@@ -28,17 +33,19 @@ You need to download the chromedriver binary, unzip it somewhere on your PC and 
 
 ```python
 from selenium import webdriver
+
 driver = webdriver.Chrome('/home/user/drivers/chromedriver')
 ```
 
-It’s boring!!! Moreover, every time a new version of the driver is released, you need to repeat all these steps again and again.
+It’s boring!!! Moreover, every time a new version of the driver is released, you need to repeat all these steps again
+and again.
 
 With webdriver manager, you just need to do two simple steps:
 
 #### Install manager:
 
 ```bash
-pip install webdriver-manager
+pip install hf-webdriver-manager
 ```
 
 #### Use with Chrome
@@ -50,6 +57,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 driver = webdriver.Chrome(ChromeDriverManager().install())
 ```
+
 ```python
 # selenium 4
 from selenium import webdriver
@@ -110,6 +118,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 ```
+
 ```python
 # selenium 4
 from selenium import webdriver
@@ -128,6 +137,7 @@ from webdriver_manager.microsoft import IEDriverManager
 
 driver = webdriver.Ie(IEDriverManager().install())
 ```
+
 ```python
 # selenium 4
 from selenium import webdriver
@@ -146,6 +156,7 @@ from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
 driver = webdriver.Edge(EdgeChromiumDriverManager().install())
 ```
+
 ```python
 # selenium 4
 from selenium import webdriver
@@ -184,6 +195,7 @@ To get the version of the browser from the executable of the browser itself:
 
 ```python
 from webdriver_manager.core.utils import read_version_from_cmd, PATTERN
+
 version = read_version_from_cmd("/usr/bin/firefox-bin --version", PATTERN["firefox"])
 driver_binary = FirefoxDriverManager(version=version).install()
 ```
@@ -194,8 +206,13 @@ driver_binary = FirefoxDriverManager(version=version).install()
 Any variable can be set using either .env file or via python directly
 
 ### `GH_TOKEN`
-**webdriver_manager** downloading some webdrivers from their official GitHub repositories but GitHub has [limitations](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting) like 60 requests per hour for unauthenticated users.
-In case not to face an error related to github credentials, you need to [create](https://help.github.com/articles/creating-an-access-token-for-command-line-use) github token and place it into your environment: (\*)
+
+**webdriver_manager** downloading some webdrivers from their official GitHub repositories but GitHub
+has [limitations](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting) like 60 requests per
+hour for unauthenticated users.
+In case not to face an error related to github credentials, you need
+to [create](https://help.github.com/articles/creating-an-access-token-for-command-line-use) github token and place it
+into your environment: (\*)
 
 Example:
 
@@ -203,7 +220,8 @@ Example:
 export GH_TOKEN = "asdasdasdasd"
 ```
 
-(\*) access_token required to work with GitHub API [more info](https://help.github.com/articles/creating-an-access-token-for-command-line-use/).
+(\*) access_token required to work with GitHub
+API [more info](https://help.github.com/articles/creating-an-access-token-for-command-line-use/).
 
 There is also possibility to set same variable via ENV VARIABLES, example:
 
@@ -214,7 +232,8 @@ os.environ['GH_TOKEN'] = "asdasdasdasd"
 ```
 
 ### `WDM_LOG`
-Turn off webdriver-manager logs use:
+
+Turn off hf-webdriver-manager logs use:
 
 ```python
 import logging
@@ -224,6 +243,7 @@ os.environ['WDM_LOG'] = str(logging.NOTSET)
 ```
 
 ### `WDM_PROGRESS_BAR`
+
 Turn off the progress bar which is displayed on downloads:
 
 ```python
@@ -233,7 +253,9 @@ os.environ['WDM_PROGRESS_BAR'] = str(0)
 ```
 
 ### `WDM_LOCAL`
-By default, all driver binaries are saved to user.home/.wdm folder. You can override this setting and save binaries to project.root/.wdm.
+
+By default, all driver binaries are saved to user.home/.wdm folder. You can override this setting and save binaries to
+project.root/.wdm.
 
 ```python
 import os
@@ -242,7 +264,9 @@ os.environ['WDM_LOCAL'] = '1'
 ```
 
 ### `WDM_SSL_VERIFY`
-SSL verification can be disabled for downloading webdriver binaries in case when you have troubles with SSL Certificates or SSL Certificate Chain. Just set the environment variable `WDM_SSL_VERIFY` to `"0"`.
+
+SSL verification can be disabled for downloading webdriver binaries in case when you have troubles with SSL Certificates
+or SSL Certificate Chain. Just set the environment variable `WDM_SSL_VERIFY` to `"0"`.
 
 ```python
 import os
@@ -251,16 +275,19 @@ os.environ['WDM_SSL_VERIFY'] = '0'
 ```
 
 ### `path`
+
 Set the directory where you want to download and save the webdriver. You can use relative and absolute paths.
 
 ```python
 from webdriver_manager.chrome import ChromeDriverManager
 
-ChromeDriverManager(path = r".\\Drivers").install()
+ChromeDriverManager(path=r".\\Drivers").install()
 ```
 
 ### `version`
-Specify the version of webdriver you need. And webdriver-manager will download it from sources for your os.
+
+Specify the version of webdriver you need. And hf-webdriver-manager will download it from sources for your os.
+
 ```python
 from webdriver_manager.chrome import ChromeDriverManager
 
@@ -268,6 +295,7 @@ ChromeDriverManager(version="2.26").install()
 ```
 
 ### `cache_valid_range`
+
 Driver cache by default is valid for 1 day. You are able to change this value using constructor parameter:
 
 ```python
@@ -297,6 +325,7 @@ set_logger(logger)
 ---
 
 ### Custom HTTP Client
+
 If you need to add custom HTTP logic like session or proxy you can define your custom HttpClient implementation.
 
 ```python
@@ -309,6 +338,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.download_manager import WDMDownloadManager
 from webdriver_manager.core.http import HttpClient
 from webdriver_manager.core.logger import log
+
 
 class CustomHttpClient(HttpClient):
 

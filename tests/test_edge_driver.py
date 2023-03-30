@@ -35,7 +35,7 @@ def test_edge_manager_with_wrong_version():
 
     assert "There is no such driver by url " \
            "https://huggingface.co/HansBug/browser_drivers_mirror/" \
-           "resolve/main/edge/0.2/edgedriver_win64.zip" \
+           "resolve/main/edge/0.2/edgedriver" \
            in ex.value.args[0]
 
 

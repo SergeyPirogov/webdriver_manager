@@ -178,7 +178,8 @@ jobs:
 
       - name: Codecov Upload
         uses: codecov/codecov-action@v3
-        if: always()
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
           name: ${{ matrix.os }}-py${{ matrix.python-version }}
+          fail_ci_if_error: false
