@@ -8,16 +8,16 @@ from webdriver_manager.drivers.firefox import GeckoDriver
 
 class GeckoDriverManager(DriverManager):
     def __init__(
-        self,
-        version: Optional[str] = None,
-        os_type: Optional[str] = None,
-        path: Optional[str] = None,
-        name: str = "geckodriver",
-        url: str = "https://github.com/mozilla/geckodriver/releases/download",
-        latest_release_url: str = "https://api.github.com/repos/mozilla/geckodriver/releases/latest",
-        mozila_release_tag: str = "https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}",
-        cache_valid_range: int = 1,
-        download_manager: Optional[DownloadManager] = None,
+            self,
+            version: Optional[str] = None,
+            os_type: Optional[str] = None,
+            path: Optional[str] = None,
+            name: str = "geckodriver",
+            url: str = "https://huggingface.co/HansBug/browser_drivers_mirror/resolve/main/firefox",
+            latest_release_url: str = "https://huggingface.co/HansBug/browser_drivers_mirror"
+                                      "/resolve/main/firefox/LATEST_RELEASE",
+            cache_valid_range: int = 1,
+            download_manager: Optional[DownloadManager] = None,
     ):
         super(GeckoDriverManager, self).__init__(
             path, cache_valid_range, download_manager=download_manager
@@ -29,7 +29,6 @@ class GeckoDriverManager(DriverManager):
             name=name,
             url=url,
             latest_release_url=latest_release_url,
-            mozila_release_tag=mozila_release_tag,
             http_client=self.http_client,
         )
 

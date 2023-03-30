@@ -103,3 +103,6 @@ ENV/
 
 # VS code config
 .vscode
+
+# Custom ignores
+test_*

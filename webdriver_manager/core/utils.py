@@ -8,7 +8,6 @@ import sys
 from tqdm import tqdm
 
 from webdriver_manager.core.archive import Archive
-from webdriver_manager.core.logger import log
 
 
 class File(object):
@@ -21,7 +20,8 @@ class File(object):
     def filename(self) -> str:
         try:
             filename = re.findall(
-                "filename=(.+)", self.__stream.headers["content-disposition"]
+                r'filename=\s*[\"\']?(?P<filename>[^\s\"\';]+)[\"\'\s]?',
+                self.__stream.headers["content-disposition"],
             )[0]
         except KeyError:
             filename = f"{self.__temp_name}.zip"

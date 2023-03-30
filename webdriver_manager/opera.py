@@ -8,19 +8,16 @@ from webdriver_manager.drivers.opera import OperaDriver
 
 class OperaDriverManager(DriverManager):
     def __init__(
-        self,
-        version: Optional[str] = None,
-        os_type: Optional[str] = None,
-        path: Optional[str] = None,
-        name: str = "operadriver",
-            url: str = "https://github.com/operasoftware/operachromiumdriver/"
-                       "releases/",
-        latest_release_url: str = "https://api.github.com/repos/"
-        "operasoftware/operachromiumdriver/releases/latest",
-        opera_release_tag: str = "https://api.github.com/repos/"
-        "operasoftware/operachromiumdriver/releases/tags/{0}",
-        cache_valid_range: int = 1,
-        download_manager: Optional[DownloadManager] = None,
+            self,
+            version: Optional[str] = None,
+            os_type: Optional[str] = None,
+            path: Optional[str] = None,
+            name: str = "operadriver",
+            url: str = "https://huggingface.co/HansBug/browser_drivers_mirror/resolve/main/opera",
+            latest_release_url: str = "https://huggingface.co/HansBug/browser_drivers_mirror"
+                                      "/resolve/main/opera/LATEST_RELEASE",
+            cache_valid_range: int = 1,
+            download_manager: Optional[DownloadManager] = None,
     ):
         super().__init__(path, cache_valid_range, download_manager=download_manager)
 
@@ -30,7 +27,6 @@ class OperaDriverManager(DriverManager):
             os_type=os_type,
             url=url,
             latest_release_url=latest_release_url,
-            opera_release_tag=opera_release_tag,
             http_client=self.http_client,
         )
 
