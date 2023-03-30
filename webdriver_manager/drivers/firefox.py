@@ -28,10 +28,7 @@ class GeckoDriver(Driver):
     def get_latest_release_version(self) -> str:
         determined_browser_version = self.get_browser_version_from_os()
         log(f"Get LATEST {self._name} version for {determined_browser_version} firefox")
-        resp = self._http_client.get(
-            url=self.latest_release_url,
-            headers=self.auth_header
-        )
+        resp = self._http_client.get(url=self.latest_release_url)
         return resp.text.strip()
 
     def get_driver_download_url(self):

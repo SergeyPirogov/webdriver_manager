@@ -1,6 +1,4 @@
 from webdriver_manager.core import utils
-from webdriver_manager.core.logger import log
-from webdriver_manager.core.config import gh_token
 from webdriver_manager.core.utils import get_browser_version_from_os
 
 
@@ -24,14 +22,6 @@ class Driver(object):
         self._browser_version = None
         self._driver_to_download_version = None
 
-    @property
-    def auth_header(self):
-        token = gh_token()
-        if token:
-            log("GH_TOKEN will be used to perform requests")
-            return {"Authorization": f"token {token}"}
-        return None
-
     def get_name(self):
         return self._name
 
@@ -48,7 +38,8 @@ class Driver(object):
         Downloads determined browser version driver in all other ways as a bonus fallback for lazy users.
         """
         if not self._driver_to_download_version:
-            self._driver_to_download_version = self._version if self._version not in (None, "latest") else self.get_latest_release_version()
+            self._driver_to_download_version = self._version if self._version not in (
+                None, "latest") else self.get_latest_release_version()
         return self._driver_to_download_version
 
     def get_latest_release_version(self):

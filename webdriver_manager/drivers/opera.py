@@ -18,10 +18,7 @@ class OperaDriver(Driver):
         )
 
     def get_latest_release_version(self) -> str:
-        resp = self._http_client.get(
-            url=self.latest_release_url,
-            headers=self.auth_header
-        )
+        resp = self._http_client.get(url=self.latest_release_url)
         return resp.text.strip()
 
     def get_driver_download_url(self) -> str:

@@ -38,4 +38,3 @@ class WDMHttpClient(HttpClient):
         if wdm_progress_bar():
             show_download_progress(resp)
         return resp
-

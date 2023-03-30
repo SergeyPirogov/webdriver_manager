@@ -28,10 +28,7 @@ class IEDriver(Driver):
 
     def get_latest_release_version(self) -> str:
         log(f"Get LATEST driver version for Internet Explorer")
-        resp = self._http_client.get(
-            url=self.latest_release_url,
-            headers=self.auth_header
-        )
+        resp = self._http_client.get(url=self.latest_release_url)
         return resp.text.strip().replace("selenium-", "")
 
     def _get_version_to_fulfill(self, version):

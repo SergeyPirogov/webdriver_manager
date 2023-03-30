@@ -1,4 +1,5 @@
 import os
+
 from dotenv import load_dotenv
 
 
@@ -25,7 +26,7 @@ def wdm_log_level():
     default_level = 20
     try:
         return int(os.getenv("WDM_LOG", default_level))
-    except Exception:
+    except (ValueError, TypeError):
         return default_level
 
 
@@ -33,7 +34,7 @@ def wdm_progress_bar():
     default_level = 1
     try:
         return int(os.getenv("WDM_PROGRESS_BAR", default_level))
-    except Exception:
+    except (ValueError, TypeError):
         return default_level
 
 
