@@ -58,8 +58,9 @@ def test_opera_driver_manager_with_wrong_version():
         OperaDriverManager("0.2").install()
 
     assert "There is no such driver by url " \
-           "https://api.github.com/repos/operasoftware/operachromiumdriver/" \
-           "releases/tags/0.2" in ex.value.args[0]
+           "https://huggingface.co/HansBug/browser_drivers_mirror/" \
+           "resolve/main/opera/0.2/operadriver_linux64.zip" \
+           in ex.value.args[0]
 
 
 @pytest.mark.parametrize('path', ['.', None])

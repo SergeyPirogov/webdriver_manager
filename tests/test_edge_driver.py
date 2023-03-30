@@ -4,8 +4,8 @@ import re
 import pytest
 from selenium import webdriver
 
-from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from webdriver_manager.core.utils import PATTERN, ChromeType
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
 
 def test_edge_manager_with_selenium():
@@ -33,10 +33,10 @@ def test_edge_manager_with_wrong_version():
             os_type='win64',
         ).install()
 
-    assert (
-               "There is no such driver by url "
-               "https://msedgedriver.azureedge.net/0.2/edgedriver_win64.zip"
-           ) in ex.value.args[0]
+    assert "There is no such driver by url " \
+           "https://huggingface.co/HansBug/browser_drivers_mirror/" \
+           "resolve/main/edge/0.2/edgedriver_win64.zip" \
+           in ex.value.args[0]
 
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64', 'mac64', 'linux64'])

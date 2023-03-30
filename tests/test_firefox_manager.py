@@ -35,7 +35,8 @@ def test_gecko_manager_with_wrong_version():
         GeckoDriverManager("0.2").install()
 
     assert "There is no such driver by url " \
-           "https://api.github.com/repos/mozilla/geckodriver/releases/tags/0.2" \
+           "https://huggingface.co/HansBug/browser_drivers_mirror/" \
+           "resolve/main/firefox/0.2/geckodriver-0.2-linux64.gz" \
            in ex.value.args[0]
 
 
