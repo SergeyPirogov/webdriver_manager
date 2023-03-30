@@ -1,3 +1,5 @@
+import requests
+
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
 
@@ -27,7 +29,11 @@ class OperaDriver(Driver):
         driver_version_to_download = self.get_driver_version_to_download()
         log(f"Getting latest opera release info for {driver_version_to_download}")
         name = "{0}_{1}.zip".format(self.get_name(), self.get_os_type())
-        return f'{self._url}/{driver_version_to_download}/{name}'
+        url = f'{self._url}/{driver_version_to_download}/{name}'
+        if requests.head(url).ok:
+            return url
+        else:
+            raise ValueError(f'There is no such driver by url {url}.')
 
     @property
     def latest_release_url(self):

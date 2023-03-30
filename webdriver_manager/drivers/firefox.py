@@ -38,15 +38,15 @@ class GeckoDriver(Driver):
         """Like https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz"""
         driver_version_to_download = self.get_driver_version_to_download()
         log(f"Getting latest opera release info for {driver_version_to_download}")
-        _exts = ['tar.gz', 'zip']
+        _exts = ['tar.gz', 'zip', 'gz']
         for ext in _exts:
             name = f"{self.get_name()}-{driver_version_to_download}-{self._os_type}.{ext}"
             url = f'{self._url}/{driver_version_to_download}/{name}'
             if requests.head(url).ok:
                 return url
         else:
-            raise ConnectionError(f'Resource not found for '
-                                  f'{self.get_name()}-{driver_version_to_download}-{self._os_type}.')
+            # noinspection PyUnboundLocalVariable
+            raise ValueError(f'There is no such driver by url {url}.')
 
     def get_os_type(self):
         os_type = super().get_os_type()

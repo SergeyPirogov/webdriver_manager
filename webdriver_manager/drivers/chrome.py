@@ -1,3 +1,4 @@
+import requests
 from packaging import version
 
 from webdriver_manager.core.driver import Driver
@@ -45,7 +46,11 @@ class ChromeDriver(Driver):
         if version.parse(driver_version_to_download) < version.parse("106.0.5249.61"):
             os_type = os_type.replace("mac_arm64", "mac64_m1")
 
-        return f"{self._url}/{driver_version_to_download}/{self.get_name()}_{os_type}.zip"
+        url = f"{self._url}/{driver_version_to_download}/{self.get_name()}_{os_type}.zip"
+        if requests.head(url).ok:
+            return url
+        else:
+            raise ValueError(f'There is no such driver by url {url}.')
 
     def get_browser_type(self):
         return self._browser_type
