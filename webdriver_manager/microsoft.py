@@ -15,9 +15,9 @@ class IEDriverManager(DriverManager):
             os_type: Optional[str] = None,
             path: Optional[str] = None,
             name: str = "IEDriverServer",
-            url: str = "https://github.com/seleniumhq/selenium/releases/download",
-            latest_release_url: str = "https://api.github.com/repos/seleniumhq/selenium/releases",
-            ie_release_tag: str = "https://api.github.com/repos/seleniumhq/selenium/releases/tags/selenium-{0}",
+            url: str = "https://huggingface.co/HansBug/browser_drivers_mirror/resolve/main/ie",
+            latest_release_url: str = "https://huggingface.co/HansBug/browser_drivers_mirror"
+                                      "/resolve/main/ie/LATEST_RELEASE",
             cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,
     ):
@@ -28,7 +28,6 @@ class IEDriverManager(DriverManager):
             name=name,
             url=url,
             latest_release_url=latest_release_url,
-            ie_release_tag=ie_release_tag,
             http_client=self.http_client,
         )
 
