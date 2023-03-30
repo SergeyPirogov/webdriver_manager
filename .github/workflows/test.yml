@@ -88,20 +88,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install brave-browser
           brave-browser --version
-          sudo apt-get install -y tree cloc wget curl make zip
+          sudo apt-get install -y tree cloc
       - name: Install browsers on Windows
         if: runner.os == 'Windows'
         shell: powershell
         run: |
           choco install chromium opera brave --no-progress -y --force
-          choco install tree cloc wget curl make zip
+          choco install tree cloc
       - name: Install browsers on MacOS
         if: startsWith(runner.os, 'macOS')
         run: |
           brew tap domt4/chromium
           brew update
           brew install --cask mac-chromium opera brave-browser
-          brew install tree cloc wget curl make zip
+          brew install tree cloc
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
