@@ -55,3 +55,4 @@ setuptools.setup(
         "webdriver_manager": ["py.typed"]
     },
 )
+
