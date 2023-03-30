@@ -88,17 +88,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install brave-browser
           brave-browser --version
+          sudo apt-get install -y tree cloc wget curl make zip
       - name: Install browsers on Windows
         if: runner.os == 'Windows'
         shell: powershell
         run: |
           choco install chromium opera brave --no-progress -y --force
+          choco install tree cloc wget curl make zip
       - name: Install browsers on MacOS
         if: startsWith(runner.os, 'macOS')
         run: |
           brew tap domt4/chromium
           brew update
           brew install --cask mac-chromium opera brave-browser
+          brew install tree cloc wget curl make zip
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
@@ -112,6 +115,8 @@ jobs:
           pip --version
           pip list
           tree .
+          cloc webdriver_manager
+          cloc tests
       - name: Run tests on Linux (with xvfb)
         if: runner.os == 'Linux'
         uses: GabrielBB/xvfb-action@v1
