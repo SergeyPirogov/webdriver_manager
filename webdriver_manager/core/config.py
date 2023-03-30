@@ -14,10 +14,6 @@ def ssl_verify():
     return str2bool(os.getenv("WDM_SSL_VERIFY", "true"))
 
 
-def gh_token():
-    return os.getenv("GH_TOKEN", None)
-
-
 def wdm_local():
     return str2bool(os.getenv("WDM_LOCAL", "false"))
 

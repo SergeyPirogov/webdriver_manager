@@ -206,32 +206,6 @@ driver_binary = FirefoxDriverManager(version=version).install()
 **webdriver_manager** has several configuration variables you can be interested in.
 Any variable can be set using either .env file or via python directly
 
-### `GH_TOKEN`
-
-**webdriver_manager** downloading some webdrivers from their official GitHub repositories but GitHub
-has [limitations](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting) like 60 requests per
-hour for unauthenticated users.
-In case not to face an error related to github credentials, you need
-to [create](https://help.github.com/articles/creating-an-access-token-for-command-line-use) github token and place it
-into your environment: (\*)
-
-Example:
-
-```bash
-export GH_TOKEN = "asdasdasdasd"
-```
-
-(\*) access_token required to work with GitHub
-API [more info](https://help.github.com/articles/creating-an-access-token-for-command-line-use/).
-
-There is also possibility to set same variable via ENV VARIABLES, example:
-
-```python
-import os
-
-os.environ['GH_TOKEN'] = "asdasdasdasd"
-```
-
 ### `WDM_LOG`
 
 Turn off hf-webdriver-manager logs use:
