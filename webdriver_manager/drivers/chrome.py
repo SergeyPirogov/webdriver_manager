@@ -1,4 +1,3 @@
-import requests
 from packaging import version
 
 from webdriver_manager.core.driver import Driver
@@ -17,9 +16,10 @@ class ChromeDriver(Driver):
             latest_release_url,
             http_client,
             chrome_type=ChromeType.GOOGLE,
+            use_index=False,
     ):
         super(ChromeDriver, self).__init__(
-            name, version, os_type, url, latest_release_url, http_client
+            name, version, os_type, url, latest_release_url, http_client, use_index
         )
         self._browser_type = chrome_type
         self._os_type = self.get_os_type()
@@ -47,12 +47,8 @@ class ChromeDriver(Driver):
             os_type = os_type.replace("mac_arm64", "mac64_m1")
 
         log(f"Getting latest chrome release info for {driver_version_to_download}")
-        url = f"{self._url}/{driver_version_to_download}/{self.get_name()}_{os_type}.zip_index"
-        resp = requests.get(url)
-        if resp.ok:
-            return resp.text.strip()
-        else:
-            raise ValueError(f'There is no such driver by url {url}.')
+        url = f"{self._url}/{driver_version_to_download}/{self.get_name()}_{os_type}.zip"
+        return self._url_postprocess(url)
 
     def get_browser_type(self):
         return self._browser_type

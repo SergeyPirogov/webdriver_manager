@@ -8,6 +8,7 @@ INDEX_SITE_ROOT = os.environ.get(
     'INDEX_SITE_ROOT',
     'https://gitee.com/hansbug/browser_drivers_mirror_index/raw/master',
 )
+NO_INDEX_SITE = bool(os.environ.get('NO_INDEX_SITE', '').strip())
 
 
 class DriverManager(object):
@@ -35,7 +36,6 @@ class DriverManager(object):
             return binary_path
 
         url = driver.get_driver_download_url()
-        log(f'URL to download: {url} ...')
         file = self._download_manager.download_file(url)
         binary_path = self.driver_cache.save_file_to_cache(driver, file)
         return binary_path

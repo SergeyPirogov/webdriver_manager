@@ -1,5 +1,3 @@
-import requests
-
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
 
@@ -12,9 +10,11 @@ class OperaDriver(Driver):
             os_type,
             url,
             latest_release_url,
-            http_client):
+            http_client,
+            use_index=False,
+    ):
         super(OperaDriver, self).__init__(
-            name, version, os_type, url, latest_release_url, http_client
+            name, version, os_type, url, latest_release_url, http_client, use_index,
         )
 
     def get_latest_release_version(self) -> str:
@@ -26,12 +26,8 @@ class OperaDriver(Driver):
         driver_version_to_download = self.get_driver_version_to_download()
         log(f"Getting latest opera release info for {driver_version_to_download}")
         name = "{0}_{1}.zip".format(self.get_name(), self.get_os_type())
-        url = f'{self._url}/{driver_version_to_download}/{name}_index'
-        resp = requests.get(url)
-        if resp.ok:
-            return resp.text.strip()
-        else:
-            raise ValueError(f'There is no such driver by url {url}.')
+        url = f'{self._url}/{driver_version_to_download}/{name}'
+        return self._url_postprocess(url)
 
     @property
     def latest_release_url(self):

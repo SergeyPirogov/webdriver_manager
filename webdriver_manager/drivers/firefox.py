@@ -1,5 +1,3 @@
-import requests
-
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
 from webdriver_manager.core.utils import is_arch, is_mac_os
@@ -14,14 +12,10 @@ class GeckoDriver(Driver):
             url,
             latest_release_url,
             http_client,
+            use_index=False,
     ):
         super(GeckoDriver, self).__init__(
-            name,
-            version,
-            os_type,
-            url,
-            latest_release_url,
-            http_client,
+            name, version, os_type, url, latest_release_url, http_client, use_index,
         )
         self._os_type = self.get_os_type()
 
@@ -37,11 +31,12 @@ class GeckoDriver(Driver):
         log(f"Getting latest firefox release info for {driver_version_to_download}")
         _exts = ['tar.gz', 'zip', 'gz']
         for ext in _exts:
-            name = f"{self.get_name()}-{driver_version_to_download}-{self._os_type}.{ext}_index"
+            name = f"{self.get_name()}-{driver_version_to_download}-{self._os_type}.{ext}"
             url = f'{self._url}/{driver_version_to_download}/{name}'
-            resp = requests.get(url)
-            if resp.ok:
-                return resp.text.strip()
+            try:
+                return self._url_postprocess(url)
+            except (ValueError, IOError):
+                continue
         else:
             # noinspection PyUnboundLocalVariable
             raise ValueError(f'There is no such driver by url {url}.')

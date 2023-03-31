@@ -3,7 +3,7 @@ from typing import Optional
 
 from .core import utils
 from .core.download_manager import DownloadManager
-from .core.manager import DriverManager, INDEX_SITE_ROOT
+from .core.manager import DriverManager, INDEX_SITE_ROOT, NO_INDEX_SITE
 from .drivers.edge import EdgeChromiumDriver
 from .drivers.ie import IEDriver
 
@@ -19,6 +19,7 @@ class IEDriverManager(DriverManager):
             latest_release_url: str = f"{INDEX_SITE_ROOT}/ie/LATEST_RELEASE",
             cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,
+            use_index=not NO_INDEX_SITE,
     ):
         super().__init__(path, cache_valid_range, download_manager=download_manager)
         self.driver = IEDriver(
@@ -28,6 +29,7 @@ class IEDriverManager(DriverManager):
             url=url,
             latest_release_url=latest_release_url,
             http_client=self.http_client,
+            use_index=use_index,
         )
 
     def install(self) -> str:
@@ -45,6 +47,7 @@ class EdgeChromiumDriverManager(DriverManager):
             latest_release_url: str = f"{INDEX_SITE_ROOT}/edge/LATEST_RELEASE",
             cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,
+            use_index=not NO_INDEX_SITE,
     ):
         super().__init__(path, cache_valid_range, download_manager=download_manager)
         self.driver = EdgeChromiumDriver(
@@ -54,6 +57,7 @@ class EdgeChromiumDriverManager(DriverManager):
             url=url,
             latest_release_url=latest_release_url,
             http_client=self.http_client,
+            use_index=use_index,
         )
 
     def install(self) -> str:

@@ -1,5 +1,3 @@
-import requests
-
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
 from webdriver_manager.core.utils import OSType, ChromeType
@@ -14,15 +12,11 @@ class EdgeChromiumDriver(Driver):
             os_type,
             url,
             latest_release_url,
-            http_client
+            http_client,
+            use_index=False,
     ):
         super(EdgeChromiumDriver, self).__init__(
-            name,
-            version,
-            os_type,
-            url,
-            latest_release_url,
-            http_client
+            name, version, os_type, url, latest_release_url, http_client, use_index,
         )
         self._os_type = self.get_os_type()
 
@@ -54,12 +48,8 @@ class EdgeChromiumDriver(Driver):
         return resp.content.decode('utf-16').rstrip()
 
     def get_driver_download_url(self):
-        url = f"{self._url}/{self.get_driver_version_to_download()}/{self._name}_{self._os_type}.zip_index"
-        resp = requests.get(url)
-        if resp.ok:
-            return resp.text.strip()
-        else:
-            raise ValueError(f'There is no such driver by url {url}.')
+        url = Driver.get_driver_download_url(self)
+        return self._url_postprocess(url)
 
     def get_browser_type(self):
         return ChromeType.MSEDGE

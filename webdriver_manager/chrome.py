@@ -2,7 +2,7 @@ import os
 from typing import Optional
 
 from .core.download_manager import DownloadManager
-from .core.manager import DriverManager, INDEX_SITE_ROOT
+from .core.manager import DriverManager, INDEX_SITE_ROOT, NO_INDEX_SITE
 from .core.utils import ChromeType
 from .drivers.chrome import ChromeDriver
 
@@ -19,6 +19,7 @@ class ChromeDriverManager(DriverManager):
             chrome_type: str = ChromeType.GOOGLE,
             cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,
+            use_index=not NO_INDEX_SITE,
     ):
         super().__init__(
             path,
@@ -33,6 +34,7 @@ class ChromeDriverManager(DriverManager):
             latest_release_url=latest_release_url,
             chrome_type=chrome_type,
             http_client=self.http_client,
+            use_index=use_index,
         )
 
     def install(self) -> str:

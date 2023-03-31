@@ -12,15 +12,11 @@ class IEDriver(Driver):
             os_type,
             url,
             latest_release_url,
-            http_client
+            http_client,
+            use_index=False,
     ):
         super(IEDriver, self).__init__(
-            name,
-            version,
-            os_type,
-            url,
-            latest_release_url,
-            http_client
+            name, version, os_type, url, latest_release_url, http_client, use_index,
         )
         self.os_type = "x64" if os_type == "win64" else "Win32"
         # todo: for 'browser_version' implement installed IE version detection
@@ -51,11 +47,7 @@ class IEDriver(Driver):
         log(f"Getting latest ie release info for {driver_version_to_download}")
         filename = f"{self._name}_{self.os_type}_{driver_version_to_download}.zip"
         url = f'{self._url}/selenium-{driver_version_to_download}/{filename}'
-        resp = requests.get(url)
-        if resp.ok:
-            return resp.text.strip()
-        else:
-            raise ValueError(f'There is no such driver by url {url}.')
+        return self._url_postprocess(url)
 
     @property
     def latest_release_url(self):

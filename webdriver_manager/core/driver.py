@@ -1,5 +1,8 @@
-from webdriver_manager.core import utils
-from webdriver_manager.core.utils import get_browser_version_from_os
+import requests
+
+from .logger import log
+from .utils import get_browser_version_from_os
+from .utils import os_type as _utils_os_type
 
 
 class Driver(object):
@@ -10,17 +13,20 @@ class Driver(object):
             os_type,
             url,
             latest_release_url,
-            http_client):
+            http_client,
+            use_index=False,
+    ):
         self._name = name
         self._url = url
         self._version = version
         self._os_type = os_type
         if os_type is None:
-            self._os_type = utils.os_type()
+            self._os_type = _utils_os_type()
         self._latest_release_url = latest_release_url
         self._http_client = http_client
         self._browser_version = None
         self._driver_to_download_version = None
+        self._use_index = bool(use_index)
 
     def get_name(self):
         return self._name
@@ -70,3 +76,23 @@ class Driver(object):
             f"{driver_binary_name}.exe" if "win" in self.get_os_type() else driver_binary_name
         )
         return driver_binary_name
+
+    def _url_postprocess(self, url):
+        if self._use_index:
+            index_url = f'{url}_index'
+            log(f'Fetching resource url from index {index_url!r} ...')
+            resp = requests.get(index_url)
+            if resp.ok:
+                return resp.text.strip()
+            elif resp.status_code == 404:
+                raise ValueError(f'There is no such driver by url of index - {url}.')
+            else:
+                resp.raise_for_status()
+        else:
+            resp = requests.head(url)
+            if resp.ok:
+                return url
+            elif resp.status_code == 404:
+                raise ValueError(f'There is no such driver by url {url}.')
+            else:
+                resp.raise_for_status()
