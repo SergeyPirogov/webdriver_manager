@@ -212,6 +212,25 @@ This is the index site of this mirror, default value
 is `https://gitee.com/hansbug/browser_drivers_mirror_index/raw/master`. If you need to change this, just
 set `INDEX_SITE_ROOT`'s environment variable.
 
+### `NO_INDEX_SITE`
+
+If this env is set, value of `INDEX_SITE_ROOT` will be treated as the huggingface mirror instead of url index site.
+
+For example, we use the [index site on gitee](https://gitee.com/hansbug/browser_drivers_mirror_index) to reduce the
+direct accesses to https://huggingface.co :
+
+```bash
+export INDEX_SITE_ROOT=https://gitee.com/hansbug/browser_drivers_mirror_index/raw/master
+export NO_INDEX_SITE=
+```
+
+When you do not need the index site, just directly access the huggingface, you can set the env as the following code
+
+```bash
+export INDEX_SITE_ROOT=https://huggingface.co/HansBug/browser_drivers_mirror/resolve/main
+export NO_INDEX_SITE=1
+```
+
 ### `WDM_LOG`
 
 Turn off hf-webdriver-manager logs use:
