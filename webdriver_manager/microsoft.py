@@ -1,11 +1,11 @@
 import os
 from typing import Optional
 
-from webdriver_manager.core import utils
-from webdriver_manager.core.download_manager import DownloadManager
-from webdriver_manager.core.manager import DriverManager
-from webdriver_manager.drivers.edge import EdgeChromiumDriver
-from webdriver_manager.drivers.ie import IEDriver
+from .core import utils
+from .core.download_manager import DownloadManager
+from .core.manager import DriverManager, INDEX_SITE_ROOT
+from .drivers.edge import EdgeChromiumDriver
+from .drivers.ie import IEDriver
 
 
 class IEDriverManager(DriverManager):
@@ -15,9 +15,8 @@ class IEDriverManager(DriverManager):
             os_type: Optional[str] = None,
             path: Optional[str] = None,
             name: str = "IEDriverServer",
-            url: str = "https://huggingface.co/HansBug/browser_drivers_mirror/resolve/main/ie",
-            latest_release_url: str = "https://huggingface.co/HansBug/browser_drivers_mirror"
-                                      "/resolve/main/ie/LATEST_RELEASE",
+            url: str = f"{INDEX_SITE_ROOT}/ie",
+            latest_release_url: str = f"{INDEX_SITE_ROOT}/ie/LATEST_RELEASE",
             cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,
     ):
@@ -42,9 +41,8 @@ class EdgeChromiumDriverManager(DriverManager):
             os_type: str = utils.os_type(),
             path: Optional[str] = None,
             name: str = "edgedriver",
-            url: str = "https://huggingface.co/HansBug/browser_drivers_mirror/resolve/main/edge",
-            latest_release_url: str = "https://huggingface.co/HansBug/browser_drivers_mirror"
-                                      "/resolve/main/edge/LATEST_RELEASE",
+            url: str = f"{INDEX_SITE_ROOT}/edge",
+            latest_release_url: str = f"{INDEX_SITE_ROOT}/edge/LATEST_RELEASE",
             cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,
     ):

@@ -1,6 +1,13 @@
+import os
+
 from webdriver_manager.core.download_manager import WDMDownloadManager
 from webdriver_manager.core.driver_cache import DriverCache
 from webdriver_manager.core.logger import log
+
+INDEX_SITE_ROOT = os.environ.get(
+    'INDEX_SITE_ROOT',
+    'https://gitee.com/hansbug/browser_drivers_mirror_index/raw/master',
+)
 
 
 class DriverManager(object):
@@ -27,6 +34,8 @@ class DriverManager(object):
         if binary_path:
             return binary_path
 
-        file = self._download_manager.download_file(driver.get_driver_download_url())
+        url = driver.get_driver_download_url()
+        log(f'URL to download: {url} ...')
+        file = self._download_manager.download_file(url)
         binary_path = self.driver_cache.save_file_to_cache(driver, file)
         return binary_path

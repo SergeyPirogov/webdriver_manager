@@ -34,13 +34,14 @@ class GeckoDriver(Driver):
     def get_driver_download_url(self):
         """Like https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz"""
         driver_version_to_download = self.get_driver_version_to_download()
-        log(f"Getting latest opera release info for {driver_version_to_download}")
+        log(f"Getting latest firefox release info for {driver_version_to_download}")
         _exts = ['tar.gz', 'zip', 'gz']
         for ext in _exts:
-            name = f"{self.get_name()}-{driver_version_to_download}-{self._os_type}.{ext}"
+            name = f"{self.get_name()}-{driver_version_to_download}-{self._os_type}.{ext}_index"
             url = f'{self._url}/{driver_version_to_download}/{name}'
-            if requests.head(url).ok:
-                return url
+            resp = requests.get(url)
+            if resp.ok:
+                return resp.text.strip()
         else:
             # noinspection PyUnboundLocalVariable
             raise ValueError(f'There is no such driver by url {url}.')

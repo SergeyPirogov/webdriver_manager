@@ -206,6 +206,12 @@ driver_binary = FirefoxDriverManager(version=version).install()
 **webdriver_manager** has several configuration variables you can be interested in.
 Any variable can be set using either .env file or via python directly
 
+### `INDEX_SITE_ROOT`
+
+This is the index site of this mirror, default value
+is `https://gitee.com/hansbug/browser_drivers_mirror_index/raw/master`. If you need to change this, just
+set `INDEX_SITE_ROOT`'s environment variable.
+
 ### `WDM_LOG`
 
 Turn off hf-webdriver-manager logs use:

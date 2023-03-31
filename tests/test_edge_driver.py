@@ -33,10 +33,7 @@ def test_edge_manager_with_wrong_version():
             os_type='win64',
         ).install()
 
-    assert "There is no such driver by url " \
-           "https://huggingface.co/HansBug/browser_drivers_mirror/" \
-           "resolve/main/edge/0.2/edgedriver" \
-           in ex.value.args[0]
+    assert "There is no such driver by url " in ex.value.args[0]
 
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64', 'mac64', 'linux64'])

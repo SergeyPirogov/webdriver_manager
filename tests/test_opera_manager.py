@@ -57,10 +57,7 @@ def test_opera_driver_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
         OperaDriverManager("0.2").install()
 
-    assert "There is no such driver by url " \
-           "https://huggingface.co/HansBug/browser_drivers_mirror/" \
-           "resolve/main/opera/0.2/operadriver" \
-           in ex.value.args[0]
+    assert "There is no such driver by url " in ex.value.args[0]
 
 
 @pytest.mark.parametrize('path', ['.', None])

@@ -46,9 +46,11 @@ class ChromeDriver(Driver):
         if version.parse(driver_version_to_download) < version.parse("106.0.5249.61"):
             os_type = os_type.replace("mac_arm64", "mac64_m1")
 
-        url = f"{self._url}/{driver_version_to_download}/{self.get_name()}_{os_type}.zip"
-        if requests.head(url).ok:
-            return url
+        log(f"Getting latest chrome release info for {driver_version_to_download}")
+        url = f"{self._url}/{driver_version_to_download}/{self.get_name()}_{os_type}.zip_index"
+        resp = requests.get(url)
+        if resp.ok:
+            return resp.text.strip()
         else:
             raise ValueError(f'There is no such driver by url {url}.')
 

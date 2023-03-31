@@ -26,9 +26,10 @@ class OperaDriver(Driver):
         driver_version_to_download = self.get_driver_version_to_download()
         log(f"Getting latest opera release info for {driver_version_to_download}")
         name = "{0}_{1}.zip".format(self.get_name(), self.get_os_type())
-        url = f'{self._url}/{driver_version_to_download}/{name}'
-        if requests.head(url).ok:
-            return url
+        url = f'{self._url}/{driver_version_to_download}/{name}_index'
+        resp = requests.get(url)
+        if resp.ok:
+            return resp.text.strip()
         else:
             raise ValueError(f'There is no such driver by url {url}.')
 

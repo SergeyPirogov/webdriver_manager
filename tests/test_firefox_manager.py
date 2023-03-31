@@ -34,10 +34,7 @@ def test_gecko_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
         GeckoDriverManager("0.2").install()
 
-    assert "There is no such driver by url " \
-           "https://huggingface.co/HansBug/browser_drivers_mirror/" \
-           "resolve/main/firefox/0.2/geckodriver-0.2" \
-           in ex.value.args[0]
+    assert "There is no such driver by url " in ex.value.args[0]
 
 
 def test_gecko_manager_with_correct_version_and_token(delete_drivers_dir):

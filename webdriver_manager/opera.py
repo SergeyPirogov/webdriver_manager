@@ -1,9 +1,9 @@
 import os
 from typing import Optional
 
-from webdriver_manager.core.download_manager import DownloadManager
-from webdriver_manager.core.manager import DriverManager
-from webdriver_manager.drivers.opera import OperaDriver
+from .core.download_manager import DownloadManager
+from .core.manager import DriverManager, INDEX_SITE_ROOT
+from .drivers.opera import OperaDriver
 
 
 class OperaDriverManager(DriverManager):
@@ -13,9 +13,8 @@ class OperaDriverManager(DriverManager):
             os_type: Optional[str] = None,
             path: Optional[str] = None,
             name: str = "operadriver",
-            url: str = "https://huggingface.co/HansBug/browser_drivers_mirror/resolve/main/opera",
-            latest_release_url: str = "https://huggingface.co/HansBug/browser_drivers_mirror"
-                                      "/resolve/main/opera/LATEST_RELEASE",
+            url: str = f"{INDEX_SITE_ROOT}/opera",
+            latest_release_url: str = f"{INDEX_SITE_ROOT}/opera/LATEST_RELEASE",
             cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,
     ):

@@ -1,10 +1,10 @@
 import os
 from typing import Optional
 
-from webdriver_manager.core.download_manager import DownloadManager
-from webdriver_manager.core.manager import DriverManager
-from webdriver_manager.core.utils import ChromeType
-from webdriver_manager.drivers.chrome import ChromeDriver
+from .core.download_manager import DownloadManager
+from .core.manager import DriverManager, INDEX_SITE_ROOT
+from .core.utils import ChromeType
+from .drivers.chrome import ChromeDriver
 
 
 class ChromeDriverManager(DriverManager):
@@ -14,8 +14,8 @@ class ChromeDriverManager(DriverManager):
             os_type: Optional[str] = None,
             path: Optional[str] = None,
             name: str = "chromedriver",
-            url: str = 'https://huggingface.co/HansBug/browser_drivers_mirror/resolve/main/google',
-            latest_release_url: str = 'https://huggingface.co/HansBug/browser_drivers_mirror/resolve/main/google/LATEST_RELEASE',
+            url: str = f'{INDEX_SITE_ROOT}/google',
+            latest_release_url: str = f'{INDEX_SITE_ROOT}/google/LATEST_RELEASE',
             chrome_type: str = ChromeType.GOOGLE,
             cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,

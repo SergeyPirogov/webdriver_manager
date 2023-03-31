@@ -51,9 +51,9 @@ class IEDriver(Driver):
         log(f"Getting latest ie release info for {driver_version_to_download}")
         filename = f"{self._name}_{self.os_type}_{driver_version_to_download}.zip"
         url = f'{self._url}/selenium-{driver_version_to_download}/{filename}'
-
-        if requests.head(url).ok:
-            return url
+        resp = requests.get(url)
+        if resp.ok:
+            return resp.text.strip()
         else:
             raise ValueError(f'There is no such driver by url {url}.')
 
