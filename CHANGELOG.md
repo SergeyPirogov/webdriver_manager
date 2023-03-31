@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.2
+
+* Support index site on [gitee](https://gitee.com/hansbug/browser_drivers_mirror_index)
+* Remove some useless code
+
 ## v0.0.1
 
 * Migrate from [SergeyPirogov/webdriver_manager](https://github.com/SergeyPirogov/webdriver_manager).
