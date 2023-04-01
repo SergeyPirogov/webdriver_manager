@@ -7,7 +7,7 @@ Overview:
 __TITLE__ = "hf-webdriver-manager"
 
 #: Version of this project.
-__VERSION__ = "0.0.2"
+__VERSION__ = "0.1.0"
 
 #: Short description of the project, will be included in ``setup.py``.
 __DESCRIPTION__ = 'Library provides the way to automatically manage drivers for different browsers.'
