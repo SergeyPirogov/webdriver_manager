@@ -24,17 +24,16 @@ class EdgeChromiumDriver(Driver):
         """Stable driver version when browser version was not determined."""
         stable_url = self._latest_release_url.replace("LATEST_RELEASE", "LATEST_STABLE")
         resp = self._http_client.get(url=stable_url)
-        return resp.content.decode('utf-16').rstrip()
+        return resp.text.rstrip()
 
     def get_latest_release_version(self) -> str:
         determined_browser_version = self.get_browser_version_from_os()
         log(f"Get LATEST {self._name} version for Edge {determined_browser_version}")
+        if self._version == "latest" or determined_browser_version is None:
+            edge_driver_version_to_download = self.get_stable_release_version()
+        else:
+            edge_driver_version_to_download = determined_browser_version
 
-        edge_driver_version_to_download = (
-            self.get_stable_release_version()
-            if (self._version == "latest" or determined_browser_version is None)
-            else determined_browser_version
-        )
         major_edge_version = edge_driver_version_to_download.split(".")[0]
         latest_release_url = {
             OSType.WIN
@@ -45,7 +44,7 @@ class EdgeChromiumDriver(Driver):
             in self._os_type: f"{self._latest_release_url}_{major_edge_version}_LINUX",
         }[True]
         resp = self._http_client.get(url=latest_release_url)
-        return resp.content.decode('utf-16').rstrip()
+        return resp.text.rstrip()
 
     def get_driver_download_url(self):
         url = Driver.get_driver_download_url(self)

@@ -18,7 +18,7 @@ class IEDriver(Driver):
         super(IEDriver, self).__init__(
             name, version, os_type, url, latest_release_url, http_client, use_index,
         )
-        self.os_type = "x64" if os_type == "win64" else "Win32"
+        self.os_type = "x64" if self._os_type == "win64" else "Win32"
         # todo: for 'browser_version' implement installed IE version detection
         #       like chrome or firefox
 
@@ -35,7 +35,7 @@ class IEDriver(Driver):
         else:
             raise ValueError(f'Unknown version of ie webdriver - {version!r}.')
 
-    def _get_version(self):
+    def get_driver_version_to_download(self):
         if not self._driver_to_download_version:
             self._driver_to_download_version = self._get_version_to_fulfill(self._version) \
                 if self._version not in (None, "latest") else self.get_latest_release_version()
@@ -43,7 +43,7 @@ class IEDriver(Driver):
 
     def get_driver_download_url(self):
         """Like https://github.com/seleniumhq/selenium/releases/download/3.141.59/IEDriverServer_Win32_3.141.59.zip"""
-        driver_version_to_download = self._get_version()
+        driver_version_to_download = self.get_driver_version_to_download()
         log(f"Getting latest ie release info for {driver_version_to_download}")
         filename = f"{self._name}_{self.os_type}_{driver_version_to_download}.zip"
         url = f'{self._url}/selenium-{driver_version_to_download}/{filename}'
