@@ -74,7 +74,7 @@ jobs:
 
       - name: Run tests on Linux (with xvfb)
         if: runner.os == 'Linux'
-        uses: GabrielBB/xvfb-action@v1
+        uses: coactions/setup-xvfb@v1
         env:
           WDM_LOG: ${{ matrix.wdm-log }}
         with:
