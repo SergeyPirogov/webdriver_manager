@@ -12,14 +12,10 @@ The main idea is to simplify management of binary drivers for different browsers
 For now support:
 
 - [ChromeDriver](#use-with-chrome)
-
-- [GeckoDriver](#use-with-firefox)
-
-- [IEDriver](#use-with-ie)
-
-- [OperaDriver](#use-with-opera)
-
 - [EdgeChromiumDriver](#use-with-edge)
+- [GeckoDriver](#use-with-firefox)
+- [IEDriver](#use-with-ie)
+- [OperaDriver](#use-with-opera)
 
 Compatible with Selenium 4.x and below.
 
@@ -101,6 +97,25 @@ from webdriver_manager.core.utils import ChromeType
 driver = webdriver.Chrome(service=BraveService(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install()))
 ```
 
+
+#### Use with Edge
+
+```python
+# selenium 3
+from selenium import webdriver
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
+
+driver = webdriver.Edge(EdgeChromiumDriverManager().install())
+```
+```python
+# selenium 4
+from selenium import webdriver
+from selenium.webdriver.edge.service import Service as EdgeService
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
+
+driver = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()))
+```
+
 #### Use with Firefox
 
 ```python
@@ -137,45 +152,42 @@ from webdriver_manager.microsoft import IEDriverManager
 driver = webdriver.Ie(service=IEService(IEDriverManager().install()))
 ```
 
-#### Use with Edge
-
-```python
-# selenium 3
-from selenium import webdriver
-from webdriver_manager.microsoft import EdgeChromiumDriverManager
-
-driver = webdriver.Edge(EdgeChromiumDriverManager().install())
-```
-```python
-# selenium 4
-from selenium import webdriver
-from selenium.webdriver.edge.service import Service as EdgeService
-from webdriver_manager.microsoft import EdgeChromiumDriverManager
-
-driver = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()))
-```
 
 #### Use with Opera
 
 ```python
-# selenium 3 & 4
+# selenium 3
 from selenium import webdriver
+from selenium.webdriver.chrome import service
 from webdriver_manager.opera import OperaDriverManager
 
-driver = webdriver.Opera(executable_path=OperaDriverManager().install())
+webdriver_service = service.Service(OperaDriverManager().install())
+webdriver_service.start()
+
+driver = webdriver.Remote(webdriver_service.service_url, webdriver.DesiredCapabilities.OPERA)
+```
+```python
+# selenium 4
+from selenium import webdriver
+from selenium.webdriver.chrome import service
+from webdriver_manager.opera import OperaDriverManager
+
+webdriver_service = service.Service(OperaDriverManager().install())
+webdriver_service.start()
+
+options = webdriver.ChromeOptions()
+options.add_experimental_option('w3c', True)
+
+driver = webdriver.Remote(webdriver_service.service_url, options=options)
 ```
 
 If the Opera browser is installed in a location other than `C:/Program Files` or `C:/Program Files (x86)` on windows
 and `/usr/bin/opera` for all unix variants and mac, then use the below code,
 
 ```python
-from selenium import webdriver
-from webdriver_manager.opera import OperaDriverManager
-
 options = webdriver.ChromeOptions()
-options.add_argument('allow-elevated-browser')
-options.binary_location = "C:\\Users\\USERNAME\\FOLDERLOCATION\\Opera\\VERSION\\opera.exe"
-driver = webdriver.Opera(executable_path=OperaDriverManager().install(), options=options)
+options.binary_location = "path/to/opera.exe"
+driver = webdriver.Remote(webdriver_service.service_url, options=options)
 ```
 
 #### Get browser version from path
