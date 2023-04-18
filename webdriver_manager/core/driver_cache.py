@@ -78,12 +78,12 @@ class DriverCache(object):
         driver_name = driver.get_name()
         browser_version = driver.get_browser_version_from_os()
         driver_version = self.get_cache_key_driver_version(driver)
-
+        browser_type = driver.get_browser_type()
         metadata = self.load_metadata_content()
 
         key = self.__get_metadata_key(driver)
         if key not in metadata:
-            log(f'There is no [{os_type}] {driver_name} "{driver_version}" for browser "{browser_version}" in cache')
+            log(f'There is no [{os_type}] {driver_name} "{driver_version}" for browser {browser_type} "{browser_version}" in cache')
             return None
 
         driver_info = metadata[key]
