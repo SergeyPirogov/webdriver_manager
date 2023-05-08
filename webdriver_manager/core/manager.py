@@ -7,7 +7,14 @@ from .logger import log
 
 
 def get_driver_site():
-    return os.environ.get('DRIVER_SITE', 'https://huggingface.co/datasets/HansBug/browser_drivers_mirror/resolve/main')
+    drive_site = os.environ.get(
+        'DRIVER_SITE',
+        'https://huggingface.co/datasets/HansBug/browser_drivers_mirror/resolve/main'
+    )
+    if not drive_site.endswith('/'):
+        drive_site = f'{drive_site}/'
+
+    return drive_site
 
 
 class DriverManager(object):
