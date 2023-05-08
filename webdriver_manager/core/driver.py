@@ -1,6 +1,5 @@
 import requests
 
-from .logger import log
 from .utils import get_browser_version_from_os
 from .utils import os_type as _utils_os_type
 
@@ -14,7 +13,6 @@ class Driver(object):
             url,
             latest_release_url,
             http_client,
-            use_index=False,
     ):
         self._name = name
         self._url = url
@@ -26,7 +24,6 @@ class Driver(object):
         self._http_client = http_client
         self._browser_version = None
         self._driver_to_download_version = None
-        self._use_index = bool(use_index)
 
     def get_name(self):
         return self._name
@@ -78,21 +75,10 @@ class Driver(object):
         return driver_binary_name
 
     def _url_postprocess(self, url):
-        if self._use_index:
-            index_url = f'{url}_index'
-            log(f'Fetching resource url from index {index_url!r} ...')
-            resp = requests.get(index_url)
-            if resp.ok:
-                return resp.text.strip()
-            elif resp.status_code == 404:
-                raise ValueError(f'There is no such driver by url of index - {url}.')
-            else:
-                resp.raise_for_status()
+        resp = requests.head(url)
+        if resp.ok:
+            return url
+        elif resp.status_code == 404:
+            raise ValueError(f'There is no such driver by url {url}.')
         else:
-            resp = requests.head(url)
-            if resp.ok:
-                return url
-            elif resp.status_code == 404:
-                raise ValueError(f'There is no such driver by url {url}.')
-            else:
-                resp.raise_for_status()
+            resp.raise_for_status()

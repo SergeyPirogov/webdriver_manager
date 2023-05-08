@@ -16,10 +16,9 @@ class ChromeDriver(Driver):
             latest_release_url,
             http_client,
             chrome_type=ChromeType.GOOGLE,
-            use_index=False,
     ):
         super(ChromeDriver, self).__init__(
-            name, version, os_type, url, latest_release_url, http_client, use_index
+            name, version, os_type, url, latest_release_url, http_client
         )
         self._browser_type = chrome_type
         self._os_type = self.get_os_type()

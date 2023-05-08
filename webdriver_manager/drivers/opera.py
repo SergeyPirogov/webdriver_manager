@@ -11,10 +11,9 @@ class OperaDriver(Driver):
             url,
             latest_release_url,
             http_client,
-            use_index=False,
     ):
         super(OperaDriver, self).__init__(
-            name, version, os_type, url, latest_release_url, http_client, use_index,
+            name, version, os_type, url, latest_release_url, http_client,
         )
 
     def get_latest_release_version(self) -> str:

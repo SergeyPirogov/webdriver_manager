@@ -1,8 +1,9 @@
 import os
 from typing import Optional
+from urllib.parse import urljoin
 
 from .core.download_manager import DownloadManager, WDMDownloadManager
-from .core.manager import DriverManager, INDEX_SITE_ROOT, NO_INDEX_SITE
+from .core.manager import DriverManager, get_driver_site
 from .core.utils import ChromeType
 from .drivers.chrome import ChromeDriver
 
@@ -14,23 +15,21 @@ class ChromeDriverManager(DriverManager):
             os_type: Optional[str] = None,
             path: Optional[str] = None,
             name: str = "chromedriver",
-            url: str = f'{INDEX_SITE_ROOT}/google',
-            latest_release_url: str = f'{INDEX_SITE_ROOT}/google/LATEST_RELEASE',
+            url: str = f'google',
+            latest_release_url: str = f'google/LATEST_RELEASE',
             chrome_type: str = ChromeType.GOOGLE,
             cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,
-            use_index=not NO_INDEX_SITE,
     ):
         download_manager = download_manager or WDMDownloadManager()
         driver = ChromeDriver(
             name=name,
             version=version,
             os_type=os_type,
-            url=url,
-            latest_release_url=latest_release_url,
+            url=urljoin(get_driver_site(), url),
+            latest_release_url=urljoin(get_driver_site(), latest_release_url),
             chrome_type=chrome_type,
             http_client=download_manager.http_client,
-            use_index=use_index,
         )
         DriverManager.__init__(
             self, driver, path,

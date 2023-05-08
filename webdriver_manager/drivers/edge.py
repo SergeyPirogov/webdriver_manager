@@ -13,10 +13,9 @@ class EdgeChromiumDriver(Driver):
             url,
             latest_release_url,
             http_client,
-            use_index=False,
     ):
         super(EdgeChromiumDriver, self).__init__(
-            name, version, os_type, url, latest_release_url, http_client, use_index,
+            name, version, os_type, url, latest_release_url, http_client
         )
         self._os_type = self.get_os_type()
 

@@ -5,11 +5,9 @@ from .driver import Driver
 from .driver_cache import DriverCache
 from .logger import log
 
-INDEX_SITE_ROOT = os.environ.get(
-    'INDEX_SITE_ROOT',
-    'https://gitee.com/hansbug/browser_drivers_mirror_index/raw/master',
-)
-NO_INDEX_SITE = bool(os.environ.get('NO_INDEX_SITE', '').strip())
+
+def get_driver_site():
+    return os.environ.get('DRIVER_SITE', 'https://huggingface.co/datasets/HansBug/browser_drivers_mirror/resolve/main/')
 
 
 class DriverManager(object):

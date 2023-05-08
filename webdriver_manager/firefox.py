@@ -1,8 +1,9 @@
 import os
 from typing import Optional
+from urllib.parse import urljoin
 
 from .core.download_manager import DownloadManager, WDMDownloadManager
-from .core.manager import DriverManager, INDEX_SITE_ROOT, NO_INDEX_SITE
+from .core.manager import DriverManager, get_driver_site
 from .drivers.firefox import GeckoDriver
 
 
@@ -13,21 +14,20 @@ class GeckoDriverManager(DriverManager):
             os_type: Optional[str] = None,
             path: Optional[str] = None,
             name: str = "geckodriver",
-            url: str = f"{INDEX_SITE_ROOT}/firefox",
-            latest_release_url: str = f"{INDEX_SITE_ROOT}/firefox/LATEST_RELEASE",
+            url: str = f"firefox",
+            latest_release_url: str = f"firefox/LATEST_RELEASE",
             cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,
-            use_index=not NO_INDEX_SITE,
     ):
         download_manager = download_manager or WDMDownloadManager()
+
         driver = GeckoDriver(
             version=version,
             os_type=os_type,
             name=name,
-            url=url,
-            latest_release_url=latest_release_url,
+            url=urljoin(get_driver_site(), url),
+            latest_release_url=urljoin(get_driver_site(), latest_release_url),
             http_client=download_manager.http_client,
-            use_index=use_index,
         )
         DriverManager.__init__(
             self, driver, path,
