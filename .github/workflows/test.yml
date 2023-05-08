@@ -1,26 +1,6 @@
 name: "Tests"
 on:
   push:
-    branches:
-      - master
-    paths-ignore:
-      - CHANGELOG.md
-      - README.md
-      - LICENSE
-      - LICENSE.txt
-      - release-process.rst
-      - .gitignore
-      - .coveragerc
-      - .github/workflows/deploy.yml
-      - .github/workflows/codeql-analysis.yml
-      - .github/workflows/FUNDING.yml
-      - setup.cfg
-      - setup.py
-      - webdriver_manager/__init__.py
-
-  pull_request:
-    branches:
-      - master
     paths-ignore:
       - CHANGELOG.md
       - README.md
