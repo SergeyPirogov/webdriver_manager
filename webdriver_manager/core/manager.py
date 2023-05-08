@@ -7,7 +7,7 @@ from .logger import log
 
 
 def get_driver_site():
-    return os.environ.get('DRIVER_SITE', 'https://huggingface.co/datasets/HansBug/browser_drivers_mirror/resolve/main/')
+    return os.environ.get('DRIVER_SITE', 'https://huggingface.co/datasets/HansBug/browser_drivers_mirror/resolve/main')
 
 
 class DriverManager(object):

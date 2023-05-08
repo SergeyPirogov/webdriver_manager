@@ -106,7 +106,6 @@ from webdriver_manager.core.utils import ChromeType
 driver = webdriver.Chrome(service=BraveService(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install()))
 ```
 
-
 #### Use with Edge
 
 ```python
@@ -116,6 +115,7 @@ from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
 driver = webdriver.Edge(EdgeChromiumDriverManager().install())
 ```
+
 ```python
 # selenium 4
 from selenium import webdriver
@@ -162,7 +162,6 @@ from webdriver_manager.microsoft import IEDriverManager
 
 driver = webdriver.Ie(service=IEService(IEDriverManager().install()))
 ```
-
 
 #### Use with Opera
 
@@ -218,30 +217,10 @@ driver_binary = FirefoxDriverManager(version=version).install()
 **webdriver_manager** has several configuration variables you can be interested in.
 Any variable can be set using either .env file or via python directly
 
-### `INDEX_SITE_ROOT`
+### `DRIVER_SITE`
 
-This is the index site of this mirror, default value
-is `https://gitee.com/hansbug/browser_drivers_mirror_index/raw/master`. If you need to change this, just
-set `INDEX_SITE_ROOT`'s environment variable.
-
-### `NO_INDEX_SITE`
-
-If this env is set, value of `INDEX_SITE_ROOT` will be treated as the huggingface mirror instead of url index site.
-
-For example, we use the [index site on gitee](https://gitee.com/hansbug/browser_drivers_mirror_index) to reduce the
-direct accesses to https://huggingface.co :
-
-```bash
-export INDEX_SITE_ROOT=https://gitee.com/hansbug/browser_drivers_mirror_index/raw/master
-export NO_INDEX_SITE=
-```
-
-When you do not need the index site, just directly access the huggingface, you can set the env as the following code
-
-```bash
-export INDEX_SITE_ROOT=https://huggingface.co/HansBug/browser_drivers_mirror/resolve/main
-export NO_INDEX_SITE=1
-```
+You can change the resource address of the Selenium browser driver by setting the `DRIVER_SITE` environment variable.
+The default value is `https://huggingface.co/datasets/HansBug/browser_drivers_mirror/resolve/main`.
 
 ### `WDM_LOG`
 
