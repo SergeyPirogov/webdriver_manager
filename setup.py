@@ -21,7 +21,7 @@ setuptools.setup(
     python_requires=">=3.7",
     long_description=readme,
     long_description_content_type="text/markdown",
-    packages=setuptools.find_packages(exclude=['tests']),
+    packages=setuptools.find_packages(include=['webdriver_manager*']),
     include_package_data=True,
     version='3.8.6',
     description='Library provides the way to automatically manage drivers for different browsers',
