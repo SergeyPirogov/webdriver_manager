@@ -19,6 +19,7 @@ class ChromeDriverManager(DriverManager):
             chrome_type: str = ChromeType.GOOGLE,
             cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,
+            download_url_template: Optional[str] = None,
     ):
         super().__init__(
             path,
@@ -33,6 +34,7 @@ class ChromeDriverManager(DriverManager):
             latest_release_url=latest_release_url,
             chrome_type=chrome_type,
             http_client=self.http_client,
+            download_url_template=download_url_template,
         )
 
     def install(self) -> str:

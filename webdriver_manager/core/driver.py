@@ -12,7 +12,8 @@ class Driver(object):
             os_type,
             url,
             latest_release_url,
-            http_client):
+            http_client,
+            download_url_template=None):
         self._name = name
         self._url = url
         self._version = version
@@ -23,6 +24,7 @@ class Driver(object):
         self._http_client = http_client
         self._browser_version = None
         self._driver_to_download_version = None
+        self._download_url_template = download_url_template if download_url_template is not None else "{url}/{version}/{name}_{os_type}.zip"
 
     @property
     def auth_header(self):
@@ -39,7 +41,10 @@ class Driver(object):
         return self._os_type
 
     def get_driver_download_url(self):
-        return f"{self._url}/{self.get_driver_version_to_download()}/{self._name}_{self._os_type}.zip"
+        return self._download_url_template.format(url=self._url,
+                                                  version=self.get_driver_version_to_download(),
+                                                  name=self.get_name(),
+                                                  os_type=self._os_type)
 
     def get_driver_version_to_download(self):
         """

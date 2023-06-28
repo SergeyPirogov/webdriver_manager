@@ -16,9 +16,10 @@ class ChromeDriver(Driver):
             latest_release_url,
             http_client,
             chrome_type=ChromeType.GOOGLE,
+            download_url_template=None,
     ):
         super(ChromeDriver, self).__init__(
-            name, version, os_type, url, latest_release_url, http_client
+            name, version, os_type, url, latest_release_url, http_client, download_url_template=download_url_template
         )
         self._browser_type = chrome_type
         self._os_type = self.get_os_type()
@@ -45,7 +46,10 @@ class ChromeDriver(Driver):
         if version.parse(driver_version_to_download) < version.parse("106.0.5249.61"):
             os_type = os_type.replace("mac_arm64", "mac64_m1")
 
-        return f"{self._url}/{driver_version_to_download}/{self.get_name()}_{os_type}.zip"
+        return self._download_url_template.format(url=self._url,
+                                                  version=driver_version_to_download,
+                                                  name=self.get_name(),
+                                                  os_type=os_type)
 
     def get_browser_type(self):
         return self._browser_type
