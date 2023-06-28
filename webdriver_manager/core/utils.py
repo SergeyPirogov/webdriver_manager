@@ -12,10 +12,11 @@ from webdriver_manager.core.logger import log
 
 
 class File(object):
-    def __init__(self, stream):
+    def __init__(self, stream, ext=""):
         self.content = stream.content
         self.__stream = stream
         self.__temp_name = "driver"
+        self._ext = ext
 
     @property
     def filename(self) -> str:
@@ -24,7 +25,11 @@ class File(object):
                 "filename=(.+)", self.__stream.headers["content-disposition"]
             )[0]
         except KeyError:
-            filename = f"{self.__temp_name}.zip"
+            if self._ext == "":
+                filename = f"{self.__temp_name}.zip"
+            else:
+                filename = f"{self.__temp_name}{self._ext}"
+
         except IndexError:
             filename = f"{self.__temp_name}.exe"
 

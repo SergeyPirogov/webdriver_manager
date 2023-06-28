@@ -1,8 +1,14 @@
 import os
+import io
+import typing
 import tarfile
 import zipfile
-import typing
+import arpy
+import lzma
 
+from gzip import GzipFile
+
+import zstandard
 
 class LinuxZipFileWithPermissions(zipfile.ZipFile):
     """Class for extract files in linux with right permissions"""
@@ -30,6 +36,8 @@ class Archive(object):
             return self.__extract_zip(directory)
         elif self.file_path.endswith(".tar.gz"):
             return self.__extract_tar_file(directory)
+        elif self.file_path.endswith(".deb"):
+            return self.__extract_deb_file(directory)
 
     def __extract_zip(self, to_directory):
         zip_class = (LinuxZipFileWithPermissions if self.os_type ==
@@ -53,4 +61,40 @@ class Archive(object):
         members = tar.getmembers()
         tar.extractall(to_directory)
         tar.close()
+        return [x.name for x in members]
+
+    def __extract_deb_file(self, to_directory):
+        # NOTE: based on code from: https://github.com/memory/python-dpkg/blob/master/pydpkg/dpkg.py
+
+        data_archive_type = None
+        dpkg_archive = arpy.Archive(self.file_path)
+        dpkg_archive.read_all_headers()
+        if b"data.tar.gz" in dpkg_archive.archived_files:
+            data_archive = dpkg_archive.archived_files[b"data.tar.gz"]
+            data_archive_type = "gz"
+        elif b"data.tar.xz" in dpkg_archive.archived_files:
+            data_archive = dpkg_archive.archived_files[b"data.tar.xz"]
+            data_archive_type = "xz"
+        elif b"data.tar.zst" in dpkg_archive.archived_files:
+            data_archive = dpkg_archive.archived_files[b"data.tar.zst"]
+            data_archive_type = "zst"
+
+        if data_archive_type == "gz":
+            with GzipFile(fileobj=data_archive) as gzf:
+                tar_archive = tarfile.open(fileobj=io.BytesIO(gzf.read()))
+        elif data_archive_type == "xz":
+            with lzma.open(data_archive) as xzf:
+                tar_archive = tarfile.open(fileobj=io.BytesIO(xzf.read()))
+        elif data_archive_type == "zst":
+            zst = zstandard.ZstdDecompressor()
+            with zst.stream_reader(data_archive) as reader:
+                tar_archive = tarfile.open(fileobj=io.BytesIO(reader.read()))
+        else:
+            raise NotImplementedError('unsupported data archive type')
+
+        members = []
+        with tar_archive:
+            members = tar_archive.getmembers()
+            tar_archive.extractall(to_directory)
+
         return [x.name for x in members]

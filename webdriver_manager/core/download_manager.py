@@ -1,3 +1,5 @@
+import os
+
 from abc import ABC
 
 from webdriver_manager.core.http import WDMHttpClient
@@ -26,4 +28,5 @@ class WDMDownloadManager(DownloadManager):
     def download_file(self, url: str) -> File:
         log(f"About to download new driver from {url}")
         response = self._http_client.get(url)
-        return File(response)
+        ext = os.path.splitext(url)[1]
+        return File(response, ext)
