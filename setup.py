@@ -49,7 +49,9 @@ setuptools.setup(
         'requests',
         'python-dotenv',
         'tqdm',
-        'packaging'
+        'packaging',
+        'arpy',
+        'zstandard'
     ],
     package_data={
         "webdriver_manager": ["py.typed"]
