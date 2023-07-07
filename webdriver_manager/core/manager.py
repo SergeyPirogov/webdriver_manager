@@ -11,7 +11,7 @@ class DriverManager(object):
             download_manager=None):
         self.driver_cache = DriverCache(root_dir, cache_valid_range)
         self._download_manager = download_manager
-        if download_manager is None:
+        if self._download_manager is None:
             self._download_manager = WDMDownloadManager()
         log("====== WebDriver manager ======")
 
