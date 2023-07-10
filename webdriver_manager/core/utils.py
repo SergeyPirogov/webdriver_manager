@@ -8,7 +8,6 @@ import sys
 from tqdm import tqdm
 
 from webdriver_manager.core.archive import Archive
-from webdriver_manager.core.logger import log
 
 
 class File(object):
@@ -16,21 +15,22 @@ class File(object):
         self.content = stream.content
         self.__stream = stream
         self.__temp_name = "driver"
-        self._ext = ext
+        self.__regex_filename = r"""filename.+"(.+)"|filename.+''(.+)"""
 
     @property
     def filename(self) -> str:
         try:
-            filename = re.findall(
-                "filename=(.+)", self.__stream.headers["content-disposition"]
-            )[0]
+            # filename = re.findall('filename.*"(.+)"', self.__stream.headers["content-disposition"])[0] # TODO delete this commented code after testing new block
+            content = self.__stream.headers["content-disposition"]
+            content_disposition_list = re.split(";", content)
+            filenames = [re.findall(self.__regex_filename, element) for element in content_disposition_list]
+            filename = next(filter(None, next(filter(None, next(filter(None, filenames))))))  # type: ignore
         except KeyError:
             if self._ext == "":
                 filename = f"{self.__temp_name}.zip"
             else:
                 filename = f"{self.__temp_name}{self._ext}"
-
-        except IndexError:
+        except (IndexError, StopIteration):
             filename = f"{self.__temp_name}.exe"
 
         if '"' in filename:
