@@ -10,6 +10,7 @@ from gzip import GzipFile
 
 import zstandard
 
+
 class LinuxZipFileWithPermissions(zipfile.ZipFile):
     """Class for extract files in linux with right permissions"""
 
@@ -38,6 +39,8 @@ class Archive(object):
             return self.__extract_tar_file(directory)
         elif self.file_path.endswith(".deb"):
             return self.__extract_deb_file(directory)
+        else:
+            raise Exception('unrecognized archive file type')
 
     def __extract_zip(self, to_directory):
         zip_class = (LinuxZipFileWithPermissions if self.os_type ==

@@ -4,6 +4,7 @@ import platform
 import re
 import subprocess
 import sys
+import cgi
 
 from tqdm import tqdm
 
@@ -15,25 +16,23 @@ class File(object):
         self.content = stream.content
         self.__stream = stream
         self.__temp_name = "driver"
-        self.__regex_filename = r"""filename.+"(.+)"|filename.+''(.+)"""
         self._ext = ext
 
     @property
     def filename(self) -> str:
         try:
-            # filename = re.findall('filename.*"(.+)"', self.__stream.headers["content-disposition"])[0] # TODO delete this commented code after testing new block
-            content = self.__stream.headers["content-disposition"]
-            content_disposition_list = re.split(";", content)
-            filenames = [re.findall(self.__regex_filename, element) for element in content_disposition_list]
-            filename = next(filter(None, next(filter(None, next(filter(None, filenames))))))  # type: ignore
+            content_disposition = self.__stream.headers["content-disposition"]
+            payload_type, payload_attributes = cgi.parse_header(content_disposition)
 
-        except KeyError:
+            filename = payload_attributes.get("filename")
+            if filename is None:
+                filename = f"{self.__temp_name}.exe"
+
+        except KeyError:  # in case "content-disposition" header does not exist
             if self._ext == "":
                 filename = f"{self.__temp_name}.zip"
             else:
                 filename = f"{self.__temp_name}{self._ext}"
-        except (IndexError, StopIteration):
-            filename = f"{self.__temp_name}.exe"
 
         if '"' in filename:
             filename = filename.replace('"', "")
@@ -103,6 +102,18 @@ def is_arch(os_sys_type):
 
 def is_mac_os(os_sys_type):
     return OSType.MAC in os_sys_type
+
+
+def split_ext(path, max_separators=1, separator='.'):
+    basename = os.path.basename(path)
+    dot_count = min(max_separators, basename.count(separator))
+    basename_fragments = basename.split(separator)
+    ext_fragments = basename_fragments[len(basename_fragments) - dot_count: len(basename_fragments)]
+    filename_fragments = basename_fragments[:len(basename_fragments) - dot_count]
+    ext = f'{separator}{separator.join(ext_fragments)}'
+    filename = separator.join(filename_fragments)
+
+    return filename, ext
 
 
 def get_date_diff(date1, date2, date_format):

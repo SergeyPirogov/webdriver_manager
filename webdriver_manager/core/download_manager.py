@@ -1,10 +1,8 @@
-import os
-
 from abc import ABC
 
 from webdriver_manager.core.http import WDMHttpClient
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.utils import File
+from webdriver_manager.core.utils import File, split_ext
 
 
 class DownloadManager(ABC):
@@ -28,5 +26,9 @@ class WDMDownloadManager(DownloadManager):
     def download_file(self, url: str) -> File:
         log(f"About to download new driver from {url}")
         response = self._http_client.get(url)
-        ext = os.path.splitext(url)[1]
+
+        ext = split_ext(url)[1]
+        if ext.lower() not in (".zip", ".tar.gz", ".deb"):
+            ext = split_ext(url, max_separators=2)[1]
+
         return File(response, ext)
