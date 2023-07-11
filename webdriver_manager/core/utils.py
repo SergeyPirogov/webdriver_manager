@@ -19,7 +19,7 @@ class File(object):
         self._ext = ext
 
     @property
-    def filename(self, ext="") -> str:
+    def filename(self) -> str:
         try:
             # filename = re.findall('filename.*"(.+)"', self.__stream.headers["content-disposition"])[0] # TODO delete this commented code after testing new block
             content = self.__stream.headers["content-disposition"]
