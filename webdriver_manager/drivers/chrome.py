@@ -66,8 +66,7 @@ class ChromeDriver(Driver):
         resp = self._http_client.get(url=latest_release_url)
         return resp.text.rstrip()
 
-    @staticmethod
-    def get_url_for_version_and_platform(version, platform):
+    def get_url_for_version_and_platform(self, version, platform):
         url = "https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json"
         response = self._http_client.get(url)
         data = response.json()
