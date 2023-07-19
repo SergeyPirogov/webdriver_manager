@@ -38,7 +38,10 @@ class ChromeDriver(Driver):
 
     def get_driver_download_url(self):
         driver_version_to_download = self.get_driver_version_to_download()
-        print(f"driver_version_to_download: {driver_version_to_download}")
+        if len(driver_version_to_download) < 500:
+            print(f"driver_version_to_download: {driver_version_to_download}")
+        else:
+            print(f"driver_version_to_download is huge: {driver_version_to_download[:500]}")
         os_type = self._os_type
         # For Mac ARM CPUs after version 106.0.5249.61 the format of OS type changed
         # to more unified "mac_arm64". For newer versions, it'll be "mac_arm64"
