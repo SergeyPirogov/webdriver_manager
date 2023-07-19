@@ -66,8 +66,8 @@ class ChromeType(object):
 
 
 PATTERN = {
-    ChromeType.CHROMIUM: r"\d+\.\d+\.\d+(\.\d+)?",
-    ChromeType.GOOGLE: r"\d+\.\d+\.\d+",
+    ChromeType.CHROMIUM: r"\d+\.\d+\.\d+",
+    ChromeType.GOOGLE: r"\d+\.\d+\.\d+(\.\d+)?",
     ChromeType.MSEDGE: r"\d+\.\d+\.\d+",
     "brave-browser": r"(\d+)",
     "firefox": r"(\d+.\d+)",
@@ -227,7 +227,9 @@ def get_browser_version_from_os(browser_type=None):
 
     try:
         cmd_mapping = cmd_mapping[browser_type][os_name()]
+        print(f"browser_type: {browser_type}")
         pattern = PATTERN[browser_type]
+        print(f"pattern to match on: {pattern}")
         version = read_version_from_cmd(cmd_mapping, pattern)
         return version
     except Exception:
