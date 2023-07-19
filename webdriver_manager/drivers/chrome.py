@@ -20,6 +20,7 @@ class ChromeDriver(Driver):
         super(ChromeDriver, self).__init__(
             name, version, os_type, url, latest_release_url, http_client
         )
+        print(f"chrome type passed: {chrome_type}")
         self._browser_type = chrome_type
         self._os_type = self.get_os_type()
 
