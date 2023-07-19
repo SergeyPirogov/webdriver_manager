@@ -63,6 +63,7 @@ class ChromeDriver(Driver):
             if (self._version == "latest" or determined_browser_version is None)
             else f"{self._latest_release_url}_{determined_browser_version}"
         )
+        print(f"latest_release_url: {latest_release_url}")
         resp = self._http_client.get(url=latest_release_url)
         return resp.text.rstrip()
 
