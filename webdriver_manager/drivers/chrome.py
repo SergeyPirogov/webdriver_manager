@@ -48,6 +48,7 @@ class ChromeDriver(Driver):
         if version.parse(driver_version_to_download) >= version.parse("114.0.5735.99"):
             modern_version_url = self.get_url_for_version_and_platform(driver_version_to_download, os_type)
             if modern_version_url != None:
+                print(f"modern_version_url: {modern_version_url}")
                 return modern_version_url
         return f"{self._url}/{driver_version_to_download}/{self.get_name()}_{os_type}.zip"
 
