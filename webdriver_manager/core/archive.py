@@ -43,7 +43,7 @@ class Archive(object):
                 "Permission denied",
             ]:
                 raise e
-        return archive.namelist()
+        return [n for n in archive.namelist() if "license" not in n.lower()]
 
     def __extract_tar_file(self, to_directory):
         try:
