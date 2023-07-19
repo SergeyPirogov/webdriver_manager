@@ -65,7 +65,6 @@ class Driver(object):
         """
         if self._browser_version is None:
             self._browser_version = get_browser_version_from_os(self.get_browser_type())
-        print(f"browser_version found, why missing final two digits: {self._browser_version}")
         return self._browser_version
 
     def get_browser_type(self):

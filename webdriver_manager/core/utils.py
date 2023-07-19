@@ -227,9 +227,7 @@ def get_browser_version_from_os(browser_type=None):
 
     try:
         cmd_mapping = cmd_mapping[browser_type][os_name()]
-        print(f"browser_type: {browser_type}")
         pattern = PATTERN[browser_type]
-        print(f"pattern to match on: {pattern}")
         version = read_version_from_cmd(cmd_mapping, pattern)
         return version
     except Exception:
@@ -245,7 +243,6 @@ def read_version_from_cmd(cmd, pattern):
             shell=True,
     ) as stream:
         stdout = stream.communicate()[0].decode()
-        print(f"stdout from read_version_from_cmd: {stdout}")
         version = re.search(pattern, stdout)
         version = version.group(0) if version else None
     return version

@@ -20,7 +20,6 @@ class ChromeDriver(Driver):
         super(ChromeDriver, self).__init__(
             name, version, os_type, url, latest_release_url, http_client
         )
-        print(f"chrome type passed: {chrome_type}")
         self._browser_type = chrome_type
         self._os_type = self.get_os_type()
 
@@ -49,7 +48,6 @@ class ChromeDriver(Driver):
         if version.parse(driver_version_to_download) >= version.parse("114.0.5735.99"):
             modern_version_url = self.get_url_for_version_and_platform(driver_version_to_download, os_type)
             if modern_version_url != None:
-                print(f"modern_version_url: {modern_version_url}")
                 return modern_version_url
         return f"{self._url}/{driver_version_to_download}/{self.get_name()}_{os_type}.zip"
 
@@ -61,10 +59,8 @@ class ChromeDriver(Driver):
 
         if isinstance(determined_browser_version, str):
             if version.parse(determined_browser_version) >= version.parse("114.0.5735.99"):
-                print(f"is there an os_type: {self._os_type}\nis there a version: {determined_browser_version}")
                 self._latest_release_url = self.get_url_for_version_and_platform(determined_browser_version, self._os_type)
                 determined_browser_version = None
-                print(f"version check found recent version: {self._latest_release_url}")
 
         log(f"Get LATEST {self._name} version for {self._browser_type}")
         latest_release_url = (
