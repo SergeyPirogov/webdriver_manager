@@ -59,6 +59,7 @@ class ChromeDriver(Driver):
 
         if isinstance(determined_browser_version, str):
             if version.parse(determined_browser_version) >= version.parse("114.0.5735.99"):
+                print(f"is there an os_type: {self._os_type}")
                 self._latest_release_url = self.get_url_for_version_and_platform(determined_browser_version, self._os_type)
                 determined_browser_version = None
                 print(f"version check found recent version: {self._latest_release_url}")
