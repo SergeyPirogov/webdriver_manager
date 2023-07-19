@@ -38,10 +38,6 @@ class ChromeDriver(Driver):
 
     def get_driver_download_url(self):
         driver_version_to_download = self.get_driver_version_to_download()
-        if len(driver_version_to_download) < 500:
-            print(f"driver_version_to_download: {driver_version_to_download}")
-        else:
-            print(f"driver_version_to_download is huge: {driver_version_to_download[:500]}")
         os_type = self._os_type
         # For Mac ARM CPUs after version 106.0.5249.61 the format of OS type changed
         # to more unified "mac_arm64". For newer versions, it'll be "mac_arm64"
@@ -63,8 +59,7 @@ class ChromeDriver(Driver):
 
         if isinstance(determined_browser_version, str):
             if version.parse(determined_browser_version) >= version.parse("114.0.5735.99"):
-                self._latest_release_url = self.get_url_for_version_and_platform(determined_browser_version, self._os_type)
-                determined_browser_version = None
+                return determined_browser_version
 
         log(f"Get LATEST {self._name} version for {self._browser_type}")
         latest_release_url = (
@@ -72,7 +67,6 @@ class ChromeDriver(Driver):
             if (self._version == "latest" or determined_browser_version is None)
             else f"{self._latest_release_url}_{determined_browser_version}"
         )
-        print(f"latest_release_url: {latest_release_url}")
         resp = self._http_client.get(url=latest_release_url)
         return resp.text.rstrip()
 
