@@ -243,6 +243,7 @@ def read_version_from_cmd(cmd, pattern):
             shell=True,
     ) as stream:
         stdout = stream.communicate()[0].decode()
+        print(f"stdout from read_version_from_cmd: {stdout}")
         version = re.search(pattern, stdout)
         version = version.group(0) if version else None
     return version
