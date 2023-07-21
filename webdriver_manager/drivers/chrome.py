@@ -59,7 +59,7 @@ class ChromeDriver(Driver):
                     modern_version_url = self.get_url_for_version_and_platform(release_version, tmp_os_type)
                     if modern_version_url != None:
                         return modern_version_url
-                elif re.search(r"\d+\.\d+\.\d+", driver_version_to_download):
+                elif re.search(r"^\d+\.\d+\.\d+$", driver_version_to_download):
                     release_version = self.get_latest_patch_version_for_build_version(build_version=driver_version_to_download)
                     modern_version_url = self.get_url_for_version_and_platform(release_version, tmp_os_type)
                     if modern_version_url != None:
