@@ -3,6 +3,7 @@ from packaging import version
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
 from webdriver_manager.core.utils import ChromeType, is_arch, is_mac_os
+import re
 
 
 class ChromeDriver(Driver):
@@ -52,6 +53,18 @@ class ChromeDriver(Driver):
             modern_version_url = self.get_url_for_version_and_platform(driver_version_to_download, tmp_os_type)
             if modern_version_url != None:
                 return modern_version_url
+            else:
+                if len(driver_version_to_download) < 4:
+                    release_version = self.get_latest_release_for_version(driver_version_to_download)
+                    modern_version_url = self.get_url_for_version_and_platform(release_version, tmp_os_type)
+                    if modern_version_url != None:
+                        return modern_version_url
+                elif re.search(r"\d+\.\d+\.\d+", driver_version_to_download):
+                    release_version = self.get_latest_patch_version_for_build_version(build_version=driver_version_to_download)
+                    modern_version_url = self.get_url_for_version_and_platform(release_version, tmp_os_type)
+                    if modern_version_url != None:
+                        return modern_version_url
+
         return f"{self._url}/{driver_version_to_download}/{self.get_name()}_{os_type}.zip"
 
     def get_browser_type(self):
@@ -86,5 +99,20 @@ class ChromeDriver(Driver):
                         return d["url"]
 
         return None
-
-
+    
+    def get_latest_release_for_version(self, version, channel_name : str = None):
+        url = "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions.json"
+        response = self._http_client.get(url)
+        data = response.json()
+        versions =[v["version"] for v in data["channels"].values()]
+        for v in versions:
+            if version in v:
+                return v 
+        return None
+                
+    def get_latest_patch_version_for_build_version(self, build_version):
+        url = "https://googlechromelabs.github.io/chrome-for-testing/latest-patch-versions-per-build.json"
+        response = self._http_client.get(url)
+        data = response.json()
+        return data["builds"][build_version]["version"]
+        
