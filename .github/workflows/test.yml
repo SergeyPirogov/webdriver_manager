@@ -44,8 +44,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.7']
-        selenium-version: ['3.141.0']
+        python-version: ['3.11']
+        selenium-version: ['4.10.0']
         os: [ windows-latest ]
         wdm-log: ['']
         include:
