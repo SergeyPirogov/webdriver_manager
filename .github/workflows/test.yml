@@ -50,10 +50,10 @@ jobs:
         wdm-log: ['']
         include:
           - python-version: '3.11'
-            selenium-version: '4.6.0'
+            selenium-version: '4.10.0'
             os: ubuntu-latest
           - python-version: '3.11'
-            selenium-version: '3.141.0'
+            selenium-version: '4.10.0'
             os: macos-latest
             wdm-log: '0'
 
