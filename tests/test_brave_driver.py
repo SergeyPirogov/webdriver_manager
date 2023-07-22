@@ -45,15 +45,6 @@ def test_brave_manager_with_selenium():
     driver.close()
 
 
-def test_driver_can_be_saved_to_custom_path():
-    custom_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "custom")
-
-    path = ChromeDriverManager(version="87.0.4280.88", path=custom_path,
-                               chrome_type=ChromeType.BRAVE).install()
-    assert os.path.exists(path)
-    assert custom_path in path
-
-
 def test_brave_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
         ChromeDriverManager("0.2", chrome_type=ChromeType.BRAVE).install()

@@ -27,7 +27,7 @@ class WDMDownloadManager(DownloadManager):
     def download_file(self, url: str) -> File:
         log(f"About to download new driver from {url}")
         response = self._http_client.get(url)
-        log(f"Download response is {response.status_code}")
+        log(f"Driver downloading response is {response.status_code}")
         file_name = self.extract_filename_from_url(url)
         return File(response, file_name)
 
