@@ -1,8 +1,7 @@
 import requests
 from requests import Response, exceptions
 
-from webdriver_manager.core.config import ssl_verify, wdm_progress_bar
-from webdriver_manager.core.utils import show_download_progress
+from webdriver_manager.core.config import ssl_verify
 
 
 class HttpClient:
@@ -35,7 +34,5 @@ class WDMHttpClient(HttpClient):
         except exceptions.ConnectionError:
             raise ConnectionError(f"Could not reach host. Are you offline?")
         self.validate_response(resp)
-        if wdm_progress_bar():
-            show_download_progress(resp)
         return resp
 

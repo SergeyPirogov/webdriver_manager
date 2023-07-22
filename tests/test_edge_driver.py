@@ -3,6 +3,7 @@ import re
 
 import pytest
 from selenium import webdriver
+from selenium.webdriver.edge.service import Service
 
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from webdriver_manager.core.utils import PATTERN, ChromeType
@@ -10,7 +11,7 @@ from webdriver_manager.core.utils import PATTERN, ChromeType
 
 def test_edge_manager_with_selenium():
     driver_path = EdgeChromiumDriverManager().install()
-    driver = webdriver.Edge(executable_path=driver_path, capabilities={})
+    driver = webdriver.Edge(service=Service(driver_path))
     driver.get("http://automation-remarks.com")
     driver.quit()
 

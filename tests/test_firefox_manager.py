@@ -2,6 +2,7 @@ import os
 
 import pytest
 from selenium import webdriver
+from selenium.webdriver.firefox.service import Service
 
 from webdriver_manager.firefox import GeckoDriverManager
 
@@ -14,7 +15,7 @@ def test_firefox_manager_with_cache(delete_drivers_dir):
 
 def test_gecko_manager_with_selenium():
     driver_path = GeckoDriverManager().install()
-    ff = webdriver.Firefox(executable_path=driver_path)
+    ff = webdriver.Firefox(service=Service(driver_path))
     ff.get("http://automation-remarks.com")
     ff.quit()
 

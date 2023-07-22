@@ -6,20 +6,22 @@ import subprocess
 import sys
 import cgi
 
-from tqdm import tqdm
-
 from webdriver_manager.core.archive import Archive
 
 
 class File(object):
-    def __init__(self, stream, ext=""):
+    def __init__(self, stream, file_name, ext=""):
         self.content = stream.content
         self.__stream = stream
+        self.file_name = file_name
         self.__temp_name = "driver"
-        self._ext = ext
+        self._ext = ext        
+        self.__regex_filename = r"""filename.+"(.+)"|filename.+''(.+)|filename=([\w.-]+)"""
 
     @property
     def filename(self) -> str:
+        if self.file_name:
+            return self.file_name
         try:
             content_disposition = self.__stream.headers["content-disposition"]
             payload_type, payload_attributes = cgi.parse_header(content_disposition)
@@ -66,9 +68,9 @@ class ChromeType(object):
 
 PATTERN = {
     ChromeType.CHROMIUM: r"\d+\.\d+\.\d+",
-    ChromeType.GOOGLE: r"\d+\.\d+\.\d+",
+    ChromeType.GOOGLE: r"\d+\.\d+\.\d+(\.\d+)?",
     ChromeType.MSEDGE: r"\d+\.\d+\.\d+",
-    "brave-browser": r"(\d+)",
+    "brave-browser": r"\d+\.\d+\.\d+(\.\d+)?",
     "firefox": r"(\d+.\d+)",
 }
 
@@ -249,7 +251,6 @@ def read_version_from_cmd(cmd, pattern):
     with subprocess.Popen(
             cmd,
             stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
             stdin=subprocess.DEVNULL,
             shell=True,
     ) as stream:
@@ -271,17 +272,3 @@ def determine_powershell():
     ) as stream:
         stdout = stream.communicate()[0].decode()
     return "" if stdout == "powershell" else "powershell"
-
-
-def show_download_progress(response, _bytes_threshold=100):
-    """ Opens up a response's content in chunks to show a progress bar with tqdm.
-        Resets response._content when done so that response can be consumed again as normal. """
-    total = int(response.headers.get("Content-Length", 0))
-    if total > _bytes_threshold:
-        content = bytearray()
-        progress_bar = tqdm(desc="[WDM] - Downloading", total=total, unit_scale=True, unit_divisor=1024, unit="B")
-        for chunk in response.iter_content(chunk_size=8192):
-            if chunk:  # Filter out keep-alive new chunks
-                progress_bar.update(len(chunk))
-                content.extend(chunk)
-        response._content = content  # To allow content to be "consumed" again

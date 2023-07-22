@@ -23,7 +23,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(include=['webdriver_manager*']),
     include_package_data=True,
-    version='3.8.6',
+    version='3.9.0',
     description='Library provides the way to automatically manage drivers for different browsers',
     author='Sergey Pirogov',
     author_email='automationremarks@gmail.com',
@@ -49,9 +49,9 @@ setuptools.setup(
         'requests',
         'python-dotenv',
         'tqdm',
-        'packaging',
         'arpy',
         'zstandard'
+        'packaging',
     ],
     package_data={
         "webdriver_manager": ["py.typed"]
