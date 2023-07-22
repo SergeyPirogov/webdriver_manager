@@ -3,10 +3,10 @@ import os
 
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
 
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.constants import ROOT_FOLDER_NAME
-from selenium.webdriver.chrome.service import Service
 
 os.environ.setdefault("WDM_LOCAL", "true")
 
@@ -49,7 +49,7 @@ def test_chrome_manager_with_wrong_version():
 
 def test_chrome_manager_with_selenium():
     driver_path = ChromeDriverManager().install()
-    driver = webdriver.Chrome(service=Service(driver_path))
+    driver = webdriver.Chrome(service=ChromeService(driver_path))
     driver.get("http://automation-remarks.com")
     driver.close()
 
@@ -67,8 +67,8 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
 
 def test_chrome_manager_cached_driver_with_selenium():
     custom_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "custom-cache")
-    manager = ChromeDriverManager(path=custom_path)
-    driver = webdriver.Chrome(service=Service(manager.install()))
+    driver_path = ChromeDriverManager(path=custom_path).install()
+    driver = webdriver.Chrome(service=ChromeService(driver_path))
     driver.get("http://automation-remarks.com")
 
     metadata_file = os.path.join(custom_path, ROOT_FOLDER_NAME, 'drivers.json')
