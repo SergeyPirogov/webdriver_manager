@@ -13,25 +13,25 @@ os.environ.setdefault("WDM_LOCAL", "true")
 
 def test_chrome_manager_with_cache(delete_drivers_dir):
     ChromeDriverManager().install()
-    bin = ChromeDriverManager().install()
-    assert os.path.exists(bin)
+    driver_binary = ChromeDriverManager().install()
+    assert os.path.exists(driver_binary)
 
 
 def test_chrome_manager_with_specific_version(delete_drivers_dir):
-    bin = ChromeDriverManager("87.0.4280.88").install()
-    assert os.path.exists(bin)
+    driver_binary = ChromeDriverManager("87.0.4280.88").install()
+    assert os.path.exists(driver_binary)
 
 
 def test_106_0_5249_61_chrome_version(delete_drivers_dir):
-    bin = ChromeDriverManager("106.0.5249.61").install()
-    assert os.path.exists(bin)
+    driver_binary = ChromeDriverManager("106.0.5249.61").install()
+    assert os.path.exists(driver_binary)
 
 
 def test_chrome_manager_with_project_root_local_folder(delete_drivers_dir):
     os.environ['WDM_LOCAL'] = "1"
-    bin = ChromeDriverManager("87.0.4280.88").install()
+    driver_binary = ChromeDriverManager("87.0.4280.88").install()
     os.environ['WDM_LOCAL'] = "0"
-    assert os.path.exists(bin)
+    assert os.path.exists(driver_binary)
 
 
 def test_driver_can_be_saved_to_custom_path():

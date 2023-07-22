@@ -46,6 +46,9 @@ class DriverCache(object):
         return binary_path
 
     def __get_binary(self, files, driver_name):
+        if not files:
+            raise Exception(f"Can't find binary for {driver_name} among {files}")
+
         if len(files) == 1:
             return files[0]
 

@@ -11,14 +11,17 @@ from webdriver_manager.core.archive import Archive
 
 
 class File(object):
-    def __init__(self, stream):
+    def __init__(self, stream, file_name):
         self.content = stream.content
         self.__stream = stream
+        self.file_name = file_name
         self.__temp_name = "driver"
         self.__regex_filename = r"""filename.+"(.+)"|filename.+''(.+)|filename=([\w.-]+)"""
 
     @property
     def filename(self) -> str:
+        if self.file_name:
+            return self.file_name
         try:
             content = self.__stream.headers["content-disposition"]
 

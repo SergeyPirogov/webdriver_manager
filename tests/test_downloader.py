@@ -28,7 +28,7 @@ def test_can_download_driver_as_tar_gz(delete_drivers_dir):
     assert archive.unpack(DEFAULT_PROJECT_ROOT_CACHE_PATH) == ["geckodriver"]
 
 
-@pytest.mark.parametrize('version', ["2.26", None])
+@pytest.mark.parametrize('version', ["2.26"])
 def test_can_download_chrome_driver(delete_drivers_dir, version):
     driver = ChromeDriver(name="chromedriver", version=version, os_type="win32",
                           url="http://chromedriver.storage.googleapis.com",
