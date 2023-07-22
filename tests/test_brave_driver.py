@@ -28,6 +28,7 @@ def test_brave_manager_with_specific_version():
     bin_path = ChromeDriverManager("87.0.4280.88", chrome_type=ChromeType.BRAVE).install()
     assert os.path.exists(bin_path)
 
+
 @pytest.mark.skip(reason='Brave version is strange on CI')
 def test_brave_manager_with_selenium():
     binary_location = {
