@@ -41,7 +41,8 @@ def test_gecko_manager_with_wrong_version():
 
 
 def test_gecko_manager_with_correct_version_and_token(delete_drivers_dir):
-    driver_path = GeckoDriverManager(version="v0.11.0").install()
+    # NOTE: only version 0.29.1 and above have a build for macos-aarch64
+    driver_path = GeckoDriverManager(version="v0.29.1").install()
     assert os.path.exists(driver_path)
 
 
