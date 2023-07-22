@@ -44,16 +44,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.7']
-        selenium-version: ['3.141.0']
+        python-version: ['3.11']
+        selenium-version: ['4.10.0']
         os: [ windows-latest ]
         wdm-log: ['']
         include:
           - python-version: '3.11'
-            selenium-version: '4.6.0'
+            selenium-version: '4.10.0'
             os: ubuntu-latest
           - python-version: '3.11'
-            selenium-version: '3.141.0'
+            selenium-version: '4.10.0'
             os: macos-latest
             wdm-log: '0'
 
@@ -70,32 +70,40 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install software-properties-common apt-transport-https wget curl
-
+          
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb
+          
           wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
           sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
           sudo apt-get update && sudo apt install microsoft-edge-beta
-          microsoft-edge --version
-
+          
           wget -qO- https://deb.opera.com/archive.key | sudo apt-key add -
           sudo add-apt-repository "deb [arch=i386,amd64] https://deb.opera.com/opera-stable/ stable non-free"
           sudo apt-get update
           sudo apt-get -y --no-install-recommends install opera-stable
-          opera --version
-
+          
           sudo apt-get install chromium-browser
-          chromium --version
           
           sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
-          echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
-          sudo apt-get update
-          sudo apt-get install brave-browser
+          echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+          sudo apt update
+          sudo apt install brave-browser
+
+      -  name: Check browser versions on Linux
+         if: runner.os == 'Linux'
+         run: |
+          google-chrome --version
+          microsoft-edge --version
+          opera --version
+          chromium --version
           brave-browser --version
 
       - name: Install browsers on Windows
         if: runner.os == 'Windows'
         shell: powershell
         run: |
-          choco install chromium opera brave --no-progress -y --force
+          choco install chromium opera brave googlechrome --no-progress -y --force
 
       - name: Install browsers on MacOS
         if: startsWith(runner.os, 'macOS')
@@ -103,6 +111,7 @@ jobs:
           brew tap domt4/chromium
           brew update
           brew install --cask mac-chromium opera brave-browser
+          brew upgrade google-chrome
 
       - name: Install Python dependencies
         run: |

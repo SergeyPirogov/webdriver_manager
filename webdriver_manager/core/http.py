@@ -35,7 +35,5 @@ class WDMHttpClient(HttpClient):
         except exceptions.ConnectionError:
             raise ConnectionError(f"Could not reach host. Are you offline?")
         self.validate_response(resp)
-        if wdm_progress_bar():
-            show_download_progress(resp)
         return resp
 
