@@ -45,6 +45,16 @@ class ChromeDriver(Driver):
         if version.parse(driver_version_to_download) < version.parse("106.0.5249.61"):
             os_type = os_type.replace("mac_arm64", "mac64_m1")
 
+        if version.parse(driver_version_to_download) >= version.parse("113"):
+            if os_type == "mac64":
+                os_type = "mac-x64"
+            if os_type == "mac_64":
+                os_type = "mac-arm64"
+
+            modern_version_url = self.get_url_for_version_and_platform(driver_version_to_download, os_type)
+            log(f"Modern chrome version {modern_version_url}")
+            return modern_version_url
+
         return f"{self._url}/{driver_version_to_download}/{self.get_name()}_{os_type}.zip"
 
     def get_browser_type(self):
@@ -52,8 +62,10 @@ class ChromeDriver(Driver):
 
     def get_latest_release_version(self):
         determined_browser_version = self.get_browser_version_from_os()
-
         log(f"Get LATEST {self._name} version for {self._browser_type}")
+        if version.parse(determined_browser_version) >= version.parse("113"):
+            return determined_browser_version
+
         latest_release_url = (
             self._latest_release_url
             if (self._version == "latest" or determined_browser_version is None)
@@ -61,3 +73,17 @@ class ChromeDriver(Driver):
         )
         resp = self._http_client.get(url=latest_release_url)
         return resp.text.rstrip()
+
+    def get_url_for_version_and_platform(self, browser_version, platform):
+        url = "https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json"
+        response = self._http_client.get(url)
+        data = response.json()
+        versions = data["versions"]
+        for v in versions:
+            if v["version"] == browser_version:
+                downloads = v["downloads"]["chromedriver"]
+                for d in downloads:
+                    if d["platform"] == platform:
+                        return d["url"]
+
+        raise Exception(f"No such driver version {browser_version} for {platform}")

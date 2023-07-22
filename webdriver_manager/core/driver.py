@@ -48,7 +48,8 @@ class Driver(object):
         Downloads determined browser version driver in all other ways as a bonus fallback for lazy users.
         """
         if not self._driver_to_download_version:
-            self._driver_to_download_version = self._version if self._version not in (None, "latest") else self.get_latest_release_version()
+            self._driver_to_download_version = self._version if self._version not in (None, "latest") \
+                else self.get_latest_release_version()
         return self._driver_to_download_version
 
     def get_latest_release_version(self):

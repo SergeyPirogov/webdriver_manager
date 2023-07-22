@@ -7,6 +7,8 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.constants import ROOT_FOLDER_NAME
 
+os.environ.setdefault("WDM_LOCAL", "true")
+
 
 def test_chrome_manager_with_cache(delete_drivers_dir):
     ChromeDriverManager().install()

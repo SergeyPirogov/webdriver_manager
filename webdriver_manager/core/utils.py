@@ -16,14 +16,20 @@ class File(object):
         self.__stream = stream
         self.__temp_name = "driver"
         self.__regex_filename = r"""filename.+"(.+)"|filename.+''(.+)"""
+
     @property
     def filename(self) -> str:
         try:
-            # filename = re.findall('filename.*"(.+)"', self.__stream.headers["content-disposition"])[0] # TODO delete this commented code after testing new block
             content = self.__stream.headers["content-disposition"]
-            content_disposition_list = re.split(";", content)
-            filenames = [re.findall(self.__regex_filename, element) for element in content_disposition_list]
-            filename = next(filter(None, next(filter(None, next(filter(None, filenames))))))  # type: ignore
+            if "attachment" in content.lower():
+                if "octe" in self.__stream.headers["content-type"]:
+                    filename = f"{self.__temp_name}.zip"
+                else:
+                    raise Exception("Unknown Attachment Type")
+            else:
+                content_disposition_list = re.split(";", content)
+                filenames = [re.findall(self.__regex_filename, element) for element in content_disposition_list]
+                filename = next(filter(None, next(filter(None, next(filter(None, filenames))))))
         except KeyError:
             filename = f"{self.__temp_name}.zip"
         except (IndexError, StopIteration):
@@ -61,7 +67,7 @@ class ChromeType(object):
 
 PATTERN = {
     ChromeType.CHROMIUM: r"\d+\.\d+\.\d+",
-    ChromeType.GOOGLE: r"\d+\.\d+\.\d+",
+    ChromeType.GOOGLE: r"\d+\.\d+\.\d+(\.\d+)?",
     ChromeType.MSEDGE: r"\d+\.\d+\.\d+",
     "brave-browser": r"(\d+)",
     "firefox": r"(\d+.\d+)",

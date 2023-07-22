@@ -19,3 +19,4 @@ requests = "*"
 python-dotenv = "*"
 tqdm = "*"
 packaging = "*"
+webdriver-manager = {editable = true, path = "."}
