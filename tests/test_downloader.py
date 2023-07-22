@@ -27,10 +27,11 @@ def test_can_download_driver_as_tar_gz(delete_drivers_dir):
     assert archive.file_path == f"{DEFAULT_PROJECT_ROOT_CACHE_PATH}{os.sep}{file.filename}"
     assert archive.unpack(DEFAULT_PROJECT_ROOT_CACHE_PATH) == ["geckodriver"]
 
+
 def test_can_download_driver_as_deb(delete_drivers_dir):
     file = download_manager.download_file(
         "http://archive.raspberrypi.org/debian/pool/main/c/chromium-browser/chromium-chromedriver_113.0.5672.59-rpt1_arm64.deb")
-    assert file.filename == 'driver.deb'
+    assert file.filename == 'chromium-chromedriver_113.0.5672.59-rpt1_arm64.deb'
     archive = save_file(file, DEFAULT_PROJECT_ROOT_CACHE_PATH)
     assert archive.file_path == f"{DEFAULT_PROJECT_ROOT_CACHE_PATH}{os.sep}{file.filename}"
     assert archive.unpack(DEFAULT_PROJECT_ROOT_CACHE_PATH) == [".",
