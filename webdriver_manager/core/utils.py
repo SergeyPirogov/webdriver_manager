@@ -236,7 +236,6 @@ def read_version_from_cmd(cmd, pattern):
     with subprocess.Popen(
             cmd,
             stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
             stdin=subprocess.DEVNULL,
             shell=True,
     ) as stream:
