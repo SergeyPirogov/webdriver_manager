@@ -110,7 +110,8 @@ jobs:
         run: |
           brew tap domt4/chromium
           brew update
-          brew install --cask mac-chromium opera brave-browser google-chrome
+          brew install --cask mac-chromium opera brave-browser
+          brew upgrade google-chrome
 
       - name: Install Python dependencies
         run: |
