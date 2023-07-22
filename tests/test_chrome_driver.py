@@ -6,7 +6,7 @@ from selenium import webdriver
 
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.constants import ROOT_FOLDER_NAME
-from selenium.webdriver.chrome.service import Service as ChromeService, Service
+from selenium.webdriver.chrome.service import Service
 
 os.environ.setdefault("WDM_LOCAL", "true")
 
@@ -49,7 +49,7 @@ def test_chrome_manager_with_wrong_version():
 
 def test_chrome_manager_with_selenium():
     driver_path = ChromeDriverManager().install()
-    driver = webdriver.Chrome(service=ChromeService(driver_path))
+    driver = webdriver.Chrome(service=Service(driver_path))
     driver.get("http://automation-remarks.com")
     driver.close()
 
