@@ -80,8 +80,7 @@ class ChromeDriver(Driver):
         determined_browser_version = self.get_browser_version_from_os()
 
         if isinstance(determined_browser_version, str):
-            log(f"Get LATEST {self._name} version for {self._browser_type}")
-            if version.parse(determined_browser_version) >= version.parse("113"):
+            if version.parse(determined_browser_version) >= version.parse("115"):
                 return determined_browser_version
 
         latest_release_url = (
