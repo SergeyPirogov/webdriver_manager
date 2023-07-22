@@ -103,14 +103,14 @@ jobs:
         if: runner.os == 'Windows'
         shell: powershell
         run: |
-          choco install chromium opera brave --no-progress -y --force
+          choco install chromium opera brave googlechrome --no-progress -y --force
 
       - name: Install browsers on MacOS
         if: startsWith(runner.os, 'macOS')
         run: |
           brew tap domt4/chromium
           brew update
-          brew install --cask mac-chromium opera brave-browser
+          brew install --cask mac-chromium opera brave-browser google-chrome
 
       - name: Install Python dependencies
         run: |
