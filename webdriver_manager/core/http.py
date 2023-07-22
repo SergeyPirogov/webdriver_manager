@@ -1,8 +1,7 @@
 import requests
 from requests import Response, exceptions
 
-from webdriver_manager.core.config import ssl_verify, wdm_progress_bar
-from webdriver_manager.core.utils import show_download_progress
+from webdriver_manager.core.config import ssl_verify
 
 
 class HttpClient:

@@ -48,7 +48,6 @@ setuptools.setup(
     install_requires=[
         'requests',
         'python-dotenv',
-        'tqdm',
         'packaging'
     ],
     package_data={
