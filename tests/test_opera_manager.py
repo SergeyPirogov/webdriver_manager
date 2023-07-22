@@ -45,6 +45,10 @@ def test_operadriver_manager_with_selenium():
         options.binary_location = "/usr/bin/opera"
     elif get_os_type() in "mac64":
         options.binary_location = "/Applications/Opera.app/Contents/MacOS/Opera"
+
+    if not os.path.isfile(options.binary_location):
+        pytest.skip(f'Opera binary not found at {options.binary_location}')
+
     web_service = Service(driver_path)
     web_service.start()
 
