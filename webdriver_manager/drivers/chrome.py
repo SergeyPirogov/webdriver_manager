@@ -45,7 +45,7 @@ class ChromeDriver(Driver):
         # by default, for lower versions we replace "mac_arm64" to old format - "mac64_m1".
         if version.parse(driver_version_to_download) < version.parse("106.0.5249.61"):
             os_type = os_type.replace("mac_arm64", "mac64_m1")
-            
+
         if version.parse(driver_version_to_download) >= version.parse("115"):
             if os_type == "mac64":
                 os_type = "mac-x64"
@@ -108,8 +108,8 @@ class ChromeDriver(Driver):
                     if d["platform"] == platform:
                         return d["url"]
         return None
-    
-    def get_latest_release_for_version(self, version, channel_name : str = None):
+
+    def get_latest_release_for_version(self, version):
         url = "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions.json"
         response = self._http_client.get(url)
         data = response.json()
@@ -118,7 +118,7 @@ class ChromeDriver(Driver):
             if version in v:
                 return v 
         return None
-                
+
     def get_latest_patch_version_for_build_version(self, build_version):
         url = "https://googlechromelabs.github.io/chrome-for-testing/latest-patch-versions-per-build.json"
         response = self._http_client.get(url)
