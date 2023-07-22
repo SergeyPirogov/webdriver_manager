@@ -2,6 +2,7 @@ import os
 
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
 
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.logger import log
@@ -37,10 +38,14 @@ def test_brave_manager_with_selenium():
         OSType.WIN: f"{os.getenv('LOCALAPPDATA')}\\BraveSoftware\\Brave-Browser\\Application\\brave.exe",
     }[os_name()]
     log(binary_location)
+
+    if not os.path.isfile(binary_location):
+        pytest.skip(f'Brave binary not found at {binary_location}')
+
     option = webdriver.ChromeOptions()
     option.binary_location = binary_location
     driver_path = ChromeDriverManager(chrome_type=ChromeType.BRAVE).install()
-    driver = webdriver.Chrome(driver_path, options=option)
+    driver = webdriver.Chrome(service=ChromeService(driver_path), options=option)
 
     driver.get("http://automation-remarks.com")
     driver.close()
