@@ -70,27 +70,30 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install software-properties-common apt-transport-https wget curl
-
-          google-chrome --version
-
+          
           wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
           sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
           sudo apt-get update && sudo apt install microsoft-edge-beta
-          microsoft-edge --version
-
+          
           wget -qO- https://deb.opera.com/archive.key | sudo apt-key add -
           sudo add-apt-repository "deb [arch=i386,amd64] https://deb.opera.com/opera-stable/ stable non-free"
           sudo apt-get update
           sudo apt-get -y --no-install-recommends install opera-stable
-          opera --version
-
+          
           sudo apt-get install chromium-browser
-          chromium --version
           
           sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
           echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
           sudo apt-get update
           sudo apt-get install brave-browser
+
+       - name: Check browser versions on Linux
+         if: runner.os == 'Linux'
+         run: |
+          google-chrome --version
+          microsoft-edge --version
+          opera --version
+          chromium --version
           brave-browser --version
 
       - name: Install browsers on Windows
