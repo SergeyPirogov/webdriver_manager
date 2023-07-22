@@ -86,6 +86,6 @@ def test_chrome_manager_cached_driver_with_selenium():
 
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64', 'mac64', 'mac64_m1'])
-def test_can_get_chrome_for_win(os_type):
+def test_can_get_chrome_for_os(os_type):
     path = ChromeDriverManager(os_type=os_type).install()
     assert os.path.exists(path)

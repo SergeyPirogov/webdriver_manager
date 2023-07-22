@@ -48,7 +48,7 @@ class ChromeDriver(Driver):
         if version.parse(driver_version_to_download) >= version.parse("113"):
             if os_type == "mac64":
                 os_type = "mac-x64"
-            if os_type == "mac_64":
+            if os_type in ["mac_64", "mac64_m1", "mac_arm64"]:
                 os_type = "mac-arm64"
 
             modern_version_url = self.get_url_for_version_and_platform(driver_version_to_download, os_type)
