@@ -87,7 +87,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install brave-browser
 
-       - name: Check browser versions on Linux
+      -  name: Check browser versions on Linux
          if: runner.os == 'Linux'
          run: |
           google-chrome --version
