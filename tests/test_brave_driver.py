@@ -8,7 +8,7 @@ from webdriver_manager.core.logger import log
 from webdriver_manager.core.utils import ChromeType, os_name, OSType
 
 
-@pytest.skip('Brave version is strange on CI')
+@pytest.mark.skip(reason='Brave version is strange on CI')
 def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
     os.environ['WDM_SSL_VERIFY'] = '0'
     custom_path = os.path.join(
