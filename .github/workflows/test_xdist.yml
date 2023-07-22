@@ -62,8 +62,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install software-properties-common apt-transport-https wget curl
 
-          sudo apt-get install chromium-browser
-          chromium --version
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb
+          google-chrome --version
 
       - name: Install Python dependencies
         run: |

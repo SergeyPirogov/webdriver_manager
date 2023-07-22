@@ -43,6 +43,18 @@ class Archive(object):
                 "Permission denied",
             ]:
                 raise e
+            file_names = []
+            for n in archive.namelist():
+                if "/" not in n:
+                    file_names.append(n)
+                else:
+                    file_path, file_name = n.split("/")
+                    full_file_path = os.path.join(to_directory, file_path)
+                    source = os.path.join(full_file_path, file_name)
+                    destination = os.path.join(to_directory, file_name)
+                    os.rename(source, destination)
+                    file_names.append(file_name)
+            return sorted(file_names, key=lambda x: x.lower())
         return archive.namelist()
 
     def __extract_tar_file(self, to_directory):

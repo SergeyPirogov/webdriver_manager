@@ -11,19 +11,23 @@ from webdriver_manager.core.archive import Archive
 
 
 class File(object):
-    def __init__(self, stream):
+    def __init__(self, stream, file_name):
         self.content = stream.content
         self.__stream = stream
+        self.file_name = file_name
         self.__temp_name = "driver"
-        self.__regex_filename = r"""filename.+"(.+)"|filename.+''(.+)"""
+        self.__regex_filename = r"""filename.+"(.+)"|filename.+''(.+)|filename=([\w.-]+)"""
+
     @property
     def filename(self) -> str:
+        if self.file_name:
+            return self.file_name
         try:
-            # filename = re.findall('filename.*"(.+)"', self.__stream.headers["content-disposition"])[0] # TODO delete this commented code after testing new block
             content = self.__stream.headers["content-disposition"]
+
             content_disposition_list = re.split(";", content)
             filenames = [re.findall(self.__regex_filename, element) for element in content_disposition_list]
-            filename = next(filter(None, next(filter(None, next(filter(None, filenames))))))  # type: ignore
+            filename = next(filter(None, next(filter(None, next(filter(None, filenames))))))
         except KeyError:
             filename = f"{self.__temp_name}.zip"
         except (IndexError, StopIteration):
@@ -61,9 +65,9 @@ class ChromeType(object):
 
 PATTERN = {
     ChromeType.CHROMIUM: r"\d+\.\d+\.\d+",
-    ChromeType.GOOGLE: r"\d+\.\d+\.\d+",
+    ChromeType.GOOGLE: r"\d+\.\d+\.\d+(\.\d+)?",
     ChromeType.MSEDGE: r"\d+\.\d+\.\d+",
-    "brave-browser": r"(\d+)",
+    "brave-browser": r"\d+\.\d+\.\d+(\.\d+)?",
     "firefox": r"(\d+.\d+)",
 }
 
