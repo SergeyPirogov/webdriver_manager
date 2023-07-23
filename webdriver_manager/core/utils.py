@@ -83,11 +83,11 @@ class FileManager(object):
             return sorted(file_names, key=lambda x: x.lower())
         return archive.namelist()
 
-    def __extract_tar_file(self, file_path, to_directory):
+    def __extract_tar_file(self, archive_file, to_directory):
         try:
-            tar = tarfile.open(file_path, mode="r:gz")
+            tar = tarfile.open(archive_file.file_path, mode="r:gz")
         except tarfile.ReadError:
-            tar = tarfile.open(file_path, mode="r:bz2")
+            tar = tarfile.open(archive_file.file_path, mode="r:bz2")
         members = tar.getmembers()
         tar.extractall(to_directory)
         tar.close()
