@@ -137,13 +137,14 @@ class DriverCacheManager(object):
             driver_version = self.get_cache_key_driver_version(driver)
             browser_version = driver.get_browser_version_from_os()
             browser_version = browser_version if browser_version else ""
-            self._metadata_key = f"{driver.get_os_type()}_{driver.get_name()}_{driver_version}_for_{browser_version}"
+            self._metadata_key = f"{self.get_os_type()}_{driver.get_name()}_{driver_version}" \
+                                 f"_for_{browser_version}"
         return self._metadata_key
 
     def get_cache_key_driver_version(self, driver: Driver):
         if self._cache_key_driver_version is None:
             self._cache_key_driver_version = "latest" if driver._driver_version in (
-            None, "latest") else driver._driver_version
+                None, "latest") else driver._driver_version
         return self._cache_key_driver_version
 
     def __get_path(self, driver: Driver):
@@ -151,7 +152,7 @@ class DriverCacheManager(object):
             self._driver_binary_path = os.path.join(
                 self._drivers_directory,
                 driver.get_name(),
-                driver.get_os_type(),
+                self.get_os_type(),
                 driver.get_driver_version_to_download(),
             )
         return self._driver_binary_path

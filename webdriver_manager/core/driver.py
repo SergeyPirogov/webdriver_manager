@@ -34,8 +34,8 @@ class Driver(object):
     def get_name(self):
         return self._name
 
-    def get_os_type(self):
-        return self._os_system_manager.get_os_type()
+    # def get_os_type(self):
+    #     return self._os_system_manager.get_os_type()
 
     def get_driver_download_url(self, os_type):
         return f"{self._url}/{self.get_driver_version_to_download()}/{self._name}_{os_type}.zip"
@@ -70,12 +70,12 @@ class Driver(object):
     def get_browser_type(self):
         raise NotImplementedError("Please implement this method")
 
-    def get_binary_name(self):
+    def get_binary_name(self, os_type):
         driver_name = self.get_name()
         driver_binary_name = (
             "msedgedriver" if driver_name == "edgedriver" else driver_name
         )
         driver_binary_name = (
-            f"{driver_binary_name}.exe" if "win" in self.get_os_type() else driver_binary_name
+            f"{driver_binary_name}.exe" if "win" in os_type else driver_binary_name
         )
         return driver_binary_name
