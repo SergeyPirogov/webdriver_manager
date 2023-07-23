@@ -1,26 +1,25 @@
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.utils import is_arch, is_mac_os
 
 
 class GeckoDriver(Driver):
     def __init__(
             self,
             name,
-            version,
-            os_type,
+            driver_version,
             url,
             latest_release_url,
             mozila_release_tag,
             http_client,
+            os_system_manager
     ):
         super(GeckoDriver, self).__init__(
             name,
-            version,
-            os_type,
+            driver_version,
             url,
             latest_release_url,
             http_client,
+            os_system_manager,
         )
         self._mozila_release_tag = mozila_release_tag
         self._os_type = self.get_os_type()
@@ -50,11 +49,11 @@ class GeckoDriver(Driver):
 
     def get_os_type(self):
         os_type = super().get_os_type()
-        if not is_mac_os(os_type):
+        if not self._os_system_manager.is_mac_os(os_type):
             return os_type
 
         macos = 'macos'
-        if is_arch(os_type):
+        if self._os_system_manager.is_arch(os_type):
             return f"{macos}-aarch64"
         return macos
 

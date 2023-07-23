@@ -7,22 +7,22 @@ class IEDriver(Driver):
     def __init__(
             self,
             name,
-            version,
-            os_type,
+            driver_version,
             url,
             latest_release_url,
             ie_release_tag,
-            http_client
+            http_client,
+            os_system_manager
     ):
         super(IEDriver, self).__init__(
             name,
-            version,
-            os_type,
+            driver_version,
             url,
             latest_release_url,
-            http_client
+            http_client,
+            os_system_manager
         )
-        self.os_type = "x64" if os_type == "win64" else "Win32"
+        self.os_type = "x64" if self._os_system_manager.get_os_type() == "win64" else "Win32"
         self._ie_release_tag = ie_release_tag
         # todo: for 'browser_version' implement installed IE version detection
         #       like chrome or firefox

@@ -6,14 +6,12 @@ from webdriver_manager.core.logger import log
 class DriverManager(object):
     def __init__(
             self,
-            root_dir=None,
-            cache_valid_range=1,
             download_manager=None,
             cache_manager=None
     ):
         self._cache_manager = cache_manager
         if not self._cache_manager:
-            self._cache_manager = DriverCacheManager(root_dir, cache_valid_range)
+            self._cache_manager = DriverCacheManager()
 
         self._download_manager = download_manager
         if self._download_manager is None:
@@ -27,7 +25,7 @@ class DriverManager(object):
     def install(self) -> str:
         raise NotImplementedError("Please Implement this method")
 
-    def _get_driver_path(self, driver):
+    def _get_driver_binary_path(self, driver):
         binary_path = self._cache_manager.find_driver(driver)
         if binary_path:
             return binary_path

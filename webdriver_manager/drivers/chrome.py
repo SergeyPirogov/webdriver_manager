@@ -2,7 +2,7 @@ from packaging import version
 
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.utils import ChromeType, is_arch, is_mac_os
+from webdriver_manager.core.os_manager import OperationSystemManager, ChromeType
 
 
 class ChromeDriver(Driver):
@@ -10,15 +10,20 @@ class ChromeDriver(Driver):
     def __init__(
             self,
             name,
-            version,
-            os_type,
+            driver_version,
             url,
             latest_release_url,
             http_client,
-            chrome_type=ChromeType.GOOGLE,
+            os_system_manager,
+            chrome_type=ChromeType.GOOGLE
     ):
         super(ChromeDriver, self).__init__(
-            name, version, os_type, url, latest_release_url, http_client
+            name,
+            driver_version,
+            url,
+            latest_release_url,
+            http_client,
+            os_system_manager
         )
         self._browser_type = chrome_type
         self._os_type = self.get_os_type()
@@ -28,10 +33,10 @@ class ChromeDriver(Driver):
         if "win" in os_type:
             return "win32"
 
-        if not is_mac_os(os_type):
+        if not OperationSystemManager.is_mac_os(os_type):
             return os_type
 
-        if is_arch(os_type):
+        if OperationSystemManager.is_arch(os_type):
             return "mac_arm64"
 
         return os_type
@@ -68,7 +73,7 @@ class ChromeDriver(Driver):
 
         latest_release_url = (
             self._latest_release_url
-            if (self._version == "latest" or determined_browser_version is None)
+            if (self._driver_version == "latest" or determined_browser_version is None)
             else f"{self._latest_release_url}_{determined_browser_version}"
         )
         resp = self._http_client.get(url=latest_release_url)
