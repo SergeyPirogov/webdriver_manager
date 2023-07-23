@@ -1,6 +1,6 @@
-from webdriver_manager.core import utils
 from webdriver_manager.core.logger import log
 from webdriver_manager.core.config import gh_token
+from webdriver_manager.core.os_manager import OperationSystemManager
 from webdriver_manager.core.utils import get_browser_version_from_os
 
 
@@ -18,7 +18,7 @@ class Driver(object):
         self._version = version
         self._os_type = os_type
         if os_type is None:
-            self._os_type = utils.os_type()
+            self._os_type = OperationSystemManager().os_type()
         self._latest_release_url = latest_release_url
         self._http_client = http_client
         self._browser_version = None

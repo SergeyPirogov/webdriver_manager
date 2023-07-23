@@ -2,7 +2,8 @@ from packaging import version
 
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.utils import ChromeType, is_arch, is_mac_os
+from webdriver_manager.core.os_manager import OperationSystemManager
+from webdriver_manager.core.utils import ChromeType
 
 
 class ChromeDriver(Driver):
@@ -28,10 +29,10 @@ class ChromeDriver(Driver):
         if "win" in os_type:
             return "win32"
 
-        if not is_mac_os(os_type):
+        if not OperationSystemManager.is_mac_os(os_type):
             return os_type
 
-        if is_arch(os_type):
+        if OperationSystemManager.is_arch(os_type):
             return "mac_arm64"
 
         return os_type

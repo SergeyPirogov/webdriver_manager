@@ -1,15 +1,9 @@
 import datetime
 import os
-import platform
 import re
 import subprocess
-import sys
 
-
-class OSType(object):
-    LINUX = "linux"
-    MAC = "mac"
-    WIN = "win"
+from webdriver_manager.core.os_manager import OSType, OperationSystemManager
 
 
 class ChromeType(object):
@@ -26,37 +20,6 @@ PATTERN = {
     "brave-browser": r"\d+\.\d+\.\d+(\.\d+)?",
     "firefox": r"(\d+.\d+)",
 }
-
-
-def os_name():
-    pl = sys.platform
-    if pl == "linux" or pl == "linux2":
-        return OSType.LINUX
-    elif pl == "darwin":
-        return OSType.MAC
-    elif pl == "win32":
-        return OSType.WIN
-
-
-def os_architecture():
-    if platform.machine().endswith("64"):
-        return 64
-    else:
-        return 32
-
-
-def os_type():
-    return f"{os_name()}{os_architecture()}"
-
-
-def is_arch(os_sys_type):
-    if '_m1' in os_sys_type:
-        return True
-    return platform.processor() != 'i386'
-
-
-def is_mac_os(os_sys_type):
-    return OSType.MAC in os_sys_type
 
 
 def get_date_diff(date1, date2, date_format):
@@ -180,7 +143,7 @@ def get_browser_version_from_os(browser_type=None):
     }
 
     try:
-        cmd_mapping = cmd_mapping[browser_type][os_name()]
+        cmd_mapping = cmd_mapping[browser_type][OperationSystemManager.os_name()]
         pattern = PATTERN[browser_type]
         version = read_version_from_cmd(cmd_mapping, pattern)
         return version

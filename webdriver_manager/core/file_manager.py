@@ -4,7 +4,6 @@ import tarfile
 import zipfile
 
 from webdriver_manager.core.archive import Archive, LinuxZipFileWithPermissions
-from webdriver_manager.core.utils import os_name
 
 
 class File(object):
@@ -38,6 +37,9 @@ class File(object):
 
 class FileManager(object):
 
+    def __init__(self, os_name):
+        self._os_name = os_name
+
     def save_archive_file(self, file: File, directory: str):
         os.makedirs(directory, exist_ok=True)
 
@@ -46,7 +48,7 @@ class FileManager(object):
             code.write(file.content)
         if not os.path.exists(archive_path):
             raise FileExistsError(f"No file has been saved on such path {archive_path}")
-        return Archive(archive_path, os_type=os_name())
+        return Archive(archive_path)
 
     def unpack_archive(self, archive_file: Archive, target_dir):
         file_path = archive_file.file_path
@@ -56,7 +58,7 @@ class FileManager(object):
             return self.__extract_tar_file(archive_file, target_dir)
 
     def __extract_zip(self, archive_file, to_directory):
-        zip_class = (LinuxZipFileWithPermissions if archive_file.os_type == "linux" else zipfile.ZipFile)
+        zip_class = (LinuxZipFileWithPermissions if self._os_name == "linux" else zipfile.ZipFile)
         archive = zip_class(archive_file.file_path)
         try:
             archive.extractall(to_directory)

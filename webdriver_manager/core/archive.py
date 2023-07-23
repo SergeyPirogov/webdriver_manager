@@ -21,8 +21,5 @@ class LinuxZipFileWithPermissions(zipfile.ZipFile):
 
 
 class Archive(object):
-    def __init__(self, path: str, os_type: typing.Optional[str] = None):
+    def __init__(self, path: str):
         self.file_path = path
-        self.os_type: typing.Optional[str] = os_type
-
-

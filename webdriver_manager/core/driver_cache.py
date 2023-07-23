@@ -10,6 +10,7 @@ from webdriver_manager.core.constants import (
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.file_manager import FileManager, File
 from webdriver_manager.core.logger import log
+from webdriver_manager.core.os_manager import OperationSystemManager
 from webdriver_manager.core.utils import get_date_diff
 
 
@@ -38,7 +39,7 @@ class DriverCacheManager(object):
         self._driver_binary_path = None
         self._file_manager = file_manager
         if not self._file_manager:
-            self._file_manager = FileManager()
+            self._file_manager = FileManager(OperationSystemManager.os_name())
 
     def save_archive_file(self, file: File, path):
         return self._file_manager.save_archive_file(file, path)
