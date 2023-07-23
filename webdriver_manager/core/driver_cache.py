@@ -39,7 +39,7 @@ class DriverCacheManager(object):
         self._driver_binary_path = None
         self._file_manager = file_manager
         if not self._file_manager:
-            self._file_manager = FileManager(OperationSystemManager.os_name())
+            self._file_manager = FileManager(OperationSystemManager.get_os_name())
 
     def save_archive_file(self, file: File, path):
         return self._file_manager.save_archive_file(file, path)

@@ -16,13 +16,11 @@ class Driver(object):
         self._name = name
         self._url = url
         self._version = version
-        self._os_type = os_type
-        if os_type is None:
-            self._os_type = OperationSystemManager().os_type()
         self._latest_release_url = latest_release_url
         self._http_client = http_client
         self._browser_version = None
         self._driver_to_download_version = None
+        self._os_system_manager = OperationSystemManager(os_type)
 
     @property
     def auth_header(self):
@@ -36,10 +34,10 @@ class Driver(object):
         return self._name
 
     def get_os_type(self):
-        return self._os_type
+        return self._os_system_manager.get_os_type()
 
     def get_driver_download_url(self):
-        return f"{self._url}/{self.get_driver_version_to_download()}/{self._name}_{self._os_type}.zip"
+        return f"{self._url}/{self.get_driver_version_to_download()}/{self._name}_{self.get_os_type()}.zip"
 
     def get_driver_version_to_download(self):
         """

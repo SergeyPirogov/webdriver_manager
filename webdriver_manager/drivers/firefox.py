@@ -1,6 +1,5 @@
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.utils import is_arch, is_mac_os
 
 
 class GeckoDriver(Driver):
@@ -50,11 +49,11 @@ class GeckoDriver(Driver):
 
     def get_os_type(self):
         os_type = super().get_os_type()
-        if not is_mac_os(os_type):
+        if not self._os_system_manager.is_mac_os(os_type):
             return os_type
 
         macos = 'macos'
-        if is_arch(os_type):
+        if self._os_system_manager.is_arch(os_type):
             return f"{macos}-aarch64"
         return macos
 

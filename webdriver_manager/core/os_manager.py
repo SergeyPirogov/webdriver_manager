@@ -10,8 +10,11 @@ class OSType(object):
 
 class OperationSystemManager(object):
 
+    def __init__(self, os_type=None):
+        self._os_type = os_type
+
     @staticmethod
-    def os_name():
+    def get_os_name():
         pl = sys.platform
         if pl == "linux" or pl == "linux2":
             return OSType.LINUX
@@ -21,14 +24,16 @@ class OperationSystemManager(object):
             return OSType.WIN
 
     @staticmethod
-    def os_architecture():
+    def get_os_architecture():
         if platform.machine().endswith("64"):
             return 64
         else:
             return 32
 
-    def os_type(self):
-        return f"{self.os_name()}{self.os_architecture()}"
+    def get_os_type(self):
+        if self._os_type:
+            return self._os_type
+        return f"{self.get_os_name()}{self.get_os_architecture()}"
 
     @staticmethod
     def is_arch(os_sys_type):

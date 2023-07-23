@@ -143,7 +143,7 @@ def get_browser_version_from_os(browser_type=None):
     }
 
     try:
-        cmd_mapping = cmd_mapping[browser_type][OperationSystemManager.os_name()]
+        cmd_mapping = cmd_mapping[browser_type][OperationSystemManager.get_os_name()]
         pattern = PATTERN[browser_type]
         version = read_version_from_cmd(cmd_mapping, pattern)
         return version
