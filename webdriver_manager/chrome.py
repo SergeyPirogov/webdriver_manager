@@ -36,7 +36,7 @@ class ChromeDriverManager(DriverManager):
         )
 
     def install(self) -> str:
-        driver_path = self._get_driver_path(self.driver)
+        driver_path = self._get_driver_binary_path(self.driver)
         if all(test_os not in driver_path for test_os in ["mac_arm64", "mac_x64"]):
             os.chmod(driver_path, 0o755)
         return driver_path

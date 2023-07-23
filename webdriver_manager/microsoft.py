@@ -37,7 +37,7 @@ class IEDriverManager(DriverManager):
         )
 
     def install(self) -> str:
-        return self._get_driver_path(self.driver)
+        return self._get_driver_binary_path(self.driver)
 
 
 class EdgeChromiumDriverManager(DriverManager):
@@ -66,6 +66,6 @@ class EdgeChromiumDriverManager(DriverManager):
         )
 
     def install(self) -> str:
-        driver_path = self._get_driver_path(self.driver)
+        driver_path = self._get_driver_binary_path(self.driver)
         os.chmod(driver_path, 0o755)
         return driver_path
