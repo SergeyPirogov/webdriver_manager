@@ -148,11 +148,9 @@ class DriverCacheManager(object):
         return self._cache_key_driver_version
 
     def __get_path(self, driver: Driver):
-        if self._driver_binary_path is None:
-            self._driver_binary_path = os.path.join(
-                self._drivers_directory,
-                driver.get_name(),
-                self.get_os_type(),
-                driver.get_driver_version_to_download(),
-            )
-        return self._driver_binary_path
+        return os.path.join(
+            self._drivers_directory,
+            driver.get_name(),
+            self.get_os_type(),
+            driver.get_driver_version_to_download(),
+        )
