@@ -22,7 +22,6 @@ class GeckoDriver(Driver):
             os_system_manager,
         )
         self._mozila_release_tag = mozila_release_tag
-        # self._os_type = self.get_os_type()
 
     def get_latest_release_version(self) -> str:
         determined_browser_version = self.get_browser_version_from_os()
@@ -46,16 +45,6 @@ class GeckoDriver(Driver):
         output_dict = [
             asset for asset in assets if asset["name"].startswith(name)]
         return output_dict[0]["browser_download_url"]
-
-    # def get_os_type(self):
-    #     os_type = super().get_os_type()
-    #     if not self._os_system_manager.is_mac_os(os_type):
-    #         return os_type
-    #
-    #     macos = 'macos'
-    #     if self._os_system_manager.is_arch(os_type):
-    #         return f"{macos}-aarch64"
-    #     return macos
 
     @property
     def latest_release_url(self):
