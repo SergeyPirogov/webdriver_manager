@@ -62,14 +62,14 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
         os.path.dirname(__file__)),
         "ssl_disabled",
     )
-    driver_path = ChromeDriverManager(path=custom_path).install()
+    driver_path = ChromeDriverManager(cache_manager=DriverCacheManager(custom_path)).install()
     os.environ['WDM_SSL_VERIFY'] = '1'
     assert os.path.exists(driver_path)
 
 
 def test_chrome_manager_cached_driver_with_selenium():
     custom_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "custom-cache")
-    manager = ChromeDriverManager(path=custom_path)
+    manager = ChromeDriverManager(cache_manager=DriverCacheManager(custom_path))
     driver = webdriver.Chrome(service=Service(manager.install()))
     driver.get("http://automation-remarks.com")
 
@@ -84,7 +84,7 @@ def test_chrome_manager_cached_driver_with_selenium():
     with open(metadata_file, 'w') as outfile:
         json.dump(data, outfile)
 
-    ChromeDriverManager(path=custom_path).install()
+    ChromeDriverManager(cache_manager=DriverCacheManager(custom_path)).install()
 
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64', 'mac64', 'mac64_m1'])

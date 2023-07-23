@@ -5,6 +5,7 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 
+from webdriver_manager.core.driver_cache import DriverCacheManager
 from webdriver_manager.core.utils import os_type as get_os_type
 from webdriver_manager.opera import OperaDriverManager
 
@@ -20,7 +21,7 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
         os.path.dirname(os.path.dirname(__file__)),
         "ssl_disabled",
     )
-    driver_path = OperaDriverManager(path=custom_path).install()
+    driver_path = OperaDriverManager(cache_manager=DriverCacheManager(custom_path)).install()
     os.environ['WDM_SSL_VERIFY'] = '1'
     assert os.path.exists(driver_path)
 
@@ -63,8 +64,8 @@ def test_opera_driver_manager_with_wrong_version():
 
 
 @pytest.mark.parametrize('path', ['.', None])
-def test_opera_driver_manager_with_correct_version_and_token(path):
-    driver_path = OperaDriverManager(version="v.2.45", path=path).install()
+def test_opera_driver_manager_with_correct_version_and_token(custom_path):
+    driver_path = OperaDriverManager(version="v.2.45", cache_manager=DriverCacheManager(custom_path)).install()
     assert os.path.exists(driver_path)
 
 

@@ -5,6 +5,7 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.edge.service import Service
 
+from webdriver_manager.core.driver_cache import DriverCacheManager
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from webdriver_manager.core.utils import PATTERN, ChromeType
 
@@ -22,7 +23,7 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
         os.path.dirname(os.path.dirname(__file__)),
         "ssl_disabled",
     )
-    driver_path = EdgeChromiumDriverManager(path=custom_path).install()
+    driver_path = EdgeChromiumDriverManager(cache_manager=DriverCacheManager(custom_path)).install()
     os.environ['WDM_SSL_VERIFY'] = '1'
     assert os.path.exists(driver_path)
 

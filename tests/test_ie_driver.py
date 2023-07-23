@@ -2,6 +2,7 @@ import os
 
 import pytest
 
+from webdriver_manager.core.driver_cache import DriverCacheManager
 from webdriver_manager.microsoft import IEDriverManager
 
 
@@ -20,7 +21,7 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
         os.path.dirname(os.path.dirname(__file__)),
         "ssl_disabled",
     )
-    driver_path = IEDriverManager(path=custom_path).install()
+    driver_path = IEDriverManager(cache_manager=DriverCacheManager(custom_path)).install()
     os.environ['WDM_SSL_VERIFY'] = '1'
     assert os.path.exists(driver_path)
 
