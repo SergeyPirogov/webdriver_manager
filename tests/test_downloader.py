@@ -5,7 +5,7 @@ import pytest
 from webdriver_manager.core.constants import DEFAULT_PROJECT_ROOT_CACHE_PATH
 from webdriver_manager.core.download_manager import WDMDownloadManager
 from webdriver_manager.core.http import WDMHttpClient
-from webdriver_manager.core.utils import save_file, ChromeType
+from webdriver_manager.core.utils import ChromeType
 from webdriver_manager.drivers.chrome import ChromeDriver
 
 download_manager = WDMDownloadManager()
