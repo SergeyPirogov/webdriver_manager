@@ -2,25 +2,30 @@ import os
 from typing import Optional
 
 from webdriver_manager.core.download_manager import DownloadManager
+from webdriver_manager.core.driver_cache import DriverCacheManager
 from webdriver_manager.core.manager import DriverManager
 from webdriver_manager.drivers.firefox import GeckoDriver
 
 
 class GeckoDriverManager(DriverManager):
     def __init__(
-        self,
-        version: Optional[str] = None,
-        os_type: Optional[str] = None,
-        path: Optional[str] = None,
-        name: str = "geckodriver",
-        url: str = "https://github.com/mozilla/geckodriver/releases/download",
-        latest_release_url: str = "https://api.github.com/repos/mozilla/geckodriver/releases/latest",
-        mozila_release_tag: str = "https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}",
-        cache_valid_range: int = 1,
-        download_manager: Optional[DownloadManager] = None,
+            self,
+            version: Optional[str] = None,
+            os_type: Optional[str] = None,
+            path: Optional[str] = None,
+            name: str = "geckodriver",
+            url: str = "https://github.com/mozilla/geckodriver/releases/download",
+            latest_release_url: str = "https://api.github.com/repos/mozilla/geckodriver/releases/latest",
+            mozila_release_tag: str = "https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}",
+            cache_valid_range: int = 1,
+            download_manager: Optional[DownloadManager] = None,
+            cache_manager: Optional[DriverCacheManager] = None
     ):
         super(GeckoDriverManager, self).__init__(
-            path, cache_valid_range, download_manager=download_manager
+            path,
+            cache_valid_range,
+            download_manager=download_manager,
+            cache_manager=cache_manager
         )
 
         self.driver = GeckoDriver(

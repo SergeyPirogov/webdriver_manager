@@ -200,6 +200,13 @@ version = read_version_from_cmd("/usr/bin/firefox-bin --version", PATTERN["firef
 driver_binary = FirefoxDriverManager(version=version).install()
 ```
 
+#### Custom Cache and File manager
+
+```python
+cache_manager = DriverCacheManager(file_manager=FileManager())
+manager = ChromeDriverManager(cache_manager=cache_manager)
+```
+
 ## Configuration
 
 **webdriver_manager** has several configuration variables you can be interested in.
@@ -233,15 +240,6 @@ import logging
 import os
 
 os.environ['WDM_LOG'] = str(logging.NOTSET)
-```
-
-### `WDM_PROGRESS_BAR`
-Turn off the progress bar which is displayed on downloads:
-
-```python
-import os
-
-os.environ['WDM_PROGRESS_BAR'] = str(0)
 ```
 
 ### `WDM_LOCAL`

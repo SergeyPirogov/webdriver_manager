@@ -9,11 +9,11 @@ from webdriver_manager.core.constants import (
 )
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.utils import get_date_diff, File, save_file
+from webdriver_manager.core.utils import get_date_diff, File, FileManager
 
 
-class DriverCache(object):
-    def __init__(self, root_dir=None, valid_range=1):
+class DriverCacheManager(object):
+    def __init__(self, root_dir=None, valid_range=1, file_manager=None):
         self._root_dir = DEFAULT_USER_HOME_CACHE_PATH
         is_wdm_local = wdm_local()
         xdist_worker_id = get_xdist_worker_id()
@@ -30,15 +30,24 @@ class DriverCache(object):
         self._drivers_json_path = os.path.join(self._root_dir, "drivers.json")
         self._date_format = "%d/%m/%Y"
         self._drivers_directory = os.path.join(self._root_dir, self._drivers_root)
-        self.valid_range = valid_range
+        self._cache_valid_days_range = valid_range
         self._cache_key_driver_version = None
         self._metadata_key = None
         self._driver_binary_path = None
+        self._file_manager = file_manager
+        if not self._file_manager:
+            self._file_manager = FileManager()
+
+    def save_archive_file(self, file: File, path):
+        return self._file_manager.save_archive_file(file, path)
+
+    def unpack_archive(self, archive, path):
+        return self._file_manager.unpack_archive(archive, path)
 
     def save_file_to_cache(self, driver: Driver, file: File):
         path = self.__get_path(driver)
-        archive = save_file(file, path)
-        files = archive.unpack(path)
+        archive = self.save_archive_file(file, path)
+        files = self.unpack_archive(archive, path)
         binary = self.__get_binary(files, driver.get_name())
         binary_path = os.path.join(path, binary)
         self.__save_metadata(driver, binary_path)
@@ -107,7 +116,7 @@ class DriverCache(object):
         dates_diff = get_date_diff(
             driver_info["timestamp"], datetime.date.today(), self._date_format
         )
-        return dates_diff < self.valid_range
+        return dates_diff < self._cache_valid_days_range
 
     def load_metadata_content(self):
         if os.path.exists(self._drivers_json_path):

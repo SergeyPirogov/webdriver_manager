@@ -2,6 +2,7 @@ import os
 from typing import Optional
 
 from webdriver_manager.core.download_manager import DownloadManager
+from webdriver_manager.core.driver_cache import DriverCacheManager
 from webdriver_manager.core.manager import DriverManager
 from webdriver_manager.core.utils import ChromeType
 from webdriver_manager.drivers.chrome import ChromeDriver
@@ -19,11 +20,13 @@ class ChromeDriverManager(DriverManager):
             chrome_type: str = ChromeType.GOOGLE,
             cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,
+            cache_manager: Optional[DriverCacheManager] = None
     ):
         super().__init__(
             path,
             cache_valid_range=cache_valid_range,
-            download_manager=download_manager)
+            download_manager=download_manager,
+            cache_manager=cache_manager)
 
         self.driver = ChromeDriver(
             name=name,
