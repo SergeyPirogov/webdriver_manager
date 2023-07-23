@@ -37,10 +37,10 @@ class DriverCache(object):
         self._file_manager = FileManager()
 
     def save_archive_file(self, file: File, path):
-        return self._file_manager.save_file(file, path)
+        return self._file_manager.save_archive_file(file, path)
 
     def unpack_archive(self, archive, path):
-        return archive.unpack(path)
+        return self._file_manager.unpack_archive(archive, path)
 
     def save_file_to_cache(self, driver: Driver, file: File):
         path = self.__get_path(driver)
