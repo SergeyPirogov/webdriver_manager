@@ -97,15 +97,15 @@ class DriverCacheManager(object):
         """Find driver by '{os_type}_{driver_name}_{driver_version}_{browser_version}'."""
         os_type = self.get_os_type()
         driver_name = driver.get_name()
-        browser_version = driver.get_browser_version_from_os()
-
-        driver_version = self.get_cache_key_driver_version(driver)
         browser_type = driver.get_browser_type()
+        browser_version = self._os_system_manager.get_browser_version_from_os(browser_type)
+        driver_version = self.get_cache_key_driver_version(driver)
         metadata = self.load_metadata_content()
 
         key = self.__get_metadata_key(driver)
         if key not in metadata:
-            log(f'There is no [{os_type}] {driver_name} "{driver_version}" for browser {browser_type} "{browser_version}" in cache')
+            log(f'There is no [{os_type}] {driver_name} "{driver_version}" for browser {browser_type} '
+                f'"{browser_version}" in cache')
             return None
 
         driver_info = metadata[key]
@@ -142,7 +142,8 @@ class DriverCacheManager(object):
 
     def get_cache_key_driver_version(self, driver: Driver):
         if self._cache_key_driver_version is None:
-            self._cache_key_driver_version = "latest" if driver._driver_version in (None, "latest") else driver._driver_version
+            self._cache_key_driver_version = "latest" if driver._driver_version in (
+            None, "latest") else driver._driver_version
         return self._cache_key_driver_version
 
     def __get_path(self, driver: Driver):
