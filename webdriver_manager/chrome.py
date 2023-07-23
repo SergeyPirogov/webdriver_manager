@@ -47,10 +47,10 @@ class ChromeDriverManager(DriverManager):
         if "win" in os_type:
             return "win32"
 
-        if not OperationSystemManager.is_mac_os(os_type):
+        if not self._os_system_manager.is_mac_os(os_type):
             return os_type
 
-        if OperationSystemManager.is_arch(os_type):
+        if self._os_system_manager.is_arch(os_type):
             return "mac_arm64"
 
         return os_type

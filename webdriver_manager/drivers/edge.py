@@ -22,7 +22,7 @@ class EdgeChromiumDriver(Driver):
             http_client,
             os_system_manager
         )
-        self._os_type = self.get_os_type()
+        # self._os_type = self.get_os_type()
 
     def get_stable_release_version(self):
         """Stable driver version when browser version was not determined."""
