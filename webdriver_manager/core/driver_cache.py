@@ -9,7 +9,7 @@ from webdriver_manager.core.constants import (
 )
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.utils import get_date_diff, File, save_file
+from webdriver_manager.core.utils import get_date_diff, File, FileManager
 
 
 class DriverCache(object):
@@ -34,11 +34,18 @@ class DriverCache(object):
         self._cache_key_driver_version = None
         self._metadata_key = None
         self._driver_binary_path = None
+        self._file_manager = FileManager()
+
+    def save_archive_file(self, file: File, path):
+        return self._file_manager.save_file(file, path)
+
+    def unpack_archive(self, archive, path):
+        return archive.unpack(path)
 
     def save_file_to_cache(self, driver: Driver, file: File):
         path = self.__get_path(driver)
-        archive = save_file(file, path)
-        files = archive.unpack(path)
+        archive = self.save_archive_file(file, path)
+        files = self.unpack_archive(archive, path)
         binary = self.__get_binary(files, driver.get_name())
         binary_path = os.path.join(path, binary)
         self.__save_metadata(driver, binary_path)

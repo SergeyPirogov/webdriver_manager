@@ -39,3 +39,11 @@ def test_can_download_chrome_driver(delete_drivers_dir, version):
     assert file.filename == "chromedriver_win32.zip"
     archive = save_file(file, DEFAULT_PROJECT_ROOT_CACHE_PATH)
     assert "chromedriver.exe" in archive.unpack(DEFAULT_PROJECT_ROOT_CACHE_PATH)
+
+
+def test_can_download_driver_as_deb(delete_drivers_dir):
+    file = download_manager.download_file(
+        "http://archive.raspberrypi.org/debian/pool/main/c/chromium-browser/chromium-chromedriver_113.0.5672.59-rpt1_arm64.deb")
+    assert file.filename == 'chromium-chromedriver_113.0.5672.59-rpt1_arm64.deb'
+    archive = save_file(file, DEFAULT_PROJECT_ROOT_CACHE_PATH)
+    assert "chromedriver.exe" in archive.unpack(DEFAULT_PROJECT_ROOT_CACHE_PATH)

@@ -37,15 +37,17 @@ class File(object):
         return filename
 
 
-def save_file(file: File, directory: str):
-    os.makedirs(directory, exist_ok=True)
+class FileManager(object):
 
-    archive_path = f"{directory}{os.sep}{file.filename}"
-    with open(archive_path, "wb") as code:
-        code.write(file.content)
-    if not os.path.exists(archive_path):
-        raise FileExistsError(f"No file has been saved on such path {archive_path}")
-    return Archive(archive_path, os_type=os_name())
+    def save_file(self, file: File, directory: str):
+        os.makedirs(directory, exist_ok=True)
+
+        archive_path = f"{directory}{os.sep}{file.filename}"
+        with open(archive_path, "wb") as code:
+            code.write(file.content)
+        if not os.path.exists(archive_path):
+            raise FileExistsError(f"No file has been saved on such path {archive_path}")
+        return Archive(archive_path, os_type=os_name())
 
 
 class OSType(object):
