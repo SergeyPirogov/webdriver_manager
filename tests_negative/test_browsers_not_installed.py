@@ -8,10 +8,9 @@ from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.firefox.service import Service as FFService
 
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.os_manager import OperationSystemManager
+from webdriver_manager.core.os_manager import OperationSystemManager, ChromeType, OSType
 from webdriver_manager.firefox import GeckoDriverManager
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
-from webdriver_manager.core.utils import OSType, ChromeType
 
 
 @pytest.mark.skip(reason="it is not stable on CI")
