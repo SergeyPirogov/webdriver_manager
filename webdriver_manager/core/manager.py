@@ -1,5 +1,5 @@
 from webdriver_manager.core.download_manager import WDMDownloadManager
-from webdriver_manager.core.driver_cache import DriverCache
+from webdriver_manager.core.driver_cache import DriverCacheManager
 from webdriver_manager.core.logger import log
 
 
@@ -13,7 +13,7 @@ class DriverManager(object):
     ):
         self._cache_manager = cache_manager
         if not self._cache_manager:
-            self._cache_manager = DriverCache(root_dir, cache_valid_range)
+            self._cache_manager = DriverCacheManager(root_dir, cache_valid_range)
 
         self._download_manager = download_manager
         if self._download_manager is None:

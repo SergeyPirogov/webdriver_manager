@@ -2,7 +2,7 @@ import os
 from typing import Optional
 
 from webdriver_manager.core.download_manager import DownloadManager
-from webdriver_manager.core.driver_cache import DriverCache
+from webdriver_manager.core.driver_cache import DriverCacheManager
 from webdriver_manager.core.manager import DriverManager
 from webdriver_manager.drivers.firefox import GeckoDriver
 
@@ -19,7 +19,7 @@ class GeckoDriverManager(DriverManager):
             mozila_release_tag: str = "https://api.github.com/repos/mozilla/geckodriver/releases/tags/{0}",
             cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,
-            cache_manager: Optional[DriverCache] = None
+            cache_manager: Optional[DriverCacheManager] = None
     ):
         super(GeckoDriverManager, self).__init__(
             path,

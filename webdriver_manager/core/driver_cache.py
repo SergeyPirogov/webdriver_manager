@@ -12,7 +12,7 @@ from webdriver_manager.core.logger import log
 from webdriver_manager.core.utils import get_date_diff, File, FileManager
 
 
-class DriverCache(object):
+class DriverCacheManager(object):
     def __init__(self, root_dir=None, valid_range=1, file_manager=None):
         self._root_dir = DEFAULT_USER_HOME_CACHE_PATH
         is_wdm_local = wdm_local()
