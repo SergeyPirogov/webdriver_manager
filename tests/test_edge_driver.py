@@ -6,8 +6,8 @@ from selenium import webdriver
 from selenium.webdriver.edge.service import Service
 
 from webdriver_manager.core.driver_cache import DriverCacheManager
+from webdriver_manager.core.os_manager import PATTERN, ChromeType, OperationSystemManager
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
-from webdriver_manager.core.utils import PATTERN, ChromeType
 
 
 def test_edge_manager_with_selenium():
@@ -32,7 +32,7 @@ def test_edge_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
         EdgeChromiumDriverManager(
             version="0.2",
-            os_type='win64',
+            os_system_manager=OperationSystemManager("win64")
         ).install()
 
     assert (
@@ -46,7 +46,7 @@ def test_edge_manager_with_wrong_version():
 def test_edge_with_specific_version(os_type, specific_version):
     bin_path = EdgeChromiumDriverManager(
         version=specific_version,
-        os_type=os_type,
+        os_system_manager=OperationSystemManager(os_type),
     ).install()
     assert os.path.exists(bin_path)
 
@@ -56,11 +56,11 @@ def test_edge_with_specific_version(os_type, specific_version):
 def test_can_get_edge_driver_from_cache(os_type, specific_version):
     EdgeChromiumDriverManager(
         version=specific_version,
-        os_type=os_type,
+        os_system_manager=OperationSystemManager(os_type),
     ).install()
     driver_path = EdgeChromiumDriverManager(
         version=specific_version,
-        os_type=os_type
+        os_system_manager=OperationSystemManager(os_type)
     ).install()
     assert os.path.exists(driver_path)
 

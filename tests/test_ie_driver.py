@@ -3,6 +3,7 @@ import os
 import pytest
 
 from webdriver_manager.core.driver_cache import DriverCacheManager
+from webdriver_manager.core.os_manager import OperationSystemManager
 from webdriver_manager.microsoft import IEDriverManager
 
 
@@ -28,14 +29,14 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])
 def test_can_download_ie_driver_x64(os_type):
-    path = IEDriverManager(os_type=os_type).install()
+    path = IEDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
     assert os.path.exists(path)
 
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])
 def test_can_get_ie_driver_from_cache(os_type):
-    IEDriverManager(os_type=os_type).install()
-    driver_path = IEDriverManager(os_type=os_type).install()
+    IEDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
+    driver_path = IEDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
     assert os.path.exists(driver_path)
 
 

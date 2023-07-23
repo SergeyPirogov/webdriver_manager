@@ -4,8 +4,9 @@ import pytest
 from selenium import webdriver
 
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.driver_cache import DriverCacheManager
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.utils import ChromeType, os_name, OSType
+from webdriver_manager.core.os_manager import ChromeType, OSType
 
 
 def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
@@ -17,7 +18,7 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
     )
     driver_path = ChromeDriverManager(
         version="87.0.4280.88",
-        path=custom_path,
+        cache_manager=DriverCacheManager(custom_path),
         chrome_type=ChromeType.BRAVE,
     ).install()
 

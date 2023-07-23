@@ -1,6 +1,6 @@
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.utils import OSType, ChromeType
+from webdriver_manager.core.os_manager import OSType, ChromeType
 
 
 class EdgeChromiumDriver(Driver):
