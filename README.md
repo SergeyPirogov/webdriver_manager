@@ -203,7 +203,7 @@ driver_binary = FirefoxDriverManager(version=version).install()
 #### Custom Cache and File manager
 
 ```python
-cache_manager = DriverCache(file_manager=FileManager())
+cache_manager = DriverCacheManager(file_manager=FileManager())
 manager = ChromeDriverManager(cache_manager=cache_manager)
 ```
 

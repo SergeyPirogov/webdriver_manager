@@ -30,7 +30,7 @@ class DriverCacheManager(object):
         self._drivers_json_path = os.path.join(self._root_dir, "drivers.json")
         self._date_format = "%d/%m/%Y"
         self._drivers_directory = os.path.join(self._root_dir, self._drivers_root)
-        self.valid_range = valid_range
+        self._cache_valid_days_range = valid_range
         self._cache_key_driver_version = None
         self._metadata_key = None
         self._driver_binary_path = None
@@ -116,7 +116,7 @@ class DriverCacheManager(object):
         dates_diff = get_date_diff(
             driver_info["timestamp"], datetime.date.today(), self._date_format
         )
-        return dates_diff < self.valid_range
+        return dates_diff < self._cache_valid_days_range
 
     def load_metadata_content(self):
         if os.path.exists(self._drivers_json_path):
