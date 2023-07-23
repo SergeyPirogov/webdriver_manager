@@ -13,20 +13,17 @@ class ChromeDriverManager(DriverManager):
             self,
             version: Optional[str] = None,
             os_type: Optional[str] = None,
-            path: Optional[str] = None,
             name: str = "chromedriver",
             url: str = "https://chromedriver.storage.googleapis.com",
             latest_release_url: str = "https://chromedriver.storage.googleapis.com/LATEST_RELEASE",
             chrome_type: str = ChromeType.GOOGLE,
-            cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,
             cache_manager: Optional[DriverCacheManager] = None
     ):
         super().__init__(
-            path,
-            cache_valid_range=cache_valid_range,
             download_manager=download_manager,
-            cache_manager=cache_manager)
+            cache_manager=cache_manager
+        )
 
         self.driver = ChromeDriver(
             name=name,

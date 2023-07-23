@@ -1,0 +1,3 @@
+
+class OperationSystemManager(object):
+    pass

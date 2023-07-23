@@ -12,7 +12,6 @@ class OperaDriverManager(DriverManager):
             self,
             version: Optional[str] = None,
             os_type: Optional[str] = None,
-            path: Optional[str] = None,
             name: str = "operadriver",
             url: str = "https://github.com/operasoftware/operachromiumdriver/"
                        "releases/",
@@ -20,14 +19,13 @@ class OperaDriverManager(DriverManager):
                                       "operasoftware/operachromiumdriver/releases/latest",
             opera_release_tag: str = "https://api.github.com/repos/"
                                      "operasoftware/operachromiumdriver/releases/tags/{0}",
-            cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,
             cache_manager: Optional[DriverCacheManager] = None
     ):
-        super().__init__(path,
-                         cache_valid_range,
-                         download_manager=download_manager,
-                         cache_manager=cache_manager)
+        super().__init__(
+            download_manager=download_manager,
+            cache_manager=cache_manager
+        )
 
         self.driver = OperaDriver(
             name=name,

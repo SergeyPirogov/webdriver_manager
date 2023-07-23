@@ -21,8 +21,9 @@ class DriverCacheManager(object):
             log(f"xdist worker is: {xdist_worker_id}")
             self._root_dir = os.path.join(self._root_dir, xdist_worker_id)
 
-        if root_dir is not None:
+        if root_dir:
             self._root_dir = os.path.join(root_dir, ROOT_FOLDER_NAME, xdist_worker_id)
+
         if is_wdm_local:
             self._root_dir = os.path.join(DEFAULT_PROJECT_ROOT_CACHE_PATH, xdist_worker_id)
 
