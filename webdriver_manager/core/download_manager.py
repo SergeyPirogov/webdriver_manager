@@ -1,9 +1,9 @@
 import os
 from abc import ABC
 
+from webdriver_manager.core.file_manager import File
 from webdriver_manager.core.http import WDMHttpClient
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.utils import File
 
 
 class DownloadManager(ABC):

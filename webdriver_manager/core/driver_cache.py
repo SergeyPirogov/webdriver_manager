@@ -8,8 +8,9 @@ from webdriver_manager.core.constants import (
     DEFAULT_USER_HOME_CACHE_PATH, ROOT_FOLDER_NAME,
 )
 from webdriver_manager.core.driver import Driver
+from webdriver_manager.core.file_manager import FileManager, File
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.utils import get_date_diff, File, FileManager
+from webdriver_manager.core.utils import get_date_diff
 
 
 class DriverCacheManager(object):
