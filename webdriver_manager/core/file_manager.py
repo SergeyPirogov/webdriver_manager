@@ -4,6 +4,7 @@ import tarfile
 import zipfile
 
 from webdriver_manager.core.archive import Archive, LinuxZipFileWithPermissions
+from webdriver_manager.core.os_manager import OperationSystemManager
 
 
 class File(object):
@@ -37,8 +38,8 @@ class File(object):
 
 class FileManager(object):
 
-    def __init__(self, os_name):
-        self._os_name = os_name
+    def __init__(self, os_system_manager: OperationSystemManager):
+        self._os_system_manager = os_system_manager
 
     def save_archive_file(self, file: File, directory: str):
         os.makedirs(directory, exist_ok=True)
@@ -58,7 +59,7 @@ class FileManager(object):
             return self.__extract_tar_file(archive_file, target_dir)
 
     def __extract_zip(self, archive_file, to_directory):
-        zip_class = (LinuxZipFileWithPermissions if self._os_name == "linux" else zipfile.ZipFile)
+        zip_class = (LinuxZipFileWithPermissions if self._os_system_manager.get_os_name() == "linux" else zipfile.ZipFile)
         archive = zip_class(archive_file.file_path)
         try:
             archive.extractall(to_directory)

@@ -2,8 +2,7 @@ from packaging import version
 
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.os_manager import OperationSystemManager
-from webdriver_manager.core.utils import ChromeType
+from webdriver_manager.core.os_manager import OperationSystemManager, ChromeType
 
 
 class ChromeDriver(Driver):

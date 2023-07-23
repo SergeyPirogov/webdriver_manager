@@ -38,8 +38,9 @@ class DriverCacheManager(object):
         self._metadata_key = None
         self._driver_binary_path = None
         self._file_manager = file_manager
+        self._os_system_manager = OperationSystemManager()
         if not self._file_manager:
-            self._file_manager = FileManager(OperationSystemManager.get_os_name())
+            self._file_manager = FileManager(self._os_system_manager)
 
     def save_archive_file(self, file: File, path):
         return self._file_manager.save_archive_file(file, path)
@@ -89,9 +90,12 @@ class DriverCacheManager(object):
         with open(self._drivers_json_path, "w+") as outfile:
             json.dump(metadata, outfile, indent=4)
 
+    def get_os_type(self):
+        return self._os_system_manager.get_os_type()
+
     def find_driver(self, driver: Driver):
         """Find driver by '{os_type}_{driver_name}_{driver_version}_{browser_version}'."""
-        os_type = driver.get_os_type()
+        os_type = self.get_os_type()
         driver_name = driver.get_name()
         browser_version = driver.get_browser_version_from_os()
         driver_version = self.get_cache_key_driver_version(driver)

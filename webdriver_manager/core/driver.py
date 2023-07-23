@@ -1,7 +1,6 @@
 from webdriver_manager.core.logger import log
 from webdriver_manager.core.config import gh_token
 from webdriver_manager.core.os_manager import OperationSystemManager
-from webdriver_manager.core.utils import get_browser_version_from_os
 
 
 class Driver(object):
@@ -65,7 +64,7 @@ class Driver(object):
         Note: the fallback may have collisions in user cases when previous browser was not uninstalled properly.
         """
         if self._browser_version is None:
-            self._browser_version = get_browser_version_from_os(self.get_browser_type())
+            self._browser_version = self._os_system_manager.get_browser_version_from_os(self.get_browser_type())
         return self._browser_version
 
     def get_browser_type(self):

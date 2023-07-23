@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 
 from webdriver_manager.core.driver_cache import DriverCacheManager
-from webdriver_manager.core.utils import os_type as get_os_type
+from webdriver_manager.core.os_manager import OperationSystemManager
 from webdriver_manager.opera import OperaDriverManager
 
 
@@ -30,8 +30,8 @@ def test_operadriver_manager_with_selenium():
     driver_path = OperaDriverManager().install()
     options = webdriver.ChromeOptions()
     options.add_experimental_option('w3c', True)
-
-    if get_os_type() in ["win64", "win32"]:
+    os_type = OperationSystemManager().get_os_type()
+    if os_type in ["win64", "win32"]:
         paths = [f for f in glob.glob(
             f"C:/Users/{os.getlogin()}/AppData/Local/Programs/Opera/**",
             recursive=True
@@ -40,11 +40,11 @@ def test_operadriver_manager_with_selenium():
             if os.path.isfile(path) and path.endswith("opera.exe"):
                 options.binary_location = path
     elif (
-            (get_os_type() in ["linux64", "linux32"])
+            (os_type in ["linux64", "linux32"])
             and not os.path.exists('/usr/bin/opera')
     ):
         options.binary_location = "/usr/bin/opera"
-    elif get_os_type() in "mac64":
+    elif os_type in "mac64":
         options.binary_location = "/Applications/Opera.app/Contents/MacOS/Opera"
     web_service = Service(driver_path)
     web_service.start()
@@ -64,8 +64,8 @@ def test_opera_driver_manager_with_wrong_version():
 
 
 @pytest.mark.parametrize('path', ['.', None])
-def test_opera_driver_manager_with_correct_version_and_token(custom_path):
-    driver_path = OperaDriverManager(version="v.2.45", cache_manager=DriverCacheManager(custom_path)).install()
+def test_opera_driver_manager_with_correct_version_and_token(path):
+    driver_path = OperaDriverManager(version="v.2.45", cache_manager=DriverCacheManager(path)).install()
     assert os.path.exists(driver_path)
 
 
@@ -74,6 +74,6 @@ def test_opera_driver_manager_with_correct_version_and_token(custom_path):
                                      'linux64',
                                      'mac64'])
 def test_can_get_driver_from_cache(os_type):
-    OperaDriverManager(os_type=os_type).install()
-    driver_path = OperaDriverManager(os_type=os_type).install()
+    OperaDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
+    driver_path = OperaDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
     assert os.path.exists(driver_path)

@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 
 from webdriver_manager.core.driver_cache import DriverCacheManager
+from webdriver_manager.core.os_manager import OperationSystemManager
 from webdriver_manager.firefox import GeckoDriverManager
 
 
@@ -47,7 +48,7 @@ def test_gecko_manager_with_correct_version_and_token(delete_drivers_dir):
 
 
 def test_can_download_ff_x64(delete_drivers_dir):
-    driver_path = GeckoDriverManager(os_type="win64").install()
+    driver_path = GeckoDriverManager(os_system_manager=OperationSystemManager("win64")).install()
     assert os.path.exists(driver_path)
 
 
@@ -58,6 +59,6 @@ def test_can_download_ff_x64(delete_drivers_dir):
                                      'mac64',
                                      'mac64_m1'])
 def test_can_get_driver_from_cache(os_type):
-    GeckoDriverManager(os_type=os_type).install()
-    driver_path = GeckoDriverManager(os_type=os_type).install()
+    GeckoDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
+    driver_path = GeckoDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
     assert os.path.exists(driver_path)
