@@ -39,6 +39,9 @@ class IEDriverManager(DriverManager):
     def install(self) -> str:
         return self._get_driver_binary_path(self.driver)
 
+    def get_os_type(self):
+        return "x64" if self._os_system_manager.get_os_type() == "win64" else "Win32"
+
 
 class EdgeChromiumDriverManager(DriverManager):
     def __init__(
