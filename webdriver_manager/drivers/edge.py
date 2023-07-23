@@ -22,7 +22,6 @@ class EdgeChromiumDriver(Driver):
             http_client,
             os_system_manager
         )
-        self._os_type = self.get_os_type()
 
     def get_stable_release_version(self):
         """Stable driver version when browser version was not determined."""
@@ -40,13 +39,14 @@ class EdgeChromiumDriver(Driver):
             else determined_browser_version
         )
         major_edge_version = edge_driver_version_to_download.split(".")[0]
+        os_type = self._os_system_manager.get_os_type()
         latest_release_url = {
             OSType.WIN
-            in self._os_type: f"{self._latest_release_url}_{major_edge_version}_WINDOWS",
+            in os_type: f"{self._latest_release_url}_{major_edge_version}_WINDOWS",
             OSType.MAC
-            in self._os_type: f"{self._latest_release_url}_{major_edge_version}_MACOS",
+            in os_type: f"{self._latest_release_url}_{major_edge_version}_MACOS",
             OSType.LINUX
-            in self._os_type: f"{self._latest_release_url}_{major_edge_version}_LINUX",
+            in os_type: f"{self._latest_release_url}_{major_edge_version}_LINUX",
         }[True]
         resp = self._http_client.get(url=latest_release_url)
         return resp.text.rstrip()

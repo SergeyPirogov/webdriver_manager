@@ -2,7 +2,7 @@ from packaging import version
 
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
-from webdriver_manager.core.os_manager import OperationSystemManager, ChromeType
+from webdriver_manager.core.os_manager import ChromeType
 
 
 class ChromeDriver(Driver):
@@ -26,24 +26,9 @@ class ChromeDriver(Driver):
             os_system_manager
         )
         self._browser_type = chrome_type
-        self._os_type = self.get_os_type()
 
-    def get_os_type(self):
-        os_type = super().get_os_type()
-        if "win" in os_type:
-            return "win32"
-
-        if not OperationSystemManager.is_mac_os(os_type):
-            return os_type
-
-        if OperationSystemManager.is_arch(os_type):
-            return "mac_arm64"
-
-        return os_type
-
-    def get_driver_download_url(self):
+    def get_driver_download_url(self, os_type):
         driver_version_to_download = self.get_driver_version_to_download()
-        os_type = self._os_type
         # For Mac ARM CPUs after version 106.0.5249.61 the format of OS type changed
         # to more unified "mac_arm64". For newer versions, it'll be "mac_arm64"
         # by default, for lower versions we replace "mac_arm64" to old format - "mac64_m1".

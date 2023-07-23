@@ -22,7 +22,6 @@ class IEDriver(Driver):
             http_client,
             os_system_manager
         )
-        self.os_type = "x64" if self._os_system_manager.get_os_type() == "win64" else "Win32"
         self._ie_release_tag = ie_release_tag
         # todo: for 'browser_version' implement installed IE version detection
         #       like chrome or firefox
@@ -43,7 +42,7 @@ class IEDriver(Driver):
         )
         return release["tag_name"].replace("selenium-", "")
 
-    def get_driver_download_url(self):
+    def get_driver_download_url(self, os_type):
         """Like https://github.com/seleniumhq/selenium/releases/download/3.141.59/IEDriverServer_Win32_3.141.59.zip"""
         driver_version_to_download = self.get_driver_version_to_download()
         log(f"Getting latest ie release info for {driver_version_to_download}")
@@ -54,7 +53,7 @@ class IEDriver(Driver):
 
         assets = resp.json()["assets"]
 
-        name = f"{self._name}_{self.os_type}_{driver_version_to_download}" + "."
+        name = f"{self._name}_{os_type}_{driver_version_to_download}" + "."
         output_dict = [
             asset for asset in assets if asset["name"].startswith(name)]
         return output_dict[0]["browser_download_url"]
