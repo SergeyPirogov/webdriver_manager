@@ -8,9 +8,10 @@ from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.firefox.service import Service as FFService
 
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.os_manager import OperationSystemManager
 from webdriver_manager.firefox import GeckoDriverManager
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
-from webdriver_manager.core.utils import OSType, os_name, ChromeType
+from webdriver_manager.core.utils import OSType, ChromeType
 
 
 @pytest.mark.skip(reason="it is not stable on CI")
@@ -19,7 +20,7 @@ def test_brave_not_installed():
         OSType.LINUX: "/usr/bin/brave-browser",
         OSType.MAC: "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
         OSType.WIN: f"{os.getenv('LOCALAPPDATA')}\\BraveSoftware\\Brave-Browser\\Application\\brave.exe",
-    }[os_name()]
+    }[OperationSystemManager.get_os_name()]
 
     option = webdriver.ChromeOptions()
     option.binary_location = binary_location
