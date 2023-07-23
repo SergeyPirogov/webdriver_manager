@@ -13,7 +13,7 @@ from webdriver_manager.core.utils import get_date_diff, File, FileManager
 
 
 class DriverCache(object):
-    def __init__(self, root_dir=None, valid_range=1):
+    def __init__(self, root_dir=None, valid_range=1, file_manager=None):
         self._root_dir = DEFAULT_USER_HOME_CACHE_PATH
         is_wdm_local = wdm_local()
         xdist_worker_id = get_xdist_worker_id()
@@ -34,7 +34,9 @@ class DriverCache(object):
         self._cache_key_driver_version = None
         self._metadata_key = None
         self._driver_binary_path = None
-        self._file_manager = FileManager()
+        self._file_manager = file_manager
+        if not self._file_manager:
+            self._file_manager = FileManager()
 
     def save_archive_file(self, file: File, path):
         return self._file_manager.save_archive_file(file, path)
