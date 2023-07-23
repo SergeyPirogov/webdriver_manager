@@ -12,14 +12,19 @@ class ChromeDriver(Driver):
             self,
             name,
             version,
-            os_type,
             url,
             latest_release_url,
             http_client,
-            chrome_type=ChromeType.GOOGLE,
+            os_system_manager,
+            chrome_type=ChromeType.GOOGLE
     ):
         super(ChromeDriver, self).__init__(
-            name, version, os_type, url, latest_release_url, http_client
+            name,
+            version,
+            url,
+            latest_release_url,
+            http_client,
+            os_system_manager
         )
         self._browser_type = chrome_type
         self._os_type = self.get_os_type()

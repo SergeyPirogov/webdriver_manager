@@ -9,18 +9,18 @@ class EdgeChromiumDriver(Driver):
             self,
             name,
             version,
-            os_type,
             url,
             latest_release_url,
-            http_client
+            http_client,
+            os_system_manager
     ):
         super(EdgeChromiumDriver, self).__init__(
             name,
             version,
-            os_type,
             url,
             latest_release_url,
-            http_client
+            http_client,
+            os_system_manager
         )
         self._os_type = self.get_os_type()
 

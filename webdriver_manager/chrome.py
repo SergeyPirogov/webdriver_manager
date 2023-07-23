@@ -4,6 +4,7 @@ from typing import Optional
 from webdriver_manager.core.download_manager import DownloadManager
 from webdriver_manager.core.driver_cache import DriverCacheManager
 from webdriver_manager.core.manager import DriverManager
+from webdriver_manager.core.os_manager import OperationSystemManager
 from webdriver_manager.core.utils import ChromeType
 from webdriver_manager.drivers.chrome import ChromeDriver
 
@@ -12,13 +13,13 @@ class ChromeDriverManager(DriverManager):
     def __init__(
             self,
             version: Optional[str] = None,
-            os_type: Optional[str] = None,
             name: str = "chromedriver",
             url: str = "https://chromedriver.storage.googleapis.com",
             latest_release_url: str = "https://chromedriver.storage.googleapis.com/LATEST_RELEASE",
             chrome_type: str = ChromeType.GOOGLE,
             download_manager: Optional[DownloadManager] = None,
-            cache_manager: Optional[DriverCacheManager] = None
+            cache_manager: Optional[DriverCacheManager] = None,
+            os_system_manager: Optional[OperationSystemManager] = None
     ):
         super().__init__(
             download_manager=download_manager,
@@ -28,11 +29,11 @@ class ChromeDriverManager(DriverManager):
         self.driver = ChromeDriver(
             name=name,
             version=version,
-            os_type=os_type,
             url=url,
             latest_release_url=latest_release_url,
             chrome_type=chrome_type,
             http_client=self.http_client,
+            os_system_manager=os_system_manager
         )
 
     def install(self) -> str:

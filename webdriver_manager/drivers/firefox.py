@@ -7,19 +7,19 @@ class GeckoDriver(Driver):
             self,
             name,
             version,
-            os_type,
             url,
             latest_release_url,
             mozila_release_tag,
             http_client,
+            os_system_manager
     ):
         super(GeckoDriver, self).__init__(
             name,
             version,
-            os_type,
             url,
             latest_release_url,
             http_client,
+            os_system_manager,
         )
         self._mozila_release_tag = mozila_release_tag
         self._os_type = self.get_os_type()

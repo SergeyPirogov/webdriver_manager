@@ -9,10 +9,10 @@ class Driver(object):
             self,
             name,
             version,
-            os_type,
             url,
             latest_release_url,
-            http_client):
+            http_client,
+            os_system_manager):
         self._name = name
         self._url = url
         self._version = version
@@ -20,7 +20,9 @@ class Driver(object):
         self._http_client = http_client
         self._browser_version = None
         self._driver_to_download_version = None
-        self._os_system_manager = OperationSystemManager(os_type)
+        self._os_system_manager = os_system_manager
+        if not self._os_system_manager:
+            self._os_system_manager = OperationSystemManager()
 
     @property
     def auth_header(self):

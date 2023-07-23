@@ -1,9 +1,9 @@
 import os
 from typing import Optional
 
-from webdriver_manager.core import utils
 from webdriver_manager.core.download_manager import DownloadManager
 from webdriver_manager.core.driver_cache import DriverCacheManager
+from webdriver_manager.core.os_manager import OperationSystemManager
 from webdriver_manager.drivers.edge import EdgeChromiumDriver
 from webdriver_manager.drivers.ie import IEDriver
 from webdriver_manager.core.manager import DriverManager
@@ -13,13 +13,13 @@ class IEDriverManager(DriverManager):
     def __init__(
             self,
             version: Optional[str] = None,
-            os_type: Optional[str] = None,
             name: str = "IEDriverServer",
             url: str = "https://github.com/seleniumhq/selenium/releases/download",
             latest_release_url: str = "https://api.github.com/repos/seleniumhq/selenium/releases",
             ie_release_tag: str = "https://api.github.com/repos/seleniumhq/selenium/releases/tags/selenium-{0}",
             download_manager: Optional[DownloadManager] = None,
-            cache_manager: Optional[DriverCacheManager] = None
+            cache_manager: Optional[DriverCacheManager] = None,
+            os_system_manager: Optional[OperationSystemManager] = None
     ):
         super().__init__(
             download_manager=download_manager,
@@ -28,12 +28,12 @@ class IEDriverManager(DriverManager):
 
         self.driver = IEDriver(
             version=version,
-            os_type=os_type,
             name=name,
             url=url,
             latest_release_url=latest_release_url,
             ie_release_tag=ie_release_tag,
             http_client=self.http_client,
+            os_system_manager=os_system_manager
         )
 
     def install(self) -> str:
@@ -44,12 +44,12 @@ class EdgeChromiumDriverManager(DriverManager):
     def __init__(
             self,
             version: Optional[str] = None,
-            os_type: str = utils.os_type(),
             name: str = "edgedriver",
             url: str = "https://msedgedriver.azureedge.net",
             latest_release_url: str = "https://msedgedriver.azureedge.net/LATEST_RELEASE",
             download_manager: Optional[DownloadManager] = None,
-            cache_manager: Optional[DriverCacheManager] = None
+            cache_manager: Optional[DriverCacheManager] = None,
+            os_system_manager: Optional[OperationSystemManager] = None
     ):
         super().__init__(
             download_manager=download_manager,
@@ -58,11 +58,11 @@ class EdgeChromiumDriverManager(DriverManager):
 
         self.driver = EdgeChromiumDriver(
             version=version,
-            os_type=os_type,
             name=name,
             url=url,
             latest_release_url=latest_release_url,
             http_client=self.http_client,
+            os_system_manager=os_system_manager
         )
 
     def install(self) -> str:
