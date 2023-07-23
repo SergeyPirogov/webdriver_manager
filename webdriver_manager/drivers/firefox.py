@@ -6,7 +6,7 @@ class GeckoDriver(Driver):
     def __init__(
             self,
             name,
-            version,
+            driver_version,
             url,
             latest_release_url,
             mozila_release_tag,
@@ -15,7 +15,7 @@ class GeckoDriver(Driver):
     ):
         super(GeckoDriver, self).__init__(
             name,
-            version,
+            driver_version,
             url,
             latest_release_url,
             http_client,

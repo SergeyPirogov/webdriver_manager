@@ -142,7 +142,7 @@ class DriverCacheManager(object):
 
     def get_cache_key_driver_version(self, driver: Driver):
         if self._cache_key_driver_version is None:
-            self._cache_key_driver_version = "latest" if driver._version in (None, "latest") else driver._version
+            self._cache_key_driver_version = "latest" if driver._driver_version in (None, "latest") else driver._driver_version
         return self._cache_key_driver_version
 
     def __get_path(self, driver: Driver):

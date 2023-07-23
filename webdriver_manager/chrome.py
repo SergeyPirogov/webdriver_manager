@@ -11,7 +11,7 @@ from webdriver_manager.drivers.chrome import ChromeDriver
 class ChromeDriverManager(DriverManager):
     def __init__(
             self,
-            version: Optional[str] = None,
+            driver_version: Optional[str] = None,
             name: str = "chromedriver",
             url: str = "https://chromedriver.storage.googleapis.com",
             latest_release_url: str = "https://chromedriver.storage.googleapis.com/LATEST_RELEASE",
@@ -27,7 +27,7 @@ class ChromeDriverManager(DriverManager):
 
         self.driver = ChromeDriver(
             name=name,
-            version=version,
+            driver_version=driver_version,
             url=url,
             latest_release_url=latest_release_url,
             chrome_type=chrome_type,

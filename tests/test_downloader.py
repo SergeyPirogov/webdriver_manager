@@ -33,7 +33,7 @@ def test_can_download_driver_as_tar_gz(delete_drivers_dir):
 @pytest.mark.parametrize('version', ["2.26"])
 def test_can_download_chrome_driver(delete_drivers_dir, version):
     driver = ChromeDriver(name="chromedriver",
-                          version=version,
+                          driver_version=version,
                           os_system_manager=OperationSystemManager("win32"),
                           url="http://chromedriver.storage.googleapis.com",
                           latest_release_url="http://chromedriver.storage.googleapis.com/LATEST_RELEASE",

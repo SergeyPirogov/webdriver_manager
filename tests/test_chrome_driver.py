@@ -39,7 +39,7 @@ def test_chrome_manager_with_project_root_local_folder(delete_drivers_dir):
 
 def test_driver_can_be_saved_to_custom_path():
     custom_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "custom")
-    path = ChromeDriverManager(version="87.0.4280.88", cache_manager=DriverCacheManager(custom_path)).install()
+    path = ChromeDriverManager(driver_version="87.0.4280.88", cache_manager=DriverCacheManager(custom_path)).install()
     assert os.path.exists(path)
     assert custom_path in path
 

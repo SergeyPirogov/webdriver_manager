@@ -8,7 +8,7 @@ class EdgeChromiumDriver(Driver):
     def __init__(
             self,
             name,
-            version,
+            driver_version,
             url,
             latest_release_url,
             http_client,
@@ -16,7 +16,7 @@ class EdgeChromiumDriver(Driver):
     ):
         super(EdgeChromiumDriver, self).__init__(
             name,
-            version,
+            driver_version,
             url,
             latest_release_url,
             http_client,
@@ -36,7 +36,7 @@ class EdgeChromiumDriver(Driver):
 
         edge_driver_version_to_download = (
             self.get_stable_release_version()
-            if (self._version == "latest" or determined_browser_version is None)
+            if (self._driver_version == "latest" or determined_browser_version is None)
             else determined_browser_version
         )
         major_edge_version = edge_driver_version_to_download.split(".")[0]

@@ -6,7 +6,7 @@ class OperaDriver(Driver):
     def __init__(
             self,
             name,
-            version,
+            driver_version,
             url,
             latest_release_url,
             opera_release_tag,
@@ -15,7 +15,7 @@ class OperaDriver(Driver):
     ):
         super(OperaDriver, self).__init__(
             name,
-            version,
+            driver_version,
             url,
             latest_release_url,
             http_client,

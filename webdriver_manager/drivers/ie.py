@@ -7,7 +7,7 @@ class IEDriver(Driver):
     def __init__(
             self,
             name,
-            version,
+            driver_version,
             url,
             latest_release_url,
             ie_release_tag,
@@ -16,7 +16,7 @@ class IEDriver(Driver):
     ):
         super(IEDriver, self).__init__(
             name,
-            version,
+            driver_version,
             url,
             latest_release_url,
             http_client,

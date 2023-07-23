@@ -17,7 +17,7 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
         "ssl_disabled",
     )
     driver_path = ChromeDriverManager(
-        version="87.0.4280.88",
+        driver_version="87.0.4280.88",
         cache_manager=DriverCacheManager(custom_path),
         chrome_type=ChromeType.BRAVE,
     ).install()
@@ -55,7 +55,7 @@ def test_brave_manager_with_wrong_version():
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])
 def test_can_get_brave_for_win(os_type):
-    path = ChromeDriverManager(version="83.0.4103.39",
+    path = ChromeDriverManager(driver_version="83.0.4103.39",
                                os_system_manager=OperationSystemManager(os_type),
                                chrome_type=ChromeType.BRAVE).install()
     assert os.path.exists(path)

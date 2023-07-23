@@ -26,7 +26,7 @@ class GeckoDriverManager(DriverManager):
         )
 
         self.driver = GeckoDriver(
-            version=version,
+            driver_version=version,
             name=name,
             url=url,
             latest_release_url=latest_release_url,

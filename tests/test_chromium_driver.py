@@ -14,7 +14,7 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
         "ssl_disabled",
     )
     driver_path = ChromeDriverManager(
-        version="87.0.4280.88",
+        driver_version="87.0.4280.88",
         cache_manager=DriverCacheManager(custom_path),
         chrome_type=ChromeType.CHROMIUM,
     ).install()
@@ -30,7 +30,7 @@ def test_chromium_manager_with_specific_version():
 def test_driver_can_be_saved_to_custom_path():
     custom_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "custom")
 
-    path = ChromeDriverManager(version="87.0.4280.88", cache_manager=DriverCacheManager(custom_path),
+    path = ChromeDriverManager(driver_version="87.0.4280.88", cache_manager=DriverCacheManager(custom_path),
                                chrome_type=ChromeType.CHROMIUM).install()
     assert os.path.exists(path)
     assert custom_path in path
@@ -44,7 +44,7 @@ def test_chromium_manager_with_wrong_version():
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])
 def test_can_get_chromium_for_win(os_type):
-    path = ChromeDriverManager(version="83.0.4103.39",
+    path = ChromeDriverManager(driver_version="83.0.4103.39",
                                os_system_manager=OperationSystemManager(os_type),
                                chrome_type=ChromeType.CHROMIUM).install()
     assert os.path.exists(path)

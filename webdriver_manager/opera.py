@@ -30,7 +30,7 @@ class OperaDriverManager(DriverManager):
 
         self.driver = OperaDriver(
             name=name,
-            version=version,
+            driver_version=version,
             url=url,
             latest_release_url=latest_release_url,
             opera_release_tag=opera_release_tag,

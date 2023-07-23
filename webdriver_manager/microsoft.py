@@ -27,7 +27,7 @@ class IEDriverManager(DriverManager):
         )
 
         self.driver = IEDriver(
-            version=version,
+            driver_version=version,
             name=name,
             url=url,
             latest_release_url=latest_release_url,
@@ -57,7 +57,7 @@ class EdgeChromiumDriverManager(DriverManager):
         )
 
         self.driver = EdgeChromiumDriver(
-            version=version,
+            driver_version=version,
             name=name,
             url=url,
             latest_release_url=latest_release_url,
