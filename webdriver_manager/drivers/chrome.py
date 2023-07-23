@@ -50,7 +50,7 @@ class ChromeDriver(Driver):
         if version.parse(driver_version_to_download) < version.parse("106.0.5249.61"):
             os_type = os_type.replace("mac_arm64", "mac64_m1")
 
-        if version.parse(driver_version_to_download) >= version.parse("113"):
+        if version.parse(driver_version_to_download) >= version.parse("115"):
             if os_type == "mac64":
                 os_type = "mac-x64"
             if os_type in ["mac_64", "mac64_m1", "mac_arm64"]:
