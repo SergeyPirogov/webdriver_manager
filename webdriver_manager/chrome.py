@@ -41,3 +41,16 @@ class ChromeDriverManager(DriverManager):
         if all(test_os not in driver_path for test_os in ["mac_arm64", "mac_x64"]):
             os.chmod(driver_path, 0o755)
         return driver_path
+
+    def get_os_type(self):
+        os_type = super().get_os_type()
+        if "win" in os_type:
+            return "win32"
+
+        if not OperationSystemManager.is_mac_os(os_type):
+            return os_type
+
+        if OperationSystemManager.is_arch(os_type):
+            return "mac_arm64"
+
+        return os_type

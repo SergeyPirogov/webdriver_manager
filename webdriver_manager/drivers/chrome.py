@@ -26,20 +26,20 @@ class ChromeDriver(Driver):
             os_system_manager
         )
         self._browser_type = chrome_type
-        self._os_type = self.get_os_type()
+        # self._os_type = self.get_os_type()
 
-    def get_os_type(self):
-        os_type = super().get_os_type()
-        if "win" in os_type:
-            return "win32"
-
-        if not OperationSystemManager.is_mac_os(os_type):
-            return os_type
-
-        if OperationSystemManager.is_arch(os_type):
-            return "mac_arm64"
-
-        return os_type
+    # def get_os_type(self):
+    #     os_type = super().get_os_type()
+    #     if "win" in os_type:
+    #         return "win32"
+    #
+    #     if not OperationSystemManager.is_mac_os(os_type):
+    #         return os_type
+    #
+    #     if OperationSystemManager.is_arch(os_type):
+    #         return "mac_arm64"
+    #
+    #     return os_type
 
     def get_driver_download_url(self, os_type):
         driver_version_to_download = self.get_driver_version_to_download()
