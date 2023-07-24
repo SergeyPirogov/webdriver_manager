@@ -2,6 +2,7 @@ import json
 import os
 
 import pytest
+import browsers
 from selenium import webdriver
 
 from webdriver_manager.chrome import ChromeDriverManager
@@ -51,8 +52,10 @@ def test_chrome_manager_with_wrong_version():
 
 
 def test_chrome_manager_with_selenium():
+    options = webdriver.ChromeOptions()
+    options.binary_location = browsers.get("chrome")["path"]
     driver_path = ChromeDriverManager().install()
-    driver = webdriver.Chrome(service=Service(driver_path))
+    driver = webdriver.Chrome(service=Service(driver_path), options=options)
     driver.get("http://automation-remarks.com")
     driver.close()
 
@@ -69,9 +72,11 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
 
 
 def test_chrome_manager_cached_driver_with_selenium():
+    options = webdriver.ChromeOptions()
+    options.binary_location = browsers.get("chrome")["path"]
     custom_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "custom-cache")
     manager = ChromeDriverManager(cache_manager=DriverCacheManager(custom_path))
-    driver = webdriver.Chrome(service=Service(manager.install()))
+    driver = webdriver.Chrome(service=Service(manager.install()), options=options)
     driver.get("http://automation-remarks.com")
 
     metadata_file = os.path.join(custom_path, ROOT_FOLDER_NAME, 'drivers.json')
