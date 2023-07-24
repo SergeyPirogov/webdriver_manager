@@ -32,7 +32,7 @@ class WDMHttpClient(HttpClient):
             resp = requests.get(
                 url=url, verify=self._ssl_verify, stream=True, **kwargs)
         except exceptions.ConnectionError:
-            raise ConnectionError(f"Could not reach host. Are you offline?")
+            raise exceptions.ConnectionError(f"Could not reach host. Are you offline?")
         self.validate_response(resp)
         return resp
 
