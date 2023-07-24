@@ -53,7 +53,7 @@ class ChromeDriver(Driver):
     def get_latest_release_version(self):
         determined_browser_version = self.get_browser_version_from_os()
         log(f"Get LATEST {self._name} version for {self._browser_type}")
-        if version.parse(determined_browser_version) >= version.parse("113"):
+        if determined_browser_version is not None and version.parse(determined_browser_version) >= version.parse("113"):
             return determined_browser_version
 
         latest_release_url = (
