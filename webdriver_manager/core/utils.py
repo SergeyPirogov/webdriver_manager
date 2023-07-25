@@ -4,9 +4,6 @@ import re
 import subprocess
 
 
-
-
-
 def get_date_diff(date1, date2, date_format):
     a = datetime.datetime.strptime(date1, date_format)
     b = datetime.datetime.strptime(
