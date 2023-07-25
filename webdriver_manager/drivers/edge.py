@@ -35,7 +35,7 @@ class EdgeChromiumDriver(Driver):
 
         edge_driver_version_to_download = (
             self.get_stable_release_version()
-            if (self._driver_version == "latest" or determined_browser_version is None)
+            if (determined_browser_version is None)
             else determined_browser_version
         )
         major_edge_version = edge_driver_version_to_download.split(".")[0]

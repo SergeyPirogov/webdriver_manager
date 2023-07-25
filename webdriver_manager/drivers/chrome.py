@@ -58,7 +58,7 @@ class ChromeDriver(Driver):
 
         latest_release_url = (
             self._latest_release_url
-            if (self._driver_version == "latest" or determined_browser_version is None)
+            if (determined_browser_version is None)
             else f"{self._latest_release_url}_{determined_browser_version}"
         )
         resp = self._http_client.get(url=latest_release_url)
