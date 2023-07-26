@@ -159,4 +159,5 @@ class OperationSystemManager(object):
             version = read_version_from_cmd(cmd_mapping, pattern)
             return version
         except Exception:
-            raise Exception("Can not get browser version from OS")
+            return None
+            # raise Exception("Can not get browser version from OS")

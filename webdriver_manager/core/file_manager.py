@@ -78,7 +78,7 @@ class FileManager(object):
                     full_file_path = os.path.join(to_directory, file_path)
                     source = os.path.join(full_file_path, file_name)
                     destination = os.path.join(to_directory, file_name)
-                    os.rename(source, destination)
+                    os.replace(source, destination)
                     file_names.append(file_name)
             return sorted(file_names, key=lambda x: x.lower())
         return archive.namelist()

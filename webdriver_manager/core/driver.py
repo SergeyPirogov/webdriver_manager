@@ -7,18 +7,17 @@ class Driver(object):
     def __init__(
             self,
             name,
-            driver_version,
+            driver_version_to_download,
             url,
             latest_release_url,
             http_client,
             os_system_manager):
         self._name = name
         self._url = url
-        self._driver_version = driver_version
         self._latest_release_url = latest_release_url
         self._http_client = http_client
         self._browser_version = None
-        self._driver_to_download_version = None
+        self._driver_version_to_download = driver_version_to_download
         self._os_system_manager = os_system_manager
         if not self._os_system_manager:
             self._os_system_manager = OperationSystemManager()
@@ -43,10 +42,10 @@ class Driver(object):
         Downloads latest, if version is "latest" or browser could not been determined.
         Downloads determined browser version driver in all other ways as a bonus fallback for lazy users.
         """
-        if not self._driver_to_download_version:
-            self._driver_to_download_version = self._driver_version if self._driver_version not in (None, "latest") \
-                else self.get_latest_release_version()
-        return self._driver_to_download_version
+        if self._driver_version_to_download:
+            return self._driver_version_to_download
+
+        return self.get_latest_release_version()
 
     def get_latest_release_version(self):
         # type: () -> str
