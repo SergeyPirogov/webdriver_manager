@@ -274,7 +274,7 @@ Specify the version of webdriver you need. And webdriver-manager will download i
 ```python
 from webdriver_manager.chrome import ChromeDriverManager
 
-ChromeDriverManager(version="2.26").install()
+ChromeDriverManager(driver_version="2.26").install()
 ```
 
 ### `cache_valid_range`
