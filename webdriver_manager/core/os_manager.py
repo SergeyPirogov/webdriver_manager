@@ -20,7 +20,7 @@ class OSType(object):
 
 PATTERN = {
     ChromeType.CHROMIUM: r"\d+\.\d+\.\d+",
-    ChromeType.GOOGLE: r"\d+\.\d+\.\d+(\.\d+)?",
+    ChromeType.GOOGLE: r"\d+\.\d+\.\d+",
     ChromeType.MSEDGE: r"\d+\.\d+\.\d+",
     "brave-browser": r"\d+\.\d+\.\d+(\.\d+)?",
     "firefox": r"(\d+.\d+)",
