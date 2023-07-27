@@ -69,11 +69,23 @@ class ChromeDriver(Driver):
         response = self._http_client.get(url)
         data = response.json()
         versions = data["versions"]
-        for v in versions:
-            if v["version"] == browser_version:
-                downloads = v["downloads"]["chromedriver"]
+
+        if version.parse(browser_version) >= version.parse("115"):
+            short_version = ".".join(browser_version.split(".")[:3])
+            compatible_versions = [v for v in versions if short_version in v["version"]]
+            if compatible_versions:
+                latest_version = compatible_versions[-1]
+                log(f"WebDriver version {latest_version['version']} selected")
+                downloads = latest_version["downloads"]["chromedriver"]
                 for d in downloads:
                     if d["platform"] == platform:
                         return d["url"]
+        else:
+            for v in versions:
+                if v["version"] == browser_version:
+                    downloads = v["downloads"]["chromedriver"]
+                    for d in downloads:
+                        if d["platform"] == platform:
+                            return d["url"]
 
         raise Exception(f"No such driver version {browser_version} for {platform}")
