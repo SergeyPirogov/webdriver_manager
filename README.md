@@ -200,11 +200,12 @@ version = read_version_from_cmd("/usr/bin/firefox-bin --version", PATTERN["firef
 driver_binary = FirefoxDriverManager(version=version).install()
 ```
 
-#### Custom Cache and File manager
+#### Custom Cache, File manager and OS Manager
 
 ```python
 cache_manager = DriverCacheManager(file_manager=FileManager())
 manager = ChromeDriverManager(cache_manager=cache_manager)
+os_manager = OperationSystemManager(os_type="win64")
 ```
 
 ## Configuration
@@ -260,15 +261,6 @@ import os
 os.environ['WDM_SSL_VERIFY'] = '0'
 ```
 
-### `path`
-Set the directory where you want to download and save the webdriver. You can use relative and absolute paths.
-
-```python
-from webdriver_manager.chrome import ChromeDriverManager
-
-ChromeDriverManager(path = r".\\Drivers").install()
-```
-
 ### `version`
 Specify the version of webdriver you need. And webdriver-manager will download it from sources for your os.
 ```python
@@ -282,8 +274,29 @@ Driver cache by default is valid for 1 day. You are able to change this value us
 
 ```python
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.driver_cache import DriverCacheManager
 
-ChromeDriverManager("2.26", cache_valid_range=1).install()
+ChromeDriverManager("2.26", cache_manager=DriverCacheManager(valid_range=1)).install()
+```
+
+### `os_type`
+For some reasons you may use custom OS/arch. You are able to change this value using constructor parameter:
+
+```python
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.os_manager import OperationSystemManager
+
+ChromeDriverManager(os_system_manager=OperationSystemManager(os_type="linux-mips64")).install()
+```
+
+### `url
+You may use any other repo with drivers and release URl. You are able to change this value using constructor parameters:
+
+```python
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.os_manager import OperationSystemManager
+
+ChromeDriverManager(url="https://custom-repo.url", latest_release_url="https://custom-repo.url/LATEST").install()
 ```
 
 ---

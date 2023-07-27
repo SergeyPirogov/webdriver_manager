@@ -2,6 +2,23 @@
 
 ---
 
+## 4.0.1
+- Add correct os_type determination while on cygwin
+- Up-to date README.md
+
+---
+
+## 4.0.0
+- Refactor
+
+---
+
+## 3.9.1
+- Fix new chromedriver path
+- Rework Manager os_type to class - Os System Manager
+
+---
+
 ## 3.8.6
 - Officially support python 3.11 (3.11.1+)
 - Add MyPy stubs
