@@ -1,7 +1,5 @@
 import os
-import tarfile
 import zipfile
-import typing
 
 
 class LinuxZipFileWithPermissions(zipfile.ZipFile):
