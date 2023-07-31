@@ -4,6 +4,7 @@ import os
 import pytest
 import browsers
 from selenium import webdriver
+from mock import patch
 
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.constants import ROOT_FOLDER_NAME
@@ -23,6 +24,12 @@ def test_chrome_manager_with_cache(delete_drivers_dir):
 
 def test_chrome_manager_with_specific_version(delete_drivers_dir):
     driver_binary = ChromeDriverManager("87.0.4280.88").install()
+    assert os.path.exists(driver_binary)
+
+@patch('webdriver_manager.core.driver.get_browser_version_from_os')
+def test_chrome_manager_with_old_detected_version(mock_get_browser, delete_drivers_dir):
+    mock_get_browser.return_value="112.0.5615.165"
+    driver_binary = ChromeDriverManager().install()
     assert os.path.exists(driver_binary)
 
 
