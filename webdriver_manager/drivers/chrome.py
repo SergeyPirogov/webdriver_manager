@@ -55,7 +55,8 @@ class ChromeDriver(Driver):
         log(f"Get LATEST {self._name} version for {self._browser_type}")
         if determined_browser_version is not None and version.parse(determined_browser_version) >= version.parse("113"):
             return determined_browser_version
-
+        # Remove the build version (the last segment) from determined_browser_version for version < 113
+        determined_browser_version = ".".join(determined_browser_version.split(".")[:3])
         latest_release_url = (
             self._latest_release_url
             if (determined_browser_version is None)
