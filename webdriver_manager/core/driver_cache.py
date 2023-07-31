@@ -144,6 +144,7 @@ class DriverCacheManager(object):
         browser_version = browser_version if browser_version else ""
         self._metadata_key = f"{self.get_os_type()}_{driver.get_name()}_{driver_version}" \
                              f"_for_{browser_version}"
+        return self._metadata_key
 
     def get_cache_key_driver_version(self, driver: Driver):
         if self._cache_key_driver_version:
