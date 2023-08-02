@@ -61,7 +61,7 @@ driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install())
 # selenium 3
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.utils import ChromeType
+from webdriver_manager.core.os_manager import ChromeType
 
 driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
 ```
@@ -71,7 +71,7 @@ driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).i
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromiumService
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.utils import ChromeType
+from webdriver_manager.core.os_manager import ChromeType
 
 driver = webdriver.Chrome(service=ChromiumService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()))
 ```
@@ -82,7 +82,7 @@ driver = webdriver.Chrome(service=ChromiumService(ChromeDriverManager(chrome_typ
 # selenium 3
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.utils import ChromeType
+from webdriver_manager.core.os_manager import ChromeType
 
 driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install())
 ```
@@ -92,7 +92,7 @@ driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.BRAVE).inst
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as BraveService
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.utils import ChromeType
+from webdriver_manager.core.os_manager import ChromeType
 
 driver = webdriver.Chrome(service=BraveService(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install()))
 ```
@@ -181,7 +181,7 @@ options.add_experimental_option('w3c', True)
 driver = webdriver.Remote(webdriver_service.service_url, options=options)
 ```
 
-If the Opera browser is installed in a location other than `C:/Program Files` or `C:/Program Files (x86)` on windows
+If the Opera browser is installed in a location other than `C:/Program Files` or `C:/Program Files (x86)` on Windows
 and `/usr/bin/opera` for all unix variants and mac, then use the below code,
 
 ```python
@@ -195,15 +195,24 @@ driver = webdriver.Remote(webdriver_service.service_url, options=options)
 To get the version of the browser from the executable of the browser itself:
 
 ```python
-from webdriver_manager.core.utils import read_version_from_cmd, PATTERN
+from webdriver_manager.firefox import GeckoDriverManager
+
+from webdriver_manager.core.utils import read_version_from_cmd 
+from webdriver_manager.core.os_manager import PATTERN
+
 version = read_version_from_cmd("/usr/bin/firefox-bin --version", PATTERN["firefox"])
-driver_binary = FirefoxDriverManager(version=version).install()
+driver_binary = GeckoDriverManager(version=version).install()
 ```
 
 #### Custom Cache, File manager and OS Manager
 
 ```python
-cache_manager = DriverCacheManager(file_manager=FileManager())
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.file_manager import FileManager
+from webdriver_manager.core.driver_cache import DriverCacheManager
+from webdriver_manager.core.os_manager import OperationSystemManager
+
+cache_manager = DriverCacheManager(file_manager=FileManager(os_system_manager=OperationSystemManager()))
 manager = ChromeDriverManager(cache_manager=cache_manager)
 os_manager = OperationSystemManager(os_type="win64")
 ```
@@ -215,7 +224,7 @@ Any variable can be set using either .env file or via python directly
 
 ### `GH_TOKEN`
 **webdriver_manager** downloading some webdrivers from their official GitHub repositories but GitHub has [limitations](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting) like 60 requests per hour for unauthenticated users.
-In case not to face an error related to github credentials, you need to [create](https://help.github.com/articles/creating-an-access-token-for-command-line-use) github token and place it into your environment: (\*)
+In case not to face an error related to GitHub credentials, you need to [create](https://help.github.com/articles/creating-an-access-token-for-command-line-use) GitHub token and place it into your environment: (\*)
 
 Example:
 
@@ -294,7 +303,6 @@ You may use any other repo with drivers and release URl. You are able to change 
 
 ```python
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.os_manager import OperationSystemManager
 
 ChromeDriverManager(url="https://custom-repo.url", latest_release_url="https://custom-repo.url/LATEST").install()
 ```
