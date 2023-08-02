@@ -13,6 +13,7 @@ pytest = "*"
 bump2version = "*"
 pytest-xdist = "*"
 pybrowsers = "*"
+mock = "*"
 
 [packages]
 requests = "*"
