@@ -39,7 +39,7 @@ class OperationSystemManager(object):
             return OSType.LINUX
         elif pl == "darwin":
             return OSType.MAC
-        elif pl == "win32" or "cygwin":
+        elif pl == "win32" or pl == "cygwin":
             return OSType.WIN
 
     @staticmethod
