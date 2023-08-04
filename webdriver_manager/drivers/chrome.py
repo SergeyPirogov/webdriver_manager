@@ -45,7 +45,8 @@ class ChromeDriver(Driver):
             log(f"Modern chrome version {modern_version_url}")
             return modern_version_url
 
-        return f"{self._url}/{driver_version_to_download}/{self.get_name()}_{os_type}.zip"
+        short_version = ".".join(driver_version_to_download.split(".")[:3])
+        return f"{self._url}/{short_version}/{self.get_name()}_{os_type}.zip"
 
     def get_browser_type(self):
         return self._browser_type
