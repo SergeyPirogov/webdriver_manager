@@ -23,7 +23,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(include=['webdriver_manager*']),
     include_package_data=True,
-    version='4.0.0',
+    version='4.0.1',
     description='Library provides the way to automatically manage drivers for different browsers',
     author='Sergey Pirogov',
     author_email='automationremarks@gmail.com',
