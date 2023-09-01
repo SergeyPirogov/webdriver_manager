@@ -48,7 +48,8 @@ setuptools.setup(
     install_requires=[
         'requests',
         'python-dotenv',
-        'packaging'
+        'packaging',
+        'filelock'
     ],
     package_data={
         "webdriver_manager": ["py.typed"]
