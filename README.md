@@ -298,7 +298,7 @@ from webdriver_manager.core.os_manager import OperationSystemManager
 ChromeDriverManager(os_system_manager=OperationSystemManager(os_type="linux-mips64")).install()
 ```
 
-### `url
+### `url`
 You may use any other repo with drivers and release URl. You are able to change this value using constructor parameters:
 
 ```python
