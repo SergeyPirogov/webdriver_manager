@@ -112,7 +112,9 @@ def test_can_get_chrome_for_win64():
     os_sys_manager = OperationSystemManager("win64")
     # using random folder to avoid using any possible cache
     cache_manager = DriverCacheManager(os.path.join(".test", f"win64_{random()}"))
-    path = ChromeDriverManager(os_system_manager=os_sys_manager, cache_manager=cache_manager).install()
+    path = ChromeDriverManager(
+        os_system_manager=os_sys_manager, cache_manager=cache_manager
+    ).install()
     assert os.path.basename(os.path.dirname(path)) == "chromedriver-win64"
 
 
@@ -120,8 +122,11 @@ def test_can_get_chrome_for_win32():
     os_sys_manager = OperationSystemManager("win32")
     # using random folder to avoid using any possible cache
     cache_manager = DriverCacheManager(os.path.join(".test", f"win32_{random()}"))
-    path = ChromeDriverManager(os_system_manager=os_sys_manager, cache_manager=cache_manager).install()
+    path = ChromeDriverManager(
+        os_system_manager=os_sys_manager, cache_manager=cache_manager
+    ).install()
     assert os.path.basename(os.path.dirname(path)) == "chromedriver-win32"
+
 
 @patch("webdriver_manager.core.os_manager.platform")
 def test_can_get_chrome_for_mac64(mock_platform):
@@ -129,7 +134,9 @@ def test_can_get_chrome_for_mac64(mock_platform):
     os_sys_manager = OperationSystemManager("mac64")
     # using random folder to avoid using any possible cache
     cache_manager = DriverCacheManager(os.path.join(".test", f"mac64_{random()}"))
-    path = ChromeDriverManager(os_system_manager=os_sys_manager, cache_manager=cache_manager).install()
+    path = ChromeDriverManager(
+        os_system_manager=os_sys_manager, cache_manager=cache_manager
+    ).install()
     assert os.path.basename(os.path.dirname(path)) == "chromedriver-mac-x64"
 
 
@@ -137,5 +144,7 @@ def test_can_get_chrome_for_mac64_m1():
     os_sys_manager = OperationSystemManager("mac64_m1")
     # using random folder to avoid using any possible cache
     cache_manager = DriverCacheManager(os.path.join(".test", f"mac64_m1_{random()}"))
-    path = ChromeDriverManager(os_system_manager=os_sys_manager, cache_manager=cache_manager).install()
+    path = ChromeDriverManager(
+        os_system_manager=os_sys_manager, cache_manager=cache_manager
+    ).install()
     assert os.path.basename(os.path.dirname(path)) == "chromedriver-mac-arm64"
