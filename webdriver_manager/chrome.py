@@ -1,4 +1,5 @@
 import os
+from packaging import version
 from typing import Optional
 
 from webdriver_manager.core.download_manager import DownloadManager
@@ -26,6 +27,7 @@ class ChromeDriverManager(DriverManager):
             os_system_manager=os_system_manager
         )
 
+        self.driver_version = driver_version
         self.driver = ChromeDriver(
             name=name,
             driver_version=driver_version,
@@ -44,7 +46,10 @@ class ChromeDriverManager(DriverManager):
     def get_os_type(self):
         os_type = super().get_os_type()
         if "win" in os_type:
-            return "win32"
+            if version.parse(self.driver_version) >= version.parse("115"):
+                return os_type
+            else:
+                return "win32"
 
         if not self._os_system_manager.is_mac_os(os_type):
             return os_type
