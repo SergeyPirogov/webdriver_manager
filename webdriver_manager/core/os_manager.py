@@ -64,6 +64,16 @@ class OperationSystemManager(object):
     def is_mac_os(os_sys_type):
         return OSType.MAC in os_sys_type
 
+    def get_browser_version_from_path(self, browser_type, browser_path: str):
+        os = OperationSystemManager.get_os_name()
+        if os == OSType.WIN:
+            cmd = f'(Get-Item -Path "{browser_path}").VersionInfo.FileVersion'
+        else:         # Linux, Mac
+            cmd = f'"{browser_path}" --version'
+        pattern = PATTERN[browser_type]
+        version = read_version_from_cmd(cmd, pattern)
+        return version
+
     def get_browser_version_from_os(self, browser_type=None):
         """Return installed browser version."""
         cmd_mapping = {
@@ -154,9 +164,9 @@ class OperationSystemManager(object):
         }
 
         try:
-            cmd_mapping = cmd_mapping[browser_type][OperationSystemManager.get_os_name()]
+            cmd = cmd_mapping[browser_type][OperationSystemManager.get_os_name()]
             pattern = PATTERN[browser_type]
-            version = read_version_from_cmd(cmd_mapping, pattern)
+            version = read_version_from_cmd(cmd, pattern)
             return version
         except Exception:
             return None

@@ -18,12 +18,14 @@ class ChromeDriverManager(DriverManager):
             chrome_type: str = ChromeType.GOOGLE,
             download_manager: Optional[DownloadManager] = None,
             cache_manager: Optional[DriverCacheManager] = None,
-            os_system_manager: Optional[OperationSystemManager] = None
+            os_system_manager: Optional[OperationSystemManager] = None,
+            browser_path: Optional[str] = None
     ):
         super().__init__(
             download_manager=download_manager,
             cache_manager=cache_manager,
-            os_system_manager=os_system_manager
+            os_system_manager=os_system_manager,
+            browser_path=browser_path
         )
 
         self.driver = ChromeDriver(

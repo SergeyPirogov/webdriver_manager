@@ -1,3 +1,4 @@
+from typing import Optional
 import datetime
 import json
 import os
@@ -15,7 +16,9 @@ from webdriver_manager.core.utils import get_date_diff
 
 
 class DriverCacheManager(object):
-    def __init__(self, root_dir=None, valid_range=1, file_manager=None):
+    def __init__(self, root_dir=None, valid_range=1, file_manager=None, 
+                 browser_path: Optional[str] = None):
+        self.browser_path = browser_path
         self._root_dir = DEFAULT_USER_HOME_CACHE_PATH
         is_wdm_local = wdm_local()
         xdist_worker_id = get_xdist_worker_id()
@@ -98,7 +101,12 @@ class DriverCacheManager(object):
         os_type = self.get_os_type()
         driver_name = driver.get_name()
         browser_type = driver.get_browser_type()
-        browser_version = self._os_system_manager.get_browser_version_from_os(browser_type)
+
+        if self.browser_path is None:
+            browser_version = self._os_system_manager.get_browser_version_from_os(browser_type)
+        else:
+            browser_version = self._os_system_manager.get_browser_version_from_path(browser_type, self.browser_path)
+        
         if not browser_version:
             return None
 

@@ -1,3 +1,6 @@
+from typing import Optional
+import os
+
 from webdriver_manager.core.download_manager import WDMDownloadManager
 from webdriver_manager.core.driver_cache import DriverCacheManager
 from webdriver_manager.core.logger import log
@@ -9,7 +12,8 @@ class DriverManager(object):
             self,
             download_manager=None,
             cache_manager=None,
-            os_system_manager=None
+            os_system_manager=None,
+            browser_path: Optional[str] = None
     ):
         self._cache_manager = cache_manager
         if not self._cache_manager:
@@ -22,6 +26,10 @@ class DriverManager(object):
         self._os_system_manager = os_system_manager
         if not self._os_system_manager:
             self._os_system_manager = OperationSystemManager()
+
+        if not os.access(browser_path, os.X_OK):
+            raise PermissionError(f'Provided browser path is not executable: {browser_path!r}')
+        self.browser_path = browser_path
         log("====== WebDriver manager ======")
 
     @property

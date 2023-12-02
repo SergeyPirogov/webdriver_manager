@@ -19,11 +19,13 @@ class IEDriverManager(DriverManager):
             ie_release_tag: str = "https://api.github.com/repos/seleniumhq/selenium/releases/tags/selenium-{0}",
             download_manager: Optional[DownloadManager] = None,
             cache_manager: Optional[DriverCacheManager] = None,
-            os_system_manager: Optional[OperationSystemManager] = None
+            os_system_manager: Optional[OperationSystemManager] = None,
+            browser_path: Optional[str] = None
     ):
         super().__init__(
             download_manager=download_manager,
-            cache_manager=cache_manager
+            cache_manager=cache_manager,
+            browser_path=browser_path
         )
 
         self.driver = IEDriver(
@@ -52,12 +54,14 @@ class EdgeChromiumDriverManager(DriverManager):
             latest_release_url: str = "https://msedgedriver.azureedge.net/LATEST_RELEASE",
             download_manager: Optional[DownloadManager] = None,
             cache_manager: Optional[DriverCacheManager] = None,
-            os_system_manager: Optional[OperationSystemManager] = None
+            os_system_manager: Optional[OperationSystemManager] = None,
+            browser_path: Optional[str] = None
     ):
         super().__init__(
             download_manager=download_manager,
             cache_manager=cache_manager,
-            os_system_manager=os_system_manager
+            os_system_manager=os_system_manager,
+            browser_path=browser_path
         )
 
         self.driver = EdgeChromiumDriver(
