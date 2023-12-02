@@ -28,7 +28,8 @@ class DriverManager(object):
             self._os_system_manager = OperationSystemManager()
 
         if not os.access(browser_path, os.X_OK):
-            raise PermissionError(f'Provided browser path is not executable: {browser_path!r}')
+            raise PermissionError(
+                f'Provided browser path is not executable: {browser_path!r}')
         self.browser_path = browser_path
         log("====== WebDriver manager ======")
 
