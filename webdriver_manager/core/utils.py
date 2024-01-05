@@ -40,6 +40,7 @@ def read_version_from_cmd(cmd, pattern):
             cmd,
             stdout=subprocess.PIPE,
             stdin=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
             shell=True,
     ) as stream:
         stdout = stream.communicate()[0].decode()
