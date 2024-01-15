@@ -58,6 +58,8 @@ class ChromeDriver(Driver):
             url = "https://googlechromelabs.github.io/chrome-for-testing/latest-patch-versions-per-build.json"
             response = self._http_client.get(url)
             response_dict = json.loads(response.text)
+            if determined_browser_version not in response_dict.get("builds"):
+                raise Exception(f"No build version {determined_browser_version} found in inventory at {url}")
             determined_browser_version = response_dict.get("builds").get(determined_browser_version).get("version")
             return determined_browser_version
         # Remove the build version (the last segment) from determined_browser_version for version < 113
