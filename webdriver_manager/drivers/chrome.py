@@ -60,13 +60,13 @@ class ChromeDriver(Driver):
             response_dict = json.loads(response.text)
             determined_browser_version = response_dict.get("builds").get(determined_browser_version).get("version")
             return determined_browser_version
-        # Remove the build version (the last segment) from determined_browser_version for version < 113
-        determined_browser_version = ".".join(determined_browser_version.split(".")[:3])
-        latest_release_url = (
-            self._latest_release_url
-            if (determined_browser_version is None)
-            else f"{self._latest_release_url}_{determined_browser_version}"
-        )
+
+        if determined_browser_version is None:
+            latest_release_url = self._latest_release_url
+        else:
+            # Remove the build version (the last segment) from determined_browser_version for version < 113
+            determined_browser_version = ".".join(determined_browser_version.split(".")[:3])
+            latest_release_url = f"{self._latest_release_url}_{determined_browser_version}"
         resp = self._http_client.get(url=latest_release_url)
         return resp.text.rstrip()
 
