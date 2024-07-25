@@ -68,6 +68,8 @@ class DriverCacheManager(object):
         for f in files:
             if 'LICENSE' in f:
                 continue
+            if 'THIRD_PARTY' in f:
+                continue
             if driver_name in f:
                 return f
 
