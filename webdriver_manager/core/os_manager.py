@@ -23,7 +23,7 @@ PATTERN = {
     ChromeType.GOOGLE: r"\d+\.\d+\.\d+",
     ChromeType.MSEDGE: r"\d+\.\d+\.\d+",
     "brave-browser": r"\d+\.\d+\.\d+(\.\d+)?",
-    "firefox": r"(\d+.\d+)",
+    "firefox": r"(\d+\.\d+\.\d+)|(\d+\.\d+)",
 }
 
 
