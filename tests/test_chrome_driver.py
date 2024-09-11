@@ -1,5 +1,6 @@
 import json
 import os
+import re
 
 import pytest
 import browsers
@@ -114,5 +115,6 @@ def test_chrome_driver_filename_change():
 
 def test_cross_platform_solution():
     driver_path = "/path/to/THIRD_PARTY_NOTICES.chromedriver"
-    driver_path = re.sub(r'(?<=[\\/])[^\\/]+$', r'chromedriver.exe', driver_path)
+    regex_path = r"(?<=[\\/])[^\\/]+$"
+    driver_path = re.sub(regex_path, r"chromedriver.exe", driver_path)
     assert driver_path == "/path/to/chromedriver.exe"

@@ -40,7 +40,8 @@ class ChromeDriverManager(DriverManager):
     def install(self) -> str:
         driver_path = self._get_driver_binary_path(self.driver)
         os.chmod(driver_path, 0o755)
-        driver_path = re.sub(r'(?<=[\\/])[^\\/]+$', r'chromedriver.exe', driver_path)
+        path_regex = r"(?<=[\\/])[^\\/]+$"
+        driver_path = re.sub(path_regex, r"chromedriver.exe", driver_path)
         return driver_path
 
     def get_os_type(self):
