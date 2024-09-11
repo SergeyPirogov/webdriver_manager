@@ -1,4 +1,5 @@
 import os
+import re
 from typing import Optional
 
 from webdriver_manager.core.download_manager import DownloadManager
@@ -39,6 +40,7 @@ class ChromeDriverManager(DriverManager):
     def install(self) -> str:
         driver_path = self._get_driver_binary_path(self.driver)
         os.chmod(driver_path, 0o755)
+        driver_path = re.sub(r'(?<=[\\/])[^\\/]+$', r'chromedriver.exe', driver_path)
         return driver_path
 
     def get_os_type(self):
