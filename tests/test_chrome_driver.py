@@ -1,10 +1,11 @@
 import json
 import os
-
+import platform
+from random import random
 import pytest
 import browsers
 from selenium import webdriver
-from mock import patch
+from mock import patch, create_autospec
 
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.constants import ROOT_FOLDER_NAME
@@ -105,3 +106,29 @@ def test_chrome_manager_cached_driver_with_selenium():
 def test_can_get_chrome_for_os(os_type):
     path = ChromeDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
     assert os.path.exists(path)
+
+
+def test_can_get_chrome_for_win64(delete_drivers_dir):
+    os_sys_manager = OperationSystemManager("win64")
+    path = ChromeDriverManager(os_system_manager=os_sys_manager).install()
+    assert os.path.basename(os.path.dirname(path)) == "chromedriver-win64"
+
+
+def test_can_get_chrome_for_win32(delete_drivers_dir):
+    os_sys_manager = OperationSystemManager("win32")
+    path = ChromeDriverManager(os_system_manager=os_sys_manager).install()
+    assert os.path.basename(os.path.dirname(path)) == "chromedriver-win32"
+
+
+@patch("webdriver_manager.core.os_manager.platform")
+def test_can_get_chrome_for_mac64(mock_platform, delete_drivers_dir):
+    mock_platform.processor = create_autospec(platform.processor, return_value="i386")
+    os_sys_manager = OperationSystemManager("mac64")
+    path = ChromeDriverManager(os_system_manager=os_sys_manager).install()
+    assert os.path.basename(os.path.dirname(path)) == "chromedriver-mac-x64"
+
+
+def test_can_get_chrome_for_mac64_m1(delete_drivers_dir):
+    os_sys_manager = OperationSystemManager("mac64_m1")
+    path = ChromeDriverManager(os_system_manager=os_sys_manager).install()
+    assert os.path.basename(os.path.dirname(path)) == "chromedriver-mac-arm64"
