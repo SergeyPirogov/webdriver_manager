@@ -42,10 +42,6 @@ class GeckoDriverManager(DriverManager):
 
     def get_os_type(self):
         os_type = super().get_os_type()
-        if not self._os_system_manager.is_mac_os(os_type):
-            return os_type
-
-        macos = 'macos'
         if self._os_system_manager.is_arch(os_type):
-            return f"{macos}-aarch64"
-        return macos
+            os_type = f'{self._os_system_manager.get_os_name()}{"os" if self._os_system_manager.is_mac_os(os_type) else ""}-aarch{self._os_system_manager.get_os_architecture()}'
+        return os_type
