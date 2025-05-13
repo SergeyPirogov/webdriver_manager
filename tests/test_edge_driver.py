@@ -1,6 +1,6 @@
 import os
 import re
-
+import browsers
 import pytest
 from selenium import webdriver
 from selenium.webdriver.edge.service import Service
@@ -11,12 +11,15 @@ from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
 
 def test_edge_manager_with_selenium():
+    options = webdriver.EdgeOptions()
+    options.binary_location = browsers.get("msedge")["path"]
     driver_path = EdgeChromiumDriverManager().install()
-    driver = webdriver.Edge(service=Service(driver_path))
+    driver = webdriver.Edge(service=Service(driver_path), options=options)
     driver.get("http://automation-remarks.com")
     driver.quit()
 
 
+@pytest.mark.filterwarnings("ignore:Unverified HTTPS request:urllib3.exceptions.InsecureRequestWarning")
 def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
     os.environ['WDM_SSL_VERIFY'] = '0'
     custom_path = os.path.join(
@@ -42,7 +45,7 @@ def test_edge_manager_with_wrong_version():
 
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64', 'mac64', 'linux64'])
-@pytest.mark.parametrize('specific_version', ['86.0.600.0'])
+@pytest.mark.parametrize('specific_version', ['101.0.1210.53'])
 def test_edge_with_specific_version(os_type, specific_version):
     bin_path = EdgeChromiumDriverManager(
         version=specific_version,
@@ -52,7 +55,7 @@ def test_edge_with_specific_version(os_type, specific_version):
 
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64', 'mac64', 'linux64'])
-@pytest.mark.parametrize('specific_version', ['87.0.637.0'])
+@pytest.mark.parametrize('specific_version', ['101.0.1210.53'])
 def test_can_get_edge_driver_from_cache(os_type, specific_version):
     EdgeChromiumDriverManager(
         version=specific_version,

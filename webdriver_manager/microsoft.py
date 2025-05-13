@@ -23,7 +23,8 @@ class IEDriverManager(DriverManager):
     ):
         super().__init__(
             download_manager=download_manager,
-            cache_manager=cache_manager
+            cache_manager=cache_manager,
+            os_system_manager=os_system_manager
         )
 
         self.driver = IEDriver(

@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import tarfile
 import zipfile
 
@@ -89,6 +90,10 @@ class FileManager(object):
         except tarfile.ReadError:
             tar = tarfile.open(archive_file.file_path, mode="r:bz2")
         members = tar.getmembers()
-        tar.extractall(to_directory)
+        # Python 3.13+ requires 'filter' to avoid deprecation warning
+        if sys.version_info >= (3, 13):
+            tar.extractall(to_directory, filter="fully_trusted")
+        else:
+            tar.extractall(to_directory)
         tar.close()
         return [x.name for x in members]
