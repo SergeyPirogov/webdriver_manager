@@ -43,5 +43,4 @@ class DriverManager(object):
         return binary_path
 
     def get_os_type(self):
-        print(self._os_system_manager.get_os_type())
         return self._os_system_manager.get_os_type()

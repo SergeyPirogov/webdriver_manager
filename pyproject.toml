@@ -1,6 +1,6 @@
 [project]
 name = "webdriver-manager"
-version = "0.1.0"
+version = "4.0.3"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.7"
