@@ -40,9 +40,14 @@ class ChromeDriverManager(DriverManager):
     def install(self) -> str:
         driver_path = self._get_driver_binary_path(self.driver)
         os.chmod(driver_path, 0o755)
+
+        # rename extracted binary to have unified '.exe' extension across
+        # platforms so that Selenium behaves consistently
         path_regex = r"(?<=[\\/])[^\\/]+$"
-        driver_path = re.sub(path_regex, r"chromedriver.exe", driver_path)
-        return driver_path
+        new_driver_path = re.sub(path_regex, r"chromedriver.exe", driver_path)
+        if new_driver_path != driver_path:
+            os.replace(driver_path, new_driver_path)
+        return new_driver_path
 
     def get_os_type(self):
         os_type = super().get_os_type()
