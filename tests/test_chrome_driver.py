@@ -1,5 +1,6 @@
 import json
 import os
+import re
 
 import pytest
 import browsers
@@ -105,3 +106,15 @@ def test_chrome_manager_cached_driver_with_selenium():
 def test_can_get_chrome_for_os(os_type):
     path = ChromeDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
     assert os.path.exists(path)
+
+
+def test_chrome_driver_filename_change():
+    driver_path = ChromeDriverManager().install()
+    assert driver_path.endswith("chromedriver.exe")
+
+
+def test_cross_platform_solution():
+    driver_path = "/path/to/THIRD_PARTY_NOTICES.chromedriver"
+    regex_path = r"(?<=[\\/])[^\\/]+$"
+    driver_path = re.sub(regex_path, r"chromedriver.exe", driver_path)
+    assert driver_path == "/path/to/chromedriver.exe"
