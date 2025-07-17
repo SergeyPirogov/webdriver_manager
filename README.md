@@ -5,6 +5,8 @@
 [![Supported Python Versions](https://img.shields.io/pypi/pyversions/webdriver_manager.svg)](https://pypi.org/project/webdriver-manager/)
 [![codecov](https://codecov.io/gh/SergeyPirogov/webdriver_manager/branch/master/graph/badge.svg)](https://codecov.io/gh/SergeyPirogov/webdriver_manager)
 
+**THIS IS A FORK**
+
 **Because of the War in Ukraine the project is on hold😔**
 
 Now it's time to produce FPV drone for Ukrainian army.
