@@ -5,10 +5,6 @@
 [![Supported Python Versions](https://img.shields.io/pypi/pyversions/webdriver_manager.svg)](https://pypi.org/project/webdriver-manager/)
 [![codecov](https://codecov.io/gh/SergeyPirogov/webdriver_manager/branch/master/graph/badge.svg)](https://codecov.io/gh/SergeyPirogov/webdriver_manager)
 
-**Because of the War in Ukraine the project is on hold😔**
-
-Now it's time to produce FPV drone for Ukrainian army.
-
 Support via paypal: semen4ik20@gmail.com
 
 ## Support the library on [Patreon](https://www.patreon.com/automation_remarks)
