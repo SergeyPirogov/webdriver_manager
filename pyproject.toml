@@ -1,0 +1,24 @@
+[project]
+name = "webdriver-manager"
+version = "4.0.3"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = [
+    "requests",
+    "python-dotenv",
+    "packaging",
+]
+
+[dependency-groups]
+dev = [
+    "selenium",
+    "pytest",
+    "pytest-cov",
+    "bump2version",
+    "pytest-xdist",
+    "pybrowsers",
+    "mock",
+]
+
+[tool.uv.sources]

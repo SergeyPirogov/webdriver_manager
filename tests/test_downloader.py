@@ -33,7 +33,7 @@ def test_can_download_driver_as_tar_gz(delete_drivers_dir):
 
 @pytest.mark.parametrize('version', ["2.26"])
 def test_can_download_chrome_driver(delete_drivers_dir, version):
-    os_sys_manager = OperationSystemManager("win32")
+    os_sys_manager = OperationSystemManager(os_type="win32", os_platform='win32', architecture='win32')
     driver = ChromeDriver(name="chromedriver",
                           driver_version=version,
                           os_system_manager=os_sys_manager,

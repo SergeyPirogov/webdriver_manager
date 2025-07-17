@@ -11,17 +11,18 @@ class DriverManager(object):
             cache_manager=None,
             os_system_manager=None
     ):
+        self._os_system_manager = os_system_manager
+        if not self._os_system_manager:
+            self._os_system_manager = OperationSystemManager()
         self._cache_manager = cache_manager
         if not self._cache_manager:
-            self._cache_manager = DriverCacheManager()
+            self._cache_manager = DriverCacheManager(os_system_manager=self._os_system_manager)
 
         self._download_manager = download_manager
         if self._download_manager is None:
             self._download_manager = WDMDownloadManager()
 
-        self._os_system_manager = os_system_manager
-        if not self._os_system_manager:
-            self._os_system_manager = OperationSystemManager()
+
         log("====== WebDriver manager ======")
 
     @property

@@ -22,43 +22,47 @@ PATTERN = {
     ChromeType.CHROMIUM: r"\d+\.\d+\.\d+",
     ChromeType.GOOGLE: r"\d+\.\d+\.\d+",
     ChromeType.MSEDGE: r"\d+\.\d+\.\d+",
-    "brave-browser": r"\d+\.\d+\.\d+(\.\d+)?",
+    ChromeType.BRAVE: r"\d+\.\d+\.\d+(\.\d+)?",
     "firefox": r"(\d+.\d+)",
 }
 
 
 class OperationSystemManager(object):
 
-    def __init__(self, os_type=None):
+    def __init__(self, os_type=None, architecture=None, os_platform=None):
         self._os_type = os_type
+        if architecture is None and os_platform is None and os_type is not None:
+            os_platform = os_type
+            architecture = os_type
+        self._os_platform = os_platform
+        self._architecture = architecture
 
-    @staticmethod
-    def get_os_name():
-        pl = sys.platform
-        if pl == "linux" or pl == "linux2":
+    def get_os_name(self):
+        pl = sys.platform if self._os_platform is None else self._os_platform
+        if pl in ["linux", "linux2", "linux32", "linux64"]:
             return OSType.LINUX
-        elif pl == "darwin":
+        elif pl in ["darwin","mac","mac64", 'mac64_m1']:
             return OSType.MAC
-        elif pl == "win32" or pl == "cygwin":
+        elif pl in ["win32", "cygwin", "win64"]:
             return OSType.WIN
 
-    @staticmethod
-    def get_os_architecture():
+    def get_os_architecture(self):
+        if self._architecture is not None:
+            if self._architecture.endswith("64") or self._architecture.endswith("64_m1"):
+                return 64
+            else:
+                return 32
         if platform.machine().endswith("64"):
             return 64
         else:
             return 32
 
     def get_os_type(self):
-        if self._os_type:
-            return self._os_type
-        return f"{self.get_os_name()}{self.get_os_architecture()}"
+        return f"{self.get_os_name()}{'-arm' if self.is_arch() else ''}{self.get_os_architecture()}"
 
-    @staticmethod
-    def is_arch(os_sys_type):
-        if '_m1' in os_sys_type:
-            return True
-        return platform.processor() != 'i386'
+    def is_arch(self):
+        machine = platform.machine() if self._architecture is None else self._architecture
+        return any(arch in machine for arch in ["arm", "aarch64", "arm64", "armv7l", "armv8", "armv6", 'mac64_m1'])
 
     @staticmethod
     def is_mac_os(os_sys_type):
