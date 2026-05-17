@@ -41,12 +41,22 @@ class OperaDriverManager(DriverManager):
 
     def install(self) -> str:
         driver_path = self._get_driver_binary_path(self.driver)
-        if not os.path.isfile(driver_path):
-            for name in os.listdir(driver_path):
-                if "sha512_sum" in name:
-                    os.remove(os.path.join(driver_path, name))
-                    break
-        driver_path = os.path.join(driver_path, os.listdir(driver_path)[0])
+        if os.path.isfile(driver_path):
+            os.chmod(driver_path, 0o755)
+            return driver_path
+
+        for name in os.listdir(driver_path):
+            if "sha512_sum" in name:
+                os.remove(os.path.join(driver_path, name))
+
+        candidates = [
+            name for name in os.listdir(driver_path)
+            if os.path.isfile(os.path.join(driver_path, name))
+        ]
+        if not candidates:
+            raise FileNotFoundError(f"No OperaDriver binary found in {driver_path}")
+
+        driver_path = os.path.join(driver_path, candidates[0])
         os.chmod(driver_path, 0o755)
         return driver_path
 
