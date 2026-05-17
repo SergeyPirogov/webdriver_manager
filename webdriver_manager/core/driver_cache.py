@@ -107,14 +107,16 @@ class DriverCacheManager(object):
             return None
 
         metadata = self.load_metadata_content()
-        cached_path = self.__find_driver_by_browser_version(
-            metadata=metadata,
-            os_type=os_type,
-            driver_name=driver_name,
-            browser_version=browser_version,
-        )
-        if cached_path:
-            return cached_path
+        requested_driver_version = getattr(driver, "_driver_version_to_download", None)
+        if not requested_driver_version:
+            cached_path = self.__find_driver_by_browser_version(
+                metadata=metadata,
+                os_type=os_type,
+                driver_name=driver_name,
+                browser_version=browser_version,
+            )
+            if cached_path:
+                return cached_path
 
         driver_version = self.get_cache_key_driver_version(driver)
 

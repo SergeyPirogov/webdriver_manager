@@ -158,7 +158,7 @@ class OperationSystemManager(object):
         }
 
         try:
-            cmd_mapping = cmd_mapping[browser_type][OperationSystemManager.get_os_name()]
+            cmd_mapping = cmd_mapping[browser_type][self.get_os_name()]
             pattern = PATTERN[browser_type]
             version = read_version_from_cmd(cmd_mapping, pattern)
             return version
