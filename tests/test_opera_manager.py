@@ -115,3 +115,15 @@ def test_can_get_driver_from_cache(os_type, delete_drivers_dir, opera_release_da
     OperaDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
     driver_path = OperaDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
     assert os.path.exists(driver_path)
+
+
+def test_opera_install_keeps_file_path_without_listdir(monkeypatch, tmp_path):
+    binary_path = tmp_path / "operadriver"
+    binary_path.write_text("bin")
+
+    manager = OperaDriverManager()
+    monkeypatch.setattr(manager, "_get_driver_binary_path", lambda _driver: str(binary_path))
+
+    resolved_path = manager.install()
+
+    assert resolved_path == str(binary_path)
