@@ -16,33 +16,30 @@ def list_browsers():
 
 @pytest.fixture()
 def delete_drivers_dir():
-    try:
-        if os.path.exists(DEFAULT_USER_HOME_CACHE_PATH):
-            log(f"Delete {DEFAULT_USER_HOME_CACHE_PATH} folder")
-            shutil.rmtree(DEFAULT_USER_HOME_CACHE_PATH)
-        if os.path.exists(DEFAULT_PROJECT_ROOT_CACHE_PATH):
-            log(f"Delete {DEFAULT_PROJECT_ROOT_CACHE_PATH} folder")
-            shutil.rmtree(DEFAULT_PROJECT_ROOT_CACHE_PATH)
+    def remove_if_exists(path):
+        if os.path.exists(path):
+            log(f"Delete {path} folder")
+            shutil.rmtree(path)
 
-        if os.path.exists(os.path.join(sys.path[0], 'custom-cache', ROOT_FOLDER_NAME)):
-            log(f"Delete {os.path.join(sys.path[0], 'custom-cache')} folder")
-            shutil.rmtree(os.path.join(sys.path[0], 'custom-cache'))
-        if os.path.exists(os.path.join(sys.path[0], 'custom', ROOT_FOLDER_NAME)):
-            log(f"Delete {os.path.join(sys.path[0], 'custom')} folder")
-            shutil.rmtree(os.path.join(sys.path[0], 'custom'))
-        if os.path.exists(os.path.join(sys.path[0], 'ssl_disabled', ROOT_FOLDER_NAME)):
-            log(f"Delete {os.path.join(sys.path[0], 'ssl_disabled')} folder")
-            shutil.rmtree(os.path.join(sys.path[0], 'ssl_disabled'))
-        
-        if os.path.exists(os.path.join(os.path.expanduser("~"), 'custom-cache', ROOT_FOLDER_NAME)):
-            log(f"Delete {os.path.join(os.path.expanduser("~"), 'custom-cache')} folder")
-            shutil.rmtree(os.path.join(os.path.expanduser("~"), 'custom-cache'))
-        if os.path.exists(os.path.join(os.path.expanduser("~"), 'custom', ROOT_FOLDER_NAME)):
-            log(f"Delete {os.path.join(os.path.expanduser("~"), 'custom')} folder")
-            shutil.rmtree(os.path.join(os.path.expanduser("~"), 'custom'))
-        if os.path.exists(os.path.join(os.path.expanduser("~"), 'ssl_disabled', ROOT_FOLDER_NAME)):
-            log(f"Delete {os.path.join(os.path.expanduser("~"), 'ssl_disabled')} folder")
-            shutil.rmtree(os.path.join(os.path.expanduser("~"), 'ssl_disabled'))
+    project_cache_paths = [
+        os.path.join(sys.path[0], "custom-cache"),
+        os.path.join(sys.path[0], "custom"),
+        os.path.join(sys.path[0], "ssl_disabled"),
+    ]
+
+    user_home_cache_paths = [
+        os.path.join(os.path.expanduser("~"), "custom-cache"),
+        os.path.join(os.path.expanduser("~"), "custom"),
+        os.path.join(os.path.expanduser("~"), "ssl_disabled"),
+    ]
+
+    try:
+        remove_if_exists(DEFAULT_USER_HOME_CACHE_PATH)
+        remove_if_exists(DEFAULT_PROJECT_ROOT_CACHE_PATH)
+
+        for cache_path in project_cache_paths + user_home_cache_paths:
+            if os.path.exists(os.path.join(cache_path, ROOT_FOLDER_NAME)):
+                remove_if_exists(cache_path)
 
     except PermissionError as e:
         print(f"Can not delete folder {e}")

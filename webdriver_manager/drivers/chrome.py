@@ -3,7 +3,18 @@ from packaging import version
 from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
 from webdriver_manager.core.os_manager import ChromeType
+
 import json
+
+CHROME_FOR_TESTING_LATEST_PATCH_VERSIONS_PER_BUILD_URL = (
+    "https://googlechromelabs.github.io/chrome-for-testing/latest-patch-versions-per-build.json"
+)
+CHROME_FOR_TESTING_LATEST_VERSIONS_PER_MILESTONE_URL = (
+    "https://googlechromelabs.github.io/chrome-for-testing/latest-versions-per-milestone.json"
+)
+CHROME_FOR_TESTING_KNOWN_GOOD_VERSIONS_URL = (
+    "https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json"
+)
 
 
 class ChromeDriver(Driver):
@@ -54,14 +65,12 @@ class ChromeDriver(Driver):
     def get_latest_release_version(self):
         determined_browser_version = self.get_browser_version_from_os()
         log(f"Get LATEST {self._name} version for {self._browser_type}")
+
         if determined_browser_version is not None and version.parse(determined_browser_version) >= version.parse("115"):
-            url = "https://googlechromelabs.github.io/chrome-for-testing/latest-patch-versions-per-build.json"
-            response = self._http_client.get(url)
-            response_dict = json.loads(response.text)
-            determined_browser_version = response_dict.get("builds").get(determined_browser_version).get("version")
-            return determined_browser_version
+            return self._latest_cft_version_for_browser_version(determined_browser_version)
+
         elif determined_browser_version is not None:
-            # Remove the build version (the last segment) from determined_browser_version for version < 113
+            # Remove the build version (the last segment) from determined_browser_version for version < 115
             determined_browser_version = ".".join(determined_browser_version.split(".")[:3])
             latest_release_url = f"{self._latest_release_url}_{determined_browser_version}"
         else:
@@ -69,6 +78,87 @@ class ChromeDriver(Driver):
 
         resp = self._http_client.get(url=latest_release_url)
         return resp.text.rstrip()
+
+    def _latest_cft_version_for_browser_version(self, browser_version):
+        browser_build_version = ".".join(browser_version.split(".")[:3])
+        browser_milestone = browser_version.split(".")[0]
+
+        latest_patch_versions = self._get_cft_json(
+            CHROME_FOR_TESTING_LATEST_PATCH_VERSIONS_PER_BUILD_URL
+        )
+        builds = latest_patch_versions.get("builds") or {}
+        build = builds.get(browser_build_version)
+
+        if build is not None:
+            chromedriver_version = build.get("version")
+            if chromedriver_version:
+                return chromedriver_version
+
+            self._raise_missing_chromedriver_version(
+                browser_version=browser_version,
+                checked_urls=[CHROME_FOR_TESTING_LATEST_PATCH_VERSIONS_PER_BUILD_URL],
+                details=(
+                    f"Chrome for Testing metadata contains an entry for build "
+                    f"{browser_build_version}, but it does not contain a driver version."
+                ),
+            )
+
+        latest_milestone_versions = self._get_cft_json(
+            CHROME_FOR_TESTING_LATEST_VERSIONS_PER_MILESTONE_URL
+        )
+        milestones = latest_milestone_versions.get("milestones") or {}
+        milestone = milestones.get(browser_milestone)
+
+        if milestone is not None:
+            chromedriver_version = milestone.get("version")
+            if chromedriver_version:
+                return chromedriver_version
+
+            self._raise_missing_chromedriver_version(
+                browser_version=browser_version,
+                checked_urls=[
+                    CHROME_FOR_TESTING_LATEST_PATCH_VERSIONS_PER_BUILD_URL,
+                    CHROME_FOR_TESTING_LATEST_VERSIONS_PER_MILESTONE_URL,
+                ],
+                details=(
+                    f"Chrome for Testing metadata contains an entry for milestone "
+                    f"{browser_milestone}, but it does not contain a driver version."
+                ),
+            )
+
+        self._raise_missing_chromedriver_version(
+            browser_version=browser_version,
+            checked_urls=[
+                CHROME_FOR_TESTING_LATEST_PATCH_VERSIONS_PER_BUILD_URL,
+                CHROME_FOR_TESTING_LATEST_VERSIONS_PER_MILESTONE_URL,
+            ],
+            details=(
+                f"No entry for build {browser_build_version} and no entry for "
+                f"milestone {browser_milestone} were found."
+            ),
+        )
+
+    def _get_cft_json(self, url):
+        response = self._http_client.get(url)
+
+        try:
+            return json.loads(response.text)
+        except ValueError as error:
+            raise ValueError(
+                f"Could not parse Chrome for Testing metadata from {url}."
+            ) from error
+
+    def _raise_missing_chromedriver_version(self, browser_version, checked_urls, details):
+        raise ValueError(
+            f"Could not find a compatible {self._name} version for "
+            f"{self._browser_type} {browser_version}. "
+            f"Checked Chrome for Testing endpoints: {', '.join(checked_urls)}. "
+            f"Possible reasons: your browser was updated before the matching driver "
+            f"was published, the browser version is too new, or this version is no "
+            f"longer available in Chrome for Testing. "
+            f"Try pinning browser/driver versions or installing a supported "
+            f"Chrome/Chromium version. Details: {details}"
+        )
 
     def get_url_for_version_and_platform(self, browser_version, platform):
         url = "https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json"

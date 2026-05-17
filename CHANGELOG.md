@@ -2,6 +2,11 @@
 
 ---
 
+## 4.0.3
+- Fixed Chrome/Chromium driver resolution for Chrome for Testing when exact build metadata is missing by adding milestone fallback, proper Chrome for Testing download resolution, and readable error handling. (#637, #642, #669, #691)
+
+---
+
 ## 4.0.1
 - Add correct os_type determination while on cygwin
 - Up-to date README.md
