@@ -154,3 +154,58 @@ def test_chrome_118_resolves_cft_driver_version_and_download_url():
     assert "chromedriver.storage.googleapis.com" not in driver.get_driver_download_url("win32")
     assert CHROME_FOR_TESTING_LATEST_PATCH_VERSIONS_PER_BUILD_URL in http_client.requested_urls
     assert CHROME_FOR_TESTING_KNOWN_GOOD_VERSIONS_URL in http_client.requested_urls
+
+
+def test_chrome_115_plus_prefers_win64_download_when_available():
+    expected_url = (
+        "https://storage.googleapis.com/chrome-for-testing-public/"
+        "131.0.6778.264/win64/chromedriver-win64.zip"
+    )
+    driver, _ = chrome_driver_for(
+        browser_version="131.0.6778.70",
+        chrome_type=ChromeType.GOOGLE,
+        responses={
+            CHROME_FOR_TESTING_KNOWN_GOOD_VERSIONS_URL: {
+                "versions": [
+                    {
+                        "version": "131.0.6778.264",
+                        "downloads": {
+                            "chromedriver": [
+                                {"platform": "win32", "url": "https://example/win32.zip"},
+                                {"platform": "win64", "url": expected_url},
+                            ],
+                        },
+                    },
+                ],
+            },
+        },
+    )
+
+    assert driver.get_url_for_version_and_platform("131.0.6778.264", "win64") == expected_url
+
+
+def test_chrome_115_plus_falls_back_to_win32_when_win64_is_unavailable():
+    expected_url = (
+        "https://storage.googleapis.com/chrome-for-testing-public/"
+        "131.0.6778.264/win32/chromedriver-win32.zip"
+    )
+    driver, _ = chrome_driver_for(
+        browser_version="131.0.6778.70",
+        chrome_type=ChromeType.GOOGLE,
+        responses={
+            CHROME_FOR_TESTING_KNOWN_GOOD_VERSIONS_URL: {
+                "versions": [
+                    {
+                        "version": "131.0.6778.264",
+                        "downloads": {
+                            "chromedriver": [
+                                {"platform": "win32", "url": expected_url},
+                            ],
+                        },
+                    },
+                ],
+            },
+        },
+    )
+
+    assert driver.get_url_for_version_and_platform("131.0.6778.264", "win64") == expected_url
