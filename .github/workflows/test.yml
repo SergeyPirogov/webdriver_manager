@@ -127,6 +127,8 @@ jobs:
         run: |
           xvfb-run -a pipenv run py.test -s \
             -o console_output_style=progress \
+            -o log_cli=false \
+            -q \
             --cov-config .coveragerc \
             --cov-report xml \
             --cov-report term:skip-covered \
@@ -137,12 +139,12 @@ jobs:
       - name: Run tests on Windows (without xvfb)
         if: runner.os == 'Windows'
         run: |
-          pipenv run py.test -s -o console_output_style=progress --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
+          pipenv run py.test -s -o console_output_style=progress -o log_cli=false -q --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
 
       - name: Run tests on MacOS (without xvfb)
         if: startsWith(runner.os, 'macOS')
         run: |
-          pipenv run py.test -s -o console_output_style=progress --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
+          pipenv run py.test -s -o console_output_style=progress -o log_cli=false -q --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
 
       - name: Codecov Upload
         uses: codecov/codecov-action@v3
@@ -194,6 +196,8 @@ jobs:
         run: |
           xvfb-run -a pipenv run py.test -s \
             -o console_output_style=progress \
+            -o log_cli=false \
+            -q \
             --cov-config .coveragerc \
             --cov-report xml \
             --cov-report term:skip-covered \
