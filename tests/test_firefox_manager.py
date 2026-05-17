@@ -1,4 +1,5 @@
 import os
+import platform
 
 import pytest
 from selenium import webdriver
@@ -64,7 +65,15 @@ def test_can_download_ff_x64(delete_drivers_dir):
     assert os.path.exists(driver_path)
 
 
-@pytest.mark.parametrize('os_type', ['win32', 'win64', 'linux32', 'linux64'])
+def _cache_os_types_for_current_platform():
+    if platform.system().lower().startswith("win"):
+        return ["win32", "win64"]
+    if platform.system().lower().startswith("linux"):
+        return ["linux32", "linux64"]
+    return ["mac64"]
+
+
+@pytest.mark.parametrize('os_type', _cache_os_types_for_current_platform())
 @requires_gh_token
 def test_can_get_driver_from_cache(os_type):
     GeckoDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
