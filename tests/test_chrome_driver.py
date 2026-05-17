@@ -5,6 +5,7 @@ import pytest
 import browsers
 from selenium import webdriver
 from mock import patch
+from tests.helper import chrome_driver_for
 
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.constants import ROOT_FOLDER_NAME
@@ -12,7 +13,9 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.core.driver import Driver
 
 from webdriver_manager.core.driver_cache import DriverCacheManager
-from webdriver_manager.core.os_manager import OperationSystemManager
+from webdriver_manager.core.os_manager import OperationSystemManager, ChromeType
+from webdriver_manager.drivers.chrome import CHROME_FOR_TESTING_LATEST_PATCH_VERSIONS_PER_BUILD_URL, \
+    CHROME_FOR_TESTING_KNOWN_GOOD_VERSIONS_URL
 
 os.environ.setdefault("WDM_LOCAL", "false")
 
@@ -109,3 +112,45 @@ def test_chrome_manager_cached_driver_with_selenium():
 def test_can_get_chrome_for_os(os_type):
     path = ChromeDriverManager(os_system_manager=OperationSystemManager(os_type=os_type)).install()
     assert os.path.exists(path)
+
+
+def test_chrome_118_resolves_cft_driver_version_and_download_url():
+    expected_url = (
+        "https://storage.googleapis.com/chrome-for-testing-public/"
+        "118.0.5993.90/win32/chromedriver-win32.zip"
+    )
+    driver, http_client = chrome_driver_for(
+        browser_version="118.0.5993.88",
+        chrome_type=ChromeType.GOOGLE,
+        responses={
+            CHROME_FOR_TESTING_LATEST_PATCH_VERSIONS_PER_BUILD_URL: {
+                "builds": {
+                    "118.0.5993": {
+                        "version": "118.0.5993.90",
+                    },
+                },
+            },
+            CHROME_FOR_TESTING_KNOWN_GOOD_VERSIONS_URL: {
+                "versions": [
+                    {
+                        "version": "118.0.5993.90",
+                        "downloads": {
+                            "chromedriver": [
+                                {
+                                    "platform": "win32",
+                                    "url": expected_url,
+                                }
+                            ],
+                        },
+                    },
+                ],
+            },
+        },
+    )
+
+    resolved_version = driver.get_latest_release_version()
+    assert resolved_version == "118.0.5993.90"
+    assert driver.get_driver_download_url("win32") == expected_url
+    assert "chromedriver.storage.googleapis.com" not in driver.get_driver_download_url("win32")
+    assert CHROME_FOR_TESTING_LATEST_PATCH_VERSIONS_PER_BUILD_URL in http_client.requested_urls
+    assert CHROME_FOR_TESTING_KNOWN_GOOD_VERSIONS_URL in http_client.requested_urls
