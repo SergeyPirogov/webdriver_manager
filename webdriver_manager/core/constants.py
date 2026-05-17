@@ -8,7 +8,7 @@ DEFAULT_PROJECT_ROOT_CACHE_PATH = os.path.join(sys.path[0], ROOT_FOLDER_NAME)
 
 def get_default_user_home_cache_path():
     home = os.path.expanduser("~")
-    if not home or home == os.path.sep or home.startswith("~"):
+    if not home or home in (os.path.sep, "/") or home.startswith("~"):
         home = tempfile.gettempdir()
     return os.path.join(home, ROOT_FOLDER_NAME)
 

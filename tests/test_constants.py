@@ -1,4 +1,5 @@
 import tempfile
+import os
 
 from webdriver_manager.core.constants import ROOT_FOLDER_NAME, get_default_user_home_cache_path
 
@@ -8,7 +9,7 @@ def test_default_user_home_cache_path_falls_back_to_temp_if_home_is_root(monkeyp
 
     cache_path = get_default_user_home_cache_path()
 
-    assert cache_path == f"{tempfile.gettempdir()}/{ROOT_FOLDER_NAME}"
+    assert cache_path == os.path.join(tempfile.gettempdir(), ROOT_FOLDER_NAME)
 
 
 def test_default_user_home_cache_path_falls_back_to_temp_if_home_is_unresolved(monkeypatch):
@@ -16,4 +17,4 @@ def test_default_user_home_cache_path_falls_back_to_temp_if_home_is_unresolved(m
 
     cache_path = get_default_user_home_cache_path()
 
-    assert cache_path == f"{tempfile.gettempdir()}/{ROOT_FOLDER_NAME}"
+    assert cache_path == os.path.join(tempfile.gettempdir(), ROOT_FOLDER_NAME)
