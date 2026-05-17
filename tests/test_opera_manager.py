@@ -11,13 +11,21 @@ from webdriver_manager.core.driver_cache import DriverCacheManager
 from webdriver_manager.core.os_manager import OperationSystemManager
 from webdriver_manager.opera import OperaDriverManager
 
+requires_gh_token = pytest.mark.skipif(
+    not os.getenv("GH_TOKEN"),
+    reason="GH_TOKEN is required to avoid GitHub API rate limiting in Opera tests",
+)
 
+
+@requires_gh_token
 def test_opera_driver_manager_with_correct_version(delete_drivers_dir):
-    driver_path = OperaDriverManager("v.2.45").install()
+    latest = OperaDriverManager().driver.get_latest_release_version()
+    driver_path = OperaDriverManager(latest).install()
     assert os.path.exists(driver_path)
 
 
 @pytest.mark.filterwarnings("ignore:Unverified HTTPS request:urllib3.exceptions.InsecureRequestWarning")
+@requires_gh_token
 def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
     os.environ['WDM_SSL_VERIFY'] = '0'
     custom_path = os.path.join(
@@ -29,6 +37,7 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
     assert os.path.exists(driver_path)
 
 
+@requires_gh_token
 def test_operadriver_manager_with_selenium():
     driver_path = OperaDriverManager().install()
     options = webdriver.ChromeOptions()
@@ -45,6 +54,7 @@ def test_operadriver_manager_with_selenium():
     opera_driver.quit()
 
 
+@requires_gh_token
 def test_opera_driver_manager_with_wrong_version():
     with pytest.raises(ValueError) as ex:
         OperaDriverManager("0.2").install()
@@ -55,8 +65,10 @@ def test_opera_driver_manager_with_wrong_version():
 
 
 @pytest.mark.parametrize('path', ['.', None])
+@requires_gh_token
 def test_opera_driver_manager_with_correct_version_and_token(path):
-    driver_path = OperaDriverManager(version="v.2.45", cache_manager=DriverCacheManager(path)).install()
+    latest = OperaDriverManager().driver.get_latest_release_version()
+    driver_path = OperaDriverManager(version=latest, cache_manager=DriverCacheManager(path)).install()
     assert os.path.exists(driver_path)
 
 
@@ -64,6 +76,7 @@ def test_opera_driver_manager_with_correct_version_and_token(path):
                                      'win64',
                                      'linux64',
                                      'mac64'])
+@requires_gh_token
 def test_can_get_driver_from_cache(os_type, delete_drivers_dir):
     OperaDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
     driver_path = OperaDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
