@@ -62,6 +62,7 @@ class FileManager(object):
     def __extract_zip(self, archive_file, to_directory):
         zip_class = (LinuxZipFileWithPermissions if self._os_system_manager.get_os_name() == "linux" else zipfile.ZipFile)
         archive = zip_class(archive_file.file_path)
+        self.__remove_file_dir_conflicts(archive.namelist(), to_directory)
         try:
             archive.extractall(to_directory)
         except Exception as e:
@@ -87,6 +88,19 @@ class FileManager(object):
                     file_names.append(file_name)
             return sorted(file_names, key=lambda x: x.lower())
         return archive.namelist()
+
+    def __remove_file_dir_conflicts(self, names, to_directory):
+        """Remove stale files that conflict with directory entries in archive.
+
+        Example: if cache contains `<to_directory>/operadriver` as a file, and
+        archive now contains `operadriver/<binary>`, extraction would fail with
+        NotADirectoryError.
+        """
+        top_level_dirs = {name.split("/", 1)[0] for name in names if "/" in name}
+        for dir_name in top_level_dirs:
+            path = os.path.join(to_directory, dir_name)
+            if os.path.isfile(path):
+                os.remove(path)
 
     def __extract_tar_file(self, archive_file, to_directory):
         try:
