@@ -22,3 +22,7 @@ dev = [
 ]
 
 [tool.uv.sources]
+
+[tool.pytest.ini_options]
+addopts = "--color=yes --cov=webdriver_manager --cov-report=term-missing"
+console_output_style = "progress"

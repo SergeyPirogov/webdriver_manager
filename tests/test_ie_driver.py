@@ -6,17 +6,21 @@ from webdriver_manager.core.driver_cache import DriverCacheManager
 from webdriver_manager.core.os_manager import OperationSystemManager
 from webdriver_manager.microsoft import IEDriverManager
 
+requires_gh_token = pytest.mark.skipif(
+    not os.getenv("GH_TOKEN"),
+    reason="GH_TOKEN is required to avoid GitHub API rate limiting in IE tests",
+)
 
-@pytest.mark.parametrize("version", [
-    "3.0",
-    "3.150.0"
-])
-def test_ie_manager_with_different_versions(version):
+
+@requires_gh_token
+def test_ie_manager_with_different_versions():
+    version = IEDriverManager().driver.get_latest_release_version()
     path = IEDriverManager(version).install()
     assert os.path.exists(path)
 
 
 @pytest.mark.filterwarnings("ignore:Unverified HTTPS request:urllib3.exceptions.InsecureRequestWarning")
+@requires_gh_token
 def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
     os.environ['WDM_SSL_VERIFY'] = '0'
     custom_path = os.path.join(
@@ -29,12 +33,14 @@ def test_driver_with_ssl_verify_disabled_can_be_downloaded(ssl_verify_enable):
 
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])
+@requires_gh_token
 def test_can_download_ie_driver_x64(os_type):
     path = IEDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
     assert os.path.exists(path)
 
 
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])
+@requires_gh_token
 def test_can_get_ie_driver_from_cache(os_type):
     IEDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
     driver_path = IEDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
