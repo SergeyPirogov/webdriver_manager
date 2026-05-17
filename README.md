@@ -41,6 +41,13 @@ pip install webdriver-manager
 
 Note: package name is `webdriver-manager`, import name is `webdriver_manager`.
 
+#### Environment scope
+
+`webdriver-manager` manages **desktop browser drivers** (Windows/macOS/Linux desktop runtimes).
+It is not intended for Android/PyDroid local browser automation.
+
+For Android automation, use Appium (UiAutomator2) with Chrome/WebView on device/emulator.
+
 #### Use with Chrome
 
 ```python
