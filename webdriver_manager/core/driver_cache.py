@@ -44,6 +44,10 @@ class DriverCacheManager(object):
         if not self._file_manager:
             self._file_manager = FileManager(self._os_system_manager)
 
+    def get_driver_lock_path(self, driver_name: str, os_type: str) -> str:
+        os.makedirs(self._root_dir, exist_ok=True)
+        return os.path.join(self._root_dir, f".wdm-lock-{driver_name}-{os_type}")
+
     def save_archive_file(self, file: File, path):
         return self._file_manager.save_archive_file(file, path)
 
