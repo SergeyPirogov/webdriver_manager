@@ -1,4 +1,7 @@
 import os
+import gzip
+import json
+import zlib
 
 import pytest
 
@@ -386,3 +389,39 @@ def test_chrome_115_plus_uses_chrome_for_testing_macos_download_url_after_milest
         CHROME_FOR_TESTING_LATEST_VERSIONS_PER_MILESTONE_URL,
         CHROME_FOR_TESTING_KNOWN_GOOD_VERSIONS_URL,
     ]
+
+
+def test_chromium_cft_json_parser_handles_gzip_compressed_response():
+    class Response:
+        headers = {"Content-Encoding": "gzip"}
+        text = ""
+        content = gzip.compress(
+            json.dumps({"builds": {"120.0.6099": {"version": "120.0.6099.109"}}}).encode("utf-8")
+        )
+
+        @staticmethod
+        def json():
+            raise ValueError("broken json parser")
+
+    driver, _ = chrome_driver_for(browser_version="120.0.6099.71", responses={})
+    parsed = driver._parse_json_response(Response())
+
+    assert parsed["builds"]["120.0.6099"]["version"] == "120.0.6099.109"
+
+
+def test_chromium_cft_json_parser_handles_deflate_compressed_response():
+    class Response:
+        headers = {"Content-Encoding": "deflate"}
+        text = ""
+        content = zlib.compress(
+            json.dumps({"versions": [{"version": "120.0.6099.109"}]}).encode("utf-8")
+        )
+
+        @staticmethod
+        def json():
+            raise ValueError("broken json parser")
+
+    driver, _ = chrome_driver_for(browser_version="120.0.6099.71", responses={})
+    parsed = driver._parse_json_response(Response())
+
+    assert parsed["versions"][0]["version"] == "120.0.6099.109"
