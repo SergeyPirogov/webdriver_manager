@@ -53,10 +53,10 @@ jobs:
         os: [ windows-latest ]
         wdm-log: ['']
         include:
-          - python-version: '3.12'
+          - python-version: '3.13'
             selenium-version: '4.10.0'
             os: ubuntu-latest
-          - python-version: '3.12'
+          - python-version: '3.14'
             selenium-version: '4.10.0'
             os: macos-latest
             wdm-log: '0'
