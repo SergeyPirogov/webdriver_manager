@@ -39,3 +39,23 @@ def test_custom_logger(capsys, create_logger):
 
     # Restore the old logger
     set_logger(__old_logger)
+
+
+def test_custom_logger_accepts_logger_like_object():
+    records = []
+
+    class LoggerLike:
+        def log(self, level, message):
+            records.append((level, message))
+
+    logger_like = LoggerLike()
+    set_logger(logger_like)
+
+    log_msg = "logger-like object message"
+    log(log_msg)
+
+    assert records
+    assert records[-1][1] == log_msg
+
+    # Restore the old logger
+    set_logger(__old_logger)
