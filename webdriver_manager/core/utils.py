@@ -2,6 +2,7 @@ import datetime
 import os
 import re
 import subprocess
+import base64
 
 
 def get_date_diff(date1, date2, date_format):
@@ -31,8 +32,10 @@ def windows_browser_apps_to_cmd(*apps: str) -> str:
     script = "$ErrorActionPreference='silentlycontinue'; " + " ".join(
         first_hit_template.format(expression=e) for e in apps
     )
-
-    return f'{powershell} -NoProfile "{script}"'
+    if not powershell:
+        return script
+    encoded_script = base64.b64encode(script.encode("utf-16le")).decode("ascii")
+    return f"{powershell} -NoProfile -EncodedCommand {encoded_script}"
 
 
 def read_version_from_cmd(cmd, pattern):
