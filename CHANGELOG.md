@@ -2,8 +2,38 @@
 
 ---
 
-## 4.0.3
-- Fixed Chrome/Chromium driver resolution for Chrome for Testing when exact build metadata is missing by adding milestone fallback, proper Chrome for Testing download resolution, and readable error handling. (#637, #642, #669, #691)
+## 4.1.0
+### Fixes
+- Chrome/Chromium: improved Chrome for Testing resolution and fallbacks (missing exact build metadata, readable errors, and stable URL resolution). (#706, #685, #639)
+- Chrome on Windows: prefer `win64` on 64-bit hosts with safe fallback to `win32` when `win64` asset is unavailable. (#647, #686)
+- Edge: updated driver endpoint and improved OS/platform mapping for driver artifacts. (#697)
+- Firefox on Linux ARM64: prefer `linux-aarch64` geckodriver to avoid architecture mismatch. (#616)
+- Windows browser version detection: switched to PowerShell `-EncodedCommand` flow to avoid quoting/expansion failures in browser version probes. (#625)
+- Cache reliability: avoid remote version lookup when a valid browser-version cache entry already exists. (#661)
+- Cache stability: cache resolved driver version inside cache manager to reduce repeated metadata/network requests. (#656)
+- Concurrency: added inter-process install lock with post-lock cache recheck to prevent parallel download/unpack races (`BadZipFile`, startup failures). (#700, #631)
+- Archive extraction robustness: improved zip fallback handling in concurrent/busy-file scenarios.
+- Docker/serverless cache path safety: fallback to writable temp directory when HOME/project-root cache targets are invalid/read-only. (#636, #651, #682, #694)
+- Binary selection safety: prevent selecting non-executable companion files like `THIRD_PARTY_NOTICES.*` as driver executables. (#667, #670, #683, #699)
+- Logger API: `set_logger()` now accepts logger-like objects exposing `log(level, message)` (not only `logging.Logger`). (#688)
+
+### Tests
+- Added regression tests for:
+  - Chrome 115+ CfT resolution flows and Chrome 118 resolution.
+  - compressed/invalid CfT metadata parsing paths.
+  - cache lookup behavior and no-network cache hit path.
+  - binary selection (`THIRD_PARTY_NOTICES`) safety.
+  - Firefox ARM64 OS mapping.
+  - manager concurrency/cache recheck behavior.
+  - constants/cache path behavior for frozen/PyInstaller and invalid HOME cases.
+
+### Docs
+- Clarified package/import naming (`webdriver-manager` vs `webdriver_manager`). (#660)
+- Added scope guidance for desktop vs Android/PyDroid usage and Docker/CI cache-path recommendations. (#640, #630)
+
+### CI
+- Stabilized Linux test runs with explicit `xvfb-run`.
+- Improved cross-platform test stability for Edge/IE/Opera and cache/extraction race scenarios.
 
 ---
 
