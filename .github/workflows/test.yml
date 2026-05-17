@@ -126,6 +126,7 @@ jobs:
           WDM_LOG: ${{ matrix.wdm-log }}
         run: |
           xvfb-run -a pipenv run py.test -sv \
+            -o console_output_style=progress \
             --cov-config .coveragerc \
             --cov-report xml \
             --cov-report term:skip-covered \
@@ -136,12 +137,12 @@ jobs:
       - name: Run tests on Windows (without xvfb)
         if: runner.os == 'Windows'
         run: |
-          pipenv run py.test -sv --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
+          pipenv run py.test -sv -o console_output_style=progress --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
 
       - name: Run tests on MacOS (without xvfb)
         if: startsWith(runner.os, 'macOS')
         run: |
-          pipenv run py.test -sv --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
+          pipenv run py.test -sv -o console_output_style=progress --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
 
       - name: Codecov Upload
         uses: codecov/codecov-action@v3
@@ -192,6 +193,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           xvfb-run -a pipenv run py.test -sv \
+            -o console_output_style=progress \
             --cov-config .coveragerc \
             --cov-report xml \
             --cov-report term:skip-covered \
