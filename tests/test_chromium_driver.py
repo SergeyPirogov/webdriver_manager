@@ -260,6 +260,22 @@ def test_chrome_115_plus_uses_chrome_for_testing_download_url_after_milestone_fa
     ]
 
 
+def test_os_manager_uses_chromium_command_for_chromium_type(monkeypatch):
+    captured = {}
+
+    def fake_read_version_from_cmd(cmd, _pattern):
+        captured["cmd"] = cmd
+        return "125.0.6422"
+
+    monkeypatch.setattr("webdriver_manager.core.os_manager.read_version_from_cmd", fake_read_version_from_cmd)
+
+    version = OperationSystemManager(os_type="linux64").get_browser_version_from_os(ChromeType.CHROMIUM)
+
+    assert version == "125.0.6422"
+    assert "chromium" in captured["cmd"]
+    assert "google-chrome" not in captured["cmd"]
+
+
 @pytest.mark.parametrize('os_type', ['win32', 'win64'])
 def test_can_get_chromium_for_win(os_type):
     path = ChromeDriverManager(driver_version="115.0.5763.0",
