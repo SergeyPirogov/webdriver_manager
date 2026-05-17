@@ -36,6 +36,10 @@ on:
       - setup.py
       - webdriver_manager/__init__.py
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -44,24 +48,24 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.11']
+        python-version: ['3.12']
         selenium-version: ['4.10.0']
         os: [ windows-latest ]
         wdm-log: ['']
         include:
-          - python-version: '3.11'
+          - python-version: '3.12'
             selenium-version: '4.10.0'
             os: ubuntu-latest
-          - python-version: '3.11'
+          - python-version: '3.12'
             selenium-version: '4.10.0'
             os: macos-latest
             wdm-log: '0'
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -147,11 +151,56 @@ jobs:
           pipenv run py.test -s -o console_output_style=progress -o log_cli=false -v --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
 
       - name: Codecov Upload
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         if: always()
         with:
           file: ./coverage.xml
           name: ${{ matrix.os }}-py${{ matrix.python-version }}
+          use_oidc: true
+
+  test-future-python:
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ '3.14', '3.15.0-beta.1' ]
+        selenium-version: [ '4.10.0' ]
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          allow-prereleases: true
+
+      - name: Install browsers on Linux
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y software-properties-common apt-transport-https wget curl xvfb
+
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install -U pip wheel
+          pip install pipenv
+          pipenv install --dev --skip-lock --python=${{ matrix.python-version }}
+          pipenv install selenium==${{ matrix.selenium-version }}
+
+      - name: Run tests on Linux (future Python, non-blocking)
+        run: |
+          xvfb-run -a pipenv run py.test -s \
+            -o console_output_style=progress \
+            -o log_cli=false \
+            -v \
+            --tb=short \
+            tests/
 
   test-negative:
     runs-on: ${{ matrix.os }}
@@ -165,10 +214,10 @@ jobs:
         os: [ ubuntu-latest ]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -206,8 +255,9 @@ jobs:
             tests_negative/
 
       - name: Codecov Upload
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         if: always()
         with:
           file: ./coverage.xml
           name: ${{ matrix.os }}-py${{ matrix.python-version }}
+          use_oidc: true
