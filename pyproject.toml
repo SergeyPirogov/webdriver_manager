@@ -17,7 +17,7 @@ dev = [
     "pytest-cov",
     "bump2version",
     "pytest-xdist",
-    "pybrowsers",
+    "pybrowsers<1.4.0; python_version >= '3.9'",
     "mock",
 ]
 
