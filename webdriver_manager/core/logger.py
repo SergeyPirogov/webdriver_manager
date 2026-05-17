@@ -17,15 +17,14 @@ def set_logger(logger):
 
     Parameters
     ----------
-    logger : logging.Logger
-        The custom logger to use.
+    logger : object
+        Any logger-like object that provides a callable ``log(level, message)`` method.
 
     Returns None
     """
 
-    # Check if the logger is a valid logger
-    if not isinstance(logger, logging.Logger):
-        raise ValueError("The logger must be an instance of logging.Logger")
+    if not callable(getattr(logger, "log", None)):
+        raise ValueError("The logger must provide a callable log(level, message) method")
 
     # Bind the logger input to the global logger
     global __logger
