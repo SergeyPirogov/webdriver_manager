@@ -22,6 +22,7 @@
 - Edge: updated driver endpoint and improved OS/platform mapping for driver artifacts. (#697)
 - Firefox on Linux ARM64: prefer `linux-aarch64` geckodriver to avoid architecture mismatch. (#616)
 - Windows browser version detection: switched to PowerShell `-EncodedCommand` flow to avoid quoting and expansion failures in browser version probes. (#625)
+- Opera driver install path handling when cache already returns a binary file path, preventing `NotADirectoryError` caused by directory-only assumptions. (#730)
 - Cache reliability: avoid remote version lookup when a valid browser-version cache entry already exists. (#661)
 - Cache stability: cache resolved driver version inside the cache manager to reduce repeated metadata and network requests. (#656)
 - Concurrency: added an inter-process install lock with post-lock cache recheck to prevent parallel download and unpack races such as `BadZipFile` and startup failures. (#700, #631)
