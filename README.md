@@ -275,6 +275,10 @@ import os
 os.environ['WDM_LOCAL'] = '1'
 ```
 
+For Docker/CI environments, this is recommended when home-directory permissions are restricted.
+You can also pass a custom writable cache location via `DriverCacheManager(root_dir=...)`.
+Additionally, webdriver-manager includes a fallback to the system temp directory when home resolves to `/` or is unresolved (fix for issue `#636`).
+
 ### `WDM_SSL_VERIFY`
 SSL verification can be disabled for downloading webdriver binaries in case when you have troubles with SSL Certificates or SSL Certificate Chain. Just set the environment variable `WDM_SSL_VERIFY` to `"0"`.
 
