@@ -49,3 +49,13 @@ class OperaDriverManager(DriverManager):
         driver_path = os.path.join(driver_path, os.listdir(driver_path)[0])
         os.chmod(driver_path, 0o755)
         return driver_path
+
+    def get_os_type(self):
+        os_type = super().get_os_type()
+        if self._os_system_manager.is_mac_os(os_type):
+            return "mac64"
+        if "win" in os_type:
+            return "win64" if "64" in os_type else "win32"
+        if "linux" in os_type:
+            return "linux64"
+        return os_type

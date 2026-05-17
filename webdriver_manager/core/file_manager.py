@@ -76,6 +76,8 @@ class FileManager(object):
                     file_names.append(n)
                 else:
                     file_path, file_name = n.rsplit("/", 1)
+                    if not file_name:
+                        continue
                     full_file_path = os.path.join(to_directory, file_path)
                     source = os.path.join(full_file_path, file_name)
                     destination = os.path.join(to_directory, file_name)
