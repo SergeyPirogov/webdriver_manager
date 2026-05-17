@@ -28,19 +28,23 @@ class IEDriver(Driver):
 
     def get_latest_release_version(self) -> str:
         log(f"Get LATEST driver version for Internet Explorer")
-        resp = self._http_client.get(
-            url=self.latest_release_url,
-            headers=self.auth_header
-        )
+        latest_release_url = self.latest_release_url
+        if "per_page=" not in latest_release_url:
+            separator = "&" if "?" in latest_release_url else "?"
+            latest_release_url = f"{latest_release_url}{separator}per_page=100"
 
+        resp = self._http_client.get(url=latest_release_url, headers=self.auth_header)
         releases = resp.json()
-        release = next(
-            release
-            for release in releases
-            for asset in release["assets"]
-            if asset["name"].startswith(self.get_name())
+
+        for release in releases:
+            assets = release.get("assets") or []
+            if any(asset.get("name", "").startswith(self.get_name()) for asset in assets):
+                return release["tag_name"].replace("selenium-", "")
+
+        raise ValueError(
+            "Could not find any Selenium release containing IEDriverServer assets. "
+            "Internet Explorer driver artifacts may no longer be published in recent releases."
         )
-        return release["tag_name"].replace("selenium-", "")
 
     def get_driver_download_url(self, os_type):
         """Like https://github.com/seleniumhq/selenium/releases/download/3.141.59/IEDriverServer_Win32_3.141.59.zip"""
@@ -54,8 +58,12 @@ class IEDriver(Driver):
         assets = resp.json()["assets"]
 
         name = f"{self._name}_{os_type}_{driver_version_to_download}" + "."
-        output_dict = [
-            asset for asset in assets if asset["name"].startswith(name)]
+        output_dict = [asset for asset in assets if asset["name"].startswith(name)]
+        if not output_dict:
+            available_assets = ", ".join(asset.get("name", "") for asset in assets)
+            raise ValueError(
+                f"Could not find IEDriver asset for '{name}'. Available assets: {available_assets}"
+            )
         return output_dict[0]["browser_download_url"]
 
     @property

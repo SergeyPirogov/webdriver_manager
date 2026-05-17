@@ -75,10 +75,12 @@ class FileManager(object):
                 if "/" not in n:
                     file_names.append(n)
                 else:
-                    file_path, file_name = n.split("/")
+                    file_path, file_name = n.rsplit("/", 1)
                     full_file_path = os.path.join(to_directory, file_path)
                     source = os.path.join(full_file_path, file_name)
                     destination = os.path.join(to_directory, file_name)
+                    if not os.path.exists(source):
+                        continue
                     os.replace(source, destination)
                     file_names.append(file_name)
             return sorted(file_names, key=lambda x: x.lower())

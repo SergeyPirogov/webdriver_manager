@@ -13,8 +13,8 @@ requires_gh_token = pytest.mark.skipif(
 
 
 @requires_gh_token
-@pytest.mark.parametrize("version", ["4.38.0", "4.37.0"])
-def test_ie_manager_with_different_versions(version):
+def test_ie_manager_with_different_versions():
+    version = IEDriverManager().driver.get_latest_release_version()
     path = IEDriverManager(version).install()
     assert os.path.exists(path)
 

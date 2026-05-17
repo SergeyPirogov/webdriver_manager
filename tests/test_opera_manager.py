@@ -17,10 +17,36 @@ requires_gh_token = pytest.mark.skipif(
 )
 
 
+@pytest.fixture(scope="module")
+def opera_release_data():
+    manager = OperaDriverManager()
+    version = manager.driver.get_latest_release_version()
+    response = manager.driver._http_client.get(
+        url=manager.driver.tagged_release_url(version),
+        headers=manager.driver.auth_header,
+    )
+    assets = response.json()["assets"]
+    asset_names = [asset["name"] for asset in assets]
+
+    supported_os_types = []
+    if any(name.startswith("operadriver_win32") for name in asset_names):
+        supported_os_types.append("win32")
+    if any(name.startswith("operadriver_win64") for name in asset_names):
+        supported_os_types.append("win64")
+    if any(name.startswith("operadriver_linux64") for name in asset_names):
+        supported_os_types.append("linux64")
+    if any(name.startswith("operadriver_mac64") for name in asset_names):
+        supported_os_types.append("mac64")
+
+    return {
+        "version": version,
+        "supported_os_types": supported_os_types,
+    }
+
+
 @requires_gh_token
-def test_opera_driver_manager_with_correct_version(delete_drivers_dir):
-    latest = OperaDriverManager().driver.get_latest_release_version()
-    driver_path = OperaDriverManager(latest).install()
+def test_opera_driver_manager_with_correct_version(delete_drivers_dir, opera_release_data):
+    driver_path = OperaDriverManager(opera_release_data["version"]).install()
     assert os.path.exists(driver_path)
 
 
@@ -66,9 +92,11 @@ def test_opera_driver_manager_with_wrong_version():
 
 @pytest.mark.parametrize('path', ['.', None])
 @requires_gh_token
-def test_opera_driver_manager_with_correct_version_and_token(path):
-    latest = OperaDriverManager().driver.get_latest_release_version()
-    driver_path = OperaDriverManager(version=latest, cache_manager=DriverCacheManager(path)).install()
+def test_opera_driver_manager_with_correct_version_and_token(path, opera_release_data):
+    driver_path = OperaDriverManager(
+        version=opera_release_data["version"],
+        cache_manager=DriverCacheManager(path),
+    ).install()
     assert os.path.exists(driver_path)
 
 
@@ -77,7 +105,9 @@ def test_opera_driver_manager_with_correct_version_and_token(path):
                                      'linux64',
                                      'mac64'])
 @requires_gh_token
-def test_can_get_driver_from_cache(os_type, delete_drivers_dir):
+def test_can_get_driver_from_cache(os_type, delete_drivers_dir, opera_release_data):
+    if os_type not in opera_release_data["supported_os_types"]:
+        pytest.skip(f"Opera release {opera_release_data['version']} has no asset for {os_type}")
     OperaDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
     driver_path = OperaDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
     assert os.path.exists(driver_path)
