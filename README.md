@@ -39,6 +39,8 @@ With webdriver manager, you just need to do two simple steps:
 pip install webdriver-manager
 ```
 
+Note: package name is `webdriver-manager`, import name is `webdriver_manager`.
+
 #### Use with Chrome
 
 ```python
