@@ -2,8 +2,61 @@
 
 ---
 
-## 4.0.3
-- Fixed Chrome/Chromium driver resolution for Chrome for Testing when exact build metadata is missing by adding milestone fallback, proper Chrome for Testing download resolution, and readable error handling. (#637, #642, #669, #691)
+## 4.1.0
+
+### Compatibility
+
+- Added support for Python 3.12, 3.13, and 3.14.
+- Added CI coverage for Python 3.15.0-beta.1.
+- Kept compatibility with both Selenium 3 and Selenium 4 usage patterns.
+- Improved Chrome / Chromium / Brave support for Chrome 115+ and Chrome for Testing driver resolution.
+- Improved Microsoft Edge driver resolution through updated endpoint handling and platform mapping.
+- Improved Firefox/geckodriver resolution on Linux ARM64.
+- Improved Windows browser version detection through safer PowerShell command execution.
+- Improved Docker, CI, and serverless compatibility when default cache locations are unavailable or read-only.
+
+### Fixes
+
+- Chrome/Chromium: improved Chrome for Testing resolution and fallbacks for missing exact build metadata, readable errors, and stable URL resolution. (#706, #685, #639)
+- Chrome on Windows: prefer `win64` on 64-bit hosts with safe fallback to `win32` when the `win64` asset is unavailable. (#647, #686)
+- Edge: updated driver endpoint and improved OS/platform mapping for driver artifacts. (#697)
+- Firefox on Linux ARM64: prefer `linux-aarch64` geckodriver to avoid architecture mismatch. (#616)
+- Windows browser version detection: switched to PowerShell `-EncodedCommand` flow to avoid quoting and expansion failures in browser version probes. (#625)
+- Opera driver install path handling when cache already returns a binary file path, preventing `NotADirectoryError` caused by directory-only assumptions. (#730)
+- Cache reliability: avoid remote version lookup when a valid browser-version cache entry already exists. (#661)
+- Cache stability: cache resolved driver version inside the cache manager to reduce repeated metadata and network requests. (#656)
+- Concurrency: added an inter-process install lock with post-lock cache recheck to prevent parallel download and unpack races such as `BadZipFile` and startup failures. (#700, #631)
+- Archive extraction robustness: improved zip fallback handling in concurrent or busy-file scenarios.
+- Docker/serverless cache path safety: fall back to a writable temp directory when `HOME` or project-root cache targets are invalid or read-only. (#636, #651, #682, #694)
+- Binary selection safety: prevent selecting non-executable companion files such as `THIRD_PARTY_NOTICES.*` as driver executables. (#667, #670, #683, #699)
+- Logger API: `set_logger()` now accepts logger-like objects exposing `log(level, message)`, not only `logging.Logger`. (#688)
+
+### Tests
+
+- Added regression tests for Chrome 115+ Chrome for Testing resolution flows and Chrome 118 resolution.
+- Added tests for compressed and invalid Chrome for Testing metadata parsing paths.
+- Added tests for cache lookup behavior and no-network cache hit paths.
+- Added tests for binary selection safety to avoid selecting `THIRD_PARTY_NOTICES.*`.
+- Added tests for Firefox ARM64 OS mapping.
+- Added tests for manager concurrency and cache recheck behavior.
+- Added tests for constants and cache path behavior in frozen/PyInstaller and invalid `HOME` scenarios.
+- Expanded CI matrix for Python 3.12, 3.13, 3.14, and 3.15.0-beta.1.
+
+### Docs
+
+- Reworked README structure for the 4.1.0 release to focus on installation, usage, compatibility, configuration, and maintenance information.
+- Added guidance on when to use `webdriver-manager` instead of Selenium Manager.
+- Clarified package/import naming: `webdriver-manager` is the package name, `webdriver_manager` is the import name. (#660)
+- Added desktop browser automation scope guidance and clarified that Android/PyDroid local browser automation is out of scope. (#640)
+- Added Docker, CI, and serverless cache-path recommendations. (#630)
+- Updated Selenium 3 and Selenium 4 usage examples for Chrome, Chromium, Brave, Edge, Firefox, IE, and Opera.
+- Documented configuration use cases for custom cache, custom OS/architecture detection, custom download URLs, GitHub token usage, SSL verification, custom logger, and custom HTTP client.
+
+### CI
+
+- Added CI coverage for Python 3.12, 3.13, 3.14, and 3.15.0-beta.1.
+- Stabilized Linux test runs with explicit `xvfb-run`.
+- Improved cross-platform test stability for Edge, IE, Opera, cache handling, and extraction race scenarios.
 
 ---
 
