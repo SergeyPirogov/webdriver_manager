@@ -4,7 +4,9 @@ from webdriver_manager.core.driver import Driver
 from webdriver_manager.core.logger import log
 from webdriver_manager.core.os_manager import ChromeType
 
+import gzip
 import json
+import zlib
 
 CHROME_FOR_TESTING_LATEST_PATCH_VERSIONS_PER_BUILD_URL = (
     "https://googlechromelabs.github.io/chrome-for-testing/latest-patch-versions-per-build.json"
@@ -142,7 +144,7 @@ class ChromeDriver(Driver):
         response = self._http_client.get(url)
 
         try:
-            return json.loads(response.text)
+            return self._parse_json_response(response)
         except ValueError as error:
             raise ValueError(
                 f"Could not parse Chrome for Testing metadata from {url}."
@@ -163,7 +165,12 @@ class ChromeDriver(Driver):
     def get_url_for_version_and_platform(self, browser_version, platform):
         url = "https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json"
         response = self._http_client.get(url)
-        data = response.json()
+        try:
+            data = self._parse_json_response(response)
+        except ValueError as error:
+            raise ValueError(
+                f"Could not parse Chrome for Testing metadata from {url}."
+            ) from error
         versions = data["versions"]
 
         if version.parse(browser_version) >= version.parse("115"):
@@ -189,3 +196,38 @@ class ChromeDriver(Driver):
                             return d["url"]
 
         raise Exception(f"No such driver version {browser_version} for {platform}")
+
+    def _parse_json_response(self, response):
+        try:
+            return response.json()
+        except Exception:
+            pass
+
+        text = getattr(response, "text", None)
+        if text:
+            try:
+                return json.loads(text)
+            except ValueError:
+                pass
+
+        raw = getattr(response, "content", None)
+        if not raw:
+            raise ValueError("Response body is empty")
+
+        headers = getattr(response, "headers", {}) or {}
+        encoding = (headers.get("Content-Encoding") or "").lower().strip()
+
+        if encoding == "gzip":
+            raw = gzip.decompress(raw)
+        elif encoding == "br":
+            try:
+                import brotli
+            except ImportError as error:
+                raise ValueError(
+                    "Response is brotli-compressed but brotli package is not installed"
+                ) from error
+            raw = brotli.decompress(raw)
+        elif encoding == "deflate":
+            raw = zlib.decompress(raw)
+
+        return json.loads(raw.decode("utf-8"))
