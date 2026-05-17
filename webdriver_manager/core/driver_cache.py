@@ -106,8 +106,17 @@ class DriverCacheManager(object):
         if not browser_version:
             return None
 
-        driver_version = self.get_cache_key_driver_version(driver)
         metadata = self.load_metadata_content()
+        cached_path = self.__find_driver_by_browser_version(
+            metadata=metadata,
+            os_type=os_type,
+            driver_name=driver_name,
+            browser_version=browser_version,
+        )
+        if cached_path:
+            return cached_path
+
+        driver_version = self.get_cache_key_driver_version(driver)
 
         key = self.__get_metadata_key(driver)
         if key not in metadata:
@@ -125,6 +134,36 @@ class DriverCacheManager(object):
 
         path = driver_info["binary_path"]
         log(f"Driver [{path}] found in cache")
+        return path
+
+    def __find_driver_by_browser_version(self, metadata, os_type, driver_name, browser_version):
+        prefix = f"{os_type}_{driver_name}_"
+        suffix = f"_for_{browser_version}"
+        candidates = []
+
+        for key, info in metadata.items():
+            if not key.startswith(prefix) or not key.endswith(suffix):
+                continue
+            path = info.get("binary_path")
+            timestamp = info.get("timestamp")
+            if not path or not os.path.exists(path):
+                continue
+            if not timestamp:
+                continue
+            if not self.__is_valid(info):
+                continue
+            try:
+                datetime.datetime.strptime(timestamp, self._date_format)
+            except ValueError:
+                continue
+            candidates.append((timestamp, path))
+
+        if not candidates:
+            return None
+
+        candidates.sort(key=lambda item: datetime.datetime.strptime(item[0], self._date_format), reverse=True)
+        path = candidates[0][1]
+        log(f"Driver [{path}] found in cache by browser version")
         return path
 
     def __is_valid(self, driver_info):
