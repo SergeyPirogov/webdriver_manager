@@ -176,6 +176,10 @@ class ChromeDriver(Driver):
                 for d in downloads:
                     if d["platform"] == platform:
                         return d["url"]
+                if platform == "win64":
+                    for d in downloads:
+                        if d["platform"] == "win32":
+                            return d["url"]
         else:
             for v in versions:
                 if v["version"] == browser_version:

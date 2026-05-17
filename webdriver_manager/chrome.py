@@ -44,7 +44,7 @@ class ChromeDriverManager(DriverManager):
     def get_os_type(self):
         os_type = super().get_os_type()
         if "win" in os_type:
-            return "win32"
+            return "win64" if self._os_system_manager.get_os_architecture() == 64 else "win32"
 
         if not self._os_system_manager.is_mac_os(os_type):
             return os_type
