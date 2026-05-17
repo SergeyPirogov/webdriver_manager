@@ -49,10 +49,10 @@ jobs:
         os: [ ubuntu-latest ]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -60,7 +60,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install software-properties-common apt-transport-https wget curl
+          sudo apt-get install -y software-properties-common apt-transport-https wget curl xvfb
 
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo dpkg -i google-chrome-stable_current_amd64.deb
@@ -75,12 +75,8 @@ jobs:
 
       - name: Run tests on Linux (with xvfb)
         if: runner.os == 'Linux'
-        uses: coactions/setup-xvfb@v1
-        env:
-          WDM_LOG: ${{ matrix.wdm-log }}
-        with:
-          run: |
-            pipenv run pytest -sv tests_xdist/ -n 3
+        run: |
+          xvfb-run -a pipenv run pytest -sv tests_xdist/ -n 3
 
       - name: List folders
         run: ls -la ~/.wdm
