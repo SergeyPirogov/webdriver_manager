@@ -17,13 +17,13 @@ with open("README.md", encoding="utf-8") as readme_file:
     readme = readme_file.read()
 
 setuptools.setup(
-    name='webdriver_manager',
+    name='webdriver-manager',
     python_requires=">=3.7",
     long_description=readme,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(include=['webdriver_manager*']),
     include_package_data=True,
-    version='4.1.0',
+    version='4.1.1',
     description='Library provides the way to automatically manage drivers for different browsers',
     author='Sergey Pirogov',
     author_email='automationremarks@gmail.com',
