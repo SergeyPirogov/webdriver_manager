@@ -6,6 +6,7 @@ on:
     paths-ignore:
       - CHANGELOG.md
       - README.md
+      - RELEASING.md
       - LICENSE
       - LICENSE.txt
       - release-process.rst
@@ -24,6 +25,7 @@ on:
     paths-ignore:
       - CHANGELOG.md
       - README.md
+      - RELEASING.md
       - LICENSE
       - LICENSE.txt
       - release-process.rst
@@ -53,6 +55,9 @@ jobs:
         os: [ windows-latest ]
         wdm-log: ['']
         include:
+          - python-version: '3.7'
+            selenium-version: '4.10.0'
+            os: ubuntu-22.04
           - python-version: '3.13'
             selenium-version: '4.10.0'
             os: ubuntu-latest

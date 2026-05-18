@@ -6,6 +6,7 @@ on:
     paths-ignore:
       - CHANGELOG.md
       - README.md
+      - RELEASING.md
       - LICENSE
       - LICENSE.txt
       - release-process.rst
@@ -24,6 +25,7 @@ on:
     paths-ignore:
       - CHANGELOG.md
       - README.md
+      - RELEASING.md
       - LICENSE
       - LICENSE.txt
       - release-process.rst

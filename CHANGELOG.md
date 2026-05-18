@@ -2,6 +2,27 @@
 
 ---
 
+## 4.1.1
+
+### Packaging
+
+- Fixed package metadata shown on PyPI.
+- Added Python version classifiers for currently supported Python versions.
+- Removed obsolete universal wheel metadata.
+- Ensured release metadata better reflects the current Python support policy.
+
+### Docs
+
+- Fixed PyPI badge package name in README.
+- Updated README badges to use the published package name `webdriver-manager`.
+
+### Notes
+
+- No functional driver-resolution changes are included in this release.
+- This is a packaging and documentation cleanup release following 4.1.0.
+
+---
+
 ## 4.1.0
 
 ### Compatibility
