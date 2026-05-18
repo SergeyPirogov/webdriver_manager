@@ -57,7 +57,7 @@ jobs:
         include:
           - python-version: '3.7'
             selenium-version: '4.10.0'
-            os: ubuntu-latest
+            os: ubuntu-22.04
           - python-version: '3.13'
             selenium-version: '4.10.0'
             os: ubuntu-latest
