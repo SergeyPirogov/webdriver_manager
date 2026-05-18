@@ -1,11 +1,20 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "webdriver-manager"
 version = "4.1.1"
 description = "Library provides the way to automatically manage drivers for different browsers"
 readme = "README.md"
 requires-python = ">=3.7"
+license = "Apache-2.0"
+authors = [
+    { name = "Sergey Pirogov", email = "automationremarks@gmail.com" },
+]
+keywords = ["testing", "selenium", "driver", "test automation"]
+urls = { Homepage = "https://github.com/SergeyPirogov/webdriver_manager", Repository = "https://github.com/SergeyPirogov/webdriver_manager" }
 classifiers = [
-    "License :: OSI Approved :: Apache Software License",
     "Intended Audience :: Information Technology",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3.7",
@@ -27,6 +36,12 @@ dependencies = [
     "python-dotenv",
     "packaging",
 ]
+
+[tool.setuptools.packages.find]
+include = ["webdriver_manager*"]
+
+[tool.setuptools.package-data]
+webdriver_manager = ["py.typed"]
 
 [dependency-groups]
 dev = [

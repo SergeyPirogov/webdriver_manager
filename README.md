@@ -536,6 +536,8 @@ Bug fixes, compatibility fixes, CI improvements, documentation updates, and regr
 
 For larger changes, please open an issue first to discuss the proposed approach.
 
+Maintainers: see [RELEASING.md](RELEASING.md) for the release runbook.
+
 ## Maintenance status
 
 The project accepts maintenance contributions focused on:
