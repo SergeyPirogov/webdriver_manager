@@ -17,6 +17,14 @@ CHROME_FOR_TESTING_LATEST_VERSIONS_PER_MILESTONE_URL = (
 CHROME_FOR_TESTING_KNOWN_GOOD_VERSIONS_URL = (
     "https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json"
 )
+CHROME_FOR_TESTING_DOWNLOAD_URL = "https://storage.googleapis.com/chrome-for-testing-public/"
+CHROME_FOR_TESTING_LATEST_RELEASE_URL = (
+    "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE"
+)
+CHROMEDRIVER_STORAGE_URL = "https://chromedriver.storage.googleapis.com"
+CHROMEDRIVER_STORAGE_LATEST_RELEASE_URL = (
+    f"{CHROMEDRIVER_STORAGE_URL}/LATEST_RELEASE"
+)
 
 
 class ChromeDriver(Driver):
@@ -59,7 +67,13 @@ class ChromeDriver(Driver):
             log(f"Modern chrome version {modern_version_url}")
             return modern_version_url
 
-        return f"{self._url}/{driver_version_to_download}/{self.get_name()}_{os_type}.zip"
+        if os_type == "win64":
+            os_type = "win32"
+
+        return (
+            f"{self._legacy_url()}/{driver_version_to_download}/"
+            f"{self.get_name()}_{os_type}.zip"
+        )
 
     def get_browser_type(self):
         return self._browser_type
@@ -74,12 +88,24 @@ class ChromeDriver(Driver):
         elif determined_browser_version is not None:
             # Remove the build version (the last segment) from determined_browser_version for version < 115
             determined_browser_version = ".".join(determined_browser_version.split(".")[:3])
-            latest_release_url = f"{self._latest_release_url}_{determined_browser_version}"
+            latest_release_url = (
+                f"{self._legacy_latest_release_url()}_{determined_browser_version}"
+            )
         else:
             latest_release_url = self._latest_release_url
 
         resp = self._http_client.get(url=latest_release_url)
         return resp.text.rstrip()
+
+    def _legacy_url(self):
+        if self._url.rstrip("/") == CHROME_FOR_TESTING_DOWNLOAD_URL.rstrip("/"):
+            return CHROMEDRIVER_STORAGE_URL
+        return self._url.rstrip("/")
+
+    def _legacy_latest_release_url(self):
+        if self._latest_release_url == CHROME_FOR_TESTING_LATEST_RELEASE_URL:
+            return CHROMEDRIVER_STORAGE_LATEST_RELEASE_URL
+        return self._latest_release_url
 
     def _latest_cft_version_for_browser_version(self, browser_version):
         browser_build_version = ".".join(browser_version.split(".")[:3])

@@ -1143,7 +1143,7 @@ socks = [
 
 [[package]]
 name = "webdriver-manager"
-version = "4.1.1"
+version = "4.1.2"
 source = { editable = "." }
 dependencies = [
     { name = "packaging", version = "24.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.8'" },

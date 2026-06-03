@@ -2,6 +2,19 @@
 
 ---
 
+## 4.1.2
+
+### Fixes
+
+- ChromeDriver: restored legacy ChromeDriver storage URL handling for Chrome/ChromeDriver 114 and older, fixing invalid Chrome for Testing download URLs for older versions such as ChromeDriver `102.0.5005.61` on Windows. (#736)
+- ChromeDriver on 64-bit Windows: use the legacy `win32` archive name for ChromeDriver 114 and older while preserving `win64` Chrome for Testing downloads for ChromeDriver 115 and newer. (#736)
+
+### Tests
+
+- Added regression coverage for ChromeDriver `102.0.5005.61` URL construction, legacy latest-release lookup, and the `ChromeDriverManager.install()` download-manager path without live network calls. (#736)
+
+---
+
 ## 4.1.1
 
 ### Packaging

@@ -5,7 +5,11 @@ from webdriver_manager.core.download_manager import DownloadManager
 from webdriver_manager.core.driver_cache import DriverCacheManager
 from webdriver_manager.core.manager import DriverManager
 from webdriver_manager.core.os_manager import OperationSystemManager, ChromeType
-from webdriver_manager.drivers.chrome import ChromeDriver
+from webdriver_manager.drivers.chrome import (
+    CHROME_FOR_TESTING_DOWNLOAD_URL,
+    CHROME_FOR_TESTING_LATEST_RELEASE_URL,
+    ChromeDriver,
+)
 
 
 class ChromeDriverManager(DriverManager):
@@ -13,8 +17,8 @@ class ChromeDriverManager(DriverManager):
             self,
             driver_version: Optional[str] = None,
             name: str = "chromedriver",
-            url: str = "https://storage.googleapis.com/chrome-for-testing-public/",
-            latest_release_url: str = "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE",
+            url: str = CHROME_FOR_TESTING_DOWNLOAD_URL,
+            latest_release_url: str = CHROME_FOR_TESTING_LATEST_RELEASE_URL,
             chrome_type: str = ChromeType.GOOGLE,
             download_manager: Optional[DownloadManager] = None,
             cache_manager: Optional[DriverCacheManager] = None,

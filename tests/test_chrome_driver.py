@@ -14,8 +14,11 @@ from webdriver_manager.core.driver import Driver
 
 from webdriver_manager.core.driver_cache import DriverCacheManager
 from webdriver_manager.core.os_manager import OperationSystemManager, ChromeType
-from webdriver_manager.drivers.chrome import CHROME_FOR_TESTING_LATEST_PATCH_VERSIONS_PER_BUILD_URL, \
-    CHROME_FOR_TESTING_KNOWN_GOOD_VERSIONS_URL
+from webdriver_manager.drivers.chrome import (
+    CHROMEDRIVER_STORAGE_LATEST_RELEASE_URL,
+    CHROME_FOR_TESTING_LATEST_PATCH_VERSIONS_PER_BUILD_URL,
+    CHROME_FOR_TESTING_KNOWN_GOOD_VERSIONS_URL,
+)
 
 os.environ.setdefault("WDM_LOCAL", "false")
 
@@ -154,6 +157,88 @@ def test_chrome_118_resolves_cft_driver_version_and_download_url():
     assert "chromedriver.storage.googleapis.com" not in driver.get_driver_download_url("win32")
     assert CHROME_FOR_TESTING_LATEST_PATCH_VERSIONS_PER_BUILD_URL in http_client.requested_urls
     assert CHROME_FOR_TESTING_KNOWN_GOOD_VERSIONS_URL in http_client.requested_urls
+
+
+def test_chrome_102_uses_legacy_storage_url_and_win32_archive_for_win64():
+    driver, http_client = chrome_driver_for(
+        browser_version="102.0.5005.63",
+        driver_version="102.0.5005.61",
+        chrome_type=ChromeType.GOOGLE,
+        responses={},
+    )
+
+    assert driver.get_driver_download_url("win64") == (
+        "https://chromedriver.storage.googleapis.com/"
+        "102.0.5005.61/chromedriver_win32.zip"
+    )
+    assert http_client.requested_urls == []
+
+
+def test_chrome_102_detected_version_uses_legacy_latest_release_url():
+    expected_url = f"{CHROMEDRIVER_STORAGE_LATEST_RELEASE_URL}_102.0.5005"
+    driver, http_client = chrome_driver_for(
+        browser_version="102.0.5005.63",
+        chrome_type=ChromeType.GOOGLE,
+        responses={
+            expected_url: "102.0.5005.61",
+        },
+    )
+
+    assert driver.get_latest_release_version() == "102.0.5005.61"
+    assert http_client.requested_urls == [expected_url]
+
+
+def test_chrome_manager_downloads_legacy_chrome_102_url_for_win64(tmp_path):
+    class CacheManagerMock:
+        def find_driver(self, _driver):
+            return None
+
+        def get_driver_lock_path(self, _driver_name, _os_type):
+            return str(tmp_path / ".wdm-lock")
+
+        def save_file_to_cache(self, _driver, _file):
+            driver_path = tmp_path / "chromedriver.exe"
+            driver_path.write_text("")
+            return str(driver_path)
+
+    class DownloadManagerMock:
+        http_client = None
+
+        def __init__(self):
+            self.requested_urls = []
+
+        def download_file(self, url):
+            self.requested_urls.append(url)
+            return object()
+
+    class Windows64OSManagerMock:
+        def get_os_type(self):
+            return "win64"
+
+        def get_os_architecture(self):
+            return 64
+
+        def is_mac_os(self, _os_type):
+            return False
+
+        def get_browser_version_from_os(self, _browser_type=None):
+            return "102.0.5005.63"
+
+    download_manager = DownloadManagerMock()
+    manager = ChromeDriverManager(
+        driver_version="102.0.5005.61",
+        download_manager=download_manager,
+        cache_manager=CacheManagerMock(),
+        os_system_manager=Windows64OSManagerMock(),
+    )
+
+    driver_path = manager.install()
+
+    assert os.path.exists(driver_path)
+    assert download_manager.requested_urls == [
+        "https://chromedriver.storage.googleapis.com/"
+        "102.0.5005.61/chromedriver_win32.zip"
+    ]
 
 
 def test_chrome_115_plus_prefers_win64_download_when_available():
