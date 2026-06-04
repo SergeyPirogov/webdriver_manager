@@ -188,6 +188,48 @@ def test_chrome_102_detected_version_uses_legacy_latest_release_url():
     assert http_client.requested_urls == [expected_url]
 
 
+def test_chrome_download_url_boundary_switches_from_legacy_to_cft():
+    legacy_driver, legacy_http_client = chrome_driver_for(
+        browser_version="114.0.5735.199",
+        driver_version="114.0.5735.90",
+        chrome_type=ChromeType.GOOGLE,
+        responses={},
+    )
+    cft_url = (
+        "https://storage.googleapis.com/chrome-for-testing-public/"
+        "115.0.5790.170/win64/chromedriver-win64.zip"
+    )
+    cft_driver, cft_http_client = chrome_driver_for(
+        browser_version="115.0.5790.99",
+        driver_version="115.0.5790.170",
+        chrome_type=ChromeType.GOOGLE,
+        responses={
+            CHROME_FOR_TESTING_KNOWN_GOOD_VERSIONS_URL: {
+                "versions": [
+                    {
+                        "version": "115.0.5790.170",
+                        "downloads": {
+                            "chromedriver": [
+                                {"platform": "win64", "url": cft_url},
+                            ],
+                        },
+                    },
+                ],
+            },
+        },
+    )
+
+    assert legacy_driver.get_driver_download_url("win64") == (
+        "https://chromedriver.storage.googleapis.com/"
+        "114.0.5735.90/chromedriver_win32.zip"
+    )
+    assert legacy_http_client.requested_urls == []
+    assert cft_driver.get_driver_download_url("win64") == cft_url
+    assert cft_http_client.requested_urls == [
+        CHROME_FOR_TESTING_KNOWN_GOOD_VERSIONS_URL,
+    ]
+
+
 def test_chrome_manager_downloads_legacy_chrome_102_url_for_win64(tmp_path):
     class CacheManagerMock:
         def find_driver(self, _driver):

@@ -8,10 +8,17 @@
 
 - ChromeDriver: restored legacy ChromeDriver storage URL handling for Chrome/ChromeDriver 114 and older, fixing invalid Chrome for Testing download URLs for older versions such as ChromeDriver `102.0.5005.61` on Windows. (#736)
 - ChromeDriver on 64-bit Windows: use the legacy `win32` archive name for ChromeDriver 114 and older while preserving `win64` Chrome for Testing downloads for ChromeDriver 115 and newer. (#736)
+- Firefox/GeckoDriver: report a readable error when a GeckoDriver release does not contain an asset matching the requested OS type instead of failing with an ambiguous missing-list entry.
 
 ### Tests
 
 - Added regression coverage for ChromeDriver `102.0.5005.61` URL construction, legacy latest-release lookup, and the `ChromeDriverManager.install()` download-manager path without live network calls. (#736)
+- Pinned GeckoDriver cache coverage to a known release and added coverage for missing GeckoDriver release assets.
+
+### CI
+
+- Windows: install Google Chrome only when it is missing, while continuing to install Chromium, Opera, and Brave through Chocolatey.
+- Linux: install Chromium through `browser-actions/setup-chrome` and expose it as `chromium`, avoiding the unavailable/unstable `apt` Chromium package path on GitHub Actions.
 
 ---
 
