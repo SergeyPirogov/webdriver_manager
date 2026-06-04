@@ -112,7 +112,17 @@ jobs:
         if: runner.os == 'Windows'
         shell: powershell
         run: |
-          choco install chromium opera brave googlechrome --no-progress -y --force
+          choco install chromium opera brave --no-progress -y --force
+
+          $chromePaths = @(
+            "$env:PROGRAMFILES\Google\Chrome\Application\chrome.exe",
+            "${env:PROGRAMFILES(X86)}\Google\Chrome\Application\chrome.exe",
+            "$env:LOCALAPPDATA\Google\Chrome\Application\chrome.exe"
+          )
+          $chromePath = $chromePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $chromePath) {
+            choco install googlechrome --no-progress -y --force
+          }
 
       - name: Install browsers on MacOS
         if: startsWith(runner.os, 'macOS')
