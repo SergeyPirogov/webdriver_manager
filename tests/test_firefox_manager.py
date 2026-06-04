@@ -76,6 +76,13 @@ def _cache_os_types_for_current_platform():
 @pytest.mark.parametrize('os_type', _cache_os_types_for_current_platform())
 @requires_gh_token
 def test_can_get_driver_from_cache(os_type):
-    GeckoDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
-    driver_path = GeckoDriverManager(os_system_manager=OperationSystemManager(os_type)).install()
+    driver_version = "v0.36.0"
+    GeckoDriverManager(
+        version=driver_version,
+        os_system_manager=OperationSystemManager(os_type),
+    ).install()
+    driver_path = GeckoDriverManager(
+        version=driver_version,
+        os_system_manager=OperationSystemManager(os_type),
+    ).install()
     assert os.path.exists(driver_path)

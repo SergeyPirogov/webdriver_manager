@@ -44,6 +44,11 @@ class GeckoDriver(Driver):
         name = f"{self.get_name()}-{driver_version_to_download}-{os_type}."
         output_dict = [
             asset for asset in assets if asset["name"].startswith(name)]
+        if not output_dict:
+            available_assets = ", ".join(asset.get("name", "") for asset in assets)
+            raise ValueError(
+                f"Could not find GeckoDriver asset for '{name}'. Available assets: {available_assets}"
+            )
         return output_dict[0]["browser_download_url"]
 
     @property
