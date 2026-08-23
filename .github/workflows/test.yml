@@ -70,7 +70,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -191,10 +191,10 @@ jobs:
           pipenv run py.test -s -o console_output_style=progress -o log_cli=false -v --cov-config .coveragerc --cov-report xml --cov-report term:skip-covered --cov=webdriver_manager --tb=short tests/
 
       - name: Codecov Upload
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         if: always()
         with:
-          file: ./coverage.xml
+          files: ./coverage.xml
           name: ${{ matrix.os }}-py${{ matrix.python-version }}
           use_oidc: true
 
@@ -213,7 +213,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: true
@@ -258,7 +258,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -296,9 +296,9 @@ jobs:
             tests_negative/
 
       - name: Codecov Upload
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         if: always()
         with:
-          file: ./coverage.xml
+          files: ./coverage.xml
           name: ${{ matrix.os }}-py${{ matrix.python-version }}
           use_oidc: true
