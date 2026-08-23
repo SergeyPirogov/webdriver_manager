@@ -83,6 +83,14 @@ jobs:
           chrome-version: latest
           install-dependencies: true
 
+      - name: Install Chromium on MacOS
+        if: startsWith(runner.os, 'macOS')
+        id: setup-chromium-macos
+        uses: browser-actions/setup-chrome@v2
+        with:
+          # "latest" is resolved from Chromium Snapshots, not stable Google Chrome.
+          chrome-version: latest
+
       - name: Install browsers on Linux
         if: runner.os == 'Linux'
         run: |
@@ -137,10 +145,17 @@ jobs:
       - name: Install browsers on MacOS
         if: startsWith(runner.os, 'macOS')
         run: |
-          brew tap domt4/chromium
           brew update
-          brew install --cask mac-chromium opera brave-browser
+          brew install --cask opera brave-browser
           brew upgrade google-chrome
+          chromium_bin="${{ steps.setup-chromium-macos.outputs.chrome-path }}"
+          if [[ "$chromium_bin" != */Chromium.app/Contents/MacOS/Chromium ]]; then
+            echo "Unexpected Chromium path: $chromium_bin" >&2
+            exit 1
+          fi
+          sudo rm -rf /Applications/Chromium.app
+          sudo cp -R "${chromium_bin%/Contents/MacOS/Chromium}" /Applications/Chromium.app
+          /Applications/Chromium.app/Contents/MacOS/Chromium --version
 
       - name: Install Python dependencies
         run: |
