@@ -16,6 +16,10 @@ DEFAULT_PROJECT_ROOT_CACHE_PATH = get_default_project_root_cache_path()
 
 
 def get_default_user_home_cache_path():
+    home = os.getenv('XDG_CACHE_HOME')
+    if home is not None:
+        return os.path.join(home, ROOT_FOLDER_NAME[1:])
+
     home = os.path.expanduser("~")
     if not home or home in (os.path.sep, "/") or home.startswith("~"):
         home = tempfile.gettempdir()

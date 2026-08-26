@@ -6,6 +6,7 @@ from webdriver_manager.core.constants import get_default_project_root_cache_path
 
 
 def test_default_user_home_cache_path_falls_back_to_temp_if_home_is_root(monkeypatch):
+    monkeypatch.setattr("os.getenv", lambda _variable: None)
     monkeypatch.setattr("os.path.expanduser", lambda _path: "/")
 
     cache_path = get_default_user_home_cache_path()
@@ -14,11 +15,20 @@ def test_default_user_home_cache_path_falls_back_to_temp_if_home_is_root(monkeyp
 
 
 def test_default_user_home_cache_path_falls_back_to_temp_if_home_is_unresolved(monkeypatch):
+    monkeypatch.setattr("os.getenv", lambda _variable: None)
     monkeypatch.setattr("os.path.expanduser", lambda _path: "~")
 
     cache_path = get_default_user_home_cache_path()
 
     assert cache_path == os.path.join(tempfile.gettempdir(), ROOT_FOLDER_NAME)
+
+
+def test_default_user_home_cache_path_with_xdg_cache_home_set(monkeypatch):
+    monkeypatch.setattr("os.getenv", lambda _variable: "/home/user/.cache")
+
+    cache_path = get_default_user_home_cache_path()
+
+    assert cache_path == os.path.join("/home/user/.cache", ROOT_FOLDER_NAME[1:])
 
 
 def test_default_project_root_cache_path_uses_cwd_for_frozen_app(monkeypatch):
