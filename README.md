@@ -3,7 +3,7 @@
 [![Tests](https://github.com/SergeyPirogov/webdriver_manager/actions/workflows/test.yml/badge.svg)](https://github.com/SergeyPirogov/webdriver_manager/actions/workflows/test.yml)
 [![PyPI](https://img.shields.io/pypi/v/webdriver-manager.svg)](https://pypi.org/project/webdriver-manager/)
 [![Supported Python Versions](https://img.shields.io/pypi/pyversions/webdriver-manager.svg)](https://pypi.org/project/webdriver-manager/)
-[![codecov](https://codecov.io/gh/SergeyPirogov/webdriver_manager/branch/master/graph/badge.svg)](https://codecov.io/gh/SergeyPirogov/webdriver_manager)
+[![codecov](https://img.shields.io/codecov/c/github/SergeyPirogov/webdriver_manager/master.svg)](https://codecov.io/gh/SergeyPirogov/webdriver_manager)
 
 `webdriver-manager` is a Python library for explicit browser driver management.
 
